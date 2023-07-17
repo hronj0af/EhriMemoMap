@@ -1,0 +1,49 @@
+﻿@using EhriMemoMap.Helpers;
+@using System.Xml;
+@using System.Xml.Linq;
+@inject IStringLocalizer<CommonResources> cl
+
+<RadzenRow JustifyContent=JustifyContent.Left>
+    @if (PlaceInfos == null || PlaceInfos.Count == 0)
+    {
+        <text>
+            @cl["noPlaceInfo"]
+        </text>
+    }
+    else
+    {
+        <text>
+            @foreach (var place in PlaceInfos)
+            {
+                <text>
+                    <ul class="no-bullets">
+                        @foreach (var property in place.Properties.Where(a => a.Value != null))
+                        {
+                            <text>
+                            <li class="indented"><b>@property.Key</b>: @((MarkupString)property.Value.Linkify())</li>
+                            </text>
+                        }
+                    </ul>
+                </text>
+            }
+        </text>
+    }
+</RadzenRow>
+
+@code {
+    [Parameter]
+    public XDocument XDoc { get; set; }
+
+    public List<PlaceInfo> PlaceInfos { get; set; }
+
+    protected override void OnInitialized()
+    {
+        PlaceInfos = XDoc.Descendants("Feature").
+            Select(f => new PlaceInfo
+            {
+                    Properties = f.Elements("Attribute").Where(a => a.Attribute("type")?.Value != "derived" && a.Attribute("value")?.Value != "NULL").Select(a => new KeyValuePair<string, string>(a.Attribute("name").Value, a.Attribute("value").Value)).ToList()
+            }).ToList();
+    }
+
+
+}

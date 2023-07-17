@@ -1,0 +1,73 @@
+﻿@using EhriMemoMap.Helpers;
+@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapState MapState
+@inject IStringLocalizer<CommonResources> cl
+
+<RadzenButton Style="@style.ButtonStyle" title="@(cl["layers"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => MapState.IsLayersOpen = !MapState.IsLayersOpen)"><RadzenIcon Icon="menu" /></RadzenButton>
+
+@if (layers != null && MapState.IsLayersOpen)
+{
+    <RadzenCard Style="@(style.BoxStyle + $";width: {(MapState.IsMobileBrowser ? 270 : 400)}px")">
+        @foreach (var item in layers)
+        {
+            <RadzenCheckBox TValue="bool" @bind-Value=@item.Selected onclick="@(() => OnLayerClick(@item))" />
+            <RadzenLabel Text="@item.Title" Style="margin-left: 8px; vertical-align: middle;" />
+            @if (!string.IsNullOrEmpty(item.Abstract))
+            {
+                <RadzenIcon onclick="@(() => ShowLayerAbstract(item))" title="@cl["moreInfo"]" IconStyle="IconStyle.Primary" style="font-size: 20px;cursor:pointer" Icon="help"></RadzenIcon>
+            }
+            <br />
+        }
+    </RadzenCard>
+}
+
+@code {
+    [Parameter]
+    public int Order { get; set; }
+
+
+    (string ButtonStyle, string BoxStyle) style;
+
+
+    List<LayerModel> layers;
+
+    protected override void OnInitialized()
+    {
+        style = MapState.GetStyleOfMapComponent(Order);
+        layers = MapState.GetAllLayers();
+        MapState.OnChange += OnMyChangeHandler;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            layers = MapState.GetAllLayers();
+            StateHasChanged();
+        });
+    }
+
+    private async Task OnLayerClick(LayerModel layer)
+    {
+        MapState.SetInfoAboutLayerSelection(layer);
+        var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+        string layerJson = JsonConvert.SerializeObject(MapState.GetMapInfoForLeafletLayer(layer.MapName), serializerSettings);
+        await JS.InvokeVoidAsync("mapAPI.changeLayer", layerJson);
+        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapState.GetLayersForUrlParameter());
+    }
+
+    private async Task ShowLayerAbstract(LayerModel layer)
+    {
+        await DialogService.OpenAsync(cl["layerInfo"], ds =>@<div><h4>@layer.Title</h4> @((MarkupString)layer.Abstract.Linkify())</div>, MapState.GetDialogOptions());
+    }
+}

@@ -1,0 +1,255 @@
+﻿{
+  "mapFeatureUrl": "https://webgis.mua.cas.cz/cgi-bin/qgis_mapserv.fcgi?service=WMS&version=1.3.0&request=GetFeatureInfo&srs=EPSG:3857&crs=EPSG:3857&info_format=text%2Fjxml&with_geometry=true&with_maptip=true&height=101&width=101&feature_count=210&x=51&y=51&i=51&j=51&FI_POINT_TOLERANCE=16&FI_LINE_TOLERANCE=8&FI_POLYGON_TOLERANCE=4&region_feature_count=100",
+  "maps": [
+    {
+      "name": "OSM",
+      "baseUrl": "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
+      "attribution": "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
+      "type": "base",
+      "zIndex": "50"
+    },
+    {
+      "name": "Prague",
+      "baseUrl": "https://geodata.ehri-project-test.eu/geoserver/ehri/wms?",
+      "type": "wms",
+      "opacities": "255",
+      "zIndex": "100",
+      "mapLanguages": [
+        {
+          "languageCode": "cs-CZ",
+          "mapParameter": "/webdata/HGIS_cze/memogis_prague_CZE_pol.qgz",
+          "layers": [
+            {
+              "name": "MGS-prague_historical_map_1938-v2",
+              "title": "Historická mapa Prahy (1938)",
+              "code": "MGS-prague_historical_map_1938-v2",
+              "abstract": "Orientační plán hlavního města Prahy s okolím (1938). Do digitální podoby zpracovala Městská knihovna v Praze, georeferencování provedl Masarykův ústav a archiv Akademie věd České republiky. Dostupný také z WWW: http://web2.mlp.cz/mapa1938/klad.php.",
+              "isNotQueryable": true
+            }
+          ]
+        },
+        {
+          "languageCode": "en-US",
+          "mapParameter": "/webdata/HGIS_cze/memogis_prague_CZE_pol.qgz",
+          "layers": [
+            {
+              "name": "MGS-prague_historical_map_1938-v2",
+              "title": "Historical map of Prague (1938)",
+              "code": "MGS-prague_historical_map_1938-v2",
+              "abstract": "Orientační plán hlavního města Prahy s okolím (1938) [Orientation plan of the capital city of Prague with its surroundings (1938)].Digitized by by the Municipal Library in Prague, georeferenced by the Masaryk Institute and archives of the Czech Academy of Sciences. Also available from WWW: http://web2.mlp.cz/mapa1938/klad.php.",
+              "isNotQueryable": true
+            }
+          ]
+        }
+
+      ]
+    },
+    {
+      "name": "Ehri",
+      "baseUrl": "https://webgis.mua.cas.cz/cgi-bin/qgis_mapserv.fcgi?",
+      "attribution": "MÚA AVČR, ITI",
+      "attributionUrl": "https://ehri.cz/memogis_cs.html#howto_credit",
+      "type": "wms",
+      "opacities": "255,255,217,255,205,255",
+      "zIndex": "500",
+      "tileSize": 512,
+      "featuresInfo": true,
+      "mapLanguages": [
+        {
+          "languageCode": "cs-CZ",
+          "mapParameter": "/webdata/HGIS_cze/memogis_prague_CZE_pol.qgz",
+          "collections": [
+            {
+              "name": "TimelineAll",
+              "title": "Všechna období",
+              "selected": true,
+              "layers": [
+                //{
+                //  "name": "Historicka_mapa_Prahy",
+                //  "title": "Historická mapa Prahy (1938)",
+                //  "code": "Historicka_mapa_Prahy",
+                //  "abstract": "Orientační plán hlavního města Prahy s okolím (1938). Do digitální podoby zpracovala Městská knihovna v Praze, georeferencování provedl Masarykův ústav a archiv Akademie věd České republiky. Dostupný také z WWW: http://web2.mlp.cz/mapa1938/klad.php.",
+                //  "isNotQueryable": true
+                //},
+                {
+                  "name": "Neprisupna_mista",
+                  "title": "Nepřístupná místa v prostoru města Prahy",
+                  "code": "Neprisupna_mista",
+                  "abstract": "Místa nepřístupná Židům. Prostoové zobrazení je založeno na historické mapě z roku 1938, současné prostory se mohou lišit velikostí i tvarem."
+                },
+                {
+                  "name": "Obeti_holokaustu_z_Prahy",
+                  "title": "Oběti holokaustu z Prahy",
+                  "code": "Obeti_holokaustu_z_Prahy",
+                  "abstract": "Databáze židovských obyvatel Prahy, kteří zahynuli v důsledku nacistického pronásledování. Záznamy jsou navázané na jejich pražské adresy. Detaily jsou přístupné skrze odkazy na portál holocaust.cz."
+
+                },
+                {
+                  "name": "Bydliste_Zidu_v_Praze_v_dobe_okupace",
+                  "title": "Bydliště Židů v Praze v době okupace",
+                  "code": "Bydliste_Zidu_v_Praze_v_dobe_okupace",
+                  "abstract": "Adresy, na nichž podle databáze obětí, bydleli v době šoa židovští obyvatelé Prahy. Údaje většinou pocházejí z registrace Židů v Protektorátu, která byla na základě nařízení Ústředny pro židovské vystěhovalectví zahájena na podzim 1941. Vrstva zahrnuje údaje o počtu obyvatel jednotlivých domů, statistiku jejich osudů a počet přítomných k různým historickým datům. V některých případech, kdy bylo obtížné jednotlivé domy identifikovat, je pod stejnými koordináty seskupeno více adres (například v jedné ulici). Na zpřesnění umístění na mapě průběžně pracujeme. Použity jsou názvy ulic z doby okupace (cca 1941-1942)."
+
+                },
+                {
+                  "name": "Body_zajmu",
+                  "title": "Body zájmu v prostoru města Prahy",
+                  "code": "Body_zajmu",
+                  "abstract": "Body zájmu zahrnující místa pronásledování, židovské objekty a sklady zabaveného majetku."
+
+                },
+                {
+                  "name": "Incidenty_v_prostoru_mesta_Prahy",
+                  "title": "Incidenty v prostoru města Prahy",
+                  "code": "Incidenty_v_prostoru_mesta_Prahy",
+                  "abstract": "Incidenty v prostoru města Prahy, při nichž byli židovští obyvatelé zatčeni či vyšetřováni pro porušení protižidovských nařízení. Údaje byly v rámci projektu MemoMap Praha vyexcerpovány z digitalizovaných dokumentů pražské policie. Jde například o informace o nedodržování prostorových zákazů, o občanských průkazech neoznačených písmenem \"J\" (Jude), apod."
+                },
+                {
+                  "name": "Statistika",
+                  "title": "Statistika pražských čtvrtí",
+                  "code": "Statistika",
+                  "abstract": "Informace o počtu židovských obyvatel, incidentů a bodů zájmu v jednotlivých pražských čtvrtí. Pro zobrazení detailů přibližte mapu.",
+                  "isNotQueryable": true
+
+                }
+              ]
+            },
+            {
+              "name": "Timeline1",
+              "title": "První období",
+              "selected": false,
+              "layers": [
+                {
+                  "name": "Neprisupna_mista",
+                  "title": "Nepřístupná místa v prostoru města Prahy",
+                  "code": "Neprisupna_mista"
+                },
+                {
+                  "name": "Obeti_holokaustu_z_Prahy",
+                  "title": "Oběti holokaustu z Prahy",
+                  "code": "Obeti_holokaustu_z_Prahy"
+                },
+                {
+                  "name": "Bydliste_Zidu_v_Praze_v_dobe_okupace",
+                  "title": "Bydliště Židů v Praze v době okupace",
+                  "code": "Bydliste_Zidu_v_Praze_v_dobe_okupace"
+
+                },
+                {
+                  "name": "Body_zajmu",
+                  "title": "Body zájmu v prostoru města Prahy",
+                  "code": "Body_zajmu"
+
+                },
+                {
+                  "name": "Incidenty_v_prostoru_mesta_Prahy",
+                  "title": "Incidenty v prostoru města Prahy",
+                  "code": "Incidenty_v_prostoru_mesta_Prahy"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "languageCode": "en-US",
+          "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_pol.qgz",
+          "collections": [
+            {
+              "name": "TimelineAll",
+              "title": "All periods",
+              "selected": true,
+              "layers": [
+                //{
+                //  "name": "Historical_map_of_Prague",
+                //  "title": "Historical Map of Prague (1938)",
+                //  "code": "Historicka_mapa_Prahy",
+                //  "abstract": "Orientační plán hlavního města Prahy s okolím (1938) [Orientation plan of the capital city of Prague with its surroundings (1938)].Digitized by by the Municipal Library in Prague, georeferenced by the Masaryk Institute and archives of the Czech Academy of Sciences. Also available from WWW: http://web2.mlp.cz/mapa1938/klad.php.",
+                //  "isNotQueryable": true
+                //},
+                {
+                  "name": "Inaccessible_places",
+                  "title": "Inaccessible Places within the City of Prague",
+                  "code": "Neprisupna_mista",
+                  "abstract": "Places that Jews were forbidden to enter. Based on the historical map from year 1938. Current shape of the place can differ."
+                },
+                {
+                  "name": "Holocaust_victims_from_Prague",
+                  "title": "Holocaust victims from Prague",
+                  "code": "Obeti_holokaustu_z_Prahy",
+                  "abstract": "Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz."
+                },
+                {
+                  "name": "Jewish_homes_during_the_occupation",
+                  "title": "Jewish Homes in Prague During the Occupation",
+                  "code": "Bydliste_Zidu_v_Praze_v_dobe_okupace",
+                  "abstract": "The home addresses of Prague's Jewish residents during the Shoah from the victims' database. The data mostly comes from the registration of Jews in the Protectorate, which began in the fall of 1941 by order of the Central Office for Jewish Emigration. You will be able to view the number of people who lived in a particular building, find out what their fates were, and the numbers of those present on various historical dates. Some buildings were difficult to identify and in those cases multiple addresses (for example, on the same street) are grouped under the same coordinates. We are continually working on refining the map. We have kept the street names used during the occupation (roughly 1941-1942)."
+
+                },
+                {
+                  "name": "Points_of_interest",
+                  "title": "Points of Interest in the City of Prague",
+                  "code": "Body_zajmu",
+                  "abstract": "Points of interest include places of persecution, Jewish buildings, warehouses full of confiscated property, or places that Jews were forbidden to enter."
+
+                },
+                {
+                  "name": "Incidents_within_the_city_of_Prague",
+                  "title": "Incidents Within the City of Prague",
+                  "code": "Incidenty_v_prostoru_mesta_Prahy",
+                  "abstract": "Incidents that took place within the city limits of Prague during which Jewish residents were arrested or investigated for violating anti-Jewish ordinances. This data was extracted from the digitized documents of the Prague Police as part of the MemoMap Prague project. It includes information about non-compliance with restrictions of free movement, identification papers lacking the letter \"J\" (Jude), etc."
+                },
+                {
+                  "name": "Prague_districts_statistic",
+                  "title": "Prague Districts Statistic",
+                  "code": "Statistika",
+                  "abstract": "Statistic information on number of Jewish residents, incidents and points of interest according to specific Prague's districts. Zoom in to display details.",
+                  "isNotQueryable": true
+
+                }
+              ]
+            },
+            {
+              "name": "Timeline1",
+              "title": "First period",
+              "selected": false,
+              "layers": [
+                {
+                  "name": "Inaccessible_places",
+                  "title": "Inaccessible Places within the City of Prague",
+                  "code": "Neprisupna_mista",
+                  "abstract": "Places that Jews were forbidden to enter. Based on the historical map from year 1938. Current shape of the place can differ."
+                },
+                {
+                  "name": "Holocaust_victims_from_Prague",
+                  "title": "Holocaust victims from Prague",
+                  "code": "Obeti_holokaustu_z_Prahy",
+                  "abstract": "Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz."
+                },
+                {
+                  "name": "Jewish_homes_during_the_occupation",
+                  "title": "Jewish Homes in Prague During the Occupation",
+                  "code": "Bydliste_Zidu_v_Praze_v_dobe_okupace",
+                  "abstract": "The home addresses of Prague's Jewish residents during the Shoah from the victims' database. The data mostly comes from the registration of Jews in the Protectorate, which began in the fall of 1941 by order of the Central Office for Jewish Emigration. You will be able to view the number of people who lived in a particular building, find out what their fates were, and the numbers of those present on various historical dates. Some buildings were difficult to identify and in those cases multiple addresses (for example, on the same street) are grouped under the same coordinates. We are continually working on refining the map. We have kept the street names used during the occupation (roughly 1941-1942)."
+
+                },
+                {
+                  "name": "Points_of_interest",
+                  "title": "Points of Interest in the City of Prague",
+                  "code": "Body_zajmu",
+                  "abstract": "Points of interest include places of persecution, Jewish buildings, warehouses full of confiscated property, or places that Jews were forbidden to enter."
+
+                },
+                {
+                  "name": "Incidents_within_the_city_of_Prague",
+                  "title": "Incidents Within the City of Prague",
+                  "code": "Incidenty_v_prostoru_mesta_Prahy",
+                  "abstract": "Incidents that took place within the city limits of Prague during which Jewish residents were arrested or investigated for violating anti-Jewish ordinances. This data was extracted from the digitized documents of the Prague Police as part of the MemoMap Prague project. It includes information about non-compliance with restrictions of free movement, identification papers lacking the letter \"J\" (Jude), etc."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

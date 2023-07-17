@@ -1,0 +1,27 @@
+﻿@using EhriMemoMap.Helpers;
+@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapState MapState
+@inject IStringLocalizer<CommonResources> cl
+
+<RadzenButton Style="padding:0;width:40px;position:absolute;bottom:120px;right:10px;z-index:600" title="@(cl["myLocation"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => GetMyLocation())"><RadzenIcon Icon="my_location"/></RadzenButton>
+<RadzenButton Style="width:40px;position:absolute;bottom:75px;right:10px;z-index:600" title="@(cl["zoomIn"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => ZoomIn())"><b>+</b></RadzenButton>
+<RadzenButton Style="width:40px;position:absolute;bottom:30px;right:10px;z-index:600" title="@(cl["zoomOut"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => ZoomOut())"><b>-</b></RadzenButton>
+
+@code {
+    private async Task GetMyLocation()
+    {
+        await JS.InvokeVoidAsync("mapAPI.getMyLocation");
+    }
+
+    private async Task ZoomIn()
+    {
+        await JS.InvokeVoidAsync("mapAPI.map.zoomIn");
+    }
+
+    private async Task ZoomOut()
+    {
+        await JS.InvokeVoidAsync("mapAPI.map.zoomOut");
+    }
+}

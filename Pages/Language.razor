@@ -1,0 +1,55 @@
+﻿@using System.Globalization;
+@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapState MapState
+@inject IStringLocalizer<CommonResources> cl
+@inject NavigationManager Navigation
+@inject IHttpContextAccessor httpContextAccesor
+
+<RadzenButton Style="@style.ButtonStyle" title="@(cl[otherLanguageTitle])"
+              ButtonStyle="ButtonStyle.Primary"
+              Variant="Variant.Filled"
+              Click="ChangeLanguage">@otherLanguage</RadzenButton>
+
+@code {
+    [Parameter]
+    public int Order { get; set; }
+
+    string otherLanguage;
+    string otherLanguageTitle;
+    string currentUri;
+
+    (string ButtonStyle, string BoxStyle) style;
+
+    protected override void OnInitialized()
+    {
+        style = MapState.GetStyleOfMapComponent(Order);
+        otherLanguage = Culture.ToString() == "cs-CZ" ? "EN" : "CS";
+        otherLanguageTitle = Culture.ToString() == "cs-CZ" ? "english" : "czech";
+    }
+
+
+    async Task ChangeLanguage()
+    {
+        currentUri = "~/" + await JS.InvokeAsync<string>("mapAPI.getWindowLocationSearch");
+        Culture = Culture.ToString() == "cs-CZ" ? new CultureInfo("en-US") : new CultureInfo("cs-CZ");
+    }
+
+    private CultureInfo Culture
+    {
+        get => CultureInfo.CurrentCulture;
+        set
+        {
+            if (CultureInfo.CurrentCulture != value)
+            {
+                var cultureEscaped = Uri.EscapeDataString(value.Name);
+                var uriEscaped = Uri.EscapeDataString(currentUri);
+
+                Navigation.NavigateTo(
+                    $"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}",
+                    forceLoad: true);
+            }
+        }
+    }
+}

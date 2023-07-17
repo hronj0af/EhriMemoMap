@@ -1,0 +1,65 @@
+﻿@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapState MapState 
+@inject IStringLocalizer<CommonResources> cl
+
+
+@if (collections != null && collections.Count > 1)
+{
+    <RadzenButton Style="@style.ButtonStyle" title="@(cl["timeline"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => MapState.IsTimelineOpen = !MapState.IsTimelineOpen)"><RadzenIcon Icon="lock_clock" /></RadzenButton>
+
+    @if (MapState.IsTimelineOpen)
+    {
+        <RadzenRow Gap="7px" Style="@style.BoxStyle">
+            @foreach (var item in collections)
+            {
+                <RadzenButton ButtonStyle="item.Selected ? ButtonStyle.Dark : ButtonStyle.Primary" Shade="Shade.Light"  Size="ButtonSize.Medium" Variant="Variant.Flat" Click="(() => OnCollectionClick(item))">@item.Title</RadzenButton>
+            }
+        </RadzenRow>
+
+    }
+}
+@code {
+    [Parameter]
+    public int Order { get; set; }
+
+
+    (string ButtonStyle, string BoxStyle) style;
+
+    List<CollectionModel> collections;
+
+    protected override void OnInitialized()
+    {
+        style = MapState.GetStyleOfMapComponent(Order);
+        collections = MapState.GetAllCollections();
+        MapState.OnChange += OnMyChangeHandler;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            collections = MapState.GetAllCollections();
+            StateHasChanged();
+        });
+    }
+
+    private async Task OnCollectionClick(CollectionModel collection)
+    {
+        if (collection.Selected)
+            return;
+        MapState.SetInfoAboutCollectionSelection(collection);
+        var serializerSettings = new JsonSerializerSettings();
+        serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        string layerJson = JsonConvert.SerializeObject(MapState.GetMapInfoForLeafletLayer(collection.MapName), serializerSettings);
+        await JS.InvokeVoidAsync("mapAPI.changeLayer", layerJson);
+        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "collection", MapState.GetCollectionForUrlParameter());
+    }
+
+}

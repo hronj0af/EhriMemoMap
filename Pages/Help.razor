@@ -1,0 +1,39 @@
+﻿@using EhriMemoMap.Helpers;
+@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapState MapState
+@inject IStringLocalizer<CommonResources> cl
+
+<RadzenButton Style="@style.ButtonStyle" title="@(cl["help"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => ShowHelp())"><RadzenIcon Icon="help" /></RadzenButton>
+
+@code {
+    [Parameter]
+    public int Order { get; set; }
+
+    (string ButtonStyle, string BoxStyle) style;
+
+    protected override void OnInitialized()
+    {
+        style = MapState.GetStyleOfMapComponent(Order);
+        MapState.OnChange += OnMyChangeHandler;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    private async Task ShowHelp()
+    {
+        await DialogService.OpenAsync(cl["help"], ds =>@<div>@((MarkupString)(cl["helpContent"].ToString()))</div>, MapState.GetDialogOptions());
+    }
+}

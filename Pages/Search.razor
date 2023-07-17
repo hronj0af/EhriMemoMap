@@ -1,0 +1,92 @@
+﻿@using EhriMemoMap.Logic;
+@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapState MapState 
+@inject AppLogic logic
+@inject IStringLocalizer<CommonResources> cl
+
+@if (MapState.IsSearchOpen)
+{
+    <RadzenButton Style="@style.ButtonStyle" title="@(cl["search"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => MapState.IsSearchOpen = !MapState.IsSearchOpen)"><RadzenIcon Icon="close" /></RadzenButton>
+    <RadzenAutoComplete Change="@ShowPlace" @bind-Value=@selectedPlaceName Data=@places TextProperty="@(CultureInfo.CurrentCulture == new CultureInfo("cs-CZ") ? "DropDownInfoCs" : "DropDownInfoEn")" LoadData=@LoadData Style="@(style.BoxStyle + $";width: {(MapState.IsMobileBrowser ? 300 : 800)}px")">
+        <Template>
+            <span onclick="@(() => ShowPlace((Place)context))">@if (CultureInfo.CurrentCulture == new CultureInfo("cs-CZ"))
+                {
+                    @context.DropDownInfoCs
+                }
+                else
+                {
+                    @context.DropDownInfoEn
+                }
+            </span>
+        </Template>
+    </RadzenAutoComplete>
+
+}
+else
+{
+    <RadzenButton Style="@style.ButtonStyle" title="@(cl["search"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => MapState.IsSearchOpen = !MapState.IsSearchOpen)"><RadzenIcon Icon="search" /></RadzenButton>
+
+}
+
+@code {
+    [Parameter]
+    public int Order { get; set; }
+
+    string selectedPlaceName;
+    IEnumerable<Place> places;
+    (string ButtonStyle, string BoxStyle) style;
+
+    protected override void OnInitialized()
+    {
+        style = MapState.GetStyleOfMapComponent(Order);
+        MapState.OnChange += OnMyChangeHandler;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            if (!MapState.IsSearchOpen)
+            {
+                JS.InvokeVoidAsync("mapAPI.removeObjects");
+                selectedPlaceName = "";
+            }
+            StateHasChanged();
+        });
+    }
+
+    public async Task ShowPlace()
+    {
+        var place = places.FirstOrDefault(a => CultureInfo.CurrentCulture == new CultureInfo("cs-CZ") ? a.DropDownInfoCs == selectedPlaceName : a.DropDownInfoEn == selectedPlaceName);
+        await ShowPlace(place);
+    }
+
+    public async Task ShowPlace(Place place)
+    {
+        if (place != null)
+        {
+            var zoom = 15;
+            if (place.MapObject == null || !place.MapObject.Contains("Polygon"))
+                zoom = 18;
+            await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, zoom);
+            await JS.InvokeVoidAsync("mapAPI.addOneObjectFromJsonString", place.MapObject != null ? place.MapObject : place.MapLocation);
+        }
+        else
+            await JS.InvokeVoidAsync("mapAPI.removeObjects");
+
+    }
+
+    async Task LoadData(LoadDataArgs args)
+    {
+      places = await logic.SolrExecuteDocument(args.Filter);
+        InvokeAsync(StateHasChanged);
+    }
+
+}

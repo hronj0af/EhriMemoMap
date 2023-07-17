@@ -1,0 +1,79 @@
+﻿@page "/"
+@using Newtonsoft.Json.Linq;
+@using System.Xml;
+@using System.Xml.Linq;
+
+@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject IStringLocalizer<CommonResources> cl
+@inject MapState MapState
+@inject IHttpContextAccessor httpContextAccesor
+
+<div title="@cl["mapTitle"]" @onclick="ShowPlaceInfo" id="map"></div>
+<Search Order=1 />
+<Timeline Order=2 />
+<Layers Order=3 />
+<Help Order=4 />
+<Language Order=5 />
+<Home Order=6 />
+<Zoom/>
+
+@code {
+    protected override void OnInitialized()
+    {
+        DialogService.OnClose += RemoveObjects;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            if (!MapState.MapStateWasInit)
+            {
+                string layers = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "layers");
+                string collectionName = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "collection");
+                MapState.Init(layers, collectionName);
+            }
+            await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetAllMapsInfoForLeaflet());
+            MapState.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
+            MapState.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
+            MapState.IsMobileBrowser = await JS.InvokeAsync<bool>("mapAPI.isMobileBrowser");
+        }
+    }
+
+    public void RemoveObjects(dynamic obj)
+    {
+        if (!MapState.IsMobileBrowser)
+            JS.InvokeVoidAsync("mapAPI.removeObjects");
+    }
+
+    protected async Task ShowPlaceInfo(MouseEventArgs e)
+    {
+        if (await JS.InvokeAsync<bool>("mapAPI.getIsDragging"))
+            return;
+
+        try
+        {
+            string bbox = await JS.InvokeAsync<string>("mapAPI.convertMousePositionToBBoxParameter");
+            // tuhle blbost tu dělám proto, že QGIS server neumí vracet anglické popisky v json, ale jenom v xml...
+            string urlJson = MapState.GetFeaturesInfoUrl("application/json") + bbox;
+            string urlXML = MapState.GetFeaturesInfoUrl("text/xml") + bbox;
+            string responseJson = await clientFactory.CreateClient().GetStringAsync(urlJson + bbox);
+            string responseXML = await clientFactory.CreateClient().GetStringAsync(urlXML + bbox);
+
+            if (!MapState.IsMobileBrowser)
+                await JS.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", responseJson);
+
+            XDocument xdoc = XDocument.Parse(responseXML);
+
+            await DialogService.OpenAsync(cl["placeInfo"], ds =>@<div><PlaceInformation XDoc=@xdoc></PlaceInformation></div>, MapState.GetDialogOptions());
+        }
+        catch
+        {
+
+        }
+    }
+}
