@@ -21,5 +21,6 @@ namespace EhriMemoMap.Models
         public bool Selected { get; set; }
 
         public bool IsNotQueryable { get; set; }
+
     }
 }

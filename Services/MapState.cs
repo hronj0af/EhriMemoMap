@@ -231,12 +231,12 @@ namespace EhriMemoMap.Services
                 return new List<LayerModel>();
 
             return Maps.
-                Where(a => a.Type == "wms").
+                Where(a => a.Type.Contains("wms")).
                 SelectMany(a => a.MapLanguages.Where(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString() && a.Layers != null)).
                 SelectMany(map => map.Layers).
                 Union(
                     Maps.
-                        Where(a => a.Type == "wms").
+                        Where(a => a.Type.Contains("wms")).
                         SelectMany(a => a.MapLanguages.Where(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString() && a.Collections != null)).
                         SelectMany(a => a.Collections.Where(b => b.Selected).
                         SelectMany(c => c.Layers))).

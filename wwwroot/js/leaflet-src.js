@@ -11385,7 +11385,11 @@
         // Normalizes the [tileSize option](#gridlayer-tilesize) into a point. Used by the `createTile()` method.
         getTileSize: function () {
             var s = this.options.tileSize;
-            return s instanceof Point ? s : new Point(s, s);
+            return s instanceof Point
+                ? s
+                : s > 0
+                    ? new Point(s, s)
+                    : new Point(window.outerWidth, window.outerHeight);
         },
 
         _updateZIndex: function () {

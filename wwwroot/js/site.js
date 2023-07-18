@@ -100,8 +100,36 @@ var mapAPI = {
         groupToChange.setZIndex(mapSettings.zIndex);
     },
 
-    initMap: function (jsonMapSettings) {
+    updateImageLayers: function () {
+        Object.values(mapAPI.map._layers).forEach(layer => {
+            if (layer.options.type != undefined && layer.options.type == "image") {
+                layer.setUrl(layer.options.url + this.getImageLayerLimitsUrlParameters());
+                layer.on("load", function () {
+                    layer.setBounds(mapAPI.map.getBounds());
+                });
+            }
+        });
+    },
 
+    getImageLayerLimitsUrlParameters: function () {
+
+        //var bounds = this.map.getBounds();
+        //var lefttop = this.map.project(this.map.containerPointToLatLng([bounds.getSouth(), bounds.getEast()]), 0);
+        //var rightbottom = this.map.project(this.map.containerPointToLatLng([bounds.getNorth(), bounds.getWest()]), 0);
+
+        //return "&BBOX=" + lefttop.x + "," + lefttop.y + "," + rightbottom.x + "," + rightbottom.y +
+        //    "&HEIGHT=" + window.innerHeight +
+        //    "&WIDTH=" + window.outerWidth;
+
+        var bounds = this.map.getBounds();
+
+        return "&bbox=" + bounds.getSouth() + "," + bounds.getWest() + "," + bounds.getNorth() + "," + bounds.getEast() +
+            "&height=" + (this.map.getSize().y) +
+            "&width=" + this.map.getSize().x;
+
+    },
+
+    initMap: function (jsonMapSettings) {
 
         this.fitMapToWindow();
 
@@ -112,6 +140,7 @@ var mapAPI = {
 
         this.map.on("moveend", function (e) {
             mapAPI.setUrlByMapInfo();
+            mapAPI.updateImageLayers();
             setTimeout(() => {
                 mapAPI.isDragging = false;
             }, 100);
@@ -152,9 +181,24 @@ var mapAPI = {
             return L.tileLayer.wms(mapSettingsObject.baseUrl, {
                 id: mapSettingsObject.name,
                 map: mapSettingsObject.mapParameter,
-                tileSize: mapSettingsObject.tileSize != null ? parseInt(mapSettingsObject.tileSize) : 512,
+                tileSize: mapSettingsObject.tileSize != null
+                    ? parseInt(mapSettingsObject.tileSize)
+                    : 512,
                 layers: mapSettingsObject.layers.map(a => a.name).join()
             });
+        }
+        else if (mapSettingsObject.type == 'wms-image') {
+            var bounds = this.map.getBounds();
+            var bbox = bounds.getSouth() + "," + bounds.getWest() + "," + bounds.getNorth() + "," + bounds.getEast();
+            var url = mapSettingsObject.baseUrl +
+                "service=WMS&request=GetMap&version=1.3.0&srs=EPSG:4326&crs=EPSG:4326&map=" +
+                mapSettingsObject.mapParameter +
+                "&opacities=" + mapSettingsObject.opacities +
+                "&format=image/png" +
+                "&transparent=true" +
+                "&layers=" + mapSettingsObject.layers.map(a => a.name).join();
+            console.log(url);
+            return L.imageOverlay(url + this.getImageLayerLimitsUrlParameters(), this.map.getBounds(), { id: mapSettingsObject.name, type: "image", url: url });
         }
 
     },

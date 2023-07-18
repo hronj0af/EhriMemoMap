@@ -49,10 +49,9 @@
       "baseUrl": "https://webgis.mua.cas.cz/cgi-bin/qgis_mapserv.fcgi?",
       "attribution": "MÚA AVČR, ITI",
       "attributionUrl": "https://ehri.cz/memogis_cs.html#howto_credit",
-      "type": "wms",
+      "type": "wms-image",
       "opacities": "255,255,217,255,205,255",
       "zIndex": "500",
-      "tileSize": 512,
       "featuresInfo": true,
       "mapLanguages": [
         {
@@ -109,8 +108,6 @@
                   "title": "Statistika pražských čtvrtí",
                   "code": "Statistika",
                   "abstract": "Informace o počtu židovských obyvatel, incidentů a bodů zájmu v jednotlivých pražských čtvrtí. Pro zobrazení detailů přibližte mapu.",
-                  "isNotQueryable": true
-
                 }
               ]
             },
@@ -204,7 +201,6 @@
                   "code": "Statistika",
                   "abstract": "Statistic information on number of Jewish residents, incidents and points of interest according to specific Prague's districts. Zoom in to display details.",
                   "isNotQueryable": true
-
                 }
               ]
             },
