@@ -113,20 +113,13 @@ var mapAPI = {
 
     getImageLayerLimitsUrlParameters: function () {
 
-        //var bounds = this.map.getBounds();
-        //var lefttop = this.map.project(this.map.containerPointToLatLng([bounds.getSouth(), bounds.getEast()]), 0);
-        //var rightbottom = this.map.project(this.map.containerPointToLatLng([bounds.getNorth(), bounds.getWest()]), 0);
-
-        //return "&BBOX=" + lefttop.x + "," + lefttop.y + "," + rightbottom.x + "," + rightbottom.y +
-        //    "&HEIGHT=" + window.innerHeight +
-        //    "&WIDTH=" + window.outerWidth;
-
         var bounds = this.map.getBounds();
+        var lefttop = this.map.project([bounds.getSouth(), bounds.getWest()], 0);
+        var rightbottom = this.map.project([bounds.getNorth(), bounds.getEast()], 0);
 
-        return "&bbox=" + bounds.getSouth() + "," + bounds.getWest() + "," + bounds.getNorth() + "," + bounds.getEast() +
-            "&height=" + (this.map.getSize().y) +
-            "&width=" + this.map.getSize().x;
-
+        return "&BBOX=" + lefttop.x + "," + lefttop.y + "," + rightbottom.x + "," + rightbottom.y +
+            "&HEIGHT=" + this.map.getSize().y +
+            "&WIDTH=" + this.map.getSize().x;
     },
 
     initMap: function (jsonMapSettings) {
@@ -191,7 +184,7 @@ var mapAPI = {
             var bounds = this.map.getBounds();
             var bbox = bounds.getSouth() + "," + bounds.getWest() + "," + bounds.getNorth() + "," + bounds.getEast();
             var url = mapSettingsObject.baseUrl +
-                "service=WMS&request=GetMap&version=1.3.0&srs=EPSG:4326&crs=EPSG:4326&map=" +
+                "service=WMS&request=GetMap&version=1.3.0&srs=EPSG:3857&crs=EPSG:3857&map=" +
                 mapSettingsObject.mapParameter +
                 "&opacities=" + mapSettingsObject.opacities +
                 "&format=image/png" +
