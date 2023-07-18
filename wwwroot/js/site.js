@@ -8,7 +8,7 @@ var mapAPI = {
 
         var mapElement = document.getElementById("map");
 
-        if (mapElement.length == 0)
+        if (mapElement == null || mapElement.length == 0)
             return;
 
         var mapHeight = window.innerHeight - mapElement.offsetTop - 1;
@@ -138,6 +138,8 @@ var mapAPI = {
     initMap: function (jsonMapSettings) {
 
         this.fitMapToWindow();
+
+
 
         this.map = L.map('map', { zoomControl: false });
 
@@ -339,3 +341,4 @@ var mapAPI = {
     }
 }
 
+window.addEventListener("resize", mapAPI.fitMapToWindow);

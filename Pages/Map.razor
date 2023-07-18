@@ -57,6 +57,9 @@
 
         try
         {
+            MapState.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
+            MapState.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
+
             string bbox = await JS.InvokeAsync<string>("mapAPI.convertMousePositionToBBoxParameter");
             // tuhle blbost tu dělám proto, že QGIS server neumí vracet anglické popisky v json, ale jenom v xml...
             string urlJson = MapState.GetFeaturesInfoUrl("application/json") + bbox;

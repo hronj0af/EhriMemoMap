@@ -68,6 +68,9 @@
 
     private async Task ShowLayerAbstract(LayerModel layer)
     {
+        MapState.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
+        MapState.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
+
         await DialogService.OpenAsync(cl["layerInfo"], ds =>@<div><h4>@layer.Title</h4> @((MarkupString)layer.Abstract.Linkify())</div>, MapState.GetDialogOptions());
     }
 }
