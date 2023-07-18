@@ -10,7 +10,7 @@
 @inject MapState MapState
 @inject IHttpContextAccessor httpContextAccesor
 
-<div title="@cl["mapTitle"]" @onclick="ShowPlaceInfo" id="map"></div>
+<div title="@cl["mapTitle"]" @onclick="ShowPlaceInfo" id="map" style="cursor:default"></div>
 <Search Order=1 />
 <Timeline Order=2 />
 <Layers Order=3 />
@@ -52,7 +52,7 @@
 
     protected async Task ShowPlaceInfo(MouseEventArgs e)
     {
-        if (await JS.InvokeAsync<bool>("mapAPI.getIsDragging"))
+        if ((await JS.InvokeAsync<int>("mapAPI.getIsDragging")) > 0)
             return;
 
         try

@@ -1,7 +1,7 @@
 ﻿
 var mapAPI = {
 
-    map: null, lat: null, lng: null, coorx: null, coory: null, polygons: [], isDragging: false,
+    map: null, lat: null, lng: null, coorx: null, coory: null, polygons: [], isDragging: 0,
 
     // nastaví mapu, aby lícovala s oknem
     fitMapToWindow: function () {
@@ -148,18 +148,20 @@ var mapAPI = {
 
         // update url a obrázkových vrstev po té, co se změní poloha mapy
         this.map.on("moveend", function (e) {
+            document.getElementById("map").style.cursor = 'default';
             mapAPI.setUrlByMapInfo();
             mapAPI.updateImageLayers();
 
             setTimeout(() => {
-                mapAPI.isDragging = false;
-            }, 100);
+                mapAPI.setIsDragging(false);
+            }, 500);
 
         });
 
         // tohle je tu kvůli tomu, aby nevznikl dojem, že uživatel klikl myší, když jenom přesunul mapu o kousek vedle
         this.map.on("movestart", function (e) {
-            mapAPI.isDragging = true;
+            document.getElementById("map").style.cursor = 'grab';
+            mapAPI.setIsDragging(true);
         });
 
         // při změně polohy myši se zapíšou její souřadnice do proměnných
@@ -338,6 +340,13 @@ var mapAPI = {
 
     getIsDragging: function () {
         return this.isDragging;
+    },
+
+    setIsDragging: function (value) {
+        if (value)
+            this.isDragging++;
+        else
+            this.isDragging--;
     }
 }
 
