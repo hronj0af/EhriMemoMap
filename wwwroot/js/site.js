@@ -2,6 +2,8 @@
 var mapAPI = {
 
     map: null, lat: null, lng: null, coorx: null, coory: null, polygons: [], isDragging: false,
+
+    // nastaví mapu, aby lícovala s oknem
     fitMapToWindow: function () {
 
         var mapElement = document.getElementById("map");
@@ -13,6 +15,7 @@ var mapAPI = {
         mapElement.style.height = mapHeight + "px";
     },
 
+    // získá informace z URL pro nastavení polohy mapy
     getMapInfoFromUrl: function () {
         var queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -35,6 +38,7 @@ var mapAPI = {
         };
     },
 
+    // nastaví URL parametry pro pozdější nastavení mapy
     setUrlByMapInfo: function () {
         var bounds = this.map.getBounds();
 
@@ -44,17 +48,20 @@ var mapAPI = {
         this.setUrlParam('zoom', this.map.getZoom());
     },
 
+    // nastaví jednotlivý parametr url
     setUrlParam: function (paramName, paramValue) {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set(paramName, paramValue);
         history.pushState({ pageID: '100' }, 'Mapa', "?" + urlParams);
     },
 
+    // získá parametr z url
     getUrlParam: function (paramName) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(paramName);
     },
 
+    // nastaví mapu podle parametrů url
     setMapWithInfoFromUrl: function () {
         var infoFromUrl = this.getMapInfoFromUrl();
         if (infoFromUrl == null)
@@ -68,6 +75,8 @@ var mapAPI = {
 
         return true;
     },
+
+    // převede pozici myši nad mapou do parametru bbox pro získání informací o daném místě (dotaz na QGIS server)
     convertMousePositionToBBoxParameter: function () {
 
         var sizeOfBox = 5 * this.map.getZoom();
@@ -83,6 +92,7 @@ var mapAPI = {
         return "&bbox=" + lefttop.x + "," + lefttop.y + "," + rightbottom.x + "," + rightbottom.y;
     },
 
+    // přidá k vrstvám mapy vrstvu v parametru a tutéž vrstvu také předtím z mapy odejme
     changeLayer: function (jsonMapSettings) {
         var mapSettings = JSON.parse(jsonMapSettings);
         var oldLayer, groupToChange;
@@ -100,6 +110,7 @@ var mapAPI = {
         groupToChange.setZIndex(mapSettings.zIndex);
     },
 
+    // updatuje obrázkovou vrstvu mapy (nastaví nové url a souřadnice pro aktuální zobrazení mapy)
     updateImageLayers: function () {
         Object.values(mapAPI.map._layers).forEach(layer => {
             if (layer.options.type != undefined && layer.options.type == "image") {
@@ -111,6 +122,7 @@ var mapAPI = {
         });
     },
 
+    // získá url string s informacemi o výšce a šířce obrázku + souřadnice obrázku (vlevo nahoře + vpravo dole)
     getImageLayerLimitsUrlParameters: function () {
 
         var bounds = this.map.getBounds();
@@ -122,6 +134,7 @@ var mapAPI = {
             "&WIDTH=" + this.map.getSize().x;
     },
 
+    // připraví mapu do úvodního stavu
     initMap: function (jsonMapSettings) {
 
         this.fitMapToWindow();
@@ -131,19 +144,23 @@ var mapAPI = {
         if (!this.setMapWithInfoFromUrl())
             this.map.setView([50.07905886, 14.43715096], 14);
 
+        // update url a obrázkových vrstev po té, co se změní poloha mapy
         this.map.on("moveend", function (e) {
             mapAPI.setUrlByMapInfo();
             mapAPI.updateImageLayers();
+
             setTimeout(() => {
                 mapAPI.isDragging = false;
             }, 100);
 
         });
 
+        // tohle je tu kvůli tomu, aby nevznikl dojem, že uživatel klikl myší, když jenom přesunul mapu o kousek vedle
         this.map.on("movestart", function (e) {
             mapAPI.isDragging = true;
         });
 
+        // při změně polohy myši se zapíšou její souřadnice do proměnných
         this.map.addEventListener('mousemove', function (ev) {
             mapAPI.lat = ev.latlng.lat;
             mapAPI.lng = ev.latlng.lng;
@@ -153,6 +170,7 @@ var mapAPI = {
 
         var mapSettings = JSON.parse(jsonMapSettings);
 
+        // konverze json objektu do jednotlivých vrstev mapy a jejich přidání k mapě
         for (var i = 0; i < mapSettings.length; i++) {
             var layer = this.convertMapSettingsObjectToMapLayer(mapSettings[i]);
             var group = L.layerGroup(layer, { id: mapSettings[i].name + "_group" });
@@ -162,6 +180,7 @@ var mapAPI = {
         }
     },
 
+    // konvertuje objekt s nastavením mapových vrstev do mapových vrstev leafletu
     convertMapSettingsObjectToMapLayer: function (mapSettingsObject) {
         if (mapSettingsObject.type == 'base') {
             return L.tileLayer(mapSettingsObject.baseUrl, {
@@ -181,8 +200,6 @@ var mapAPI = {
             });
         }
         else if (mapSettingsObject.type == 'wms-image') {
-            var bounds = this.map.getBounds();
-            var bbox = bounds.getSouth() + "," + bounds.getWest() + "," + bounds.getNorth() + "," + bounds.getEast();
             var url = mapSettingsObject.baseUrl +
                 "service=WMS&request=GetMap&version=1.3.0&srs=EPSG:3857&crs=EPSG:3857&map=" +
                 mapSettingsObject.mapParameter +
@@ -190,16 +207,18 @@ var mapAPI = {
                 "&format=image/png" +
                 "&transparent=true" +
                 "&layers=" + mapSettingsObject.layers.map(a => a.name).join();
-            console.log(url);
+            //console.log(url);
             return L.imageOverlay(url + this.getImageLayerLimitsUrlParameters(), this.map.getBounds(), { id: mapSettingsObject.name, type: "image", url: url });
         }
 
     },
 
+    // konverze souřadnic z EPSG 4236 do EPSG 3857
     convertPoint: function (originalPoint) {
         return this.map.unproject(originalPoint, 0);
     },
 
+    // přidá objekty (polygony atd.) na mapu podle jsonu
     addObjectsFromJsonString: function (jsonInfo) {
 
         jsonInfo = JSON.parse(jsonInfo);
@@ -210,6 +229,7 @@ var mapAPI = {
         this.showPolygons();
 
     },
+
 
     addOneObjectFromJsonString: function (jsonInfo) {
         this.addObject(JSON.parse(jsonInfo));
@@ -310,7 +330,7 @@ var mapAPI = {
             mapAPI.addMarker([lat, long]);
             mapAPI.showPolygons();
 
-            console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy)
+            //console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy)
         }
     },
 
