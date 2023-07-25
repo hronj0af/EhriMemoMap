@@ -1,0 +1,12 @@
+﻿@using EhriMemoMap.Helpers;
+@inject IStringLocalizer<CommonResources> cl
+
+@if (Layer != null && !string.IsNullOrEmpty(Layer.Abstract))
+{
+    <div><h4>@Layer.Title</h4> @((MarkupString)Layer.Abstract.Linkify())</div>
+}
+
+@code {
+    [Parameter]
+    public LayerModel Layer { get; set; }
+}

@@ -37,6 +37,6 @@
         MapState.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
         MapState.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
 
-        await DialogService.OpenAsync(cl["help"], ds =>@<div>@((MarkupString)(cl["helpContent"].ToString()))</div>, MapState.GetDialogOptions());
+        await DialogService.OpenSideAsync<HelpInformation>(cl["help"], options: MapState.GetDialogOptions());
     }
 }

@@ -72,11 +72,29 @@
 
             XDocument xdoc = XDocument.Parse(responseXML);
 
-            await DialogService.OpenAsync(cl["placeInfo"], ds =>@<div><PlaceInformation XDoc=@xdoc></PlaceInformation></div>, MapState.GetDialogOptions());
+            var placeInfos = ConvertXDocToPlaceInfo(xdoc);
+            if (placeInfos == null || placeInfos.Count() == 0)
+                return;
+
+            await DialogService.OpenSideAsync<PlaceInformation>(cl["placeInfo"], parameters: new Dictionary<string, object> { { "PlaceInfos", placeInfos } }, options: MapState.GetDialogOptions());
         }
         catch
         {
 
         }
+    }
+
+    private List<PlaceInfo>? ConvertXDocToPlaceInfo(XDocument xdoc)
+    {
+        if (xdoc == null)
+            return null;
+
+        var placeInfos = xdoc.Descendants("Feature").
+            Select(f => new PlaceInfo
+                {
+                    Properties = f.Elements("Attribute").Where(a => a.Attribute("type")?.Value != "derived" && a.Attribute("value")?.Value != "NULL").Select(a => new KeyValuePair<string, string>(a.Attribute("name").Value, a.Attribute("value").Value)).ToList()
+                }).ToList();
+
+        return placeInfos;
     }
 }

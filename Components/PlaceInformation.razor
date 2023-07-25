@@ -32,18 +32,8 @@
 
 @code {
     [Parameter]
-    public XDocument XDoc { get; set; }
-
     public List<PlaceInfo> PlaceInfos { get; set; }
 
-    protected override void OnInitialized()
-    {
-        PlaceInfos = XDoc.Descendants("Feature").
-            Select(f => new PlaceInfo
-            {
-                    Properties = f.Elements("Attribute").Where(a => a.Attribute("type")?.Value != "derived" && a.Attribute("value")?.Value != "NULL").Select(a => new KeyValuePair<string, string>(a.Attribute("name").Value, a.Attribute("value").Value)).ToList()
-            }).ToList();
-    }
 
 
 }

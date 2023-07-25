@@ -96,7 +96,7 @@ namespace EhriMemoMap.Services
         }
 
         private int topOfElement = 10;
-        private int leftOfElement = 10;
+        private int rightOfElement = 10;
 
 
         /// <summary>
@@ -107,10 +107,10 @@ namespace EhriMemoMap.Services
         public (string Button, string Box) GetStyleOfMapComponent(int order)
         {
             var top = (IsMobileBrowser ? (topOfElement - 5) : topOfElement) + 45 * (order - 1);
-            var left = (IsMobileBrowser ? (leftOfElement - 5) : leftOfElement);
+            var right = (IsMobileBrowser ? (rightOfElement - 5) : rightOfElement);
 
-            var buttonStyle = $"position:absolute;top:{top}px;left:{left}px;z-index:600";
-            var boxStyle = $"position:absolute;top:{top}px;left:{left + 60}px;z-index:600";
+            var buttonStyle = $"position:absolute;top:{top}px;right:{right}px;z-index:600";
+            var boxStyle = $"position:absolute;top:{top}px;right:{right + 60}px;z-index:600";
 
             return (buttonStyle, boxStyle);
         }
@@ -420,14 +420,16 @@ namespace EhriMemoMap.Services
         /// Vrátí nastavení pro dialogové okno, aby se dobře vykreslovalo na mobilech i desktopech
         /// </summary>
         /// <returns></returns>
-        public DialogOptions GetDialogOptions()
+        public SideDialogOptions GetDialogOptions()
         {
-            return new DialogOptions()
+            return new SideDialogOptions()
             {
                 CloseDialogOnOverlayClick = true,
-                Left = (IsMobileBrowser ? 0 : (WindowWidth / 3 * 2)) + "px",
-                Height = WindowHeight + "px",
-                Width = (IsMobileBrowser ? WindowWidth : WindowWidth / 3) + "px"
+                Position = IsMobileBrowser ? DialogPosition.Bottom : DialogPosition.Left,
+                ShowMask = false,
+                CssClass= IsMobileBrowser ? "" : "side-dialog",
+                Height = IsMobileBrowser ? "50%" : "",
+                Width = !IsMobileBrowser ? "33%" : ""
             };
 
         }

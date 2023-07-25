@@ -345,7 +345,7 @@ var mapAPI = {
     setIsDragging: function (value) {
         if (value)
             this.isDragging++;
-        else
+        else if (this.isDragging > 0)
             this.isDragging--;
     }
 }
