@@ -69,7 +69,7 @@
             if (!wmsResponse.Layers.Any(a => a.Features != null && a.Features.Count > 0))
             {
                 DialogService.CloseSide();
-                JS.InvokeVoidAsync("mapAPI.removeObjects");
+                await JS.InvokeVoidAsync("mapAPI.removeObjects");
                 return;
             }
 

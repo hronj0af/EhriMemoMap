@@ -347,6 +347,19 @@ var mapAPI = {
             this.isDragging++;
         else if (this.isDragging > 0)
             this.isDragging--;
+    },
+
+
+    dialogWidth: null,
+    fullscreenDialog: function (value) {
+        if (value) {
+            this.dialogWidth = document.querySelector(".side-dialog").style.width;
+            document.querySelector(".side-dialog").style.width = "100%";
+        } else {
+            document.querySelector(".side-dialog").style.width = this.dialogWidth;
+        }
+
+
     }
 }
 
