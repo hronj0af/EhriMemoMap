@@ -67,10 +67,11 @@
             string responseJson = await clientFactory.CreateClient().GetStringAsync(urlJson + bbox);
             string responseXML = await clientFactory.CreateClient().GetStringAsync(urlXML + bbox);
 
-            if (!MapState.IsMobileBrowser)
-                await JS.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", responseJson);
+            await JS.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", responseJson);
 
             XDocument xdoc = XDocument.Parse(responseXML);
+
+            var response = new WMSResponse(responseXML);
 
             var placeInfos = ConvertXDocToPlaceInfo(xdoc);
             if (placeInfos == null || placeInfos.Count() == 0)
@@ -84,13 +85,13 @@
         }
     }
 
-    private List<PlaceInfo>? ConvertXDocToPlaceInfo(XDocument xdoc)
+    private List<WMSPlaceInfo>? ConvertXDocToPlaceInfo(XDocument xdoc)
     {
         if (xdoc == null)
             return null;
 
         var placeInfos = xdoc.Descendants("Feature").
-            Select(f => new PlaceInfo
+            Select(f => new WMSPlaceInfo
                 {
                     Properties = f.Elements("Attribute").Where(a => a.Attribute("type")?.Value != "derived" && a.Attribute("value")?.Value != "NULL").Select(a => new KeyValuePair<string, string>(a.Attribute("name").Value, a.Attribute("value").Value)).ToList()
                 }).ToList();
