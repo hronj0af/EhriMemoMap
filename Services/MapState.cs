@@ -19,6 +19,14 @@ namespace EhriMemoMap.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public bool DialogIsFullscreen = false;
+
+        public void SetDialogIsFullscreen(bool value)
+        {
+            DialogIsFullscreen = value;
+            NotifyStateChanged();
+        }
+
         public bool MapStateWasInit = false;
 
         public event Action OnChange;

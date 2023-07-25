@@ -1,5 +1,6 @@
 ﻿@inject DialogService DialogService
 @inject IJSRuntime JS
+@inject MapState MapState
 
 <RadzenRow JustifyContent="JustifyContent.End">
     <RadzenButton Click=OnFullscreen Icon="fullscreen" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat"/>
@@ -7,17 +8,18 @@
 </RadzenRow>
 
 @code {
-    private bool isFullscreen = false;
 
     private async Task OnClose()
     {
         await JS.InvokeVoidAsync("mapAPI.removeObjects");
         DialogService.CloseSide();
+
+        MapState.SetDialogIsFullscreen(false);
     }
 
     private async Task OnFullscreen()
     {
-        isFullscreen = !isFullscreen;
-        await JS.InvokeVoidAsync("mapAPI.fullscreenDialog", isFullscreen);
+        MapState.SetDialogIsFullscreen(!MapState.DialogIsFullscreen);
+        await JS.InvokeVoidAsync("mapAPI.fullscreenDialog", MapState.DialogIsFullscreen);
     }
 }

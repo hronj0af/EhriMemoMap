@@ -1,6 +1,7 @@
 ﻿@using EhriMemoMap.Helpers;
 @inject IStringLocalizer<CommonResources> cl
 
+<DialogButtons />
 @if (Layer != null && !string.IsNullOrEmpty(Layer.Abstract))
 {
     <div><h4>@Layer.Title</h4> @((MarkupString)Layer.Abstract.Linkify())</div>

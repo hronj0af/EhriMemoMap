@@ -2,7 +2,7 @@
 @using System.Xml;
 @using System.Xml.Linq;
 @inject IStringLocalizer<CommonResources> cl
-
+@inject MapState MapState
 <DialogButtons />
 @if (WMSResponse != null && WMSResponse.Layers != null && WMSResponse.Layers.Any(a => a.Features != null && a.Features.Count > 0))
 {
@@ -48,7 +48,10 @@
     [Parameter]
     public WMSResponse WMSResponse { get; set; }
 
-
+    protected override void OnInitialized()
+    {
+        MapState.OnChange += StateHasChanged;
+    }
 
 }
 
