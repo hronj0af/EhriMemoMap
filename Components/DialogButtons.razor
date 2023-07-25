@@ -13,13 +13,17 @@
     {
         await JS.InvokeVoidAsync("mapAPI.removeObjects");
         DialogService.CloseSide();
-
-        MapState.SetDialogIsFullscreen(false);
+        //MapState.SetDialogIsFullscreen(false);
     }
 
     private async Task OnFullscreen()
     {
         MapState.SetDialogIsFullscreen(!MapState.DialogIsFullscreen);
+        await JS.InvokeVoidAsync("mapAPI.fullscreenDialog", MapState.DialogIsFullscreen);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
         await JS.InvokeVoidAsync("mapAPI.fullscreenDialog", MapState.DialogIsFullscreen);
     }
 }
