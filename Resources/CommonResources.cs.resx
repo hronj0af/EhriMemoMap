@@ -165,4 +165,19 @@
   <data name="myLocation" xml:space="preserve">
     <value>Moje poloha</value>
   </data>
+  <data name="Neprisupna_mista" xml:space="preserve">
+    <value>Nepřístupná místa</value>
+  </data>
+  <data name="Obeti_holokaustu_z_Prahy" xml:space="preserve">
+    <value>Oběti</value>
+  </data>
+  <data name="Bydliste_Zidu_v_Praze_v_dobe_okupace" xml:space="preserve">
+    <value>Bydliště Židů</value>
+  </data>
+  <data name="Body_zajmu" xml:space="preserve">
+    <value>Body zájmu</value>
+  </data>
+  <data name="Incidenty_v_prostoru_mesta_Prahy" xml:space="preserve">
+    <value>Incidenty</value>
+  </data>
 </root>

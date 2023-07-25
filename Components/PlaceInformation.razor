@@ -3,37 +3,42 @@
 @using System.Xml.Linq;
 @inject IStringLocalizer<CommonResources> cl
 
-<RadzenRow JustifyContent=JustifyContent.Left>
-    @if (PlaceInfos == null || PlaceInfos.Count == 0)
+@if (WMSResponse != null && WMSResponse.Layers != null && WMSResponse.Layers.Any(a => a.Features != null && a.Features.Count > 0))
+{
+    if (WMSResponse.Layers.Any(a => a.Features != null && a.Features.Count > 0 && (a.Type == WMSFeatureType.Neprisupna_mista || a.Type == WMSFeatureType.Body_zajmu || a.Type == WMSFeatureType.Incidenty_v_prostoru_mesta_Prahy)))
     {
-        <text>
-            @cl["noPlaceInfo"]
-        </text>
+        <RadzenTabs RenderMode="TabRenderMode.Client">
+            <Tabs>
+                @foreach (var layer in WMSResponse.Layers.Where(a => a.Features != null && a.Features.Count > 0 && (a.Type == WMSFeatureType.Neprisupna_mista || a.Type == WMSFeatureType.Body_zajmu || a.Type == WMSFeatureType.Incidenty_v_prostoru_mesta_Prahy)))
+                {
+                    <RadzenTabsItem Text="@(cl[layer.Type.ToString()])">
+                        @foreach (var feature in layer.Features)
+                        {
+                            <FeatureNormalInfo WMSFeatureInfo="feature" />
+                        }
+                    </RadzenTabsItem>
+                }
+            </Tabs>
+        </RadzenTabs>
     }
+
     else
     {
-        <text>
-            @foreach (var place in PlaceInfos)
+        <RadzenRow Gap="1rem" JustifyContent=JustifyContent.Left>
+            @foreach (var feature in WMSResponse.Layers.SelectMany(a => a.Features))
             {
-                <text>
-                    <ul class="no-bullets">
-                        @foreach (var property in place.Properties.Where(a => a.Value != null))
-                        {
-                            <text>
-                            <li class="indented"><b>@property.Key</b>: @((MarkupString)property.Value.Linkify())</li>
-                            </text>
-                        }
-                    </ul>
-                </text>
+                <FeatureNormalInfo WMSFeatureInfo="feature" />
             }
-        </text>
+        </RadzenRow>
     }
-</RadzenRow>
+
+}
 
 @code {
     [Parameter]
-    public List<WMSPlaceInfo> PlaceInfos { get; set; }
+    public WMSResponse WMSResponse { get; set; }
 
 
 
 }
+

@@ -17,7 +17,7 @@
 <Help Order=4 />
 <Language Order=5 />
 <Home Order=6 />
-<Zoom/>
+<Zoom />
 
 @code {
     protected override void OnInitialized()
@@ -38,8 +38,6 @@
                 MapState.Init(layers, collectionName);
             }
             await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetAllMapsInfoForLeaflet());
-            MapState.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
-            MapState.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
             MapState.IsMobileBrowser = await JS.InvokeAsync<bool>("mapAPI.isMobileBrowser");
         }
     }
@@ -57,9 +55,6 @@
 
         try
         {
-            MapState.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
-            MapState.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
-
             string bbox = await JS.InvokeAsync<string>("mapAPI.convertMousePositionToBBoxParameter");
             // tuhle blbost tu dělám proto, že QGIS server neumí vracet anglické popisky v json, ale jenom v xml...
             string urlJson = MapState.GetFeaturesInfoUrl("application/json") + bbox;
@@ -69,33 +64,16 @@
 
             await JS.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", responseJson);
 
-            XDocument xdoc = XDocument.Parse(responseXML);
+            var wmsResponse = new WMSResponse(responseXML);
 
-            var response = new WMSResponse(responseXML);
-
-            var placeInfos = ConvertXDocToPlaceInfo(xdoc);
-            if (placeInfos == null || placeInfos.Count() == 0)
+            if (!wmsResponse.Layers.Any(a => a.Features != null && a.Features.Count > 0))
                 return;
 
-            await DialogService.OpenSideAsync<PlaceInformation>(cl["placeInfo"], parameters: new Dictionary<string, object> { { "PlaceInfos", placeInfos } }, options: MapState.GetDialogOptions());
+            await DialogService.OpenSideAsync<PlaceInformation>(cl["placeInfo"], new Dictionary<string, object> { { "WMSResponse", wmsResponse } }, MapState.GetDialogOptions());
         }
         catch
         {
 
         }
-    }
-
-    private List<WMSPlaceInfo>? ConvertXDocToPlaceInfo(XDocument xdoc)
-    {
-        if (xdoc == null)
-            return null;
-
-        var placeInfos = xdoc.Descendants("Feature").
-            Select(f => new WMSPlaceInfo
-                {
-                    Properties = f.Elements("Attribute").Where(a => a.Attribute("type")?.Value != "derived" && a.Attribute("value")?.Value != "NULL").Select(a => new KeyValuePair<string, string>(a.Attribute("name").Value, a.Attribute("value").Value)).ToList()
-                }).ToList();
-
-        return placeInfos;
     }
 }

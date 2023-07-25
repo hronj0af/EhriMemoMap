@@ -19,6 +19,7 @@ namespace EhriMemoMap.Models
         public string? Code { get; set; }
         public string? MapName { get; set; }
         public bool Selected { get; set; }
+        public bool Hidden { get; set; }
 
         public bool IsNotQueryable { get; set; }
 

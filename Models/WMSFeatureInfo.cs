@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Globalization;
+using System.Xml.Linq;
 
 namespace EhriMemoMap.Models
 {
@@ -12,73 +13,96 @@ namespace EhriMemoMap.Models
             {
                 switch (element.Attribute("name")?.Value)
                 {
-                    case "Jméno (datum narození)": 
+                    case "Jméno (datum narození)":
+                    case "Victim":
                         NameAndBirthDate = element.Attribute("value")?.Value;
                         break;
-                    case "Detaily": 
+                    case "Detaily":
+                    case "Details":
                         Details = element.Attribute("value")?.Value;
                         break;
-                    case "Adresa": 
+                    case "Adresa":
+                    case "Address":
                         Address = element.Attribute("value")?.Value;
                         break;
-                    case "Adresa (česky, z doby okupace)": 
+                    case "Adresa (česky, z doby okupace)":
+                    case "Address (Czech)":
                         AddressCzechOccupation = element.Attribute("value")?.Value;
                         break;
-                    case "Adresa (německy, z doby okupace)": 
+                    case "Adresa (německy, z doby okupace)":
+                    case "Address (German)":
                         AddressGermanOccupation = element.Attribute("value")?.Value;
                         break;
                     case "Počet židovských obyvatel (1. 10. 1941)":
+                    case "Jewish residents (October 1941)":
                         JewsCitizens1941 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
                         break;
-                    case "Zavražděno": 
+                    case "Zavražděno":
+                    case "Murdered":
                         Murdered = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
                         break;
-                    case "Přežilo": 
+                    case "Přežilo":
+                    case "Survived":
                         Survived = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
                         break;
-                    case "Osud neznámý": 
+                    case "Osud neznámý":
+                    case "Fate unknown":
                         FateUnknown = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
                         break;
-                    case "Nedeportováno k 1. 1. 1942": 
+                    case "Nedeportováno k 1. 1. 1942":
+                    case "Present at 1942-01-01":
                         NotDeportedUntil_1_1_1942 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
                         break;
                     case "Nedeportováno k 1. 1. 1943":
+                    case "Present at 1943-01-01":
                         NotDeportedUntil_1_1_1943 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
                         break;
-                    case "Nedeportováno k 1. 1. 1944": 
+                    case "Nedeportováno k 1. 1. 1944":
+                    case "Present at 1944-01-01":
                         NotDeportedUntil_1_1_1944 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
                         break;
-                    case "Nedeportováno k 1. 1. 1945": 
+                    case "Nedeportováno k 1. 1. 1945":
+                    case "Present at 1945-01-01":
                         NotDeportedUntil_1_1_1945 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
                         break;
-                    case "Nedeportováno k 9. 5. 1945": 
+                    case "Nedeportováno k 9. 5. 1945":
+                    case "Present at 1945-05-09":
                         NotDeportedUntil_9_5_1945 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
                         break;
-                    case "Název": 
+                    case "Název":
+                    case "Label":
                         Title = element.Attribute("value")?.Value;
                         break;
-                    case "Popis": 
+                    case "Popis":
+                    case "Description":
                         Description = element.Attribute("value")?.Value;
                         break;
-                    case "Typ": 
+                    case "Typ":
+                    case "Type":
                         Type = element.Attribute("value")?.Value;
                         break;
-                    case "Specifikace": 
+                    case "Specifikace":
+                    case "Specification":
                         Specification = element.Attribute("value")?.Value;
                         break;
-                    case "Typ (alternativní)": 
+                    case "Typ (alternativní)":
+                    case "Type (alternative)":
                         TypeAlternative = element.Attribute("value")?.Value;
                         break;
-                    case "Specifikace (alternativní)": 
+                    case "Specifikace (alternativní)":
+                    case "Specification (alternative)":
                         SpecificationAlternative = element.Attribute("value")?.Value;
                         break;
-                    case "Datum": 
-                        Date = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? DateTime.Parse(element.Attribute("value")?.Value) : null;
+                    case "Datum":
+                    case "Date":
+                        Date = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? DateTime.ParseExact(element.Attribute("value")?.Value, "dd.MM.yyyy", CultureInfo.InvariantCulture) : null;
                         break;
-                    case "Místo": 
+                    case "Místo":
+                    case "Place":
                         Place = element.Attribute("value")?.Value;
                         break;
-                    case "Dokumenty": 
+                    case "Dokumenty":
+                    case "Documents":
                         Documents = element.Attribute("value")?.Value;
                         break;
                 }

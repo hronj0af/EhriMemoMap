@@ -34,9 +34,6 @@
 
     private async Task ShowHelp()
     {
-        MapState.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
-        MapState.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
-
         await DialogService.OpenSideAsync<HelpInformation>(cl["help"], options: MapState.GetDialogOptions());
     }
 }

@@ -7,7 +7,7 @@
 
 <RadzenButton Style="@style.ButtonStyle" title="@(cl["layers"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => MapState.IsLayersOpen = !MapState.IsLayersOpen)"><RadzenIcon Icon="menu" /></RadzenButton>
 
-@if (layers != null && MapState.IsLayersOpen)
+@if (layers != null && layers.Count() > 0 && MapState.IsLayersOpen)
 {
     <RadzenCard Style="@(style.BoxStyle + $";width: {(MapState.IsMobileBrowser ? 270 : 400)}px")">
         @foreach (var item in layers)
@@ -31,12 +31,11 @@
     (string ButtonStyle, string BoxStyle) style;
 
 
-    List<LayerModel> layers;
+    IEnumerable<LayerModel>? layers;
 
     protected override void OnInitialized()
     {
         style = MapState.GetStyleOfMapComponent(Order);
-        layers = MapState.GetAllLayers();
         MapState.OnChange += OnMyChangeHandler;
     }
 
@@ -49,7 +48,7 @@
     {
         await InvokeAsync(() =>
         {
-            layers = MapState.GetAllLayers();
+            layers = MapState.GetAllLayers()?.Where(a => !a.Hidden).ToList();
             StateHasChanged();
         });
     }
@@ -68,9 +67,6 @@
 
     private async Task ShowLayerAbstract(LayerModel layer)
     {
-        MapState.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
-        MapState.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
-
         await DialogService.OpenSideAsync<LayerInformation>(cl["layerInfo"], parameters: new Dictionary<string, object> { { "Layer", layer } }, options: MapState.GetDialogOptions());
     }
 }

@@ -38,20 +38,6 @@ namespace EhriMemoMap.Services
             } 
         }
 
-        private int windowHeight;
-
-        /// <summary>
-        /// Výška okna prohlížeče
-        /// </summary>
-        public int WindowHeight { get { return windowHeight; } set { windowHeight = value; NotifyStateChanged(); } }
-
-        private int windowWidth;
-        /// <summary>
-        /// Šířka okna prohlížeče
-        /// </summary>
-        public int WindowWidth { get { return windowWidth; } set { windowWidth = value; NotifyStateChanged(); } }
-
-
         private bool isLayersOpen = false;
         /// <summary>
         /// Je otevřený seznam vrstev?
@@ -249,6 +235,7 @@ namespace EhriMemoMap.Services
                             Selected = b.Selected,
                             IsNotQueryable = b.IsNotQueryable,
                             Abstract = b.Abstract,
+                            Hidden = b.Hidden
                         }).ToList();
         }
 

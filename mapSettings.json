@@ -74,14 +74,14 @@
                   "name": "Neprisupna_mista",
                   "title": "Nepřístupná místa v prostoru města Prahy",
                   "code": "Neprisupna_mista",
-                  "abstract": "Místa nepřístupná Židům. Prostoové zobrazení je založeno na historické mapě z roku 1938, současné prostory se mohou lišit velikostí i tvarem."
+                  "abstract": "Místa nepřístupná Židům. Prostoové zobrazení je založeno na historické mapě z roku 1938, současné prostory se mohou lišit velikostí i tvarem.",
                 },
                 {
                   "name": "Obeti_holokaustu_z_Prahy",
                   "title": "Oběti holokaustu z Prahy",
                   "code": "Obeti_holokaustu_z_Prahy",
-                  "abstract": "Databáze židovských obyvatel Prahy, kteří zahynuli v důsledku nacistického pronásledování. Záznamy jsou navázané na jejich pražské adresy. Detaily jsou přístupné skrze odkazy na portál holocaust.cz."
-
+                  "abstract": "Databáze židovských obyvatel Prahy, kteří zahynuli v důsledku nacistického pronásledování. Záznamy jsou navázané na jejich pražské adresy. Detaily jsou přístupné skrze odkazy na portál holocaust.cz.",
+                  "hidden": true
                 },
                 {
                   "name": "Bydliste_Zidu_v_Praze_v_dobe_okupace",
@@ -124,7 +124,8 @@
                 {
                   "name": "Obeti_holokaustu_z_Prahy",
                   "title": "Oběti holokaustu z Prahy",
-                  "code": "Obeti_holokaustu_z_Prahy"
+                  "code": "Obeti_holokaustu_z_Prahy",
+                  "hidden": true
                 },
                 {
                   "name": "Bydliste_Zidu_v_Praze_v_dobe_okupace",
@@ -173,7 +174,8 @@
                   "name": "Holocaust_victims_from_Prague",
                   "title": "Holocaust victims from Prague",
                   "code": "Obeti_holokaustu_z_Prahy",
-                  "abstract": "Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz."
+                  "abstract": "Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz.",
+                  "hidden": true
                 },
                 {
                   "name": "Jewish_homes_during_the_occupation",
@@ -219,7 +221,8 @@
                   "name": "Holocaust_victims_from_Prague",
                   "title": "Holocaust victims from Prague",
                   "code": "Obeti_holokaustu_z_Prahy",
-                  "abstract": "Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz."
+                  "abstract": "Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz.",
+                  "hidden": true
                 },
                 {
                   "name": "Jewish_homes_during_the_occupation",
