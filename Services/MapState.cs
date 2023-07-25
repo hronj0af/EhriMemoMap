@@ -411,10 +411,12 @@ namespace EhriMemoMap.Services
         {
             return new SideDialogOptions()
             {
-                CloseDialogOnOverlayClick = true,
+                ShowClose = true,
+                ShowTitle = false,
                 Position = IsMobileBrowser ? DialogPosition.Bottom : DialogPosition.Left,
                 ShowMask = false,
                 CssClass= IsMobileBrowser ? "" : "side-dialog",
+                Style ="background-color:#eeeeee",
                 Height = IsMobileBrowser ? "50%" : "",
                 Width = !IsMobileBrowser ? "33%" : ""
             };

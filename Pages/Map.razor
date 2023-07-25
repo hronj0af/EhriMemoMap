@@ -22,7 +22,7 @@
 @code {
     protected override void OnInitialized()
     {
-        DialogService.OnClose += RemoveObjects;
+        DialogService.OnSideClose += RemoveObjects;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -67,9 +67,13 @@
             var wmsResponse = new WMSResponse(responseXML);
 
             if (!wmsResponse.Layers.Any(a => a.Features != null && a.Features.Count > 0))
+            {
+                DialogService.CloseSide();
+                JS.InvokeVoidAsync("mapAPI.removeObjects");
                 return;
+            }
 
-            await DialogService.OpenSideAsync<PlaceInformation>(cl["placeInfo"], new Dictionary<string, object> { { "WMSResponse", wmsResponse } }, MapState.GetDialogOptions());
+            await DialogService.OpenSideAsync<PlaceInformation>(null, new Dictionary<string, object> { { "WMSResponse", wmsResponse } }, MapState.GetDialogOptions());
         }
         catch
         {

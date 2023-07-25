@@ -5,7 +5,7 @@
 
 @if (WMSResponse != null && WMSResponse.Layers != null && WMSResponse.Layers.Any(a => a.Features != null && a.Features.Count > 0))
 {
-    if (WMSResponse.Layers.Any(a => a.Features != null && a.Features.Count > 0 && (a.Type == WMSFeatureType.Neprisupna_mista || a.Type == WMSFeatureType.Body_zajmu || a.Type == WMSFeatureType.Incidenty_v_prostoru_mesta_Prahy)))
+    if (WMSResponse.Layers.Count(a => a.Features != null && a.Features.Count > 0 && (a.Type == WMSFeatureType.Neprisupna_mista || a.Type == WMSFeatureType.Body_zajmu || a.Type == WMSFeatureType.Incidenty_v_prostoru_mesta_Prahy || a.Type == WMSFeatureType.Obeti_holokaustu_z_Prahy)) > 1)
     {
         <RadzenTabs RenderMode="TabRenderMode.Client">
             <Tabs>
@@ -18,22 +18,31 @@
                         }
                     </RadzenTabsItem>
                 }
+                @if (WMSResponse.Layers.Any(a => a.Type == WMSFeatureType.Obeti_holokaustu_z_Prahy && a.Features != null && a.Features.Count > 0))
+                {
+                    <RadzenTabsItem Text="@(cl[WMSFeatureType.Obeti_holokaustu_z_Prahy.ToString()])">
+                        <FeatureVictimsInfo WMSResponse="WMSResponse" />
+                    </RadzenTabsItem>
+                }
+
             </Tabs>
         </RadzenTabs>
     }
 
     else
     {
-        <RadzenRow Gap="1rem" JustifyContent=JustifyContent.Left>
-            @foreach (var feature in WMSResponse.Layers.SelectMany(a => a.Features))
-            {
-                <FeatureNormalInfo WMSFeatureInfo="feature" />
-            }
-        </RadzenRow>
+        <h2>@cl[WMSResponse.Layers.FirstOrDefault(a=>a.Features != null && a.Features.Count > 0).Type.ToString()]</h2>
+        @foreach (var feature in WMSResponse.Layers.Where(a => a.Type != WMSFeatureType.Obeti_holokaustu_z_Prahy && a.Type != WMSFeatureType.Bydliste_Zidu_v_Praze_v_dobe_okupace).SelectMany(a => a.Features))
+        {
+            <FeatureNormalInfo WMSFeatureInfo="feature" />
+        }
+        @if (WMSResponse.Layers.Any(a => a.Type == WMSFeatureType.Obeti_holokaustu_z_Prahy && a.Features != null && a.Features.Count > 0))
+        {
+            <FeatureVictimsInfo WMSResponse="WMSResponse" />
+        }
     }
 
 }
-
 @code {
     [Parameter]
     public WMSResponse WMSResponse { get; set; }

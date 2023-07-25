@@ -4,7 +4,7 @@
 @inject IStringLocalizer<CommonResources> cl
 
 <RadzenRow class="rz-mb-4">
-    <RadzenCard>
+    <RadzenCard Style="width:100%">
 
         @if (WMSFeatureInfo.FeatureInfoType == WMSFeatureType.Body_zajmu || WMSFeatureInfo.FeatureInfoType == WMSFeatureType.Neprisupna_mista)
         {
@@ -12,25 +12,16 @@
                 <li><b>@WMSFeatureInfo.Title</b></li>
                 @if (WMSFeatureInfo.Address != "NULL")
                 {
-                    <li>WMSFeatureInfo.Address</li>
+                    <li><i>@WMSFeatureInfo.Address</i></li>
                 }
                 <li>@WMSFeatureInfo.Description</li>
             </ul>
-        }
-        else if (WMSFeatureInfo.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy)
-        {
-            <RadzenColumn>
-                <RadzenCard>
-                    <RadzenImage Path="http://collections.jewishmuseum.cz/media/jmpcollpublic/images/7/2/3/6/60478_ca_object_representations_media_723698_preview.jpg" />
-                    <p>@WMSFeatureInfo.NameAndBirthDate</p>
-                </RadzenCard>
-            </RadzenColumn>
         }
         else if (WMSFeatureInfo.FeatureInfoType == WMSFeatureType.Incidenty_v_prostoru_mesta_Prahy)
         {
             <ul class="no-bullets">
                 <li><b>@WMSFeatureInfo.Title</b></li>
-                <li>@WMSFeatureInfo.Date?.ToString("d. M. yyyy")</li>
+                <li><i>@WMSFeatureInfo.Date?.ToString("d. M. yyyy")</i></li>
                 <li>@WMSFeatureInfo.Place</li>
                 @if (WMSFeatureInfo.Description != "NULL")
                 {
