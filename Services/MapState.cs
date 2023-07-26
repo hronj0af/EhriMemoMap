@@ -38,12 +38,14 @@ namespace EhriMemoMap.Services
         /// <summary>
         /// Prohlíží si uživatel mapu na mobilu?
         /// </summary>
-        public bool IsMobileBrowser { get { return isMobileBrowser; } 
-            set 
-            { 
-                isMobileBrowser = value; 
-                NotifyStateChanged(); 
-            } 
+        public bool IsMobileBrowser
+        {
+            get { return isMobileBrowser; }
+            set
+            {
+                isMobileBrowser = value;
+                NotifyStateChanged();
+            }
         }
 
         private bool isLayersOpen = false;
@@ -98,8 +100,9 @@ namespace EhriMemoMap.Services
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        public (string Button, string Box) GetStyleOfMapComponent(int order)
+        public (string Button, string Box) GetStyleOfMapComponent()
         {
+            var order = GetButtonOrderIndex();
             var top = (IsMobileBrowser ? (topOfElement - 5) : topOfElement) + 45 * (order - 1);
             var right = (IsMobileBrowser ? (rightOfElement - 5) : rightOfElement);
 
@@ -156,14 +159,11 @@ namespace EhriMemoMap.Services
                 map.MapLanguages?.ForEach(mapLanguage =>
                 {
                     mapLanguage.MapName = map.Name;
-                    if (mapLanguage.Collections == null)
+                    if (mapLanguage.Layers != null)
                         mapLanguage.Layers?.ForEach(layer => layer.MapName = map.Name);
 
                     if (mapLanguage.Collections != null)
-                    {
-                        mapLanguage.Collections?.SelectMany(a => a.Layers).ToList().ForEach(layer => layer.MapName = map.Name);
                         mapLanguage.Collections?.ForEach(collection => collection.MapName = map.Name);
-                    }
                 });
             });
 
@@ -187,15 +187,6 @@ namespace EhriMemoMap.Services
                             else
                                 layer.Selected = false;
 
-                        });
-
-                    if (mapLanguage.Collections != null)
-                        mapLanguage.Collections?.SelectMany(a => a.Layers).ToList().ForEach(layer =>
-                        {
-                            if (layers == null || layers.Contains(layer.Code))
-                                layer.Selected = true;
-                            else
-                                layer.Selected = false;
                         });
                 });
             });
@@ -231,9 +222,8 @@ namespace EhriMemoMap.Services
                 Union(
                     Maps.
                         Where(a => a.Type.Contains("wms")).
-                        SelectMany(a => a.MapLanguages.Where(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString() && a.Collections != null)).
-                        SelectMany(a => a.Collections.Where(b => b.Selected).
-                        SelectMany(c => c.Layers))).
+                        SelectMany(a => a.MapLanguages.Where(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString() && a.Layers != null)).
+                        SelectMany(c => c.Layers)).
                         Select(b => new LayerModel
                         {
                             MapName = b.MapName,
@@ -257,7 +247,7 @@ namespace EhriMemoMap.Services
                 return new List<CollectionModel>();
 
             return Maps.
-                Where(a => a.Type == "wms").
+                Where(a => a.Type.Contains("wms")).
                 SelectMany(a => a.MapLanguages.Where(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString() && a.Collections != null)).
                 SelectMany(map => map.Collections).ToList();
         }
@@ -291,8 +281,15 @@ namespace EhriMemoMap.Services
                 return "";
 
             string? queryLayers = GetAllLayers()?.Where(a => a.Selected && !a.IsNotQueryable).Select(a => a.Name)?.Aggregate((x, y) => x + "," + y);
+            string? mapParameter = featureMap.MapLanguages?.FirstOrDefault(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString())?.MapParameter != null
+                ? featureMap.MapLanguages?.FirstOrDefault(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString())?.MapParameter
+                : featureMap.MapLanguages?.FirstOrDefault(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString())?.Collections?.FirstOrDefault(a => a.Selected)?.MapParameter;
 
-            return MapFeatureUrl + "&map=" + featureMap.MapLanguages.FirstOrDefault(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString()).MapParameter + "&query_layers=" + queryLayers + "&layers=" + queryLayers + "&info_format=" + infoFormat;
+            return MapFeatureUrl +
+                "&map=" + mapParameter +
+                "&query_layers=" + queryLayers +
+                "&layers=" + queryLayers +
+                "&info_format=" + infoFormat;
         }
 
 
@@ -331,10 +328,10 @@ namespace EhriMemoMap.Services
                         Type = a.Type,
                         ZIndex = a.ZIndex,
                         TileSize = a.TileSize,
-                        MapParameter = mapLanguage?.MapParameter,
-                        Layers = mapLanguage?.Layers != null
-                        ? mapLanguage?.Layers.Where(b => b.Selected).ToList()
-                        : mapLanguage?.Collections?.Where(b => b.Selected && b.Layers != null).SelectMany(b => b.Layers.Where(c => c.Selected)).ToList(),
+                        MapParameter = mapLanguage?.MapParameter != null
+                            ? mapLanguage?.MapParameter
+                            : mapLanguage?.Collections?.FirstOrDefault(a => a.Selected)?.MapParameter,
+                        Layers = mapLanguage?.Layers != null ? mapLanguage?.Layers.Where(a=>a.Selected).ToList() : null
                     };
                 }).FirstOrDefault() ?? new MapLeafletModel();
             return result;
@@ -352,12 +349,6 @@ namespace EhriMemoMap.Services
                 map.MapLanguages?.ForEach(mapLanguage =>
                 {
                     mapLanguage.Layers?.ForEach(oldLayer =>
-                    {
-                        if (oldLayer.Code == layer.Code)
-                            oldLayer.Selected = layer.Selected;
-                    });
-
-                    mapLanguage.Collections?.SelectMany(a => a.Layers).ToList().ForEach(oldLayer =>
                     {
                         if (oldLayer.Code == layer.Code)
                             oldLayer.Selected = layer.Selected;
@@ -423,13 +414,16 @@ namespace EhriMemoMap.Services
                 ShowTitle = false,
                 Position = IsMobileBrowser ? DialogPosition.Bottom : DialogPosition.Left,
                 ShowMask = false,
-                CssClass= IsMobileBrowser ? "" : "side-dialog",
-                Style ="background-color:#eeeeee",
+                CssClass = IsMobileBrowser ? "" : "side-dialog",
+                Style = "background-color:#eeeeee",
                 Height = IsMobileBrowser ? "50%" : "",
                 Width = !IsMobileBrowser ? "33%" : ""
             };
 
         }
+
+        private int buttonOrderIndex { get; set; } = 0;
+        public int GetButtonOrderIndex() => ++buttonOrderIndex;
     }
 
 

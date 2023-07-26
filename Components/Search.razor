@@ -1,9 +1,9 @@
-﻿@using EhriMemoMap.Logic;
+﻿@using EhriMemoMap.Services;
 @inject IJSRuntime JS
 @inject IHttpClientFactory clientFactory
 @inject DialogService DialogService
 @inject MapState MapState 
-@inject AppLogic logic
+@inject SolrService solr
 @inject IStringLocalizer<CommonResources> cl
 
 @if (MapState.IsSearchOpen)
@@ -31,16 +31,13 @@ else
 }
 
 @code {
-    [Parameter]
-    public int Order { get; set; }
-
     string selectedPlaceName;
     IEnumerable<Place> places;
     (string ButtonStyle, string BoxStyle) style;
 
     protected override void OnInitialized()
     {
-        style = MapState.GetStyleOfMapComponent(Order);
+        style = MapState.GetStyleOfMapComponent();
         MapState.OnChange += OnMyChangeHandler;
     }
 
@@ -85,7 +82,7 @@ else
 
     async Task LoadData(LoadDataArgs args)
     {
-      places = await logic.SolrExecuteDocument(args.Filter);
+      places = await solr.SolrExecuteDocument(args.Filter);
         InvokeAsync(StateHasChanged);
     }
 

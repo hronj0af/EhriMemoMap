@@ -13,9 +13,6 @@
               Click="ChangeLanguage">@otherLanguage</RadzenButton>
 
 @code {
-    [Parameter]
-    public int Order { get; set; }
-
     string otherLanguage;
     string otherLanguageTitle;
     string currentUri;
@@ -24,7 +21,7 @@
 
     protected override void OnInitialized()
     {
-        style = MapState.GetStyleOfMapComponent(Order);
+        style = MapState.GetStyleOfMapComponent();
         otherLanguage = Culture.ToString() == "cs-CZ" ? "EN" : "CS";
         otherLanguageTitle = Culture.ToString() == "cs-CZ" ? "english" : "czech";
     }

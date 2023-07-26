@@ -1,7 +1,7 @@
 ﻿@inject IJSRuntime JS
 @inject IHttpClientFactory clientFactory
 @inject DialogService DialogService
-@inject MapState MapState 
+@inject MapState MapState
 @inject IStringLocalizer<CommonResources> cl
 
 
@@ -14,25 +14,21 @@
         <RadzenRow Gap="7px" Style="@style.BoxStyle">
             @foreach (var item in collections)
             {
-                <RadzenButton ButtonStyle="item.Selected ? ButtonStyle.Dark : ButtonStyle.Primary" Shade="Shade.Light"  Size="ButtonSize.Medium" Variant="Variant.Flat" Click="(() => OnCollectionClick(item))">@item.Title</RadzenButton>
+                <RadzenButton ButtonStyle="item.Selected ? ButtonStyle.Dark : ButtonStyle.Primary" Shade="Shade.Light" Size="ButtonSize.Medium" Variant="Variant.Flat" Click="(() => OnCollectionClick(item))">@item.Title</RadzenButton>
             }
         </RadzenRow>
 
     }
 }
 @code {
-    [Parameter]
-    public int Order { get; set; }
-
-
     (string ButtonStyle, string BoxStyle) style;
 
     List<CollectionModel> collections;
 
     protected override void OnInitialized()
     {
-        style = MapState.GetStyleOfMapComponent(Order);
         collections = MapState.GetAllCollections();
+        style = MapState.GetStyleOfMapComponent();
         MapState.OnChange += OnMyChangeHandler;
     }
 

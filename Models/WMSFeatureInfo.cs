@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace EhriMemoMap.Models
@@ -35,7 +36,7 @@ namespace EhriMemoMap.Models
                         break;
                     case "Počet židovských obyvatel (1. 10. 1941)":
                     case "Jewish residents (October 1941)":
-                        JewsCitizens1941 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
+                        JewishResidents1941 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
                         break;
                     case "Zavražděno":
                     case "Murdered":
@@ -106,6 +107,8 @@ namespace EhriMemoMap.Models
                         Documents = element.Attribute("value")?.Value;
                         break;
                 }
+                if (string.IsNullOrEmpty(Address) && !string.IsNullOrEmpty(AddressCzechOccupation))
+                    Address = new Regex("/.*").Replace(AddressCzechOccupation, "");
             }
         }
 
@@ -115,7 +118,7 @@ namespace EhriMemoMap.Models
         public string? Address { get; set; }
         public string? AddressCzechOccupation { get; set; }
         public string? AddressGermanOccupation { get; set; }
-        public int? JewsCitizens1941 { get; set; }
+        public int? JewishResidents1941 { get; set; }
         public int? Murdered { get; set; }
         public int? Survived { get; set; }
         public int? FateUnknown { get; set; }

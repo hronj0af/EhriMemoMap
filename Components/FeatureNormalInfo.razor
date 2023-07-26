@@ -22,17 +22,17 @@
             <ul class="no-bullets">
                 <li><b>@WMSFeatureInfo.Title</b></li>
                 <li><i>@WMSFeatureInfo.Date?.ToString("d. M. yyyy")</i></li>
-                <li>@WMSFeatureInfo.Place</li>
+                <li>@cl["place"]: @WMSFeatureInfo.Place</li>
                 @if (WMSFeatureInfo.Description != "NULL")
                 {
-                    <li>@WMSFeatureInfo.Description</li>
+                    <li>@cl["description"]: @WMSFeatureInfo.Description</li>
                 }
-                <li>@WMSFeatureInfo.Type</li>
+                <li>@cl["type"]: @WMSFeatureInfo.Type</li>
                 @if (WMSFeatureInfo.Specification != "NULL")
                 {
-                    <li>@WMSFeatureInfo.Specification</li>
+                    <li>@cl["specification"]: @WMSFeatureInfo.Specification</li>
                 }
-                <li>@((MarkupString)WMSFeatureInfo.Documents?.Linkify())</li>
+                <li>@cl["documents"]: @((MarkupString)WMSFeatureInfo.Documents?.Linkify())</li>
             </ul>
         }
 

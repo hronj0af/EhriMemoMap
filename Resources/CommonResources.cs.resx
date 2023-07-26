@@ -165,19 +165,67 @@
   <data name="myLocation" xml:space="preserve">
     <value>Moje poloha</value>
   </data>
-  <data name="Neprisupna_mista" xml:space="preserve">
+  <data name="featureType_Neprisupna_mista" xml:space="preserve">
     <value>Nepřístupná místa</value>
   </data>
-  <data name="Obeti_holokaustu_z_Prahy" xml:space="preserve">
+  <data name="featureType_Obeti_holokaustu_z_Prahy" xml:space="preserve">
     <value>Oběti</value>
   </data>
-  <data name="Bydliste_Zidu_v_Praze_v_dobe_okupace" xml:space="preserve">
+  <data name="featureType_Bydliste_Zidu_v_Praze_v_dobe_okupace" xml:space="preserve">
     <value>Bydliště Židů</value>
   </data>
-  <data name="Body_zajmu" xml:space="preserve">
+  <data name="featureType_Body_zajmu" xml:space="preserve">
     <value>Body zájmu</value>
   </data>
-  <data name="Incidenty_v_prostoru_mesta_Prahy" xml:space="preserve">
+  <data name="featureType_Incidenty_v_prostoru_mesta_Prahy" xml:space="preserve">
     <value>Incidenty</value>
+  </data>
+  <data name="title" xml:space="preserve">
+    <value>Název</value>
+  </data>
+  <data name="date" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="place" xml:space="preserve">
+    <value>Místo</value>
+  </data>
+  <data name="description" xml:space="preserve">
+    <value>Popis</value>
+  </data>
+  <data name="type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="specification" xml:space="preserve">
+    <value>Specifikace</value>
+  </data>
+  <data name="documents" xml:space="preserve">
+    <value>Dokumenty</value>
+  </data>
+  <data name="jewishResidents1941" xml:space="preserve">
+    <value>Počet židovských obyvatel (1. 10. 1941)</value>
+  </data>
+  <data name="murdered" xml:space="preserve">
+    <value>Zavražděno</value>
+  </data>
+  <data name="survived" xml:space="preserve">
+    <value>Přežilo</value>
+  </data>
+  <data name="fateUnknown" xml:space="preserve">
+    <value>Osud neznámý</value>
+  </data>
+  <data name="notDeportedUntil_1_1_1942" xml:space="preserve">
+    <value>Nedeportováno k 1. 1. 1942</value>
+  </data>
+  <data name="notDeportedUntil_1_1_1943" xml:space="preserve">
+    <value>Nedeportováno k 1. 1. 1943</value>
+  </data>
+  <data name="notDeportedUntil_1_1_1944" xml:space="preserve">
+    <value>Nedeportováno k 1. 1. 1944</value>
+  </data>
+  <data name="notDeportedUntil_1_1_1945" xml:space="preserve">
+    <value>Nedeportováno k 1. 1. 1945</value>
+  </data>
+  <data name="notDeportedUntil_9_5_1945" xml:space="preserve">
+    <value>Nedeportováno k 9. 5. 1945</value>
   </data>
 </root>

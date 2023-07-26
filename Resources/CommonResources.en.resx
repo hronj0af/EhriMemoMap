@@ -165,19 +165,67 @@
   <data name="myLocation" xml:space="preserve">
     <value>My location</value>
   </data>
-  <data name="Incidenty_v_prostoru_mesta_Prahy" xml:space="preserve">
+  <data name="featureType_Incidenty_v_prostoru_mesta_Prahy" xml:space="preserve">
     <value>Incidents</value>
   </data>
-  <data name="Body_zajmu" xml:space="preserve">
+  <data name="featureType_Body_zajmu" xml:space="preserve">
     <value>Points of Interest</value>
   </data>
-  <data name="Neprisupna_mista" xml:space="preserve">
+  <data name="featureType_Neprisupna_mista" xml:space="preserve">
     <value>Inaccessible Places</value>
   </data>
-  <data name="Obeti_holokaustu_z_Prahy" xml:space="preserve">
+  <data name="featureType_Obeti_holokaustu_z_Prahy" xml:space="preserve">
     <value>Victims</value>
   </data>
-  <data name="Bydliste_Zidu_v_Praze_v_dobe_okupace" xml:space="preserve">
+  <data name="featureType_Bydliste_Zidu_v_Praze_v_dobe_okupace" xml:space="preserve">
     <value>Jewish Homes</value>
+  </data>
+  <data name="title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="place" xml:space="preserve">
+    <value>Place</value>
+  </data>
+  <data name="description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="specification" xml:space="preserve">
+    <value>Specification</value>
+  </data>
+  <data name="documents" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="jewishResidents1941" xml:space="preserve">
+    <value>Jewish residents (October 1941)</value>
+  </data>
+  <data name="murdered" xml:space="preserve">
+    <value>Murdered</value>
+  </data>
+  <data name="survived" xml:space="preserve">
+    <value>Survived</value>
+  </data>
+  <data name="fateUnknown" xml:space="preserve">
+    <value>Fate unknown</value>
+  </data>
+  <data name="notDeportedUntil_1_1_1942" xml:space="preserve">
+    <value>Present at 1942-01-01</value>
+  </data>
+  <data name="notDeportedUntil_1_1_1943" xml:space="preserve">
+    <value>Present at 1943-01-01</value>
+  </data>
+  <data name="notDeportedUntil_1_1_1944" xml:space="preserve">
+    <value>Present at 1944-01-01</value>
+  </data>
+  <data name="notDeportedUntil_1_1_1945" xml:space="preserve">
+    <value>Present at 1945-01-01</value>
+  </data>
+  <data name="notDeportedUntil_9_5_1945" xml:space="preserve">
+    <value>Present at 1945-05-09</value>
   </data>
 </root>

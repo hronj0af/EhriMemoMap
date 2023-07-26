@@ -1,15 +1,15 @@
 ﻿using EhriMemoMap.Models;
 using Newtonsoft.Json.Linq;
 
-namespace EhriMemoMap.Logic
+namespace EhriMemoMap.Services
 {
-    public partial class AppLogic
+    public partial class SolrService
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly string _solrUrl;
 
 
-        public AppLogic(
+        public SolrService(
             IConfiguration configuration,
             IHttpClientFactory clientFactory)
         {

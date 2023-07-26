@@ -352,14 +352,19 @@ var mapAPI = {
 
     dialogWidth: null,
     dialogHeight: null,
+    isFullscreen: false,
 
     fullscreenDialog: function (value) {
         if (value) {
-            this.dialogWidth = document.querySelector("aside").style.width;
-            this.dialogHeight = document.querySelector("aside").style.height;
+            if (!this.isFullscreen) {
+                this.dialogWidth = document.querySelector("aside").style.width;
+                this.dialogHeight = document.querySelector("aside").style.height;
+            }
+            this.isFullscreen = true;
             document.querySelector("aside").style.width = "100%";
             document.querySelector("aside").style.height = "100%";
-        } else {
+        } else if (!value && this.isFullscreen && this.dialogHeight != null && this.dialogWidth != null) {
+            this.isFullscreen = false;
             document.querySelector("aside").style.width = this.dialogWidth;
             document.querySelector("aside").style.height = this.dialogHeight;
 

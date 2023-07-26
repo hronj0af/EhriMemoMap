@@ -5,14 +5,11 @@
 <RadzenButton Style="@style.ButtonStyle" title="@(cl["home"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => ShowHome())"><RadzenIcon Icon="home" /></RadzenButton>
 
 @code {
-    [Parameter]
-    public int Order { get; set; }
-
     (string ButtonStyle, string BoxStyle) style;
 
     protected override void OnInitialized()
     {
-        style = MapState.GetStyleOfMapComponent(Order);
+        style = MapState.GetStyleOfMapComponent();
         MapState.OnChange += OnMyChangeHandler;
     }
 

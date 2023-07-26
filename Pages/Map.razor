@@ -11,12 +11,12 @@
 @inject IHttpContextAccessor httpContextAccesor
 
 <div title="@cl["mapTitle"]" @onclick="ShowPlaceInfo" id="map" style="cursor:default"></div>
-<Search Order=1 />
-@*<Timeline Order=2 />*@
-<Layers Order=2 />
-<Help Order=3 />
-<Language Order=4 />
-<Home Order=5 />
+<Search />
+<Timeline />
+<Layers />
+<Help />
+<Language />
+<Home />
 <Zoom />
 
 @code {
@@ -37,6 +37,7 @@
                 string collectionName = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "collection");
                 MapState.Init(layers, collectionName);
             }
+            var mapInfo = MapState.GetAllMapsInfoForLeaflet();
             await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetAllMapsInfoForLeaflet());
             MapState.IsMobileBrowser = await JS.InvokeAsync<bool>("mapAPI.isMobileBrowser");
         }

@@ -13,8 +13,7 @@ namespace EhriMemoMap.Models
         public string? Name { get; set; }
         public string? Title { get; set; }
         public string? MapName { get; set; }
-
-        public List<LayerModel>? Layers { get; set; }
+        public string? MapParameter { get; set; }
         public bool Selected { get; set; }
     }
 
