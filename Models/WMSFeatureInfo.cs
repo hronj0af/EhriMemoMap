@@ -111,6 +111,9 @@ namespace EhriMemoMap.Models
                         Documents = element.Attribute("value")?.Value;
                         break;
                 }
+
+                // pro bydliště je v adrese často i číslo popisné, které ovšem není u adresy oběti,
+                // tak to tady musím sjednotit (ale mělo by to být jednotné už ve výsledku dotazu - dodělat!!!
                 if (string.IsNullOrEmpty(Address) && !string.IsNullOrEmpty(AddressCzechOccupation))
                     Address = new Regex("/.*").Replace(AddressCzechOccupation, "");
             }
