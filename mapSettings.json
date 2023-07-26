@@ -69,7 +69,7 @@
               "title": "Oběti holokaustu z Prahy",
               "code": "Obeti_holokaustu_z_Prahy",
               "abstract": "Databáze židovských obyvatel Prahy, kteří zahynuli v důsledku nacistického pronásledování. Záznamy jsou navázané na jejich pražské adresy. Detaily jsou přístupné skrze odkazy na portál holocaust.cz.",
-              "hidden": true
+              "selected": true
             },
             {
               "name": "Bydliste_Zidu_v_Praze_v_dobe_okupace",

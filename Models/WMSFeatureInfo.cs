@@ -18,6 +18,10 @@ namespace EhriMemoMap.Models
                     case "Victim":
                         NameAndBirthDate = element.Attribute("value")?.Value;
                         break;
+                    case "Fotografie":
+                    case "Photo":
+                        Photo = element.Attribute("value")?.Value;
+                        break;
                     case "Detaily":
                     case "Details":
                         Details = element.Attribute("value")?.Value;
@@ -114,6 +118,7 @@ namespace EhriMemoMap.Models
 
 
         public string? NameAndBirthDate { get; set; }
+        public string? Photo { get; set; }
         public string? Details { get; set; }
         public string? Address { get; set; }
         public string? AddressCzechOccupation { get; set; }
