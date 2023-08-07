@@ -17,7 +17,26 @@
                 <li>@cl["fateUnknown"]: @House.FateUnknown</li>
             }
 
-            @if (House.StatisticsAbsent.Count > 0 || House.StatisticsPresent.Count > 0)
+            @if (House.Statistics.Count > 0)
+            {
+                <table class="rz-grid-table rz-grid-table-fixed" style="width:100%">
+                    <tr>
+                        <th></th>
+                        <th style="text-align:left">@cl["present"]</th>
+                        <th style="text-align:left">@cl["deported"]</th>
+                    </tr>
+                    @foreach (var statistic in House.Statistics)
+                    {
+                        <tr>
+                            <td>@statistic.Date.ToString("d. M. yyyy")</td>
+                            <td>@statistic.NumberPresent</td>
+                            <td>@statistic.NumberAbsent</td>
+                        </tr>
+                    }
+                </table>
+            }
+
+@*            @if (House.StatisticsAbsent.Count > 0 || House.StatisticsPresent.Count > 0)
             {
                 <RadzenChart style="height: 200px">
                     <RadzenLegend Visible="false" />
@@ -43,7 +62,7 @@
                     <RadzenCategoryAxis Step="TimeSpan.FromDays(366)" Min="new DateTime(1941,1,1)" Max="new DateTime(1946,1,1)" Formatter="FormatAsYear" />
                 </RadzenChart>
             }
-
+*@
         </ul>
     </RadzenCard>
 </RadzenColumn>
@@ -57,16 +76,16 @@
         return ((DateTime)value).Year.ToString();
     }
 
-    int ValueAxisStep()
-    {
-        var min = Math.Min(House.StatisticsAbsent.Count > 0 ? House.StatisticsAbsent.Min(a => a.Number) : 0, House.StatisticsPresent.Count > 0 ? House.StatisticsPresent.Min(a => a.Number) : 0);
-        var max = Math.Max(House.StatisticsAbsent.Count > 0 ? House.StatisticsAbsent.Max(a => a.Number) : 0, House.StatisticsPresent.Count > 0 ? House.StatisticsPresent.Max(a => a.Number) : 0);
-        if (max - min <= 10)
-            return 1;
+    //int ValueAxisStep()
+    //{
+    //    var min = Math.Min(House.StatisticsAbsent.Count > 0 ? House.StatisticsAbsent.Min(a => a.Number) : 0, House.StatisticsPresent.Count > 0 ? House.StatisticsPresent.Min(a => a.Number) : 0);
+    //    var max = Math.Max(House.StatisticsAbsent.Count > 0 ? House.StatisticsAbsent.Max(a => a.Number) : 0, House.StatisticsPresent.Count > 0 ? House.StatisticsPresent.Max(a => a.Number) : 0);
+    //    if (max - min <= 10)
+    //        return 1;
 
-        return 5;
+    //    return 5;
 
-    }
+    //}
 
 
 }

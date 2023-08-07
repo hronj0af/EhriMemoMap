@@ -11,8 +11,7 @@ namespace EhriMemoMap.Models
         {
             FeatureInfoType = type;
 
-            StatisticsAbsent = new List<WMSFeatureInfoStatistics>();
-            StatisticsPresent = new List<WMSFeatureInfoStatistics>();
+            Statistics = new List<WMSFeatureInfoStatistics>();
 
             foreach (var element in xdoc.Descendants("Attribute"))
             {
@@ -45,7 +44,7 @@ namespace EhriMemoMap.Models
                         break;
                     case "Počet židovských obyvatel (1. 10. 1941)":
                     case "Jewish residents (October 1941)":
-                        StatisticsPresent.Add(new WMSFeatureInfoStatistics { Date = new DateTime(1941,10,1), Number = int.Parse(element.Attribute("value")?.Value) });
+                        Statistics.Add(new WMSFeatureInfoStatistics { Date = new DateTime(1941, 10, 1), NumberPresent = int.Parse(element.Attribute("value")?.Value) });
                         break;
                     case "Zavražděno":
                     case "Murdered":
@@ -61,12 +60,28 @@ namespace EhriMemoMap.Models
                         break;
                     case { } when elementName.StartsWith("Nedeportováno k"):
                     case { } when elementName.StartsWith("Present at"):
-                        var datePresent = DateTime.ParseExact(elementName.Replace("Nedeportováno k ", "").Replace("Present at ", ""), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                        StatisticsPresent.Add(new WMSFeatureInfoStatistics { Date = datePresent, Number = int.Parse(element.Attribute("value")?.Value) });
+                        DateTime datePresent;
+
+                        if (!DateTime.TryParseExact(elementName.Replace("Present at ", "").Replace("Nedeportováno k ", ""), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out datePresent))
+                            DateTime.TryParseExact(elementName.Replace("Present at ", "").Replace("Nedeportováno k ", ""), "d. M. yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out datePresent);
+
+                        var numberPresent = int.Parse(element.Attribute("value")?.Value);
+                        if (Statistics.Any(x => x.Date == datePresent))
+                            Statistics.FirstOrDefault(a => a.Date == datePresent).NumberPresent = numberPresent;
+                        else
+                            Statistics.Add(new WMSFeatureInfoStatistics { Date = datePresent, NumberPresent = numberPresent });
                         break;
                     case { } when elementName.StartsWith("Absent at"):
-                        var dateAbsent = DateTime.ParseExact(elementName.Replace("Absent at ", ""), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                        StatisticsAbsent.Add(new WMSFeatureInfoStatistics { Date = dateAbsent, Number = int.Parse(element.Attribute("value")?.Value) });
+                        DateTime dateAbsent;
+
+                        if (!DateTime.TryParseExact(elementName.Replace("Absent at ", ""), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateAbsent))
+                            DateTime.TryParseExact(elementName.Replace("Absent at ", ""), "d. M. yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateAbsent);
+
+                        var numberAbsent = int.Parse(element.Attribute("value")?.Value);
+                        if (Statistics.Any(x => x.Date == dateAbsent))
+                            Statistics.FirstOrDefault(a => a.Date == dateAbsent).NumberPresent = numberAbsent;
+                        else
+                            Statistics.Add(new WMSFeatureInfoStatistics { Date = dateAbsent, NumberPresent = numberAbsent });
                         break;
                     case "Název":
                     case "Label":
@@ -137,8 +152,7 @@ namespace EhriMemoMap.Models
         public string? Documents { get; set; }
         public StatusEnum? Status { get; set; }
         public WMSFeatureType? FeatureInfoType { get; set; }
-        public List<WMSFeatureInfoStatistics> StatisticsAbsent { get; set; }
-        public List<WMSFeatureInfoStatistics> StatisticsPresent { get; set; }
+        public List<WMSFeatureInfoStatistics> Statistics { get; set; }
 
     }
 
@@ -150,7 +164,8 @@ namespace EhriMemoMap.Models
     public class WMSFeatureInfoStatistics
     {
         public DateTime Date { get; set; }
-        public int Number { get; set; }
+        public int? NumberAbsent { get; set; }
+        public int? NumberPresent { get; set; }
     }
 
 }
