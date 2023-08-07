@@ -22,6 +22,7 @@ namespace EhriMemoMap.Models
         public bool Hidden { get; set; }
 
         public bool IsNotQueryable { get; set; }
+        public int Order { get; set; }
 
     }
 }

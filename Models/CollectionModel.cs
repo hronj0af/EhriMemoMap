@@ -15,6 +15,8 @@ namespace EhriMemoMap.Models
         public string? MapName { get; set; }
         public string? MapParameter { get; set; }
         public bool Selected { get; set; }
+        public List<LayerModel>? AdditionalLayers { get; set; }
+
     }
 
 }

@@ -2,14 +2,21 @@
 @inject IStringLocalizer<CommonResources> cl
 @inject NavigationManager NavManager
 
-<RadzenButton Style="@style.ButtonStyle" title="@(cl["home"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => ShowHome())"><RadzenIcon Icon="home" /></RadzenButton>
+<RadzenButton Style="@style.ButtonStyle" title="@(cl["home"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => ShowHome())"><RadzenIcon Icon="home" /></RadzenButton>
 
 @code {
+    [Parameter]
+    public int Order { get; set; }
+
+    [Parameter]
+    public PositionEnum Position { get; set; }
+
+
     (string ButtonStyle, string BoxStyle) style;
 
     protected override void OnInitialized()
     {
-        style = MapState.GetStyleOfMapComponent();
+        style = MapState.GetStyleOfMapComponent(Position, Order);
         MapState.OnChange += OnMyChangeHandler;
     }
 

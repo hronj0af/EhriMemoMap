@@ -8,7 +8,7 @@
 
 @if (MapState.IsSearchOpen)
 {
-    <RadzenButton Style="@style.ButtonStyle" title="@(cl["search"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => MapState.IsSearchOpen = !MapState.IsSearchOpen)"><RadzenIcon Icon="close" /></RadzenButton>
+    <RadzenButton Style="@style.ButtonStyle" title="@(cl["search"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => MapState.IsSearchOpen = !MapState.IsSearchOpen)"><RadzenIcon Icon="close" /></RadzenButton>
     <RadzenAutoComplete Change="@ShowPlace" @bind-Value=@selectedPlaceName Data=@places TextProperty="@(CultureInfo.CurrentCulture == new CultureInfo("cs-CZ") ? "DropDownInfoCs" : "DropDownInfoEn")" LoadData=@LoadData Style="@(style.BoxStyle + $";width: {(MapState.IsMobileBrowser ? 300 : 800)}px")">
         <Template>
             <span onclick="@(() => ShowPlace((Place)context))">@if (CultureInfo.CurrentCulture == new CultureInfo("cs-CZ"))
@@ -26,18 +26,26 @@
 }
 else
 {
-    <RadzenButton Style="@style.ButtonStyle" title="@(cl["search"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => MapState.IsSearchOpen = !MapState.IsSearchOpen)"><RadzenIcon Icon="search" /></RadzenButton>
+    <RadzenButton Style="@style.ButtonStyle" title="@(cl["search"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => MapState.IsSearchOpen = !MapState.IsSearchOpen)"><RadzenIcon Icon="search" /></RadzenButton>
 
 }
 
 @code {
+    [Parameter]
+    public int Order { get; set; }
+
+    [Parameter]
+    public PositionEnum Position { get; set; }
+
+
+
     string selectedPlaceName;
     IEnumerable<Place> places;
     (string ButtonStyle, string BoxStyle) style;
 
     protected override void OnInitialized()
     {
-        style = MapState.GetStyleOfMapComponent();
+        style = MapState.GetStyleOfMapComponent(Position, Order);
         MapState.OnChange += OnMyChangeHandler;
     }
 

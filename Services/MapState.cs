@@ -100,14 +100,13 @@ namespace EhriMemoMap.Services
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        public (string Button, string Box) GetStyleOfMapComponent()
+        public (string Button, string Box) GetStyleOfMapComponent(PositionEnum position, int index)
         {
-            var order = GetButtonOrderIndex();
-            var top = (IsMobileBrowser ? (topOfElement - 5) : topOfElement) + 45 * (order - 1);
-            var right = (IsMobileBrowser ? (rightOfElement - 5) : rightOfElement);
+            var y = topOfElement + 45 * index + (position == PositionEnum.Bottom ? 20 : 0);
+            var x = rightOfElement;
 
-            var buttonStyle = $"position:absolute;top:{top}px;right:{right}px;z-index:600";
-            var boxStyle = $"position:absolute;top:{top}px;right:{right + 60}px;z-index:600";
+            var buttonStyle = $"position:absolute;{position.ToString().ToLower()}:{y}px;right:{x}px;z-index:600";
+            var boxStyle = $"position:absolute;{position.ToString().ToLower()}:{y}px;right:{x + 60}px;z-index:600";
 
             return (buttonStyle, boxStyle);
         }
@@ -210,31 +209,28 @@ namespace EhriMemoMap.Services
         /// pokaždé vrátí ty vrstvy, které příslušejí přímo určité mapě (nespadají pod žádnou kolekci), 
         /// </summary>
         /// <returns></returns>
-        public List<LayerModel>? GetAllLayers()
+        public List<LayerModel>? GetAllWMSLayers(string? mapName = null)
         {
-            if (Maps == null)
+            if (Maps == null || (!string.IsNullOrEmpty(mapName) && !Maps.Any(a => a.Name == mapName)))
                 return new List<LayerModel>();
 
-            return Maps.
-                Where(a => a.Type.Contains("wms")).
-                SelectMany(a => a.MapLanguages.Where(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString() && a.Layers != null)).
+            var mapLanguages = Maps.
+                Where(a => a.Type.Contains("wms") && (!string.IsNullOrEmpty(mapName) ? a.Name == mapName : a.Name == a.Name)).
+                SelectMany(a => a.MapLanguages.Where(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString())).ToList();
+
+            if (mapLanguages == null || !mapLanguages.Any())
+                return new List<LayerModel>();
+
+            var result = mapLanguages.
+                Where(a => a.Layers != null).
                 SelectMany(map => map.Layers).
                 Union(
-                    Maps.
-                        Where(a => a.Type.Contains("wms")).
-                        SelectMany(a => a.MapLanguages.Where(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString() && a.Layers != null)).
-                        SelectMany(c => c.Layers)).
-                        Select(b => new LayerModel
-                        {
-                            MapName = b.MapName,
-                            Code = b.Code,
-                            Name = b.Name,
-                            Title = b.Title,
-                            Selected = b.Selected,
-                            IsNotQueryable = b.IsNotQueryable,
-                            Abstract = b.Abstract,
-                            Hidden = b.Hidden
-                        }).ToList();
+                    mapLanguages.Where(a => a.Collections != null).
+                        SelectMany(c => c.Collections.Where(a => a.Selected && a.AdditionalLayers != null)).
+                        SelectMany(d => d.AdditionalLayers)).
+                ToList();
+
+            return result;
         }
 
         /// <summary>
@@ -280,7 +276,9 @@ namespace EhriMemoMap.Services
             if (featureMap == null)
                 return "";
 
-            string? queryLayers = GetAllLayers()?.Where(a => a.Selected && !a.IsNotQueryable).Select(a => a.Name)?.Aggregate((x, y) => x + "," + y);
+            var wmsLayers = GetAllWMSLayers();
+
+            string? queryLayers = wmsLayers?.Where(a => a.Selected && !a.IsNotQueryable).Select(a => a.Name)?.Aggregate((x, y) => x + "," + y);
             string? mapParameter = featureMap.MapLanguages?.FirstOrDefault(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString())?.MapParameter != null
                 ? featureMap.MapLanguages?.FirstOrDefault(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString())?.MapParameter
                 : featureMap.MapLanguages?.FirstOrDefault(a => a.LanguageCode == CultureInfo.CurrentCulture.ToString())?.Collections?.FirstOrDefault(a => a.Selected)?.MapParameter;
@@ -298,7 +296,7 @@ namespace EhriMemoMap.Services
         /// </summary>
         /// <returns></returns>
         public string? GetLayersForUrlParameter()
-            => GetAllLayers()?.Count(a => a.Selected) == 0 ? "" : GetAllLayers()?.Where(a => a.Selected).Select(a => a.Code)?.Aggregate((x, y) => x + "," + y);
+            => GetAllWMSLayers()?.Count(a => a.Selected) == 0 ? "" : GetAllWMSLayers()?.Where(a => a.Selected).Select(a => a.Code)?.Aggregate((x, y) => x + "," + y);
 
         /// <summary>
         /// Vrátí název vybrané kolekce / bodu na časové ose pro nastavení v url query
@@ -331,7 +329,9 @@ namespace EhriMemoMap.Services
                         MapParameter = mapLanguage?.MapParameter != null
                             ? mapLanguage?.MapParameter
                             : mapLanguage?.Collections?.FirstOrDefault(a => a.Selected)?.MapParameter,
-                        Layers = mapLanguage?.Layers != null ? mapLanguage?.Layers.Where(a=>a.Selected).ToList() : null
+                        Layers = !string.IsNullOrEmpty(a.Type) && a.Type.Contains("wms")
+                            ? GetAllWMSLayers(mapName)?.Where(a => a.Selected).ToList() 
+                            : null
                     };
                 }).FirstOrDefault() ?? new MapLeafletModel();
             return result;
@@ -421,9 +421,6 @@ namespace EhriMemoMap.Services
             };
 
         }
-
-        private int buttonOrderIndex { get; set; } = 0;
-        public int GetButtonOrderIndex() => ++buttonOrderIndex;
     }
 
 

@@ -1,0 +1,17 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapState MapState
+
+<RadzenColumn Size="MapState.DialogIsFullscreen && !MapState.IsMobileBrowser ? 2 : 6">
+    <a href="@Victim.Details" target="_blank" style="text-decoration:none;color:black">
+        <RadzenCard  Style="height:200px" >
+            <RadzenImage Style="@(MapState.IsMobileBrowser ? (!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" ? "max-height:85%;max-width:100%" : "max-height:70%;max-width:100%") : "max-height:90%;max-width:100%")" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" ? Victim.Photo : "images/face.png")" />
+            <div><small>@Victim.NameAndBirthDate</small></div>
+        </RadzenCard>
+    </a>
+</RadzenColumn>
+
+@code {
+    [Parameter]
+    public WMSFeatureInfo Victim { get; set; }
+
+}

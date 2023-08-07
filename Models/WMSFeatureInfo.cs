@@ -10,9 +10,14 @@ namespace EhriMemoMap.Models
         public WMSFeatureInfo(XElement xdoc, WMSFeatureType type)
         {
             FeatureInfoType = type;
+
+            StatisticsAbsent = new List<WMSFeatureInfoStatistics>();
+            StatisticsPresent = new List<WMSFeatureInfoStatistics>();
+
             foreach (var element in xdoc.Descendants("Attribute"))
             {
-                switch (element.Attribute("name")?.Value)
+                var elementName = element.Attribute("name")?.Value;
+                switch (elementName)
                 {
                     case "Jméno (datum narození)":
                     case "Victim":
@@ -40,7 +45,7 @@ namespace EhriMemoMap.Models
                         break;
                     case "Počet židovských obyvatel (1. 10. 1941)":
                     case "Jewish residents (October 1941)":
-                        JewishResidents1941 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
+                        StatisticsPresent.Add(new WMSFeatureInfoStatistics { Date = new DateTime(1941,10,1), Number = int.Parse(element.Attribute("value")?.Value) });
                         break;
                     case "Zavražděno":
                     case "Murdered":
@@ -54,25 +59,14 @@ namespace EhriMemoMap.Models
                     case "Fate unknown":
                         FateUnknown = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
                         break;
-                    case "Nedeportováno k 1. 1. 1942":
-                    case "Present at 1942-01-01":
-                        NotDeportedUntil_1_1_1942 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
+                    case { } when elementName.StartsWith("Nedeportováno k"):
+                    case { } when elementName.StartsWith("Present at"):
+                        var datePresent = DateTime.ParseExact(elementName.Replace("Nedeportováno k ", "").Replace("Present at ", ""), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        StatisticsPresent.Add(new WMSFeatureInfoStatistics { Date = datePresent, Number = int.Parse(element.Attribute("value")?.Value) });
                         break;
-                    case "Nedeportováno k 1. 1. 1943":
-                    case "Present at 1943-01-01":
-                        NotDeportedUntil_1_1_1943 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
-                        break;
-                    case "Nedeportováno k 1. 1. 1944":
-                    case "Present at 1944-01-01":
-                        NotDeportedUntil_1_1_1944 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
-                        break;
-                    case "Nedeportováno k 1. 1. 1945":
-                    case "Present at 1945-01-01":
-                        NotDeportedUntil_1_1_1945 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
-                        break;
-                    case "Nedeportováno k 9. 5. 1945":
-                    case "Present at 1945-05-09":
-                        NotDeportedUntil_9_5_1945 = !string.IsNullOrEmpty(element.Attribute("value")?.Value) ? int.Parse(element.Attribute("value")?.Value) : null;
+                    case { } when elementName.StartsWith("Absent at"):
+                        var dateAbsent = DateTime.ParseExact(elementName.Replace("Absent at ", ""), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                        StatisticsAbsent.Add(new WMSFeatureInfoStatistics { Date = dateAbsent, Number = int.Parse(element.Attribute("value")?.Value) });
                         break;
                     case "Název":
                     case "Label":
@@ -110,6 +104,9 @@ namespace EhriMemoMap.Models
                     case "Documents":
                         Documents = element.Attribute("value")?.Value;
                         break;
+                    case "Status":
+                        Status = Enum.Parse<StatusEnum>(element.Attribute("value")?.Value);
+                        break;
                 }
 
                 // pro bydliště je v adrese často i číslo popisné, které ovšem není u adresy oběti,
@@ -126,15 +123,9 @@ namespace EhriMemoMap.Models
         public string? Address { get; set; }
         public string? AddressCzechOccupation { get; set; }
         public string? AddressGermanOccupation { get; set; }
-        public int? JewishResidents1941 { get; set; }
         public int? Murdered { get; set; }
         public int? Survived { get; set; }
         public int? FateUnknown { get; set; }
-        public int? NotDeportedUntil_1_1_1942 { get; set; }
-        public int? NotDeportedUntil_1_1_1943 { get; set; }
-        public int? NotDeportedUntil_1_1_1944 { get; set; }
-        public int? NotDeportedUntil_1_1_1945 { get; set; }
-        public int? NotDeportedUntil_9_5_1945 { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
         public string? Type { get; set; }
@@ -144,7 +135,22 @@ namespace EhriMemoMap.Models
         public DateTime? Date { get; set; }
         public string? Place { get; set; }
         public string? Documents { get; set; }
+        public StatusEnum? Status { get; set; }
         public WMSFeatureType? FeatureInfoType { get; set; }
+        public List<WMSFeatureInfoStatistics> StatisticsAbsent { get; set; }
+        public List<WMSFeatureInfoStatistics> StatisticsPresent { get; set; }
+
+    }
+
+    public enum StatusEnum
+    {
+        present, absent
+    }
+
+    public class WMSFeatureInfoStatistics
+    {
+        public DateTime Date { get; set; }
+        public int Number { get; set; }
     }
 
 }

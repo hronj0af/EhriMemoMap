@@ -228,4 +228,19 @@
   <data name="notDeportedUntil_9_5_1945" xml:space="preserve">
     <value>Nedeportováno k 9. 5. 1945</value>
   </data>
+  <data name="present" xml:space="preserve">
+    <value>Přítomní</value>
+  </data>
+  <data name="deported" xml:space="preserve">
+    <value>Deportovaní</value>
+  </data>
+  <data name="presentAt" xml:space="preserve">
+    <value>Nedeportováno k </value>
+  </data>
+  <data name="absentAt" xml:space="preserve">
+    <value>Deportováno k </value>
+  </data>
+  <data name="numberOfInhabitants" xml:space="preserve">
+    <value>Počet obyvatel</value>
+  </data>
 </root>

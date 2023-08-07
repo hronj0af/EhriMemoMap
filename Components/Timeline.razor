@@ -7,14 +7,16 @@
 
 @if (collections != null && collections.Count > 1)
 {
-    <RadzenButton Style="@style.ButtonStyle" title="@(cl["timeline"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => MapState.IsTimelineOpen = !MapState.IsTimelineOpen)"><RadzenIcon Icon="lock_clock" /></RadzenButton>
+    <RadzenButton Style="@style.ButtonStyle" title="@(cl["timeline"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => MapState.IsTimelineOpen = !MapState.IsTimelineOpen)"><RadzenIcon Icon="lock_clock" /></RadzenButton>
 
     @if (MapState.IsTimelineOpen)
     {
-        <RadzenRow Gap="7px" Style="@style.BoxStyle">
+        <RadzenRow class="rz-ml-2" Style="@style.BoxStyle">
             @foreach (var item in collections)
             {
-                <RadzenButton ButtonStyle="item.Selected ? ButtonStyle.Dark : ButtonStyle.Primary" Shade="Shade.Light" Size="ButtonSize.Medium" Variant="Variant.Flat" Click="(() => OnCollectionClick(item))">@item.Title</RadzenButton>
+                <RadzenColumn Size="MapState.IsMobileBrowser ? 4 : null">
+                <RadzenButton ButtonStyle="item.Selected ? ButtonStyle.Dark : ButtonStyle.Secondary" Shade="Shade.Light" Size="ButtonSize.Medium" Variant="Variant.Flat" Click="(() => OnCollectionClick(item))">@item.Title</RadzenButton>
+                </RadzenColumn>
             }
         </RadzenRow>
 
@@ -23,12 +25,19 @@
 @code {
     (string ButtonStyle, string BoxStyle) style;
 
+    [Parameter]
+    public int Order { get; set; }
+
+    [Parameter]
+    public PositionEnum Position { get; set; }
+
+
     List<CollectionModel> collections;
 
     protected override void OnInitialized()
     {
         collections = MapState.GetAllCollections();
-        style = MapState.GetStyleOfMapComponent();
+        style = MapState.GetStyleOfMapComponent(Position, Order);
         MapState.OnChange += OnMyChangeHandler;
     }
 

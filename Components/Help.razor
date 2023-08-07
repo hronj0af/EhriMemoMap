@@ -8,11 +8,17 @@
 <RadzenButton Style="@style.ButtonStyle" title="@(cl["help"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => ShowHelp())"><RadzenIcon Icon="help" /></RadzenButton>
 
 @code {
+    [Parameter]
+    public int Order { get; set; }
+
+    [Parameter]
+    public PositionEnum Position { get; set; }
+
     (string ButtonStyle, string BoxStyle) style;
 
     protected override void OnInitialized()
     {
-        style = MapState.GetStyleOfMapComponent();
+        style = MapState.GetStyleOfMapComponent(Position, Order);
         MapState.OnChange += OnMyChangeHandler;
     }
 

@@ -13,33 +13,41 @@
         <RadzenRow Gap="1rem" JustifyContent=JustifyContent.Left>
             @foreach (var house in victimGroup.Where(a => a.FeatureInfoType == WMSFeatureType.Bydliste_Zidu_v_Praze_v_dobe_okupace))
             {
-                <RadzenColumn Size="12">
-                    <RadzenCard>
-                        <ul class="no-bullets">
-                            <li>@cl["jewishResidents1941"]: @house.JewishResidents1941</li>
-                            <li>@cl["murdered"]: @house.Murdered</li>
-                            <li>@cl["survived"]: @house.Survived</li>
-                            <li>@cl["fateUnknown"]: @house.FateUnknown</li>
-                            <li>@cl["notDeportedUntil_1_1_1942"]: @house.NotDeportedUntil_1_1_1942</li>
-                            <li>@cl["notDeportedUntil_1_1_1943"]: @house.NotDeportedUntil_1_1_1943</li>
-                            <li>@cl["notDeportedUntil_1_1_1944"]: @house.NotDeportedUntil_1_1_1944</li>
-                            <li>@cl["notDeportedUntil_1_1_1945"]: @house.NotDeportedUntil_1_1_1945</li>
-                            <li>@cl["notDeportedUntil_9_5_1945"]: @house.NotDeportedUntil_9_5_1945</li>
-                        </ul>
-                    </RadzenCard>
-                </RadzenColumn>
-
+                <HouseCard House="@house"/>
             }
 
-            @foreach (var victim in victimGroup.Where(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy))
+            @if (victimGroup.Any(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy && a.Status == StatusEnum.present))
             {
-                <RadzenColumn Size="MapState.DialogIsFullscreen && !MapState.IsMobileBrowser ? 2 : 6">
-                    <RadzenCard>
-                        <RadzenImage Style="width:100%" Path="@(!string.IsNullOrEmpty(victim.Photo) && victim.Photo != "NULL" ? victim.Photo : "images/face.png")" />
-                        <div><small>@victim.NameAndBirthDate</small></div>
-                    </RadzenCard>
+                <RadzenColumn Size="12">
+                <h4>@cl["present"]</h4>
                 </RadzenColumn>
+                foreach (var victim in victimGroup.Where(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy && a.Status == StatusEnum.present))
+                {
+                    <VictimCard Victim="@victim" />
+                }
+
             }
+
+            @if (victimGroup.Any(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy && a.Status == StatusEnum.absent))
+            {
+                <RadzenColumn Size="12">
+                    <h4>@cl["deported"]</h4>
+                </RadzenColumn>
+                foreach (var victim in victimGroup.Where(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy && a.Status == StatusEnum.absent))
+                {
+                    <VictimCard Victim="@victim" />
+                }
+
+            }
+
+            @if (!victimGroup.Any(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy && (a.Status == StatusEnum.present || a.Status == StatusEnum.absent)))
+            {
+                foreach (var victim in victimGroup.Where(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy))
+                {
+                    <VictimCard Victim="@victim" />
+                }
+            }
+
         </RadzenRow>
     }
 }

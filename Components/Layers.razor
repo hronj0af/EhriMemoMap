@@ -5,18 +5,18 @@
 @inject MapState MapState
 @inject IStringLocalizer<CommonResources> cl
 
-<RadzenButton Style="@style.ButtonStyle" title="@(cl["layers"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => MapState.IsLayersOpen = !MapState.IsLayersOpen)"><RadzenIcon Icon="menu" /></RadzenButton>
+<RadzenButton Style="@style.ButtonStyle" title="@(cl["layers"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => MapState.IsLayersOpen = !MapState.IsLayersOpen)"><RadzenIcon Icon="menu" /></RadzenButton>
 
 @if (layers != null && layers.Count() > 0 && MapState.IsLayersOpen)
 {
-    <RadzenCard Style="@(style.BoxStyle + $";width: {(MapState.IsMobileBrowser ? 270 : 400)}px")">
-        @foreach (var item in layers)
+    <RadzenCard Style="@(style.BoxStyle + $";width: {(MapState.IsMobileBrowser ? 270 : 410)}px")">
+        @foreach (var item in layers.OrderBy(a => a.Order))
         {
-            <RadzenCheckBox TValue="bool" @bind-Value=@item.Selected onclick="@(() => OnLayerClick(@item))" />
+            <RadzenCheckBox  TValue="bool" @bind-Value=@item.Selected onclick="@(() => OnLayerClick(@item))" />
             <RadzenLabel Text="@item.Title" Style="margin-left: 8px; vertical-align: middle;" />
             @if (!string.IsNullOrEmpty(item.Abstract))
             {
-                <RadzenIcon onclick="@(() => ShowLayerAbstract(item))" title="@cl["moreInfo"]" IconStyle="IconStyle.Primary" style="font-size: 20px;cursor:pointer" Icon="help"></RadzenIcon>
+                <RadzenIcon onclick="@(() => ShowLayerAbstract(item))" title="@cl["moreInfo"]" IconStyle="IconStyle.Dark" style="font-size: 20px;cursor:pointer" Icon="help"></RadzenIcon>
             }
             <br />
         }
@@ -26,12 +26,17 @@
 @code {
     (string ButtonStyle, string BoxStyle) style;
 
+    [Parameter]
+    public int Order { get; set; }
+
+    [Parameter]
+    public PositionEnum Position { get; set; }
 
     IEnumerable<LayerModel>? layers;
 
     protected override void OnInitialized()
     {
-        style = MapState.GetStyleOfMapComponent();
+        style = MapState.GetStyleOfMapComponent(Position, Order);
         MapState.OnChange += OnMyChangeHandler;
     }
 
@@ -44,7 +49,7 @@
     {
         await InvokeAsync(() =>
         {
-            layers = MapState.GetAllLayers()?.Where(a => !a.Hidden).ToList();
+            layers = MapState.GetAllWMSLayers()?.Where(a => !a.Hidden).ToList();
             StateHasChanged();
         });
     }

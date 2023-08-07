@@ -228,4 +228,19 @@
   <data name="notDeportedUntil_9_5_1945" xml:space="preserve">
     <value>Present at 1945-05-09</value>
   </data>
+  <data name="present" xml:space="preserve">
+    <value>Present</value>
+  </data>
+  <data name="deported" xml:space="preserve">
+    <value>Deported</value>
+  </data>
+  <data name="presentAt" xml:space="preserve">
+    <value>Present at </value>
+  </data>
+  <data name="absentAt" xml:space="preserve">
+    <value>Absent at </value>
+  </data>
+  <data name="numberOfInhabitants" xml:space="preserve">
+    <value>Number of inhabitants</value>
+  </data>
 </root>
