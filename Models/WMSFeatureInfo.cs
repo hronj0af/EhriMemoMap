@@ -79,9 +79,9 @@ namespace EhriMemoMap.Models
 
                         var numberAbsent = int.Parse(element.Attribute("value")?.Value);
                         if (Statistics.Any(x => x.Date == dateAbsent))
-                            Statistics.FirstOrDefault(a => a.Date == dateAbsent).NumberPresent = numberAbsent;
+                            Statistics.FirstOrDefault(a => a.Date == dateAbsent).NumberAbsent = numberAbsent;
                         else
-                            Statistics.Add(new WMSFeatureInfoStatistics { Date = dateAbsent, NumberPresent = numberAbsent });
+                            Statistics.Add(new WMSFeatureInfoStatistics { Date = dateAbsent, NumberAbsent = numberAbsent });
                         break;
                     case "Název":
                     case "Label":
