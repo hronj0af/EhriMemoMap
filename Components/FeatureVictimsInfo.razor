@@ -19,7 +19,7 @@
             @if (victimGroup.Any(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy) && victimGroup.Any(a => a.FeatureInfoType == WMSFeatureType.Bydliste_Zidu_v_Praze_v_dobe_okupace && (a.FateUnknown != null || a.Survived != null)))
             {
                 <p>
-                    @cl["survivorsAreNotDisplayed"]
+                    <b>@cl["survivorsNotDisplayed"]</b>
                 </p>
             }
 

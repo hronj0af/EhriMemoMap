@@ -72,10 +72,11 @@ namespace EhriMemoMap.Models
                             Statistics.Add(new WMSFeatureInfoStatistics { Date = datePresent, NumberPresent = numberPresent });
                         break;
                     case { } when elementName.StartsWith("Absent at"):
+                    case { } when elementName.StartsWith("deported_"):
                         DateTime dateAbsent;
 
-                        if (!DateTime.TryParseExact(elementName.Replace("Absent at ", ""), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateAbsent))
-                            DateTime.TryParseExact(elementName.Replace("Absent at ", ""), "d. M. yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateAbsent);
+                        if (!DateTime.TryParseExact(elementName.Replace("Absent at ", "").Replace("deported_", ""), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateAbsent))
+                            DateTime.TryParseExact(elementName.Replace("Absent at ", "").Replace("deported_", ""), "d. M. yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateAbsent);
 
                         var numberAbsent = int.Parse(element.Attribute("value")?.Value);
                         if (Statistics.Any(x => x.Date == dateAbsent))
