@@ -11,15 +11,20 @@
 
     @if (MapState.IsTimelineOpen)
     {
-        <RadzenRow class="rz-ml-2" Style="@style.BoxStyle">
-            @foreach (var item in collections)
-            {
-                <RadzenColumn Size="MapState.IsMobileBrowser ? 4 : null">
-                <RadzenButton ButtonStyle="item.Selected ? ButtonStyle.Dark : ButtonStyle.Secondary" Shade="Shade.Light" Size="ButtonSize.Medium" Variant="Variant.Flat" Click="(() => OnCollectionClick(item))">@item.Title</RadzenButton>
-                </RadzenColumn>
-            }
-        </RadzenRow>
-
+        <RadzenCard Style="@style.BoxStyle">
+            <RadzenRow>
+                @foreach (var group in collections.GroupBy(a => a.Year).OrderBy(a => a.Key))
+                {
+                    <RadzenColumn Size="MapState.IsMobileBrowser ? 4 : null">
+                        <span><b>@group.Key</b></span><br />
+                        @foreach (var item in group)
+                        {
+                            <RadzenButton class="rz-mb-1" ButtonStyle="item.Selected ? ButtonStyle.Dark : ButtonStyle.Secondary" Shade="Shade.Light" Size="ButtonSize.Small" Variant="Variant.Flat" Click="(() => OnCollectionClick(item))">@item.Title</RadzenButton>
+                        }
+                    </RadzenColumn>
+                }
+            </RadzenRow>
+        </RadzenCard>
     }
 }
 @code {
@@ -34,10 +39,11 @@
 
     List<CollectionModel> collections;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        var width = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
+        style = await MapState.GetStyleOfMapComponent(Position, Order, width);
         collections = MapState.GetAllCollections();
-        style = MapState.GetStyleOfMapComponent(Position, Order);
         MapState.OnChange += OnMyChangeHandler;
     }
 

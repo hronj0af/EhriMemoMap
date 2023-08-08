@@ -38,7 +38,7 @@
             @if (victimGroup.Any(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy && a.Status == StatusEnum.absent))
             {
                 <RadzenColumn Size="12">
-                    <h4>@cl["deported"]</h4>
+                    <h4>@cl["absent"]</h4>
                 </RadzenColumn>
                 foreach (var victim in victimGroup.Where(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy && a.Status == StatusEnum.absent))
                 {

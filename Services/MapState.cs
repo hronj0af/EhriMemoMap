@@ -1,5 +1,6 @@
 ﻿using EhriMemoMap.Models;
 using Microsoft.Extensions.Primitives;
+using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Radzen;
@@ -14,9 +15,11 @@ namespace EhriMemoMap.Services
     public class MapState
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public MapState(IHttpContextAccessor httpContextAccessor)
+        private readonly IJSRuntime _js;
+        public MapState(IHttpContextAccessor httpContextAccessor, IJSRuntime js)
         {
             _httpContextAccessor = httpContextAccessor;
+            _js = js;
         }
 
         public bool DialogIsFullscreen = false;
@@ -58,6 +61,8 @@ namespace EhriMemoMap.Services
             set
             {
                 isLayersOpen = value;
+                if (IsTimelineOpen)
+                    isTimelineOpen = !IsTimelineOpen;
                 NotifyStateChanged();
             }
         }
@@ -72,6 +77,8 @@ namespace EhriMemoMap.Services
             set
             {
                 isTimelineOpen = value;
+                if (IsLayersOpen)
+                    isLayersOpen = !IsLayersOpen;
                 NotifyStateChanged();
             }
         }
@@ -100,13 +107,13 @@ namespace EhriMemoMap.Services
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        public (string Button, string Box) GetStyleOfMapComponent(PositionEnum position, int index)
+        public async Task<(string Button, string Box)> GetStyleOfMapComponent(PositionEnum position, int index, int? windowWidth = null)
         {
             var y = topOfElement + 45 * index + (position == PositionEnum.Bottom ? 20 : 0);
             var x = rightOfElement;
 
             var buttonStyle = $"position:absolute;{position.ToString().ToLower()}:{y}px;right:{x}px;z-index:600";
-            var boxStyle = $"position:absolute;{position.ToString().ToLower()}:{y}px;right:{x + 60}px;z-index:600";
+            var boxStyle = $"{(windowWidth != null ? $"width:{windowWidth - 110}px;" : null)}position:absolute;{position.ToString().ToLower()}:{y}px;right:{x + 60}px;z-index:600";
 
             return (buttonStyle, boxStyle);
         }

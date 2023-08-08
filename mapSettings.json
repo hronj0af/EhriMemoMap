@@ -36,7 +36,7 @@
           "layers": [
             {
               "name": "MGS-prague_historical_map_1938-v2",
-              "title": "Historical map of Prague (1938)",
+              "title": "Historical map (1938)",
               "code": "MGS-prague_historical_map_1938-v2",
               "abstract": "Orientační plán hlavního města Prahy s okolím (1938) [Orientation plan of the capital city of Prague with its surroundings (1938)].Digitized by by the Municipal Library in Prague, georeferenced by the Masaryk Institute and archives of the Czech Academy of Sciences. Also available from WWW: http://web2.mlp.cz/mapa1938/klad.php.",
               "isNotQueryable": true,
@@ -120,7 +120,7 @@
           "layers": [
             {
               "name": "Inaccessible_places",
-              "title": "Inaccessible Places within the City of Prague",
+              "title": "Inaccessible Places",
               "code": "Neprisupna_mista",
               "abstract": "Places that Jews were forbidden to enter. Based on the historical map from year 1938. Current shape of the place can differ.",
               "selected": true,
@@ -128,7 +128,7 @@
             },
             {
               "name": "Holocaust_victims_from_Prague",
-              "title": "Holocaust victims from Prague",
+              "title": "Holocaust victims",
               "code": "Obeti_holokaustu_z_Prahy",
               "abstract": "Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz.",
               "selected": true,
@@ -137,7 +137,7 @@
             },
             {
               "name": "Jewish_homes_during_the_occupation",
-              "title": "Jewish Homes in Prague During the Occupation",
+              "title": "Jewish Homes",
               "code": "Bydliste_Zidu_v_Praze_v_dobe_okupace",
               "abstract": "The home addresses of Prague's Jewish residents during the Shoah from the victims' database. The data mostly comes from the registration of Jews in the Protectorate, which began in the fall of 1941 by order of the Central Office for Jewish Emigration. You will be able to view the number of people who lived in a particular building, find out what their fates were, and the numbers of those present on various historical dates. Some buildings were difficult to identify and in those cases multiple addresses (for example, on the same street) are grouped under the same coordinates. We are continually working on refining the map. We have kept the street names used during the occupation (roughly 1941-1942).",
               "selected": true,
@@ -146,7 +146,7 @@
             },
             {
               "name": "Points_of_interest",
-              "title": "Points of Interest in the City of Prague",
+              "title": "Points of Interest",
               "code": "Body_zajmu",
               "abstract": "Points of interest include places of persecution, Jewish buildings, warehouses full of confiscated property, or places that Jews were forbidden to enter.",
               "selected": true,
@@ -155,7 +155,7 @@
             },
             {
               "name": "Incidents_within_the_city_of_Prague",
-              "title": "Incidents Within the City of Prague",
+              "title": "Incidents",
               "code": "Incidenty_v_prostoru_mesta_Prahy",
               "abstract": "Incidents that took place within the city limits of Prague during which Jewish residents were arrested or investigated for violating anti-Jewish ordinances. This data was extracted from the digitized documents of the Prague Police as part of the MemoMap Prague project. It includes information about non-compliance with restrictions of free movement, identification papers lacking the letter \"J\" (Jude), etc.",
               "selected": true,
@@ -166,103 +166,118 @@
           "collections": [
             {
               "name": "Q4_1941",
-              "title": "Q4 1941",
+              "title": "Q4",
+              "year": 1941,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1941_q4.qgz"
             },
             {
               "name": "Q1_1942",
-              "title": "Q1 1942",
+              "title": "Q1",
+              "year": 1942,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1942_q1.qgz"
             },
             {
               "name": "Q2_1942",
-              "title": "Q2 1942",
+              "title": "Q2",
+              "year": 1942,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1942_q2.qgz"
             },
             {
               "name": "Q3_1942",
-              "title": "Q3 1942",
+              "title": "Q3",
+              "year": 1942,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1942_q3.qgz"
             },
             {
               "name": "Q4_1942",
-              "title": "Q4 1942",
+              "title": "Q4",
+              "year": 1942,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1942_q4.qgz"
             },
             {
               "name": "Q1_1943",
-              "title": "Q1 1943",
+              "title": "Q1",
+              "year": 1943,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1943_q1.qgz"
             },
             {
               "name": "Q2_1943",
-              "title": "Q2 1943",
+              "title": "Q2",
+              "year": 1943,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1943_q2.qgz"
             },
             {
               "name": "Q3_1943",
-              "title": "Q3 1943",
+              "title": "Q3",
+              "year": 1943,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1943_q3.qgz"
             },
             {
               "name": "Q4_1943",
-              "title": "Q4 1943",
+              "title": "Q4",
+              "year": 1943,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1943_q4.qgz"
             },
             {
               "name": "Q1_1944",
-              "title": "Q1 1944",
+              "title": "Q1",
+              "year": 1944,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1944_q1.qgz"
             },
             {
               "name": "Q2_1944",
-              "title": "Q2 1944",
+              "title": "Q2",
+              "year": 1944,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1944_q2.qgz"
             },
             {
               "name": "Q3_1944",
-              "title": "Q3 1944",
+              "title": "Q3",
+              "year": 1944,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1944_q3.qgz"
             },
             {
               "name": "Q4_1944",
-              "title": "Q4 1944",
+              "title": "Q4",
+              "year": 1944,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1944_q4.qgz"
             },
             {
               "name": "Q1_1945",
-              "title": "Q1 1945",
+              "title": "Q1",
+              "year": 1945,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1945_q1.qgz"
             },
             {
               "name": "Q2_1945",
-              "title": "Q2 1945",
+              "title": "Q2",
+              "year": 1945,
               "selected": false,
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_1945_q2.qgz"
             },
             {
               "name": "TimelineAll",
-              "title": "All periods",
+              "title": "All",
               "mapParameter": "/webdata/HGIS_eng/memogis_prague_ENG_TL_all.qgz",
               "selected": true,
               "additionalLayers": [
                 {
                   "name": "Prague_districts_statistic",
-                  "title": "Prague Districts Statistic",
+                  "title": "Districts Statistic",
                   "code": "Statistika",
                   "abstract": "Statistic information on number of Jewish residents, incidents and points of interest according to specific Prague's districts. Zoom in to display details.",
                   "isNotQueryable": true,

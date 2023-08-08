@@ -20,11 +20,11 @@
     (string ButtonStyle, string BoxStyle) styleZoomIn;
     (string ButtonStyle, string BoxStyle) styleZoomOut;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        styleZoomOut = MapState.GetStyleOfMapComponent(Position, Order);
-        styleZoomIn = MapState.GetStyleOfMapComponent(Position, Order + 1);
-        styleLocation = MapState.GetStyleOfMapComponent(Position, Order + 2);
+        styleZoomOut = await MapState.GetStyleOfMapComponent(Position, Order);
+        styleZoomIn = await MapState.GetStyleOfMapComponent(Position, Order + 1);
+        styleLocation = await MapState.GetStyleOfMapComponent(Position, Order + 2);
 
     }
 
