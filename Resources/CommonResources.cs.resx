@@ -231,4 +231,7 @@
   <data name="prague" xml:space="preserve">
     <value>Praha</value>
   </data>
+  <data name="survivorsNotDisplayed" xml:space="preserve">
+    <value>Přeživší a lidé s neznámým osudem nejsou níže zobrazeni.</value>
+  </data>
 </root>

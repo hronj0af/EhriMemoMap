@@ -231,4 +231,7 @@
   <data name="prague" xml:space="preserve">
     <value>Prague</value>
   </data>
+  <data name="survivorsNotDisplayed" xml:space="preserve">
+    <value>Survivors and people from uncertain fate aren't displayed below.</value>
+  </data>
 </root>

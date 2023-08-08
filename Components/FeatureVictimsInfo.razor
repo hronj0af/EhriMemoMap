@@ -13,13 +13,20 @@
         <RadzenRow Gap="1rem" JustifyContent=JustifyContent.Left>
             @foreach (var house in victimGroup.Where(a => a.FeatureInfoType == WMSFeatureType.Bydliste_Zidu_v_Praze_v_dobe_okupace))
             {
-                <HouseCard House="@house"/>
+                <HouseCard House="@house" />
+            }
+
+            @if (victimGroup.Any(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy) && victimGroup.Any(a => a.FeatureInfoType == WMSFeatureType.Bydliste_Zidu_v_Praze_v_dobe_okupace && (a.FateUnknown != null || a.Survived != null)))
+            {
+                <p>
+                    @cl["survivorsAreNotDisplayed"]
+                </p>
             }
 
             @if (victimGroup.Any(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy && a.Status == StatusEnum.present))
             {
                 <RadzenColumn Size="12">
-                <h4>@cl["present"]</h4>
+                    <h4>@cl["present"]</h4>
                 </RadzenColumn>
                 foreach (var victim in victimGroup.Where(a => a.FeatureInfoType == WMSFeatureType.Obeti_holokaustu_z_Prahy && a.Status == StatusEnum.present))
                 {
