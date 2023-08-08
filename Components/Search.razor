@@ -2,7 +2,7 @@
 @inject IJSRuntime JS
 @inject IHttpClientFactory clientFactory
 @inject DialogService DialogService
-@inject MapState MapState 
+@inject MapState MapState
 @inject SolrService solr
 @inject IStringLocalizer<CommonResources> cl
 
@@ -11,7 +11,8 @@
     <RadzenButton Style="@style.ButtonStyle" title="@(cl["search"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => MapState.IsSearchOpen = !MapState.IsSearchOpen)"><RadzenIcon Icon="close" /></RadzenButton>
     <RadzenAutoComplete Change="@ShowPlace" @bind-Value=@selectedPlaceName Data=@places TextProperty="@(CultureInfo.CurrentCulture == new CultureInfo("cs-CZ") ? "DropDownInfoCs" : "DropDownInfoEn")" LoadData=@LoadData Style="@(style.BoxStyle + $";width: {(MapState.IsMobileBrowser ? 300 : 800)}px")">
         <Template>
-            <span onclick="@(() => ShowPlace((Place)context))">@if (CultureInfo.CurrentCulture == new CultureInfo("cs-CZ"))
+            <span onclick="@(() => ShowPlace((Place)context))">
+                @if (CultureInfo.CurrentCulture == new CultureInfo("cs-CZ"))
                 {
                     @context.DropDownInfoCs
                 }
@@ -90,8 +91,8 @@ else
 
     async Task LoadData(LoadDataArgs args)
     {
-      places = await solr.SolrExecuteDocument(args.Filter);
-        InvokeAsync(StateHasChanged);
+        places = await solr.SolrExecuteDocument(args.Filter);
+        await InvokeAsync(StateHasChanged);
     }
 
 }

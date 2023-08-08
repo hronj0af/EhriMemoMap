@@ -22,47 +22,60 @@
                 <table class="rz-grid-table rz-grid-table-fixed" style="width:100%">
                     <tr>
                         <th></th>
-                        <th style="text-align:left">@cl["present"]</th>
-                        <th style="text-align:left">@cl["deported"]</th>
+                        @if (House.Statistics.Any(a => a.NumberPresent != null))
+                        {
+                            <th style="text-align:left">@cl["present"]</th>
+
+                        }
+                        @if (House.Statistics.Any(a => a.NumberAbsent != null))
+                        {
+                            <th style="text-align:left">@cl["deported"]</th>
+                        }
                     </tr>
                     @foreach (var statistic in House.Statistics)
                     {
                         <tr>
                             <td>@statistic.Date.ToString("d. M. yyyy")</td>
-                            <td>@statistic.NumberPresent</td>
-                            <td>@statistic.NumberAbsent</td>
+                            @if (House.Statistics.Any(a => a.NumberPresent != null))
+                            {
+                                <td>@statistic.NumberPresent</td>
+                            }
+                            @if (House.Statistics.Any(a => a.NumberAbsent != null))
+                            {
+                                <td>@statistic.NumberAbsent</td>
+                            }
                         </tr>
                     }
                 </table>
             }
 
-@*            @if (House.StatisticsAbsent.Count > 0 || House.StatisticsPresent.Count > 0)
+            @*            @if (House.StatisticsAbsent.Count > 0 || House.StatisticsPresent.Count > 0)
             {
-                <RadzenChart style="height: 200px">
-                    <RadzenLegend Visible="false" />
-                        <RadzenColumnSeries Data="@House.StatisticsPresent" CategoryProperty="Date" Title="Present" ValueProperty="Number">
-                            <TooltipTemplate Context="data">
-                                <strong>@cl["presentAt"] @data.Date.ToString("d. M. yyyy")</strong>:
-                                <strong>@data.Number</strong>
-                            </TooltipTemplate>
+            <RadzenChart style="height: 200px">
+            <RadzenLegend Visible="false" />
+            <RadzenColumnSeries Data="@House.StatisticsPresent" CategoryProperty="Date" Title="Present" ValueProperty="Number">
+            <TooltipTemplate Context="data">
+            <strong>@cl["presentAt"] @data.Date.ToString("d. M. yyyy")</strong>:
+            <strong>@data.Number</strong>
+            </TooltipTemplate>
 
-                        </RadzenColumnSeries>
-                        <RadzenColumnSeries Data="@House.StatisticsAbsent.OrderByDescending(a=>a.Date)" CategoryProperty="Date" Title="Absent" ValueProperty="Number">
-                            <TooltipTemplate Context="data">
-                                <strong>@cl["absentAt"] @data.Date.ToString("d. M. yyyy")</strong>:
-                                <strong>@data.Number</strong>
-                            </TooltipTemplate>
-                        </RadzenColumnSeries>
+            </RadzenColumnSeries>
+            <RadzenColumnSeries Data="@House.StatisticsAbsent.OrderByDescending(a=>a.Date)" CategoryProperty="Date" Title="Absent" ValueProperty="Number">
+            <TooltipTemplate Context="data">
+            <strong>@cl["absentAt"] @data.Date.ToString("d. M. yyyy")</strong>:
+            <strong>@data.Number</strong>
+            </TooltipTemplate>
+            </RadzenColumnSeries>
 
-                    <RadzenColumnOptions Radius="5" Width="20" />
-                    <RadzenValueAxis Step="ValueAxisStep()">
-                        <RadzenGridLines Visible="false" />
-                        <RadzenAxisTitle Text="@cl["numberOfInhabitants"]" />
-                    </RadzenValueAxis>
-                    <RadzenCategoryAxis Step="TimeSpan.FromDays(366)" Min="new DateTime(1941,1,1)" Max="new DateTime(1946,1,1)" Formatter="FormatAsYear" />
-                </RadzenChart>
+            <RadzenColumnOptions Radius="5" Width="20" />
+            <RadzenValueAxis Step="ValueAxisStep()">
+            <RadzenGridLines Visible="false" />
+            <RadzenAxisTitle Text="@cl["numberOfInhabitants"]" />
+            </RadzenValueAxis>
+            <RadzenCategoryAxis Step="TimeSpan.FromDays(366)" Min="new DateTime(1941,1,1)" Max="new DateTime(1946,1,1)" Formatter="FormatAsYear" />
+            </RadzenChart>
             }
-*@
+            *@
         </ul>
     </RadzenCard>
 </RadzenColumn>
@@ -83,7 +96,7 @@
     //    if (max - min <= 10)
     //        return 1;
 
-    //    return 5;
+        //    return 5;
 
     //}
 
