@@ -201,9 +201,6 @@
   <data name="documents" xml:space="preserve">
     <value>Dokumenty</value>
   </data>
-  <data name="jewishResidents1941" xml:space="preserve">
-    <value>Počet židovských obyvatel (1. 10. 1941)</value>
-  </data>
   <data name="murdered" xml:space="preserve">
     <value>Zavražděno</value>
   </data>
@@ -212,21 +209,6 @@
   </data>
   <data name="fateUnknown" xml:space="preserve">
     <value>Osud neznámý</value>
-  </data>
-  <data name="notDeportedUntil_1_1_1942" xml:space="preserve">
-    <value>Nedeportováno k 1. 1. 1942</value>
-  </data>
-  <data name="notDeportedUntil_1_1_1943" xml:space="preserve">
-    <value>Nedeportováno k 1. 1. 1943</value>
-  </data>
-  <data name="notDeportedUntil_1_1_1944" xml:space="preserve">
-    <value>Nedeportováno k 1. 1. 1944</value>
-  </data>
-  <data name="notDeportedUntil_1_1_1945" xml:space="preserve">
-    <value>Nedeportováno k 1. 1. 1945</value>
-  </data>
-  <data name="notDeportedUntil_9_5_1945" xml:space="preserve">
-    <value>Nedeportováno k 9. 5. 1945</value>
   </data>
   <data name="present" xml:space="preserve">
     <value>Přítomní</value>
@@ -242,5 +224,11 @@
   </data>
   <data name="numberOfInhabitants" xml:space="preserve">
     <value>Počet obyvatel</value>
+  </data>
+  <data name="absent" xml:space="preserve">
+    <value>Nepřítomní</value>
+  </data>
+  <data name="prague" xml:space="preserve">
+    <value>Praha</value>
   </data>
 </root>
