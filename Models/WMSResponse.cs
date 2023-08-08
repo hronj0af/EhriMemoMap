@@ -10,7 +10,7 @@ namespace EhriMemoMap.Models
         {
             XDocument xdoc = XDocument.Parse(xmlResponse);
             Layers = xdoc.Descendants("Layer").Select(a => new WMSLayer(a)).ToList();
-
+            Layers.RemoveAll(a => a.Features == null || a.Features.Count == 0);
         }
     }
 }

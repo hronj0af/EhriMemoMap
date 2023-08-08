@@ -9,7 +9,6 @@
 @inject IStringLocalizer<CommonResources> cl
 @inject MapState MapState
 @inject IHttpContextAccessor httpContextAccesor
-
 <div title="@cl["mapTitle"]" @onclick="ShowPlaceInfo" id="map" style="cursor:default"></div>
 <Home Position="PositionEnum.Top" Order="0" />
 <Search Position="PositionEnum.Top" Order="1" />
@@ -81,4 +80,5 @@
 
         }
     }
+
 }
