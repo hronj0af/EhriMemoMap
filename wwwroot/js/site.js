@@ -283,7 +283,8 @@ var mapAPI = {
 
     showPolygons: function () {
         for (var i = 0; i < this.polygons.length; i++) {
-            this.polygons[i].addTo(this.map);
+            if (this.polygons[i].options.type == undefined || this.polygons[i].options.type !== "bluepoint")
+                this.polygons[i].addTo(this.map);
         }
     },
 
@@ -299,7 +300,6 @@ var mapAPI = {
             if (this.polygons[i].options.type == undefined || this.polygons[i].options.type !== "bluepoint")
                 this.polygons[i].remove();
         }
-        this.polygons = [];
     },
 
     removeBluepoint: function () {
@@ -307,7 +307,6 @@ var mapAPI = {
             if (this.polygons[i].options.type !== undefined && this.polygons[i].options.type == "bluepoint")
                 this.polygons[i].remove();
         }
-        this.polygons = [];
     },
 
     goToLocation: function (pointString, zoom) {
