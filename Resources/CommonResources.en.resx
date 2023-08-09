@@ -162,8 +162,8 @@
   <data name="zoomOut" xml:space="preserve">
     <value>Zoom out</value>
   </data>
-  <data name="myLocation" xml:space="preserve">
-    <value>My location</value>
+  <data name="myLocationOn" xml:space="preserve">
+    <value>Turn on location tracking</value>
   </data>
   <data name="featureType_Incidenty_v_prostoru_mesta_Prahy" xml:space="preserve">
     <value>Incidents</value>
@@ -232,6 +232,9 @@
     <value>Prague</value>
   </data>
   <data name="survivorsNotDisplayed" xml:space="preserve">
-    <value>Survivors and people from uncertain fate aren't displayed below.</value>
+    <value>Survivors and people of unknown fate aren't displayed below.</value>
+  </data>
+  <data name="myLocationOff" xml:space="preserve">
+    <value>Turn off location tracking</value>
   </data>
 </root>

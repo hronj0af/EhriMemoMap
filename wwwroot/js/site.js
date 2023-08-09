@@ -1,7 +1,7 @@
 ﻿
 var mapAPI = {
 
-    map: null, lat: null, lng: null, coorx: null, coory: null, polygons: [], isDragging: 0,
+    map: null, lat: null, lng: null, coorx: null, coory: null, polygons: [], isDragging: 0, bluepointIcon: null, trackingInterval: null,
 
     // nastaví mapu, aby lícovala s oknem
     fitMapToWindow: function () {
@@ -139,7 +139,11 @@ var mapAPI = {
 
         this.fitMapToWindow();
 
-
+        this.bluepointIcon = L.icon({
+            iconUrl: 'css/images/blue-point.png',
+            iconSize: [20, 20], // size of the icon
+            iconAnchor: [10, 10], // point of the icon which will correspond to marker's location
+        });
 
         this.map = L.map('map', { zoomControl: false });
 
@@ -270,8 +274,11 @@ var mapAPI = {
         this.polygons.push(L.polygon(pointsArray, { color: '#9400D3' }));
     },
 
-    addMarker: function (point) {
-        this.polygons.push(L.marker(point));
+    addMarker: function (point, icon) {
+        if (icon !== undefined)
+            this.polygons.push(L.marker(point, { icon: icon, type: "bluepoint" }));
+        else
+            this.polygons.push(L.marker(point));
     },
 
     showPolygons: function () {
@@ -280,9 +287,25 @@ var mapAPI = {
         }
     },
 
+    showBluepoint: function () {
+        for (var i = 0; i < this.polygons.length; i++) {
+            if (this.polygons[i].options.type !== undefined || this.polygons[i].options.type == "bluepoint")
+                this.polygons[i].addTo(this.map);
+        }
+    },
+
     removeObjects: function () {
         for (var i = 0; i < this.polygons.length; i++) {
-            this.polygons[i].remove();
+            if (this.polygons[i].options.type == undefined || this.polygons[i].options.type !== "bluepoint")
+                this.polygons[i].remove();
+        }
+        this.polygons = [];
+    },
+
+    removeBluepoint: function () {
+        for (var i = 0; i < this.polygons.length; i++) {
+            if (this.polygons[i].options.type !== undefined && this.polygons[i].options.type == "bluepoint")
+                this.polygons[i].remove();
         }
         this.polygons = [];
     },
@@ -317,25 +340,34 @@ var mapAPI = {
         return false;
     },
 
-    getMyLocation: function () {
+    showMyLocation: function () {
         if (!navigator.geolocation) {
             console.log("Your browser doesn't support geolocation feature!")
         } else {
-            navigator.geolocation.getCurrentPosition(getPosition);
+            navigator.geolocation.getCurrentPosition(mapAPI.getPosition)
+            this.trackingInterval = setInterval(() => {
+                navigator.geolocation.getCurrentPosition(mapAPI.getPosition)
+            }, 5000);
         };
 
-        function getPosition(position) {
-            lat = position.coords.latitude
-            long = position.coords.longitude
-            accuracy = position.coords.accuracy
+    },
 
-            mapAPI.removeObjects();
-            mapAPI.map.setView([lat, long], 15);
-            mapAPI.addMarker([lat, long]);
-            mapAPI.showPolygons();
+    getPosition: function (position) {
+        lat = position.coords.latitude
+        long = position.coords.longitude
+        accuracy = position.coords.accuracy
 
-            //console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy)
-        }
+        mapAPI.removeBluepoint();
+        mapAPI.map.setView([lat, long], 15);
+        mapAPI.addMarker([lat, long], mapAPI.bluepointIcon);
+        mapAPI.showBluepoint();
+
+        console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy)
+    },
+
+    hideMyLocation: function () {
+        clearInterval(this.trackingInterval);
+        mapAPI.removeBluepoint();
     },
 
     getIsDragging: function () {

@@ -162,8 +162,8 @@
   <data name="zoomOut" xml:space="preserve">
     <value>Oddálit mapu</value>
   </data>
-  <data name="myLocation" xml:space="preserve">
-    <value>Moje poloha</value>
+  <data name="myLocationOn" xml:space="preserve">
+    <value>Zapnout sledování polohy</value>
   </data>
   <data name="featureType_Neprisupna_mista" xml:space="preserve">
     <value>Nepřístupná místa</value>
@@ -233,5 +233,8 @@
   </data>
   <data name="survivorsNotDisplayed" xml:space="preserve">
     <value>Přeživší a lidé s neznámým osudem nejsou níže zobrazeni.</value>
+  </data>
+  <data name="myLocationOff" xml:space="preserve">
+    <value>Vypnout sledování polohy</value>
   </data>
 </root>

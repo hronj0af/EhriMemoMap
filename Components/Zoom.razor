@@ -5,7 +5,16 @@
 @inject MapState MapState
 @inject IStringLocalizer<CommonResources> cl
 
-<RadzenButton Style="@styleLocation.ButtonStyle" title="@(cl["myLocation"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => GetMyLocation())"><RadzenIcon Icon="my_location"/></RadzenButton>
+<RadzenButton Style="@styleLocation.ButtonStyle" title="@((myLocationIsVisible ? cl["myLocationOff"] : cl["myLocationOn"]) + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => ToggleMyLocationVisibility())">
+    @if (myLocationIsVisible)
+    {
+        <RadzenIcon Icon="my_location" />
+    }
+    else 
+    {
+        <RadzenIcon Icon="location_searching" />
+    }
+</RadzenButton>
 <RadzenButton Style="@styleZoomIn.ButtonStyle" title="@(cl["zoomIn"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => ZoomIn())"><RadzenIcon Icon="add" /></RadzenButton>
 <RadzenButton Style="@styleZoomOut.ButtonStyle" title="@(cl["zoomOut"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => ZoomOut())"><RadzenIcon Icon="remove" /></RadzenButton>
 
@@ -19,6 +28,7 @@
     (string ButtonStyle, string BoxStyle) styleLocation;
     (string ButtonStyle, string BoxStyle) styleZoomIn;
     (string ButtonStyle, string BoxStyle) styleZoomOut;
+    private bool myLocationIsVisible = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -29,9 +39,14 @@
     }
 
 
-    private async Task GetMyLocation()
+    private async Task ToggleMyLocationVisibility()
     {
-        await JS.InvokeVoidAsync("mapAPI.getMyLocation");
+        myLocationIsVisible = !myLocationIsVisible;
+        
+        if (myLocationIsVisible)
+            await JS.InvokeVoidAsync("mapAPI.showMyLocation");
+        else
+            await JS.InvokeVoidAsync("mapAPI.hideMyLocation");
     }
 
     private async Task ZoomIn()
