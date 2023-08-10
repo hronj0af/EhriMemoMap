@@ -296,17 +296,24 @@ var mapAPI = {
     },
 
     removeObjects: function () {
-        for (var i = 0; i < this.polygons.length; i++) {
-            if (this.polygons[i].options.type == undefined || this.polygons[i].options.type !== "bluepoint")
-                this.polygons[i].remove();
-        }
+        this.polygons = this.polygons.filter((item) => {
+            if (item.options.type !== undefined || item.options.type == "bluepoint") {
+                return true;
+            }
+            else {
+                item.remove();
+            }
+    	});
     },
 
     removeBluepoint: function () {
-        for (var i = 0; i < this.polygons.length; i++) {
-            if (this.polygons[i].options.type !== undefined && this.polygons[i].options.type == "bluepoint")
-                this.polygons[i].remove();
-        }
+    	this.polygons = this.polygons.filter((item) => {
+            if (item.options.type === undefined || item.options.type !== "bluepoint") {
+                return true;
+            } else {
+                item.remove();
+            }
+    	});
     },
 
     goToLocation: function (pointString, zoom) {
