@@ -330,6 +330,11 @@ var mapAPI = {
         return window.innerHeight;
     },
 
+    getMapBoundsForMapState: function () {
+        var bounds = mapAPI.map.getBounds();
+        return [{ X: bounds._southWest.lng, Y: bounds._southWest.lat }, { X: bounds._northEast.lng, Y: bounds._northEast.lat }];
+    },
+
     getWindowLocationSearch: function () {
         return window.location.search;
     },

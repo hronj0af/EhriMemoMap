@@ -2,7 +2,9 @@
 @inject IJSRuntime JS
 @inject IHttpClientFactory clientFactory
 @inject DialogService DialogService
-@inject MapState MapState
+@inject MapStateService MapState
+@inject MapLogicService MapLogic
+
 @inject IStringLocalizer<CommonResources> cl
 
 <RadzenButton Style="@style.ButtonStyle" title="@(cl["layers"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => MapState.IsLayersOpen = !MapState.IsLayersOpen)"><RadzenIcon Icon="menu" /></RadzenButton>
@@ -13,11 +15,8 @@
         @foreach (var item in layers.OrderBy(a => a.Order))
         {
             <RadzenCheckBox  TValue="bool" @bind-Value=@item.Selected onclick="@(() => OnLayerClick(@item))" />
-            <RadzenLabel Text="@item.Title" Style="margin-left: 8px; vertical-align: middle" />
-            @if (!string.IsNullOrEmpty(item.Abstract))
-            {
-                <RadzenIcon onclick="@(() => ShowLayerAbstract(item))" title="@cl["moreInfo"]" IconStyle="IconStyle.Dark" style="font-size: 20px;cursor:pointer" Icon="help"></RadzenIcon>
-            }
+            <RadzenLabel Text="@cl["layer_" + item.Name + "_title"]" Style="margin-left: 8px; vertical-align: middle" />
+            <RadzenIcon onclick="@(() => ShowLayerAbstract(item))" title="@cl["moreInfo"]" IconStyle="IconStyle.Dark" style="font-size: 20px;cursor:pointer" Icon="help"></RadzenIcon>
             <br />
         }
     </RadzenCard>
@@ -50,20 +49,26 @@
     {
         await InvokeAsync(() =>
         {
-            layers = MapState.GetAllWMSLayers()?.Where(a => !a.Hidden).ToList();
+            layers = MapState.GetNotBaseLayers().ToList();
             StateHasChanged();
         });
     }
 
     private async Task OnLayerClick(LayerModel layer)
     {
-        MapState.SetInfoAboutLayerSelection(layer);
-        var serializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
-        string layerJson = JsonConvert.SerializeObject(MapState.GetMapInfoForLeafletLayer(layer.MapName), serializerSettings);
-        await JS.InvokeVoidAsync("mapAPI.changeLayer", layerJson);
+        if (layer.Type == LayerType.WMS)
+            await JS.InvokeVoidAsync("mapAPI.toggleLayer", layer.Name, layer.Selected);
+
+        else if (layer.Type == LayerType.Objects)
+        {
+            var serializerSettings = new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                };
+            var objects = JsonConvert.SerializeObject(MapLogic.GetMapObjects(), serializerSettings);
+            await JS.InvokeVoidAsync("mapAPI.refreshObjects", objects);
+        }
+
         await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapState.GetLayersForUrlParameter());
     }
 

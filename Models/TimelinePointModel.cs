@@ -8,14 +8,13 @@ namespace EhriMemoMap.Models
     /// <summary>
     /// Informace o kolekci; kolekce = soubor vrstev; v aplikace je jedna vrstva jedním bodem na časové ose
     /// </summary>
-    public class CollectionModel
+    public class TimelinePointModel
     {
         public string? Name { get; set; }
         public string? Title { get; set; }
-        public string? MapName { get; set; }
-        public string? MapParameter { get; set; }
         public bool Selected { get; set; }
-        public int? Year { get; set; }
+        public DateTime? From { get; set; }
+        public DateTime? To { get; set; }
         public List<LayerModel>? AdditionalLayers { get; set; }
 
     }

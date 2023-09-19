@@ -2,9 +2,9 @@
 @inject IStringLocalizer<CommonResources> cl
 
 <DialogButtons />
-@if (Layer != null && !string.IsNullOrEmpty(Layer.Abstract))
+@if (Layer != null && !string.IsNullOrEmpty(Layer.Name))
 {
-    <div><h4>@Layer.Title</h4> @((MarkupString)Layer.Abstract.Linkify())</div>
+    <div><h4>@cl["layer_" + Layer.Name + "_title"]</h4> @((MarkupString)cl["layer_" + Layer.Name + "_abstract"].ToString().Linkify())</div>
 }
 
 @code {

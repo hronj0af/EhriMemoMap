@@ -237,4 +237,46 @@
   <data name="myLocationOff" xml:space="preserve">
     <value>Turn off location tracking</value>
   </data>
+  <data name="layer_interest_title" xml:space="preserve">
+    <value>Points of interest</value>
+  </data>
+  <data name="layer_interest_abstract" xml:space="preserve">
+    <value>Points of interest include places of persecution, Jewish buildings, warehouses full of confiscated property, or places that Jews were forbidden to enter.</value>
+  </data>
+  <data name="layer_incident_title" xml:space="preserve">
+    <value>Incidents</value>
+  </data>
+  <data name="layer_incident_abstract" xml:space="preserve">
+    <value>Incidents that took place within the city limits of Prague during which Jewish residents were arrested or investigated for violating anti-Jewish ordinances. This data was extracted from the digitized documents of the Prague Police as part of the MemoMap Prague project. It includes information about non-compliance with restrictions of free movement, identification papers lacking the letter \"J\" (Jude), etc.</value>
+  </data>
+  <data name="layer_inaccessible_abstract" xml:space="preserve">
+    <value>Places that Jews were forbidden to enter. Based on the historical map from year 1938. Current shape of the place can differ.</value>
+  </data>
+  <data name="layer_inaccessible_title" xml:space="preserve">
+    <value>Inaccessible Places</value>
+  </data>
+  <data name="layer_victim_title" xml:space="preserve">
+    <value>Holocaust victims</value>
+  </data>
+  <data name="layer_victim_abstract" xml:space="preserve">
+    <value>Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz.</value>
+  </data>
+  <data name="layer_address_title" xml:space="preserve">
+    <value>Jewish Homes</value>
+  </data>
+  <data name="layer_address_abstract" xml:space="preserve">
+    <value>The home addresses of Prague's Jewish residents during the Shoah from the victims' database. The data mostly comes from the registration of Jews in the Protectorate, which began in the fall of 1941 by order of the Central Office for Jewish Emigration. You will be able to view the number of people who lived in a particular building, find out what their fates were, and the numbers of those present on various historical dates. Some buildings were difficult to identify and in those cases multiple addresses (for example, on the same street) are grouped under the same coordinates. We are continually working on refining the map. We have kept the street names used during the occupation (roughly 1941-1942).</value>
+  </data>
+  <data name="layer_statistic_title" xml:space="preserve">
+    <value>Districts Statistic</value>
+  </data>
+  <data name="layer_statistic_abstract" xml:space="preserve">
+    <value>Statistic information on number of Jewish residents, incidents and points of interest according to specific Prague's districts. Zoom in to display details.</value>
+  </data>
+  <data name="layer_MGS-prague_historical_map_1938-v2_title" xml:space="preserve">
+    <value>Historical map (1938)</value>
+  </data>
+  <data name="layer_MGS-prague_historical_map_1938-v2_abstract" xml:space="preserve">
+    <value>Orientační plán hlavního města Prahy s okolím (1938) [Orientation plan of the capital city of Prague with its surroundings (1938)].Digitized by by the Municipal Library in Prague, georeferenced by the Masaryk Institute and archives of the Czech Academy of Sciences. Also available from WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
+  </data>
 </root>
