@@ -10,6 +10,7 @@
 @inject DialogService DialogService
 @inject IStringLocalizer<CommonResources> cl
 @inject MapStateService MapState
+@inject MapLogicService MapLogic
 @inject IHttpContextAccessor httpContextAccesor
 @inject EhriMemoMap.Data.MemogisContext context
 
@@ -39,12 +40,14 @@
             {
                 string layers = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "layers");
                 string collectionName = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "collection");
-                MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.map.getZoom");
-                MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
+                MapState.IsMobileBrowser = await JS.InvokeAsync<bool>("mapAPI.isMobileBrowser");
                 MapState.Init(layers, collectionName);
             }
+            
             await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet());
-            MapState.IsMobileBrowser = await JS.InvokeAsync<bool>("mapAPI.isMobileBrowser");
+            MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.map.getZoom");
+            MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
+            await MapLogic.RefreshObjectsOnMap();
         }
     }
 
@@ -56,9 +59,6 @@
 
     protected async Task ShowPlaceInfo(MouseEventArgs e)
     {
-        if ((await JS.InvokeAsync<int>("mapAPI.getIsDragging")) > 0)
-            return;
-
         try
         {
             string bbox = await JS.InvokeAsync<string>("mapAPI.convertMousePositionToBBoxParameter");

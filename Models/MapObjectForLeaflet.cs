@@ -14,7 +14,8 @@ public partial class MapObjectForLeaflet
         PlaceType = mapObject.PlaceType;
         Citizens = mapObject.Citizens;
         CitizensTotal = mapObject.CitizensTotal;
-        Id = mapObject.PlaceType + "_" + mapObject.Id + "_" + mapObject.DateFrom?.ToString("yyyy-mm-dd");
+        Id = mapObject.Id;
+        Guid = mapObject.PlaceType + "_" + mapObject.Id + "_" + mapObject.DateFrom?.ToString("yyyy-mm-dd");
         Label = CultureInfo.CurrentCulture == new CultureInfo("en") ? mapObject.LabelEn : mapObject.LabelCs;
         MapPoint = mapObject.MapPoint;
         MapPolygon = mapObject.MapPolygon;
@@ -25,8 +26,9 @@ public partial class MapObjectForLeaflet
     public decimal? Citizens { get; set; }
 
     public decimal? CitizensTotal { get; set; }
+    public int? Id { get; set; }
 
-    public string? Id { get; set; }
+    public string? Guid { get; set; }
 
     public string? Label { get; set; }
 

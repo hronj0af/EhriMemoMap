@@ -1,7 +1,10 @@
 ﻿using EhriMemoMap.Data;
 using EhriMemoMap.Models;
 using NetTopologySuite.Geometries;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 using Radzen;
+using Microsoft.JSInterop;
 
 namespace EhriMemoMap.Services
 {
@@ -12,11 +15,24 @@ namespace EhriMemoMap.Services
     {
         private readonly MapStateService _mapState;
         private readonly MemogisContext _context;
+        private readonly IJSRuntime _js;
 
-        public MapLogicService(MapStateService mapState, MemogisContext context)
+        public MapLogicService(MapStateService mapState, MemogisContext context, IJSRuntime js)
         {
             _mapState = mapState;
             _context = context;
+            _js = js;
+        }
+
+        public async Task RefreshObjectsOnMap()
+        {
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+            var objects = JsonConvert.SerializeObject(GetMapObjects(), serializerSettings);
+            await _js.InvokeVoidAsync("mapAPI.refreshObjects", objects);
+
         }
 
         public List<MapObjectForLeaflet> GetMapObjects()

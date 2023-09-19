@@ -60,14 +60,7 @@
             await JS.InvokeVoidAsync("mapAPI.toggleLayer", layer.Name, layer.Selected);
 
         else if (layer.Type == LayerType.Objects)
-        {
-            var serializerSettings = new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                };
-            var objects = JsonConvert.SerializeObject(MapLogic.GetMapObjects(), serializerSettings);
-            await JS.InvokeVoidAsync("mapAPI.refreshObjects", objects);
-        }
+            await MapLogic.RefreshObjectsOnMap();
 
         await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapState.GetLayersForUrlParameter());
     }

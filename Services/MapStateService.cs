@@ -143,18 +143,21 @@ namespace EhriMemoMap.Services
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
 
-            var result = new MapLeafletModel
+            var result = Map.Layers?.Where(a => a.Type != LayerType.Objects).Select(a => new LayerModel
             {
-                Attribution = Map.Layers?.FirstOrDefault(a => !string.IsNullOrEmpty(a.Attribution))?.Attribution,
-                Layers = Map.Layers?.Select(a => new LayerModel
-                {
-                    Name = a.Name,
-                    Opacities = a.Opacities,
-                    Selected = a.Selected,
-                    Url = a.Url,
-                    Type = a.Type,
-                }).ToList()
-            };
+                Name = a.Name,
+                Opacities = a.Opacities,
+                Selected = a.Selected,
+                Url = a.Url,
+                Type = a.Type,
+            }).
+            Union(new List<LayerModel>
+            {
+                new LayerModel { Name = LayerType.Objects.ToString(), Type = LayerType.Objects },
+                new LayerModel { Name = LayerType.Images.ToString(), Type = LayerType.Images }
+            }).
+            ToList();
+
             return JsonConvert.SerializeObject(result, serializerSettings);
 
         }

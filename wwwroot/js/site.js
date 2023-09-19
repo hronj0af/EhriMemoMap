@@ -1,7 +1,7 @@
 ﻿
 var mapAPI = {
 
-    map: null, lat: null, lng: null, coorx: null, coory: null, polygons: [], isDragging: 0, bluepointIcon: null, trackingInterval: null,
+    map: null, lat: null, lng: null, coorx: null, coory: null, polygons: [], bluepointIcon: null, trackingInterval: null, groups: [],
 
     // nastaví mapu, aby lícovala s oknem
     fitMapToWindow: function () {
@@ -154,18 +154,6 @@ var mapAPI = {
         this.map.on("moveend", function (e) {
             document.getElementById("map").style.cursor = 'default';
             mapAPI.setUrlByMapInfo();
-            mapAPI.updateImageLayers();
-
-            setTimeout(() => {
-                mapAPI.setIsDragging(false);
-            }, 500);
-
-        });
-
-        // tohle je tu kvůli tomu, aby nevznikl dojem, že uživatel klikl myší, když jenom přesunul mapu o kousek vedle
-        this.map.on("movestart", function (e) {
-            document.getElementById("map").style.cursor = 'grab';
-            mapAPI.setIsDragging(true);
         });
 
         // při změně polohy myši se zapíšou její souřadnice do proměnných
@@ -185,38 +173,20 @@ var mapAPI = {
             group.addLayer(layer);
             group.setZIndex(mapSettings[i].zIndex);
             group.addTo(this.map);
+            this.groups.push(group);
         }
     },
 
     // konvertuje objekt s nastavením mapových vrstev do mapových vrstev leafletu
     convertMapSettingsObjectToMapLayer: function (mapSettingsObject) {
-        if (mapSettingsObject.type == 'base') {
+        if (mapSettingsObject.type == 'Base') {
             return L.tileLayer(mapSettingsObject.baseUrl, {
-                id: mapSettingsObject.name,
                 maxZoom: 18,
                 attribution: mapSettingsObject.attribution,
             });
         }
-        else if (mapSettingsObject.type == 'wms') {
-            return L.tileLayer.wms(mapSettingsObject.baseUrl, {
-                id: mapSettingsObject.name,
-                map: mapSettingsObject.mapParameter,
-                tileSize: mapSettingsObject.tileSize != null
-                    ? parseInt(mapSettingsObject.tileSize)
-                    : 512,
-                layers: mapSettingsObject.layers.map(a => a.name).join()
-            });
-        }
-        else if (mapSettingsObject.type == 'wms-image') {
-            var url = mapSettingsObject.baseUrl +
-                "service=WMS&request=GetMap&version=1.3.0&srs=EPSG:3857&crs=EPSG:3857&map=" +
-                mapSettingsObject.mapParameter +
-                "&opacities=" + mapSettingsObject.opacities +
-                "&format=image/png" +
-                "&transparent=true" +
-                "&layers=" + mapSettingsObject.layers.map(a => a.name).join();
-            //console.log(url);
-            return L.imageOverlay(url + this.getImageLayerLimitsUrlParameters(), this.map.getBounds(), { id: mapSettingsObject.name, type: "image", url: url });
+        else if (mapSettingsObject.type == 'WMS') {
+            return L.tileLayer.wms(mapSettingsObject.url, { tileSize: 512 });
         }
 
     },
@@ -379,17 +349,6 @@ var mapAPI = {
     hideMyLocation: function () {
         clearInterval(this.trackingInterval);
         mapAPI.removeBluepoint();
-    },
-
-    getIsDragging: function () {
-        return this.isDragging;
-    },
-
-    setIsDragging: function (value) {
-        if (value)
-            this.isDragging++;
-        else if (this.isDragging > 0)
-            this.isDragging--;
     },
 
 

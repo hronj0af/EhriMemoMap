@@ -67,12 +67,7 @@
         if (point.Selected)
             return;
         
-        var serializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
-        var objects = JsonConvert.SerializeObject(MapLogic.GetMapObjects(), serializerSettings);
-        await JS.InvokeVoidAsync("mapAPI.refreshObjects", objects);
+        await MapLogic.RefreshObjectsOnMap();
         await JS.InvokeVoidAsync("mapAPI.setUrlParam", "collection", MapState.GetCollectionForUrlParameter());
     }
 
