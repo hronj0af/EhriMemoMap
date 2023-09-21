@@ -168,17 +168,20 @@ namespace EhriMemoMap.Services
         /// <summary>
         /// Initializace tohoto objektu na základě mapsettings.json, případně podle parametrů v url
         /// </summary>
-        public void Init(string? layers = null, string? collectionName = null)
+        public void Init(string? layers = null, string? timelinePoint = null)
         {
             var settings = JsonConvert.DeserializeObject<MapStateService>(GetJsonSettingsContent());
             if (settings == null)
                 return;
             Map = settings.Map;
 
+            
             if (!string.IsNullOrEmpty(layers))
                 InitInfoAboutLayersSelection(layers.Split(','));
             else
                 InitInfoAboutLayersSelection();
+
+            //InitInfoAboutTimeline(timelinePoint);
 
             MapStateWasInit = true;
             NotifyStateChanged();
@@ -190,9 +193,10 @@ namespace EhriMemoMap.Services
         /// </summary>
         private void InitInfoAboutLayersSelection(string[]? layers = null)
         {
+
             Map.Layers?.ForEach(layer =>
             {
-                if (layers == null || layers.Contains(layer.Name))
+                if (layer.Type == LayerType.Base || layers == null || layers.Contains(layer.Name))
                     layer.Selected = true;
                 else
                     layer.Selected = false;
@@ -204,6 +208,23 @@ namespace EhriMemoMap.Services
                     layer.Selected = true;
                 else
                     layer.Selected = false;
+            });
+        }
+
+        /// <summary>
+        /// Když se načítá poprvé nastavení mapy, nastav správně příznak Selected u bodů časové osy;
+        /// </summary>
+        private void InitInfoAboutTimeline(string? timelinePoint)
+        {
+            if (Map.Timeline == null)
+                return;
+            
+            Map.Timeline?.ForEach(point =>
+            {
+                if ((string.IsNullOrEmpty(timelinePoint) && point.From == null) || point.Name == timelinePoint)
+                    point.Selected = true;
+                else
+                    point.Selected = false;
             });
         }
 
@@ -282,10 +303,10 @@ namespace EhriMemoMap.Services
                 : GetNotBaseLayers()?.Where(a => a.Selected).Select(a => a.Name)?.Aggregate((x, y) => x + "," + y);
 
         /// <summary>
-        /// Vrátí název vybrané kolekce / bodu na časové ose pro nastavení v url query
+        /// Vrátí název vybraného bodu na časové ose pro nastavení v url query
         /// </summary>
         /// <returns></returns>
-        public string? GetCollectionForUrlParameter()
+        public string? GetTimelineForUrlParameter()
             => GetTimeline()?.FirstOrDefault(a => a.Selected)?.Name;
 
 

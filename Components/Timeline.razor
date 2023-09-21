@@ -14,7 +14,7 @@
     {
         <RadzenCard Style="@style.BoxStyle">
             <RadzenRow>
-                @foreach (var group in timeline.GroupBy(a => a.From?.Year).OrderBy(a => a.Key))
+                @foreach (var group in timeline.GroupBy(a => a.To?.Year).OrderBy(a => a.Key))
                 {
                     <RadzenColumn Size="MapState.IsMobileBrowser ? 4 : null">
                         <span><b>@group.Key</b></span><br />
@@ -70,7 +70,7 @@
         MapState.ToggleTimeLinePoint(point);
 
         await MapLogic.RefreshObjectsOnMap(false);
-        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "collection", MapState.GetCollectionForUrlParameter());
+        //await JS.InvokeVoidAsync("mapAPI.setUrlParam", "timeline", MapState.GetTimelineForUrlParameter());
     }
 
 }

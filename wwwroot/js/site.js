@@ -56,8 +56,10 @@ var mapAPI = {
         for (var i = 0; i < mapSettings.length; i++) {
             var group = L.layerGroup(layer, { id: mapSettings[i].name + "_group" });
             group.setZIndex(mapSettings[i].zIndex);
-            group.addTo(this.map);
             this.groups.push(group);
+
+            if (mapSettings[i].selected)
+                group.addTo(this.map);
 
             var layer = this.convertMapSettingsObjectToMapLayer(mapSettings[i]);
             if (layer != null)
@@ -175,30 +177,6 @@ var mapAPI = {
         groupToChange.clearLayers();
         groupToChange.addLayer(newLayer);
         groupToChange.setZIndex(mapSettings.zIndex);
-    },
-
-    // updatuje obrázkovou vrstvu mapy (nastaví nové url a souřadnice pro aktuální zobrazení mapy)
-    updateImageLayers: function () {
-        Object.values(mapAPI.map._layers).forEach(layer => {
-            if (layer.options.type != undefined && layer.options.type == "image") {
-                layer.setUrl(layer.options.url + this.getImageLayerLimitsUrlParameters());
-                layer.on("load", function () {
-                    layer.setBounds(mapAPI.map.getBounds());
-                });
-            }
-        });
-    },
-
-    // získá url string s informacemi o výšce a šířce obrázku + souřadnice obrázku (vlevo nahoře + vpravo dole)
-    getImageLayerLimitsUrlParameters: function () {
-
-        var bounds = this.map.getBounds();
-        var lefttop = this.map.project([bounds.getSouth(), bounds.getWest()], 0);
-        var rightbottom = this.map.project([bounds.getNorth(), bounds.getEast()], 0);
-
-        return "&BBOX=" + lefttop.x + "," + lefttop.y + "," + rightbottom.x + "," + rightbottom.y +
-            "&HEIGHT=" + this.map.getSize().y +
-            "&WIDTH=" + this.map.getSize().x;
     },
 
     // konvertuje objekt s nastavením mapových vrstev do mapových vrstev leafletu

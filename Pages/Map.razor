@@ -44,9 +44,9 @@
             if (!MapState.MapStateWasInit)
             {
                 string layers = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "layers");
-                string collectionName = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "collection");
+                string timelinePointName = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "timeline");
                 MapState.IsMobileBrowser = await JS.InvokeAsync<bool>("mapAPI.isMobileBrowser");
-                MapState.Init(layers, collectionName);
+                MapState.Init(layers, timelinePointName);
             }
 
             await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet());

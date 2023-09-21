@@ -16,22 +16,20 @@
         "mapParameter": "/webdata/HGIS_cze/memogis_prague_CZE_pol.qgz",
         "layersParameter": "MGS-prague_historical_map_1938-v2",
         "type": "wms",
+        "selected": true,
         "opacities": "255",
         "zIndex": "100",
-        "order": 100,
-        "selected": true
+        "order": 100
       },
       {
         "name": "inaccessible",
         "placeType": "inaccessible",
-        "selected": true,
         "order": 10,
         "type": "polygons"
       },
       {
         "name": "address",
         "placeType": "address",
-        "selected": true,
         "order": 3,
         "type": "objects",
         "minZoom": 17
@@ -39,7 +37,6 @@
       {
         "name": "interest",
         "placeType": "interest",
-        "selected": true,
         "order": 2,
         "type": "objects",
         "minZoom": 17
@@ -47,7 +44,6 @@
       {
         "name": "incident",
         "placeType": "incident",
-        "selected": true,
         "order": 1,
         "type": "objects",
         "minZoom": 17
@@ -57,118 +53,101 @@
       {
         "name": "1941_Q4",
         "title": "Q4",
-        "selected": false,
         "from": "1939-03-15",
         "to": "1941-12-31"
       },
       {
         "name": "1942_Q1",
         "title": "Q1",
-        "selected": false,
         "from": "1942-01-01",
         "to": "1942-03-31"
       },
       {
         "name": "1942_Q2",
         "title": "Q2",
-        "selected": false,
         "from": "1942-04-01",
         "to": "1942-06-30"
       },
       {
         "name": "1942_Q3",
         "title": "Q3",
-        "selected": false,
         "from": "1942-07-01",
         "to": "1942-09-30"
       },
       {
         "name": "1942_Q4",
         "title": "Q4",
-        "selected": false,
         "from": "1942-10-01",
         "to": "1942-12-31"
       },
       {
         "name": "1943_Q1",
         "title": "Q1",
-        "selected": false,
         "from": "1943-01-01",
         "to": "1943-03-31"
       },
       {
         "name": "1943_Q2",
         "title": "Q2",
-        "selected": false,
         "from": "1943-04-01",
         "to": "1943-06-30"
       },
       {
         "name": "1943_Q3",
         "title": "Q3",
-        "selected": false,
         "from": "1943-07-01",
         "to": "1943-09-30"
       },
       {
         "name": "1943_Q4",
         "title": "Q4",
-        "selected": false,
         "from": "1943-10-01",
         "to": "1943-12-31"
       },
       {
         "name": "1944_Q1",
         "title": "Q1",
-        "selected": false,
         "from": "1944-01-01",
         "to": "1944-03-31"
       },
       {
         "name": "1944_Q2",
         "title": "Q2",
-        "selected": false,
         "from": "1944-04-01",
         "to": "1944-06-30"
       },
       {
         "name": "1944_Q3",
         "title": "Q3",
-        "selected": false,
         "from": "1944-07-01",
         "to": "1944-09-30"
       },
       {
         "name": "1944_Q4",
         "title": "Q4",
-        "selected": false,
         "from": "1944-10-01",
         "to": "1944-12-31"
       },
       {
         "name": "1945_Q1",
         "title": "Q1",
-        "selected": false,
         "from": "1945-01-01",
         "to": "1945-03-31"
       },
       {
         "name": "1945_Q2",
         "title": "Q2",
-        "selected": false,
         "from": "1945-04-01",
         "to": "1945-05-08"
       },
       {
         "title": "All",
-        "selected": true,
         "from": null,
         "to": null,
         "additionalLayers": [
           {
             "name": "statistics",
             "placeType": "statistics",
-            "selected": true,
             "order": 0,
             "type": "objects",
             "maxZoom": 16,
