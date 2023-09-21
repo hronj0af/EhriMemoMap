@@ -165,19 +165,19 @@
   <data name="myLocationOn" xml:space="preserve">
     <value>Zapnout sledování polohy</value>
   </data>
-  <data name="featureType_Neprisupna_mista" xml:space="preserve">
+  <data name="featureType_Inaccessible" xml:space="preserve">
     <value>Nepřístupná místa</value>
   </data>
   <data name="featureType_Obeti_holokaustu_z_Prahy" xml:space="preserve">
     <value>Oběti</value>
   </data>
-  <data name="featureType_Bydliste_Zidu_v_Praze_v_dobe_okupace" xml:space="preserve">
+  <data name="featureType_Address" xml:space="preserve">
     <value>Bydliště Židů</value>
   </data>
-  <data name="featureType_Body_zajmu" xml:space="preserve">
+  <data name="featureType_Interest" xml:space="preserve">
     <value>Body zájmu</value>
   </data>
-  <data name="featureType_Incidenty_v_prostoru_mesta_Prahy" xml:space="preserve">
+  <data name="featureType_Incident" xml:space="preserve">
     <value>Incidenty</value>
   </data>
   <data name="title" xml:space="preserve">
@@ -267,10 +267,10 @@
   <data name="layer_inaccessible_abstract" xml:space="preserve">
     <value>Místa nepřístupná Židům. Prostoové zobrazení je založeno na historické mapě z roku 1938, současné prostory se mohou lišit velikostí i tvarem.</value>
   </data>
-  <data name="layer_statistic_title" xml:space="preserve">
+  <data name="layer_statistics_title" xml:space="preserve">
     <value>Statistika pražských čtvrtí</value>
   </data>
-  <data name="layer_statistic_abstract" xml:space="preserve">
+  <data name="layer_statistics_abstract" xml:space="preserve">
     <value>Informace o počtu židovských obyvatel, incidentů a bodů zájmu v jednotlivých pražských čtvrtí. Pro zobrazení detailů přibližte mapu.</value>
   </data>
   <data name="layer_MGS-prague_historical_map_1938-v2_title" xml:space="preserve">
@@ -278,5 +278,26 @@
   </data>
   <data name="layer_MGS-prague_historical_map_1938-v2_abstract" xml:space="preserve">
     <value>Orientační plán hlavního města Prahy s okolím (1938). Do digitální podoby zpracovala Městská knihovna v Praze, georeferencování provedl Masarykův ústav a archiv Akademie věd České republiky. Dostupný také z WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
+  </data>
+  <data name="showStatistics" xml:space="preserve">
+    <value>Zobrazit statistiku</value>
+  </data>
+  <data name="hideStatistics" xml:space="preserve">
+    <value>Skrýt statistiku</value>
+  </data>
+  <data name="countPointsOfInterest" xml:space="preserve">
+    <value>bodů zájmu</value>
+  </data>
+  <data name="countJews" xml:space="preserve">
+    <value>Židů</value>
+  </data>
+  <data name="countInaccessiblePlaces" xml:space="preserve">
+    <value>nepřístupných míst</value>
+  </data>
+  <data name="countIncidents" xml:space="preserve">
+    <value>incidentů</value>
+  </data>
+  <data name="zoomMapForMoreInfo" xml:space="preserve">
+    <value>Pro více informací mapu přibližte.</value>
   </data>
 </root>

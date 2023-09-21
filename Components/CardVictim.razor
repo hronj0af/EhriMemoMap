@@ -2,11 +2,11 @@
 @inject MapStateService MapState
 
 <RadzenColumn Size="MapState.DialogIsFullscreen && !MapState.IsMobileBrowser ? 2 : 6">
-    <a href="@Victim.Details" target="_blank" style="text-decoration:none;color:black">
+    <a href="@Victim.DetailsCs" target="_blank" style="text-decoration:none;color:black">
         <RadzenCard  Style="@(!MapState.IsMobileBrowser ? "height:200px" : "height:250px")" >
             <RadzenStack Orientation="Orientation.Vertical" Style="height:200px" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
             <RadzenImage Style="max-height:85%;max-width:100%;" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" ? Victim.Photo : "images/face.png")" />
-                <div class="rz-text-align-center" style="height:15%; width:100%"><small>@Victim.NameAndBirthDate</small></div>
+                <div class="rz-text-align-center" style="height:15%; width:100%"><small>@Victim.Label</small></div>
             </RadzenStack>
         </RadzenCard>
     </a>
@@ -14,6 +14,6 @@
 
 @code {
     [Parameter]
-    public WMSFeatureInfo Victim { get; set; }
+    public PragueVictimsTimeline Victim { get; set; }
 
 }

@@ -34,7 +34,7 @@
         "selected": true,
         "order": 3,
         "type": "objects",
-        "minZoom": 16
+        "minZoom": 17
       },
       {
         "name": "interest",
@@ -42,7 +42,7 @@
         "selected": true,
         "order": 2,
         "type": "objects",
-        "minZoom": 16
+        "minZoom": 17
       },
       {
         "name": "incident",
@@ -50,7 +50,7 @@
         "selected": true,
         "order": 1,
         "type": "objects",
-        "minZoom": 16
+        "minZoom": 17
       }
     ],
     "timeline": [
@@ -166,11 +166,13 @@
         "to": null,
         "additionalLayers": [
           {
-            "name": "statistic",
+            "name": "statistics",
+            "placeType": "statistics",
             "selected": true,
             "order": 0,
-            "type": "images",
-            "maxZoom": 12
+            "type": "objects",
+            "maxZoom": 16,
+            "minZoom": 15
           }
         ]
       }

@@ -12,5 +12,7 @@ namespace EhriMemoMap.Models
         Interest,
         
         Incident,
+
+        Statistics
     }
 }

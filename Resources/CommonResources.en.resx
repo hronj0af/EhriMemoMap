@@ -165,19 +165,19 @@
   <data name="myLocationOn" xml:space="preserve">
     <value>Turn on location tracking</value>
   </data>
-  <data name="featureType_Incidenty_v_prostoru_mesta_Prahy" xml:space="preserve">
+  <data name="featureType_Incident" xml:space="preserve">
     <value>Incidents</value>
   </data>
-  <data name="featureType_Body_zajmu" xml:space="preserve">
+  <data name="featureType_Interest" xml:space="preserve">
     <value>Points of Interest</value>
   </data>
-  <data name="featureType_Neprisupna_mista" xml:space="preserve">
+  <data name="featureType_Inaccessible" xml:space="preserve">
     <value>Inaccessible Places</value>
   </data>
   <data name="featureType_Obeti_holokaustu_z_Prahy" xml:space="preserve">
     <value>Victims</value>
   </data>
-  <data name="featureType_Bydliste_Zidu_v_Praze_v_dobe_okupace" xml:space="preserve">
+  <data name="featureType_Address" xml:space="preserve">
     <value>Jewish Homes</value>
   </data>
   <data name="title" xml:space="preserve">
@@ -267,10 +267,10 @@
   <data name="layer_address_abstract" xml:space="preserve">
     <value>The home addresses of Prague's Jewish residents during the Shoah from the victims' database. The data mostly comes from the registration of Jews in the Protectorate, which began in the fall of 1941 by order of the Central Office for Jewish Emigration. You will be able to view the number of people who lived in a particular building, find out what their fates were, and the numbers of those present on various historical dates. Some buildings were difficult to identify and in those cases multiple addresses (for example, on the same street) are grouped under the same coordinates. We are continually working on refining the map. We have kept the street names used during the occupation (roughly 1941-1942).</value>
   </data>
-  <data name="layer_statistic_title" xml:space="preserve">
+  <data name="layer_statistics_title" xml:space="preserve">
     <value>Districts Statistic</value>
   </data>
-  <data name="layer_statistic_abstract" xml:space="preserve">
+  <data name="layer_statistics_abstract" xml:space="preserve">
     <value>Statistic information on number of Jewish residents, incidents and points of interest according to specific Prague's districts. Zoom in to display details.</value>
   </data>
   <data name="layer_MGS-prague_historical_map_1938-v2_title" xml:space="preserve">
@@ -278,5 +278,26 @@
   </data>
   <data name="layer_MGS-prague_historical_map_1938-v2_abstract" xml:space="preserve">
     <value>Orientační plán hlavního města Prahy s okolím (1938) [Orientation plan of the capital city of Prague with its surroundings (1938)].Digitized by by the Municipal Library in Prague, georeferenced by the Masaryk Institute and archives of the Czech Academy of Sciences. Also available from WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
+  </data>
+  <data name="hideStatistics" xml:space="preserve">
+    <value>Hide statistics</value>
+  </data>
+  <data name="showStatistics" xml:space="preserve">
+    <value>Show statistics</value>
+  </data>
+  <data name="countInaccessiblePlaces" xml:space="preserve">
+    <value>inaccessible places</value>
+  </data>
+  <data name="countPointsOfInterest" xml:space="preserve">
+    <value>points of interest</value>
+  </data>
+  <data name="countJews" xml:space="preserve">
+    <value>Jews</value>
+  </data>
+  <data name="countIncidents" xml:space="preserve">
+    <value>incidents</value>
+  </data>
+  <data name="zoomMapForMoreInfo" xml:space="preserve">
+    <value>Zoom in on the map for more information.</value>
   </data>
 </root>

@@ -5,6 +5,8 @@ using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
 using Radzen;
 using Microsoft.JSInterop;
+using Microsoft.Extensions.Localization;
+using EhriMemoMap.Resources;
 
 namespace EhriMemoMap.Services
 {
@@ -16,12 +18,15 @@ namespace EhriMemoMap.Services
         private readonly MapStateService _mapState;
         private readonly MemogisContext _context;
         private readonly IJSRuntime _js;
+        private readonly IStringLocalizer<CommonResources> _cl;
 
-        public MapLogicService(MapStateService mapState, MemogisContext context, IJSRuntime js)
+
+        public MapLogicService(MapStateService mapState, MemogisContext context, IJSRuntime js, IStringLocalizer<CommonResources> cl)
         {
             _mapState = mapState;
             _context = context;
             _js = js;
+            _cl = cl;
         }
 
         public async Task RefreshObjectsOnMap(bool withPolygons)
@@ -31,9 +36,10 @@ namespace EhriMemoMap.Services
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
             var objects = GetMapObjects(withPolygons);
+            objects.AddRange(GetDistrictStatistics());
+
             var result = JsonConvert.SerializeObject(objects, serializerSettings);
             await _js.InvokeVoidAsync("mapAPI.refreshObjectsOnMap", result);
-
         }
 
         public List<MapObjectForLeafletModel> GetMapObjects(bool withPolygons, Coordinate[]? customCoordinates = null)
@@ -84,6 +90,22 @@ namespace EhriMemoMap.Services
             var result = query.Select(a => new MapObjectForLeafletModel(a)).ToList();
 
             return result;
+        }
+
+        public List<MapObjectForLeafletModel> GetDistrictStatistics()
+        {
+            var layer = _mapState.GetNotBaseLayers().FirstOrDefault(a => a.Selected && a.PlaceType == PlaceType.Statistics);
+            
+            if (layer == null) 
+                return new List<MapObjectForLeafletModel>();
+
+            if (layer.MaxZoom != null && _mapState.MapZoom > layer.MaxZoom)
+                return new List<MapObjectForLeafletModel>();
+
+            if (_mapState.MapZoom < layer.MinZoom)
+                return _context.PragueQuartersStats.Where(a => a.Type.Contains("total")).GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
+
+            return _context.PragueQuartersStats.Where(a=>!a.Type.Contains("total")).GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
         }
 
         public Polygon GetBBox(Coordinate southWestPoint, Coordinate northEastPoint)

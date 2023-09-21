@@ -22,7 +22,7 @@ public partial class PragueVictimsTimeline
 
     public int? PlaceId { get; set; }
 
-    public LocalDate? TransportDate { get; set; }
+    public DateTime? TransportDate { get; set; }
 
     public string? Photo { get; set; }
 }

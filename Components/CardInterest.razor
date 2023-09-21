@@ -8,9 +8,9 @@
     <RadzenCard Style="width:100%">
 
         <ul class="no-bullets">
-            <li><b>@(CultureInfo.CurrentCulture == new CultureInfo("en-US") ? Place.LabelEn : Place.LabelCs)</b></li>
-            <li><i>@(CultureInfo.CurrentCulture == new CultureInfo("en-US") ? Place.AddressEn : Place.AddressCs)</i></li>
-            <li>@(CultureInfo.CurrentCulture == new CultureInfo("en-US") ? Place.DescriptionEn : Place.DescriptionCs)</li>
+            <li><b>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</b></li>
+            <li><i>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</i></li>
+            <li>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn : Place.DescriptionCs)</li>
         </ul>
 
     </RadzenCard>

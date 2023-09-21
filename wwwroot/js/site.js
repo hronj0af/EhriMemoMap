@@ -286,9 +286,11 @@ var mapAPI = {
                 for (var m = 0; m < polygonObject.coordinates[j].length; m++) {
                     var polygon = polygonObject.coordinates[j][m];
                     pointsArray.push([]);
+                    var innerArray = [];
                     for (var k = 0; k < polygon.length; k++) {
-                        pointsArray[j].push([polygon[k][1], polygon[k][0]]);
+                        innerArray.push([polygon[k][1], polygon[k][0]]);
                     }
+                    pointsArray[j].push(innerArray);
                 }
             }
             return L.polygon(pointsArray, { fillColor: '#E47867', color: '#222', weight: 0.5, fillOpacity: 0.8, opacity: 1, id: objectInfo.guid })
@@ -298,17 +300,13 @@ var mapAPI = {
         } else {
             var markerObject = JSON.parse(objectInfo.mapPoint);
             var icon;
-            if (objectInfo.placeType == "Incident")
-                icon = L.divIcon({ className: "", html: "<img src='images/incident.png' height=23 width=23 style='opacity:1'/>" });
-            else if (objectInfo.placeType == "Interest")
-                icon = L.divIcon({ className: "", html: "<img src='images/interest.png' height=23 width=23 style='opacity:1'/>" });
-            else if (objectInfo.placeType == "Address") {
-                var saturation = objectInfo.citizens / objectInfo.citizensTotal;
-                icon = L.divIcon({ className: "", html: "<div style='position:relative'><img src='images/address.png' height=23 width=23 style='opacity:1;filter:saturate(" + saturation + ")'/><span style='position:absolute;top:50%;left:80%;transform: translate(-50%, -50%);'>" + objectInfo.citizens + "</span></div>" });
+            icon = L.divIcon({ className: "", html: objectInfo.htmlIcon });
+
+            var result = L.marker([markerObject.coordinates[1], markerObject.coordinates[0]], { id: objectInfo.guid, icon: icon });
+            if (markerObject.label != null) {
+                result.bindTooltip(objectInfo.label, { sticky: true }).on('click', this.callBlazor_ShowPlaceInfo);
             }
-            return L.marker([markerObject.coordinates[1], markerObject.coordinates[0]], { id: objectInfo.guid, icon: icon })
-                .bindTooltip(objectInfo.label, { sticky: true })
-                .on('click', this.callBlazor_ShowPlaceInfo);
+            return result;
         }
 
     },

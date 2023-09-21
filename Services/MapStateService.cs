@@ -260,8 +260,16 @@ namespace EhriMemoMap.Services
         {
             if (Map.Timeline == null)
                 return;
-            Map.Timeline.ForEach(a=> a.Selected = point.Name == a.Name ? point.Selected : false);
+            Map.Timeline.ForEach(a => a.Selected = point.Name == a.Name ? point.Selected : false);
             point.Selected = !point.Selected;
+        }
+
+        public DateTime? GetTimelinePoint()
+        {
+            if (Map.Timeline == null || !Map.Timeline.Any(a => a.Selected && a.To != null))
+                return null;
+
+            return Map.Timeline.FirstOrDefault(a => a.Selected && a.To != null)?.To;
         }
 
         /// <summary>

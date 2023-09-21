@@ -1,0 +1,95 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+
+<RadzenRow Gap="1rem" JustifyContent=JustifyContent.Left>
+    <RadzenColumn Size="12">
+        <RadzenCard>
+            <ul class="no-bullets">
+
+                @if (House.Address.Murdered != null)
+                {
+                    <li>@cl["murdered"]: @House.Address.Murdered</li>
+                }
+                @if (House.Address.Survived != null)
+                {
+                    <li>@cl["survived"]: @House.Address.Survived</li>
+                }
+                @if (House.Address.FateUnknown != null)
+                {
+                    <li>@cl["fateUnknown"]: @House.Address.FateUnknown</li>
+                }
+                @if (!StatisticsIsOpen)
+                {
+                    <li>
+                        <RadzenButton class="rz-mt-2" title="@(cl["showStatistics"] + "...")" ButtonStyle="ButtonStyle.Dark" Size="ButtonSize.Small" Icon="add" Variant="Variant.Filled" Click="(() => StatisticsIsOpen = !StatisticsIsOpen)" />
+                    </li>
+
+                }
+
+                else
+                {
+                    <li>
+                        <RadzenButton class="rz-mt-2" title="@(cl["hideStatistics"] + "...")" ButtonStyle="ButtonStyle.Dark" Size="ButtonSize.Small" Icon="remove" Variant="Variant.Filled" Click="(() => StatisticsIsOpen = !StatisticsIsOpen)" />
+                    </li>
+                    @if (House.Statistics != null && House.Statistics.Count > 0)
+                    {
+                        <table class="rz-grid-table rz-grid-table-fixed" style="width:100%">
+                            <tr>
+                                <th></th>
+                                @if (House.Statistics.Any(a => a.NumberPresent != null))
+                                {
+                                    <th style="text-align:left">@cl["present"]</th>
+
+                                }
+                                @if (House.Statistics.Any(a => a.NumberAbsent != null))
+                                {
+                                    <th style="text-align:left">@cl["absent"]</th>
+                                }
+                            </tr>
+
+                            @foreach (var statistic in House.Statistics.Where(a=> MapState.GetTimelinePoint() != null ? (a.Date == new DateTime(1941,10,01) || a.Date == MapState.GetTimelinePoint()) : 1 == 1))
+                            {
+                                <tr>
+                                    <td>@statistic.Date.ToString("d. M. yyyy")</td>
+                                    @if (House.Statistics.Any(a => a.NumberPresent != null))
+                                    {
+                                        <td>@statistic.NumberPresent</td>
+                                    }
+                                    @if (House.Statistics.Any(a => a.NumberAbsent != null))
+                                    {
+                                        <td>@statistic.NumberAbsent</td>
+                                    }
+                                </tr>
+                            }
+                        </table>
+                    }
+                }
+            </ul>
+        </RadzenCard>
+    </RadzenColumn>
+</RadzenRow>
+
+@code {
+    [Parameter]
+    public AddressWithVictimsWrappwer? House { get; set; }
+
+    public bool StatisticsIsOpen { get; set; } = false;
+
+    //string FormatAsYear(object value)
+    //{
+    //    return ((DateTime)value).Year.ToString();
+    //}
+
+    //int ValueAxisStep()
+    //{
+    //    var min = Math.Min(House.StatisticsAbsent.Count > 0 ? House.StatisticsAbsent.Min(a => a.Number) : 0, House.StatisticsPresent.Count > 0 ? House.StatisticsPresent.Min(a => a.Number) : 0);
+    //    var max = Math.Max(House.StatisticsAbsent.Count > 0 ? House.StatisticsAbsent.Max(a => a.Number) : 0, House.StatisticsPresent.Count > 0 ? House.StatisticsPresent.Max(a => a.Number) : 0);
+    //    if (max - min <= 10)
+    //        return 1;
+
+        //    return 5;
+
+    //}
+
+
+}
