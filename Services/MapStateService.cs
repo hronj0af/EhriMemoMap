@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Radzen;
 using System.Net.NetworkInformation;
+using System.Reflection.Metadata.Ecma335;
 
 namespace EhriMemoMap.Services
 {
@@ -155,9 +156,9 @@ namespace EhriMemoMap.Services
             }).
             Union(new List<LayerForLeafletModel>
             {
-                new LayerForLeafletModel { Name = LayerType.Objects.ToString(), Type = LayerType.Objects.ToString() },
-                new LayerForLeafletModel { Name = LayerType.Polygons.ToString(), Type = LayerType.Polygons.ToString() },
-                new LayerForLeafletModel { Name = LayerType.Images.ToString(), Type = LayerType.Images.ToString() }
+                new LayerForLeafletModel { Name = LayerType.Objects.ToString(), Type = LayerType.Objects.ToString(), Selected = true },
+                new LayerForLeafletModel { Name = LayerType.Polygons.ToString(), Type = LayerType.Polygons.ToString(), Selected = true },
+                new LayerForLeafletModel { Name = "AdditionalObjects", Type = LayerType.Polygons.ToString(), Selected = true, ZIndex = 9999 }
             }).
             ToList();
 
@@ -181,7 +182,7 @@ namespace EhriMemoMap.Services
             else
                 InitInfoAboutLayersSelection();
 
-            //InitInfoAboutTimeline(timelinePoint);
+            InitInfoAboutTimeline(timelinePoint);
 
             MapStateWasInit = true;
             NotifyStateChanged();
@@ -202,13 +203,13 @@ namespace EhriMemoMap.Services
                     layer.Selected = false;
             });
 
-            Map.Timeline?.Where(a => a.AdditionalLayers != null).ToList().ForEach(layer =>
+            foreach (var layer in Map.Timeline?.Where(a=>a.AdditionalLayers != null).SelectMany(a=>a.AdditionalLayers))
             {
                 if (layers == null || layers.Contains(layer.Name))
                     layer.Selected = true;
                 else
                     layer.Selected = false;
-            });
+            }
         }
 
         /// <summary>

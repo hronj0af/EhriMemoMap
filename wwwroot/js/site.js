@@ -148,7 +148,7 @@ var mapAPI = {
     // převede pozici myši nad mapou do parametru bbox pro získání informací o daném místě (dotaz na QGIS server)
     convertMousePositionToBBoxParameter: function () {
 
-        var sizeOfBox = 5 * this.map.getZoom();
+        var sizeOfBox = 5;
 
         var minx = this.coorx < sizeOfBox / 2 ? 0 : this.coorx - sizeOfBox / 2;
         var miny = this.coory < sizeOfBox / 2 ? 0 : this.coory + sizeOfBox / 2;
@@ -162,22 +162,22 @@ var mapAPI = {
     },
 
     // přidá k vrstvám mapy vrstvu v parametru a tutéž vrstvu také předtím z mapy odejme
-    changeLayer: function (jsonMapSettings) {
-        var mapSettings = JSON.parse(jsonMapSettings);
-        var oldLayer, groupToChange;
-        Object.values(mapAPI.map._layers).forEach(layer => {
-            if (layer.options.id == mapSettings.name) {
-                oldLayer = layer;
-            }
-            if (layer.options.id == mapSettings.name + "_group") {
-                groupToChange = layer;
-            }
-        });
-        var newLayer = this.convertMapSettingsObjectToMapLayer(mapSettings);
-        groupToChange.clearLayers();
-        groupToChange.addLayer(newLayer);
-        groupToChange.setZIndex(mapSettings.zIndex);
-    },
+    //changeLayer: function (jsonMapSettings) {
+    //    var mapSettings = JSON.parse(jsonMapSettings);
+    //    var oldLayer, groupToChange;
+    //    Object.values(mapAPI.map._layers).forEach(layer => {
+    //        if (layer.options.id == mapSettings.name) {
+    //            oldLayer = layer;
+    //        }
+    //        if (layer.options.id == mapSettings.name + "_group") {
+    //            groupToChange = layer;
+    //        }
+    //    });
+    //    var newLayer = this.convertMapSettingsObjectToMapLayer(mapSettings);
+    //    groupToChange.clearLayers();
+    //    groupToChange.addLayer(newLayer);
+    //    groupToChange.setZIndex(mapSettings.zIndex);
+    //},
 
     // konvertuje objekt s nastavením mapových vrstev do mapových vrstev leafletu
     convertMapSettingsObjectToMapLayer: function (mapSettingsObject) {
@@ -230,9 +230,19 @@ var mapAPI = {
         var polygonsGroup = this.groups.find(a => a.options.id == "Polygons_group");
         objectsGroup.clearLayers();
         var objects = JSON.parse(objectJson);
+
         for (var i = 0; i < objects.length; i++) {
-            var newObject = this.getObject(objects[i]);
-            newObject.addTo(objects[i].mapPolygon != null ? polygonsGroup : objectsGroup);
+            var newObject;
+
+            if (objects[i].mapPolygon != null) {
+                var polygonObject = JSON.parse(objects[i].mapPolygon);
+                newObject = this.getPolygon(polygonObject, objects[i].label);
+                newObject.addTo(polygonsGroup);
+            } else {
+                var markerObject = JSON.parse(objects[i].mapPoint);
+                newObject = this.getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon);
+                newObject.addTo(objectsGroup);
+            }
         }
     },
 
@@ -249,98 +259,83 @@ var mapAPI = {
     },
 
 
-    addOneObjectFromJsonString: function (jsonInfo) {
-        this.addObject(JSON.parse(jsonInfo));
-        this.showPolygons();
-
+    addObjectFromJsonString: function (jsonInfo) {
+        var parsedObject = JSON.parse(jsonInfo);
+        var newObject = parsedObject.type == "Point" ? this.getPoint(parsedObject) : this.getPolygon(parsedObject, null, "#e500ff");
+        var objectsGroup = this.groups.find(a => a.options.id == "AdditionalObjects_group");
+        objectsGroup.clearLayers();
+        newObject.addTo(objectsGroup);
     },
 
-    getObject: function (objectInfo) {
+    getPoint: function (markerObject, clickable, label, htmlIcon) {
+        var iconOptions = null;
+        if (htmlIcon != undefined && htmlIcon != null)
+            iconOptions = { icon: L.divIcon({ className: "", html: htmlIcon }) };
 
-        if (objectInfo.mapPolygon != null) {
-            var pointsArray = [];
-            var polygonObject = JSON.parse(objectInfo.mapPolygon);
-            for (var j = 0; j < polygonObject.coordinates.length; j++) {
-                for (var m = 0; m < polygonObject.coordinates[j].length; m++) {
-                    var polygon = polygonObject.coordinates[j][m];
-                    pointsArray.push([]);
-                    var innerArray = [];
-                    for (var k = 0; k < polygon.length; k++) {
-                        innerArray.push([polygon[k][1], polygon[k][0]]);
-                    }
-                    pointsArray[j].push(innerArray);
+        var result = L.marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
+
+        if (label != undefined && label != null) {
+            result.bindTooltip(label, { sticky: true });
+        }
+
+        if (clickable) {
+            result.on('click', this.callBlazor_ShowPlaceInfo);
+        }
+
+        return result;
+    },
+
+    getPolygon: function (polygonObject, label, color) {
+
+        var pointsArray = [];
+        for (var j = 0; j < polygonObject.coordinates.length; j++) {
+            for (var m = 0; m < polygonObject.coordinates[j].length; m++) {
+                var polygon = polygonObject.coordinates[j][m];
+                pointsArray.push([]);
+                var innerArray = [];
+                for (var k = 0; k < polygon.length; k++) {
+                    innerArray.push([polygon[k][1], polygon[k][0]]);
                 }
+                pointsArray[j].push(innerArray);
             }
-            return L.polygon(pointsArray, { fillColor: '#E47867', color: '#222', weight: 0.5, fillOpacity: 0.8, opacity: 1, id: objectInfo.guid })
-                .bindTooltip(objectInfo.label, { sticky: true })
-                .on('click', this.callBlazor_ShowPlaceInfo);
-
-        } else {
-            var markerObject = JSON.parse(objectInfo.mapPoint);
-            var icon;
-            icon = L.divIcon({ className: "", html: objectInfo.htmlIcon });
-
-            var result = L.marker([markerObject.coordinates[1], markerObject.coordinates[0]], { id: objectInfo.guid, icon: icon });
-            if (markerObject.label != null) {
-                result.bindTooltip(objectInfo.label, { sticky: true }).on('click', this.callBlazor_ShowPlaceInfo);
-            }
-            return result;
         }
+        result = L.polygon(pointsArray, { fillColor: color != undefined && color != null ? color : '#E47867', color: '#222', weight: 0.5, fillOpacity: 0.8, opacity: 1 })
+            .on('click', this.callBlazor_ShowPlaceInfo);
+
+        if (label != undefined && label != null)
+            result.bindTooltip(label, { sticky: true });
+
+        return result;
+
 
     },
 
-
-
-    addPolygon: function (pointsArray) {
-        this.polygons.push(L.polygon(pointsArray, { color: '#9400D3' }));
+    addBluepoint: function (point, icon) {
+        var objectsGroup = this.groups.find(a => a.options.id == "AdditionalObjects_group");
+        L.marker(point, { icon: icon, type: "bluepoint" }).addTo(objectsGroup);
     },
 
-    addMarker: function (point, icon) {
-        if (icon !== undefined)
-            this.polygons.push(L.marker(point, { icon: icon, type: "bluepoint" }));
-        else
-            this.polygons.push(L.marker(point));
-    },
-
-    showPolygons: function () {
-        for (var i = 0; i < this.polygons.length; i++) {
-            if (this.polygons[i].options.type == undefined || this.polygons[i].options.type !== "bluepoint")
-                this.polygons[i].addTo(this.map);
-        }
-    },
-
-    showBluepoint: function () {
-        for (var i = 0; i < this.polygons.length; i++) {
-            if (this.polygons[i].options.type !== undefined || this.polygons[i].options.type == "bluepoint")
-                this.polygons[i].addTo(this.map);
-        }
-    },
-
-    removeObjects: function () {
-        this.polygons = this.polygons.filter((item) => {
-            if (item.options.type !== undefined || item.options.type == "bluepoint") {
-                return true;
-            }
-            else {
+    removeAdditionalObjects: function () {
+        var objectsGroup = this.groups.find(a => a.options.id == "AdditionalObjects_group");
+        objectsGroup.eachLayer(function (item) {
+            if (item.options.type == undefined || item.options.type !== "bluepoint") {
                 item.remove();
             }
     	});
     },
 
     removeBluepoint: function () {
-    	this.polygons = this.polygons.filter((item) => {
-            if (item.options.type === undefined || item.options.type !== "bluepoint") {
-                return true;
-            } else {
+        var objectsGroup = this.groups.find(a => a.options.id == "AdditionalObjects_group");
+        objectsGroup.eachLayer(function (item) {
+            if (item.options.type !== undefined && item.options.type == "bluepoint") {
                 item.remove();
             }
-    	});
+        });
     },
 
     goToLocation: function (pointString, zoom) {
-        var originalPoint = JSON.parse(pointString).coordinates;
-        var convertedPoint = this.convertPoint(originalPoint);
-        this.map.setView(convertedPoint, zoom);
+        var point = JSON.parse(pointString).coordinates;
+        this.map.setView([point[1],point[0]], zoom);
     },
 
     getWindowWidth: function () {
@@ -391,8 +386,7 @@ var mapAPI = {
 
         mapAPI.removeBluepoint();
         mapAPI.map.setView([lat, long], 15);
-        mapAPI.addMarker([lat, long], mapAPI.bluepointIcon);
-        mapAPI.showBluepoint();
+        mapAPI.addBluepoint([lat, long], mapAPI.bluepointIcon);
 
         console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy)
     },

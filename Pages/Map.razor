@@ -72,31 +72,13 @@
     public void RemoveObjects(dynamic obj)
     {
         if (!MapState.IsMobileBrowser)
-            JS.InvokeVoidAsync("mapAPI.removeObjects");
+            JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
     }
 
     [JSInvokable("ShowPlaceInfo")]
     public async Task ShowPlaceInfo(Coordinate[] coordinates)
     {
         var placesOnMap = MapLogic.GetMapObjects(true, coordinates);
-        
-        // tuhle blbost tu dělám proto, že QGIS server neumí vracet anglické popisky v json, ale jenom v xml...
-        // string urlJson = "";//  MapState.GetFeaturesInfoUrl("application/json") + bbox;
-        // string urlXML = ""; //MapState.GetFeaturesInfoUrl("text/xml") + bbox;
-        // string responseJson = await clientFactory.CreateClient().GetStringAsync(urlJson + bbox);
-        // string responseXML = await clientFactory.CreateClient().GetStringAsync(urlXML + bbox);
-
-        // await JS.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", responseJson);
-
-        // var wmsResponse = new WMSResponse(responseXML);
-
-        // if (!wmsResponse.Layers.Any(a => a.Features != null && a.Features.Count > 0))
-        // {
-        //     DialogService.CloseSide();
-        //     await JS.InvokeVoidAsync("mapAPI.removeObjects");
-        //     return;
-        // }
-
         await DialogService.OpenSideAsync<PlaceInformation>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, MapState.GetDialogOptions());
     }
 

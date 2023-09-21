@@ -15,6 +15,8 @@ public partial class MapObjectForLeafletModel
 {
     public MapObjectForLeafletModel(MapObject mapObject)
     {
+
+        Clickable = true;
         PlaceType = mapObject.PlaceType;
         Citizens = mapObject.Citizens;
         CitizensTotal = mapObject.CitizensTotal;
@@ -32,7 +34,7 @@ public partial class MapObjectForLeafletModel
 
         else if (PlaceType == Models.PlaceType.Address.ToString())
         {
-            var saturation = Citizens / CitizensTotal;
+            var saturation = ((decimal)Citizens / CitizensTotal)?.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
             HtmlIcon = "<div style='position:relative'><img src='images/address.png' height=23 width=23 style='opacity:1;filter:saturate(" + saturation + ")'/><span style='position:absolute;top:50%;left:80%;transform: translate(-50%, -50%);'>" + Citizens + "</span></div>";
         }
     }
@@ -44,6 +46,7 @@ public partial class MapObjectForLeafletModel
 
         PlaceType = Models.PlaceType.Statistics.ToString();
         Guid = PlaceType + "_" + Id + "_";
+        Clickable = false;
 
         var serializerSettings = new JsonSerializerSettings
         {
@@ -82,6 +85,7 @@ public partial class MapObjectForLeafletModel
             </div>";
 
     }
+    public bool Clickable { get; set; }
     public string? PlaceType { get; set; }
 
     public decimal? Citizens { get; set; }

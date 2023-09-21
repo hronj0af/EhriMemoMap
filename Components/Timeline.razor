@@ -70,7 +70,7 @@
         MapState.ToggleTimeLinePoint(point);
 
         await MapLogic.RefreshObjectsOnMap(false);
-        //await JS.InvokeVoidAsync("mapAPI.setUrlParam", "timeline", MapState.GetTimelineForUrlParameter());
+        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "timeline", MapState.GetTimelineForUrlParameter());
     }
 
 }

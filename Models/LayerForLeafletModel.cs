@@ -17,6 +17,7 @@ namespace EhriMemoMap.Models
         public string? Attribution { get; set; }
         public string? MapParameter { get; set; }
         public string? LayersParameter { get; set; }
+        public int? ZIndex { get; set; }
 
     }
 }

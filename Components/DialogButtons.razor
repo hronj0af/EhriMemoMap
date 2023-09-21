@@ -3,18 +3,16 @@
 @inject MapStateService MapState
 
 <RadzenRow JustifyContent="JustifyContent.End">
-        <RadzenButton Click=OnFullscreen Icon="fullscreen" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat"/>
+    <RadzenButton Click=OnFullscreen Icon="fullscreen" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat"/>
     <RadzenButton Click=OnClose Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" />
-
 </RadzenRow>
 
 @code {
 
     private async Task OnClose()
     {
-        await JS.InvokeVoidAsync("mapAPI.removeObjects");
+        await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
         DialogService.CloseSide();
-        //MapState.SetDialogIsFullscreen(false);
     }
 
     private async Task OnFullscreen()

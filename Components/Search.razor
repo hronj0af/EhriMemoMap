@@ -62,7 +62,7 @@ else
         {
             if (!MapState.IsSearchOpen)
             {
-                JS.InvokeVoidAsync("mapAPI.removeObjects");
+                JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
                 selectedPlaceName = "";
             }
             StateHasChanged();
@@ -83,10 +83,10 @@ else
             if (place.MapObject == null || !place.MapObject.Contains("Polygon"))
                 zoom = 18;
             await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, zoom);
-            await JS.InvokeVoidAsync("mapAPI.addOneObjectFromJsonString", place.MapObject != null ? place.MapObject : place.MapLocation);
+            await JS.InvokeVoidAsync("mapAPI.addObjectFromJsonString", place.MapObject != null ? place.MapObject : place.MapLocation);
         }
         else
-            await JS.InvokeVoidAsync("mapAPI.removeObjects");
+            await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
 
     }
 
