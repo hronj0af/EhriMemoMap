@@ -13,9 +13,12 @@ namespace EhriMemoMap.Models
         public string? Name { get; set; }
         public string? Url { get; set; }
         public LayerType? Type { get; set; }
+        public PlaceType? PlaceType { get; set; }
         public string? Attribution { get; set; }
         public string? Opacities { get; set; }
         public string? ZIndex { get; set; }
+        public string? MapParameter { get; set; }
+        public string? LayersParameter { get; set; }
         public bool Selected { get; set; }
         public int Order { get; set; }
         
@@ -36,6 +39,6 @@ namespace EhriMemoMap.Models
 
     public enum LayerType
     {
-        Images, Objects, WMS, Base
+        Images, Objects, WMS, Base, Polygons
     }
 }

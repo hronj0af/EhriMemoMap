@@ -1,0 +1,22 @@
+﻿@using EhriMemoMap.Data;
+@using EhriMemoMap.Helpers;
+@using System.Xml;
+@using System.Xml.Linq;
+@inject IStringLocalizer<CommonResources> cl
+
+<RadzenRow class="rz-mb-4">
+    <RadzenCard Style="width:100%">
+
+        <ul class="no-bullets">
+            <li><b>@(CultureInfo.CurrentCulture == new CultureInfo("en-US") ? Place.LabelEn : Place.LabelCs)</b></li>
+            <li><i>@(CultureInfo.CurrentCulture == new CultureInfo("en-US") ? Place.AddressEn : Place.AddressCs)</i></li>
+            <li>@(CultureInfo.CurrentCulture == new CultureInfo("en-US") ? Place.DescriptionEn : Place.DescriptionCs)</li>
+        </ul>
+
+    </RadzenCard>
+</RadzenRow>
+
+@code {
+    [Parameter]
+    public PraguePlacesOfInterestTimeline Place { get; set; }
+}

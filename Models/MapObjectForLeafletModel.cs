@@ -7,9 +7,9 @@ using NodaTime;
 
 namespace EhriMemoMap.Models;
 
-public partial class MapObjectForLeaflet
+public partial class MapObjectForLeafletModel
 {
-    public MapObjectForLeaflet(MapObject mapObject)
+    public MapObjectForLeafletModel(MapObject mapObject)
     {
         PlaceType = mapObject.PlaceType;
         Citizens = mapObject.Citizens;

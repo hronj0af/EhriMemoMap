@@ -66,8 +66,10 @@
     {
         if (point.Selected)
             return;
-        
-        await MapLogic.RefreshObjectsOnMap();
+
+        MapState.ToggleTimeLinePoint(point);
+
+        await MapLogic.RefreshObjectsOnMap(false);
         await JS.InvokeVoidAsync("mapAPI.setUrlParam", "collection", MapState.GetCollectionForUrlParameter());
     }
 

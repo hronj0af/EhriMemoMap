@@ -14,7 +14,7 @@
 @inject IHttpContextAccessor httpContextAccesor
 @inject EhriMemoMap.Data.MemogisContext context
 
-<div title="@cl["mapTitle"]" @onclick="ShowPlaceInfo" id="map" style="cursor:default"></div>
+<div id="map" style="cursor:default"></div>
 
 <Home Position="PositionEnum.Top" Order="0" />
 <Search Position="PositionEnum.Top" Order="1" />
@@ -22,7 +22,7 @@
 <Layers Position="PositionEnum.Top" Order="3" />
 <Help Position="PositionEnum.Top" Order="4" />
 <Language Position="PositionEnum.Top" Order="5" />
-<Zoom Position="PositionEnum.Bottom" Order="0"  />
+<Zoom Position="PositionEnum.Bottom" Order="0" />
 
 @code {
     protected override void OnInitialized()
@@ -36,6 +36,11 @@
 
         if (firstRender)
         {
+            // musím do javascriptu šoupnout odkaz na instanci téhle třídy Map,
+            // abych pak mohl z javascriptu volat metodu RefreshObjectsOnMap a ShowPlaceInfo
+            var dotNetReference = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("mapAPI.initBlazorMapObject", dotNetReference);
+
             if (!MapState.MapStateWasInit)
             {
                 string layers = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "layers");
@@ -43,12 +48,25 @@
                 MapState.IsMobileBrowser = await JS.InvokeAsync<bool>("mapAPI.isMobileBrowser");
                 MapState.Init(layers, collectionName);
             }
-            
+
             await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet());
             MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.map.getZoom");
             MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
-            await MapLogic.RefreshObjectsOnMap();
+            await RefreshObjectsOnMap(true);
         }
+    }
+
+    /// <summary>
+    /// Tahle metoda na obnovení špendlíků a polygonů na mapě se volá vždycky z javascriptu, když se s mapou nějak pohne,
+    // protože tady v aplikaci nemám spolehlivý přehled o tom, kdy se mapa někam pohne, nebo zazoomuje
+    /// </summary>
+    /// <returns></returns>
+    [JSInvokable("RefreshObjectsOnMap")]
+    public async Task RefreshObjectsOnMap(bool withPolygons)
+    {
+        MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.map.getZoom");
+        MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
+        await MapLogic.RefreshObjectsOnMap(withPolygons);
     }
 
     public void RemoveObjects(dynamic obj)
@@ -57,34 +75,29 @@
             JS.InvokeVoidAsync("mapAPI.removeObjects");
     }
 
-    protected async Task ShowPlaceInfo(MouseEventArgs e)
+    [JSInvokable("ShowPlaceInfo")]
+    public async Task ShowPlaceInfo(Coordinate[] coordinates)
     {
-        try
-        {
-            string bbox = await JS.InvokeAsync<string>("mapAPI.convertMousePositionToBBoxParameter");
-            // tuhle blbost tu dělám proto, že QGIS server neumí vracet anglické popisky v json, ale jenom v xml...
-            string urlJson = "";//  MapState.GetFeaturesInfoUrl("application/json") + bbox;
-            string urlXML = ""; //MapState.GetFeaturesInfoUrl("text/xml") + bbox;
-            string responseJson = await clientFactory.CreateClient().GetStringAsync(urlJson + bbox);
-            string responseXML = await clientFactory.CreateClient().GetStringAsync(urlXML + bbox);
+        var placesOnMap = MapLogic.GetMapObjects(true, coordinates);
+        
+        // tuhle blbost tu dělám proto, že QGIS server neumí vracet anglické popisky v json, ale jenom v xml...
+        // string urlJson = "";//  MapState.GetFeaturesInfoUrl("application/json") + bbox;
+        // string urlXML = ""; //MapState.GetFeaturesInfoUrl("text/xml") + bbox;
+        // string responseJson = await clientFactory.CreateClient().GetStringAsync(urlJson + bbox);
+        // string responseXML = await clientFactory.CreateClient().GetStringAsync(urlXML + bbox);
 
-            await JS.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", responseJson);
+        // await JS.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", responseJson);
 
-            var wmsResponse = new WMSResponse(responseXML);
+        // var wmsResponse = new WMSResponse(responseXML);
 
-            if (!wmsResponse.Layers.Any(a => a.Features != null && a.Features.Count > 0))
-            {
-                DialogService.CloseSide();
-                await JS.InvokeVoidAsync("mapAPI.removeObjects");
-                return;
-            }
+        // if (!wmsResponse.Layers.Any(a => a.Features != null && a.Features.Count > 0))
+        // {
+        //     DialogService.CloseSide();
+        //     await JS.InvokeVoidAsync("mapAPI.removeObjects");
+        //     return;
+        // }
 
-            await DialogService.OpenSideAsync<PlaceInformation>(null, new Dictionary<string, object> { { "WMSResponse", wmsResponse } }, MapState.GetDialogOptions());
-        }
-        catch
-        {
-
-        }
+        await DialogService.OpenSideAsync<PlaceInformation>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, MapState.GetDialogOptions());
     }
 
 }

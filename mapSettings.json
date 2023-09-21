@@ -12,7 +12,9 @@
       },
       {
         "name": "MGS-prague_historical_map_1938-v2",
-        "url": "https://geodata.ehri-project-test.eu/geoserver/ehri/wms?/webdata/HGIS_cze/memogis_prague_CZE_pol.qgz",
+        "url": "https://geodata.ehri-project-test.eu/geoserver/ehri/wms?",
+        "mapParameter": "/webdata/HGIS_cze/memogis_prague_CZE_pol.qgz",
+        "layersParameter": "MGS-prague_historical_map_1938-v2",
         "type": "wms",
         "opacities": "255",
         "zIndex": "100",
@@ -21,30 +23,34 @@
       },
       {
         "name": "inaccessible",
+        "placeType": "inaccessible",
         "selected": true,
-        "order": 5,
-        "type": "objects"
+        "order": 10,
+        "type": "polygons"
       },
       {
         "name": "address",
+        "placeType": "address",
         "selected": true,
         "order": 3,
         "type": "objects",
-        "minZoom": 12
+        "minZoom": 16
       },
       {
         "name": "interest",
+        "placeType": "interest",
         "selected": true,
         "order": 2,
         "type": "objects",
-        "minZoom": 12
+        "minZoom": 16
       },
       {
-        "name": "incidents",
+        "name": "incident",
+        "placeType": "incident",
         "selected": true,
         "order": 1,
         "type": "objects",
-        "minZoom": 12
+        "minZoom": 16
       }
     ],
     "timeline": [

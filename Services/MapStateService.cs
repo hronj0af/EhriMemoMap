@@ -143,18 +143,21 @@ namespace EhriMemoMap.Services
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
 
-            var result = Map.Layers?.Where(a => a.Type != LayerType.Objects).Select(a => new LayerModel
+            var result = Map.Layers?.Where(a => a.Type != LayerType.Objects).Select(a => new LayerForLeafletModel
             {
                 Name = a.Name,
-                Opacities = a.Opacities,
                 Selected = a.Selected,
+                Attribution = a.Attribution,
                 Url = a.Url,
-                Type = a.Type,
+                Type = a.Type?.ToString(),
+                MapParameter = a.MapParameter,
+                LayersParameter = a.LayersParameter
             }).
-            Union(new List<LayerModel>
+            Union(new List<LayerForLeafletModel>
             {
-                new LayerModel { Name = LayerType.Objects.ToString(), Type = LayerType.Objects },
-                new LayerModel { Name = LayerType.Images.ToString(), Type = LayerType.Images }
+                new LayerForLeafletModel { Name = LayerType.Objects.ToString(), Type = LayerType.Objects.ToString() },
+                new LayerForLeafletModel { Name = LayerType.Polygons.ToString(), Type = LayerType.Polygons.ToString() },
+                new LayerForLeafletModel { Name = LayerType.Images.ToString(), Type = LayerType.Images.ToString() }
             }).
             ToList();
 
@@ -247,6 +250,18 @@ namespace EhriMemoMap.Services
                 return new List<TimelinePointModel>();
 
             return Map.Timeline;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="point"></param>
+        public void ToggleTimeLinePoint(TimelinePointModel point)
+        {
+            if (Map.Timeline == null)
+                return;
+            Map.Timeline.ForEach(a=> a.Selected = point.Name == a.Name ? point.Selected : false);
+            point.Selected = !point.Selected;
         }
 
         /// <summary>

@@ -24,58 +24,83 @@ namespace EhriMemoMap.Services
             _js = js;
         }
 
-        public async Task RefreshObjectsOnMap()
+        public async Task RefreshObjectsOnMap(bool withPolygons)
         {
             var serializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-            var objects = JsonConvert.SerializeObject(GetMapObjects(), serializerSettings);
-            await _js.InvokeVoidAsync("mapAPI.refreshObjects", objects);
+            var objects = GetMapObjects(withPolygons);
+            var result = JsonConvert.SerializeObject(objects, serializerSettings);
+            await _js.InvokeVoidAsync("mapAPI.refreshObjectsOnMap", result);
 
         }
 
-        public List<MapObjectForLeaflet> GetMapObjects()
+        public List<MapObjectForLeafletModel> GetMapObjects(bool withPolygons, Coordinate[]? customCoordinates = null)
         {
             if (_mapState == null || _mapState.Map == null)
-                return new List<MapObjectForLeaflet>();
-            
+                return new List<MapObjectForLeafletModel>();
+
             // nejdriv si pripravim mapove objekty pro dalsi dotazy
-            var result = _context.MapObjects.AsQueryable();
+            var query = _context.MapObjects.AsQueryable();
 
             // vyfiltruju objekty podle toho, na jakem bode casove ose lezi
             if (_mapState.Map.Timeline != null && _mapState.Map.Timeline.Any(a => a.Selected))
             {
                 var timelimePoint = _mapState.Map.Timeline.FirstOrDefault(a => a.Selected);
-                
+
                 // bude vyberu vsechny objekty, ktere nemaji prirazeno zadne datum
                 if (timelimePoint != null && timelimePoint.From == null && timelimePoint.To == null)
-                    result = result.Where(a => a.DateFrom == null && a.DateTo == null);
-                
+                    query = query.Where(a => a.DateFrom == null && a.DateTo == null);
+
                 // anebo vyberu objekty, ktere lezi v casovem intervalu daneho bodu casove osy
                 else if (timelimePoint != null)
-                    result = result.Where(a => a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To);
+                    query = query.Where(a => a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To);
             }
 
             // vyber objektu podle toho, do jake nalezi vrstvy
-            var selectedLayerNames = new List<string>();
-            foreach (var layer in _mapState.GetNotBaseLayers(true))
+            var selectedLayerNames = new List<string?>();
+            foreach (var layer in _mapState.GetNotBaseLayers(true).Where(a => a.PlaceType != null))
             {
                 // krome nazvu vrstvy zkoumam i to, jestli se pri danem zoomu mapy ma vrstva vubec zobrazovat
-                if (string.IsNullOrEmpty(layer.Name) || (layer.MinZoom != null && _mapState.MapZoom < layer.MinZoom) || (layer.MaxZoom != null && _mapState.MapZoom > layer.MaxZoom))
+                if ((layer.MinZoom != null && _mapState.MapZoom < layer.MinZoom) || (layer.MaxZoom != null && _mapState.MapZoom > layer.MaxZoom))
                     continue;
-                selectedLayerNames.Add(layer.Name);
+                selectedLayerNames.Add(layer.PlaceType?.ToString());
             }
 
-            result = result.Where(a => !string.IsNullOrEmpty(a.PlaceType) && selectedLayerNames.Contains(a.PlaceType));
+            query = query.Where(a => a.PlaceType != null && selectedLayerNames.Contains(a.PlaceType));
 
+            if (customCoordinates != null && customCoordinates.Length == 2)
+            {
+                var bbox = GetBBox(customCoordinates[0], customCoordinates[1]);
+                query = query.Where(a => (a.GeographyMapPoint != null && bbox.Intersects(a.GeographyMapPoint)) || (a.GeographyMapPolygon != null && bbox.Intersects(a.GeographyMapPolygon)));
+            }
+            else if (_mapState.MapSouthWestPoint != null && _mapState.MapNorthEastPoint != null)
+            {
+                var bbox = GetBBox(_mapState.MapSouthWestPoint, _mapState.MapNorthEastPoint);
+                query = query.Where(a => !string.IsNullOrEmpty(a.MapPolygon) || (a.GeographyMapPoint != null && a.GeographyMapPoint.Intersects(bbox)));
+            }
+
+            var result = query.Select(a => new MapObjectForLeafletModel(a)).ToList();
+
+            return result;
+        }
+
+        public Polygon GetBBox(Coordinate southWestPoint, Coordinate northEastPoint)
+        {
             // a nakonec vyberu ty objekty, ktere jsou viditelne na zobrazenem vyrezu na mape
-            var bbox = new Envelope(_mapState.MapSouthWestPoint, _mapState.MapNorthEastPoint);
+            Coordinate[] imageOutlineCoordinates = new Coordinate[]
+            {
+                new Coordinate(southWestPoint.X, northEastPoint.Y),
+                new Coordinate(northEastPoint.X, northEastPoint.Y),
+                new Coordinate(northEastPoint.X, southWestPoint.Y),
+                new Coordinate(southWestPoint.X, southWestPoint.Y),
+                new Coordinate(southWestPoint.X, northEastPoint.Y),
+            };
+            var geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+            var bbox = geometryFactory.CreatePolygon(imageOutlineCoordinates);
+            return bbox;
 
-            // TODO - zrejme se nebudou zobrazovat polygony, jejichz uvedeny stred nelezi na mape
-            result = result.Where(a => a.MapLocation != null && bbox.Covers(a.MapLocation.Coordinate.X, a.MapLocation.Coordinate.Y));
-
-            return result.Select(a => new MapObjectForLeaflet(a)).ToList();
         }
     }
 }

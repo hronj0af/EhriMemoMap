@@ -1,7 +1,74 @@
 ﻿
 var mapAPI = {
 
-    map: null, lat: null, lng: null, coorx: null, coory: null, polygons: [], bluepointIcon: null, trackingInterval: null, groups: [],
+    map: null,
+    lat: null,
+    lng: null,
+    coorx: null,
+    coory: null,
+    polygons: [],
+    bluepointIcon: null,
+    trackingInterval: null,
+    groups: [],
+    addressIcon: null,
+    incidentIcon: null,
+    interestIcon: null,
+    blazorMapObject: null,
+
+    // připraví mapu do úvodního stavu
+    initMap: function (jsonMapSettings) {
+
+        this.fitMapToWindow();
+
+        this.incidentIcon = L.divIcon({ className: 'leaflet-incident-icon' });
+        this.addressIcon = L.divIcon();
+        this.interestIcon = L.divIcon({ className: 'leaflet-interest-icon' });
+
+        this.bluepointIcon = L.icon({
+            iconUrl: 'images/blue-point.png',
+            iconSize: [20, 20], // size of the icon
+            iconAnchor: [10, 10], // point of the icon which will correspond to marker's location
+        });
+
+        this.map = L.map('map', { zoomControl: false });
+
+        if (!this.setMapWithInfoFromUrl())
+            this.map.setView([50.07905886, 14.43715096], 14);
+
+        // update url a obrázkových vrstev po té, co se změní poloha mapy
+        this.map.on("moveend", function (e) {
+            document.getElementById("map").style.cursor = 'default';
+            mapAPI.setUrlByMapInfo();
+            mapAPI.callBlazor_RefreshObjectsOnMap();
+        });
+
+        // při změně polohy myši se zapíšou její souřadnice do proměnných
+        this.map.addEventListener('mousemove', function (ev) {
+            mapAPI.lat = ev.latlng.lat;
+            mapAPI.lng = ev.latlng.lng;
+            mapAPI.coorx = ev.containerPoint.x;
+            mapAPI.coory = ev.containerPoint.y;
+        });
+
+        var mapSettings = JSON.parse(jsonMapSettings);
+
+        // konverze json objektu do jednotlivých vrstev mapy a jejich přidání k mapě
+        for (var i = 0; i < mapSettings.length; i++) {
+            var group = L.layerGroup(layer, { id: mapSettings[i].name + "_group" });
+            group.setZIndex(mapSettings[i].zIndex);
+            group.addTo(this.map);
+            this.groups.push(group);
+
+            var layer = this.convertMapSettingsObjectToMapLayer(mapSettings[i]);
+            if (layer != null)
+                group.addLayer(layer);
+        }
+    },
+
+    // připraví instanci blazor třídy Map.razor, abych ji pak mohl později odsud volat
+    initBlazorMapObject: function (dotNetObject) {
+        this.blazorMapObject = dotNetObject;
+    },
 
     // nastaví mapu, aby lícovala s oknem
     fitMapToWindow: function () {
@@ -86,10 +153,10 @@ var mapAPI = {
         var maxx = this.coorx < sizeOfBox / 2 ? 0 : this.coorx + sizeOfBox / 2;
         var maxy = this.coory < sizeOfBox / 2 ? 0 : this.coory - sizeOfBox / 2;
 
-        var lefttop = this.map.project(this.map.containerPointToLatLng([minx, miny]), 0);
-        var rightbottom = this.map.project(this.map.containerPointToLatLng([maxx, maxy]), 0);
+        var southWest = this.map.containerPointToLatLng([minx, maxy]);
+        var northEast = this.map.containerPointToLatLng([maxx, miny]);
 
-        return "&bbox=" + lefttop.x + "," + lefttop.y + "," + rightbottom.x + "," + rightbottom.y;
+        return [{ X: southWest.lng, Y: southWest.lat }, { X: northEast.lng, Y: northEast.lat }];
     },
 
     // přidá k vrstvám mapy vrstvu v parametru a tutéž vrstvu také předtím z mapy odejme
@@ -134,66 +201,61 @@ var mapAPI = {
             "&WIDTH=" + this.map.getSize().x;
     },
 
-    // připraví mapu do úvodního stavu
-    initMap: function (jsonMapSettings) {
-
-        this.fitMapToWindow();
-
-        this.bluepointIcon = L.icon({
-            iconUrl: 'css/images/blue-point.png',
-            iconSize: [20, 20], // size of the icon
-            iconAnchor: [10, 10], // point of the icon which will correspond to marker's location
-        });
-
-        this.map = L.map('map', { zoomControl: false });
-
-        if (!this.setMapWithInfoFromUrl())
-            this.map.setView([50.07905886, 14.43715096], 14);
-
-        // update url a obrázkových vrstev po té, co se změní poloha mapy
-        this.map.on("moveend", function (e) {
-            document.getElementById("map").style.cursor = 'default';
-            mapAPI.setUrlByMapInfo();
-        });
-
-        // při změně polohy myši se zapíšou její souřadnice do proměnných
-        this.map.addEventListener('mousemove', function (ev) {
-            mapAPI.lat = ev.latlng.lat;
-            mapAPI.lng = ev.latlng.lng;
-            mapAPI.coorx = ev.containerPoint.x;
-            mapAPI.coory = ev.containerPoint.y;
-        });
-
-        var mapSettings = JSON.parse(jsonMapSettings);
-
-        // konverze json objektu do jednotlivých vrstev mapy a jejich přidání k mapě
-        for (var i = 0; i < mapSettings.length; i++) {
-            var layer = this.convertMapSettingsObjectToMapLayer(mapSettings[i]);
-            var group = L.layerGroup(layer, { id: mapSettings[i].name + "_group" });
-            group.addLayer(layer);
-            group.setZIndex(mapSettings[i].zIndex);
-            group.addTo(this.map);
-            this.groups.push(group);
-        }
-    },
-
     // konvertuje objekt s nastavením mapových vrstev do mapových vrstev leafletu
     convertMapSettingsObjectToMapLayer: function (mapSettingsObject) {
         if (mapSettingsObject.type == 'Base') {
-            return L.tileLayer(mapSettingsObject.baseUrl, {
+            return L.tileLayer(mapSettingsObject.url, {
                 maxZoom: 18,
                 attribution: mapSettingsObject.attribution,
             });
         }
         else if (mapSettingsObject.type == 'WMS') {
-            return L.tileLayer.wms(mapSettingsObject.url, { tileSize: 512 });
+            return L.tileLayer.wms(mapSettingsObject.url, {
+                tileSize: 512,
+                map: mapSettingsObject.mapParameter,
+                layers: mapSettingsObject.layersParameter
+            });
         }
-
+        return null;
     },
 
     // konverze souřadnic z EPSG 4236 do EPSG 3857
     convertPoint: function (originalPoint) {
         return this.map.unproject(originalPoint, 0);
+    },
+
+    toggleLayerGroup: function (name, selected) {
+        var groupName = name + "_group";
+        if (!selected) {
+            this.map.eachLayer(function (layer) { if (layer.options.id == groupName) layer.remove(); })
+        } else {
+            var groupToAdd = this.groups.find(a => a.options.id == groupName);
+            groupToAdd.addTo(this.map);
+        }
+    },
+
+    callBlazor_RefreshObjectsOnMap: function () {
+        var polygonsGroup = this.groups.find(a => a.options.id == "Polygons_group");
+        var mapHasPolygonsYet = polygonsGroup.getLayers().length > 0;
+        mapAPI.blazorMapObject.invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet);
+    },
+
+    callBlazor_ShowPlaceInfo: function () {
+        var bbox = mapAPI.convertMousePositionToBBoxParameter();
+        mapAPI.blazorMapObject.invokeMethodAsync("ShowPlaceInfo", bbox);
+    },
+
+    // refreshují se pouze špendlíky, polygony se přidají na začátku a pak už se s nimi nic nedělá
+    // (protože jich není moc, tak se můžou zobrazovat pořád)
+    refreshObjectsOnMap: function (objectJson) {
+        var objectsGroup = this.groups.find(a => a.options.id == "Objects_group");
+        var polygonsGroup = this.groups.find(a => a.options.id == "Polygons_group");
+        objectsGroup.clearLayers();
+        var objects = JSON.parse(objectJson);
+        for (var i = 0; i < objects.length; i++) {
+            var newObject = this.getObject(objects[i]);
+            newObject.addTo(objects[i].mapPolygon != null ? polygonsGroup : objectsGroup);
+        }
     },
 
     // přidá objekty (polygony atd.) na mapu podle jsonu
@@ -215,30 +277,43 @@ var mapAPI = {
 
     },
 
-    addObject: function (objectInfo) {
+    getObject: function (objectInfo) {
 
-        switch (objectInfo.type) {
-
-            case "MultiPolygon":
-                for (var j = 0; j < objectInfo.coordinates.length; j++) {
-                    for (var m = 0; m < objectInfo.coordinates[j].length; m++) {
-                        var polygon = objectInfo.coordinates[j][m];
-                        var pointsArray = [];
-                        for (var k = 0; k < polygon.length; k++) {
-                            var convertedPoint = this.convertPoint(polygon[k]);
-                            pointsArray.push(convertedPoint);
-                        }
-                        this.addPolygon(pointsArray);
+        if (objectInfo.mapPolygon != null) {
+            var pointsArray = [];
+            var polygonObject = JSON.parse(objectInfo.mapPolygon);
+            for (var j = 0; j < polygonObject.coordinates.length; j++) {
+                for (var m = 0; m < polygonObject.coordinates[j].length; m++) {
+                    var polygon = polygonObject.coordinates[j][m];
+                    pointsArray.push([]);
+                    for (var k = 0; k < polygon.length; k++) {
+                        pointsArray[j].push([polygon[k][1], polygon[k][0]]);
                     }
                 }
-                break;
+            }
+            return L.polygon(pointsArray, { fillColor: '#E47867', color: '#222', weight: 0.5, fillOpacity: 0.8, opacity: 1, id: objectInfo.guid })
+                .bindTooltip(objectInfo.label, { sticky: true })
+                .on('click', this.callBlazor_ShowPlaceInfo);
 
-            case "Point":
-                var convertedPoint = this.convertPoint(objectInfo.coordinates);
-                this.addMarker(convertedPoint);
-                break;
+        } else {
+            var markerObject = JSON.parse(objectInfo.mapPoint);
+            var icon;
+            if (objectInfo.placeType == "Incident")
+                icon = L.divIcon({ className: "", html: "<img src='images/incident.png' height=23 width=23 style='opacity:1'/>" });
+            else if (objectInfo.placeType == "Interest")
+                icon = L.divIcon({ className: "", html: "<img src='images/interest.png' height=23 width=23 style='opacity:1'/>" });
+            else if (objectInfo.placeType == "Address") {
+                var saturation = objectInfo.citizens / objectInfo.citizensTotal;
+                icon = L.divIcon({ className: "", html: "<div style='position:relative'><img src='images/address.png' height=23 width=23 style='opacity:1;filter:saturate(" + saturation + ")'/><span style='position:absolute;top:50%;left:80%;transform: translate(-50%, -50%);'>" + objectInfo.citizens + "</span></div>" });
+            }
+            return L.marker([markerObject.coordinates[1], markerObject.coordinates[0]], { id: objectInfo.guid, icon: icon })
+                .bindTooltip(objectInfo.label, { sticky: true })
+                .on('click', this.callBlazor_ShowPlaceInfo);
         }
+
     },
+
+
 
     addPolygon: function (pointsArray) {
         this.polygons.push(L.polygon(pointsArray, { color: '#9400D3' }));

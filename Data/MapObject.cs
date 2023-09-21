@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using EhriMemoMap.Models;
 using NetTopologySuite.Geometries;
 using NodaTime;
 
@@ -19,7 +20,9 @@ public partial class MapObject
 
     public string? LabelEn { get; set; }
 
-    public Geometry? MapLocation { get; set; }
+    public Geometry? GeographyMapPoint { get; set; }
+
+    public Geometry? GeographyMapPolygon { get; set; }
 
     public string? MapPoint { get; set; }
 

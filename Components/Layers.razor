@@ -57,10 +57,13 @@
     private async Task OnLayerClick(LayerModel layer)
     {
         if (layer.Type == LayerType.WMS)
-            await JS.InvokeVoidAsync("mapAPI.toggleLayer", layer.Name, layer.Selected);
+            await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", layer.Name, layer.Selected);
+
+        else if (layer.Type == LayerType.Polygons)
+            await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", LayerType.Polygons.ToString(), layer.Selected);
 
         else if (layer.Type == LayerType.Objects)
-            await MapLogic.RefreshObjectsOnMap();
+            await MapLogic.RefreshObjectsOnMap(false);
 
         await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapState.GetLayersForUrlParameter());
     }
