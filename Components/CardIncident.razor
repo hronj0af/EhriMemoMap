@@ -7,21 +7,21 @@
 <RadzenRow class="rz-mb-4">
     <RadzenCard Style="width:100%">
 
-            <ul class="no-bullets">
-                <li><b>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</b></li>
-@*                 <li><i>@WMSFeatureInfo.Date?.ToString("d. M. yyyy")</i></li>
-                <li>@cl["place"]: @WMSFeatureInfo.Place</li>
-                @if (WMSFeatureInfo.Description != "NULL")
-                {
-                    <li>@cl["description"]: @WMSFeatureInfo.Description</li>
-                }
-                <li>@cl["type"]: @WMSFeatureInfo.Type</li>
-                @if (WMSFeatureInfo.Specification != "NULL")
-                {
-                    <li>@cl["specification"]: @WMSFeatureInfo.Specification</li>
-                }
- *@                <li>@cl["documents"]: @((MarkupString)(CultureInfo.CurrentCulture.Name == "en-US" ? Place.DocumentsEn : Place.DocumentsCs)?.Linkify())</li>
-            </ul>
+        <ul class="no-bullets">
+            <li><b>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</b></li>
+            <li><i>@Place.DateIso?.ToString("d. M. yyyy")</i></li>
+            <li>@cl["place"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.PlaceEn : Place.PlaceCs)</li>
+            @if (!string.IsNullOrEmpty(Place.DescriptionCs))
+            {
+                <li>@cl["description"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn : Place.DescriptionCs)</li>
+            }
+            <li>@cl["type"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.Type1En : Place.Type1Cs)</li>
+            @if (!string.IsNullOrEmpty(Place.Spec1Cs))
+            {
+                <li>@cl["specification"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.Spec1En : Place.Spec1Cs)</li>
+            }
+            <li>@cl["documents"]: @((MarkupString)(CultureInfo.CurrentCulture.Name == "en-US" ? Place.DocumentsEn : Place.DocumentsCs)?.Linkify())</li>
+        </ul>
 
     </RadzenCard>
 </RadzenRow>

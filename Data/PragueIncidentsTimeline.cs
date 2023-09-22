@@ -45,5 +45,5 @@ public partial class PragueIncidentsTimeline
 
     public Geometry? Geography { get; set; }
 
-    public LocalDate? DateIso { get; set; }
+    public DateTime? DateIso { get; set; }
 }
