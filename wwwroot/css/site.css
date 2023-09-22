@@ -98,14 +98,6 @@ li.indented {
     top:0;
 }
 
-.leaflet-incident-icon {
-    background-image: url(images/incident.png);
-}
-
-.leaflet-interest-icon {
-    background-image: url(images/interest.png);
-}
-
-.leaflet-address-icon {
-    background-image: url(images/address.png);
+path.leaflet-interactive:focus {
+    outline: none;
 }

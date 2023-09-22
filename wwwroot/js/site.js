@@ -220,6 +220,8 @@ var mapAPI = {
     addObjectFromJsonString: function (jsonInfo) {
         var parsedObject = JSON.parse(jsonInfo);
         var newObject = parsedObject.type == "Point" ? this.getPoint(parsedObject) : this.getPolygon(parsedObject, null, "#e500ff");
+        if (parsedObject.type == "MultiPolygon")
+            newObject.options.zIndex = 99999;
         var objectsGroup = this.groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.clearLayers();
         newObject.addTo(objectsGroup);
@@ -362,15 +364,15 @@ var mapAPI = {
     },
 
     goToMyLocation: function () {
-        lat = mapAPI.actualLocation.coords.latitude
-        long = mapAPI.actualLocation.coords.longitude
+        lat = mapAPI.actualLocation.coords.latitude;
+        long = mapAPI.actualLocation.coords.longitude;
         mapAPI.map.setView([lat, long], 15);
     },
 
     showMyLocation: function (position) {
         mapAPI.actualLocation = position;
-        lat = position.coords.latitude
-        long = position.coords.longitude
+        lat = position.coords.latitude;
+        long = position.coords.longitude;
 
         mapAPI.removeBluepoint();
         mapAPI.addBluepoint([lat, long], mapAPI.bluepointIcon);
