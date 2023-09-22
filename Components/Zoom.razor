@@ -5,7 +5,7 @@
 @inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
 
-<RadzenButton Style="@styleLocation.ButtonStyle" title="@((myLocationIsVisible ? cl["myLocationOff"] : cl["myLocationOn"]) + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => ToggleMyLocationVisibility())">
+<RadzenButton Style="@styleLocation.ButtonStyle" title="@((myLocationIsVisible ? cl["showMyLocation"] : cl["myLocationOn"]) + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => OnLocationClick())">
     @if (myLocationIsVisible)
     {
         <RadzenIcon Icon="my_location" />
@@ -39,14 +39,17 @@
     }
 
 
-    private async Task ToggleMyLocationVisibility()
+    private async Task OnLocationClick()
     {
-        myLocationIsVisible = !myLocationIsVisible;
-        
-        if (myLocationIsVisible)
-            await JS.InvokeVoidAsync("mapAPI.showMyLocation");
+        if (!myLocationIsVisible)
+        {
+            myLocationIsVisible = true;
+            await JS.InvokeVoidAsync("mapAPI.turnOnLocationTracking");
+        }
         else
-            await JS.InvokeVoidAsync("mapAPI.hideMyLocation");
+        {
+            await JS.InvokeVoidAsync("mapAPI.goToMyLocation");
+        }
     }
 
     private async Task ZoomIn()

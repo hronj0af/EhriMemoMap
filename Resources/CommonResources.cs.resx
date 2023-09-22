@@ -300,4 +300,7 @@
   <data name="zoomMapForMoreInfo" xml:space="preserve">
     <value>Pro více informací mapu přibližte.</value>
   </data>
+  <data name="showMyLocation" xml:space="preserve">
+    <value>Zobrazit moji polohu na mapě</value>
+  </data>
 </root>

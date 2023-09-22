@@ -1,4 +1,5 @@
-﻿
+﻿// FUNKCE PRO OVLÁDÁNÍ MAPY
+
 var mapAPI = {
 
     map: null,
@@ -14,6 +15,11 @@ var mapAPI = {
     incidentIcon: null,
     interestIcon: null,
     blazorMapObject: null,
+
+    //////////////////////////
+    /// INIT
+    //////////////////////////
+
 
     // připraví mapu do úvodního stavu
     initMap: function (jsonMapSettings) {
@@ -67,11 +73,6 @@ var mapAPI = {
         }
     },
 
-    // připraví instanci blazor třídy Map.razor, abych ji pak mohl později odsud volat
-    initBlazorMapObject: function (dotNetObject) {
-        this.blazorMapObject = dotNetObject;
-    },
-
     // nastaví mapu, aby lícovala s oknem
     fitMapToWindow: function () {
 
@@ -83,6 +84,11 @@ var mapAPI = {
         var mapHeight = window.innerHeight - mapElement.offsetTop - 1;
         mapElement.style.height = mapHeight + "px";
     },
+
+    //////////////////////////
+    /// URL
+    //////////////////////////
+
 
     // získá informace z URL pro nastavení polohy mapy
     getMapInfoFromUrl: function () {
@@ -145,39 +151,6 @@ var mapAPI = {
         return true;
     },
 
-    // převede pozici myši nad mapou do parametru bbox pro získání informací o daném místě (dotaz na QGIS server)
-    convertMousePositionToBBoxParameter: function () {
-
-        var sizeOfBox = 5;
-
-        var minx = this.coorx < sizeOfBox / 2 ? 0 : this.coorx - sizeOfBox / 2;
-        var miny = this.coory < sizeOfBox / 2 ? 0 : this.coory + sizeOfBox / 2;
-        var maxx = this.coorx < sizeOfBox / 2 ? 0 : this.coorx + sizeOfBox / 2;
-        var maxy = this.coory < sizeOfBox / 2 ? 0 : this.coory - sizeOfBox / 2;
-
-        var southWest = this.map.containerPointToLatLng([minx, maxy]);
-        var northEast = this.map.containerPointToLatLng([maxx, miny]);
-
-        return [{ X: southWest.lng, Y: southWest.lat }, { X: northEast.lng, Y: northEast.lat }];
-    },
-
-    // přidá k vrstvám mapy vrstvu v parametru a tutéž vrstvu také předtím z mapy odejme
-    //changeLayer: function (jsonMapSettings) {
-    //    var mapSettings = JSON.parse(jsonMapSettings);
-    //    var oldLayer, groupToChange;
-    //    Object.values(mapAPI.map._layers).forEach(layer => {
-    //        if (layer.options.id == mapSettings.name) {
-    //            oldLayer = layer;
-    //        }
-    //        if (layer.options.id == mapSettings.name + "_group") {
-    //            groupToChange = layer;
-    //        }
-    //    });
-    //    var newLayer = this.convertMapSettingsObjectToMapLayer(mapSettings);
-    //    groupToChange.clearLayers();
-    //    groupToChange.addLayer(newLayer);
-    //    groupToChange.setZIndex(mapSettings.zIndex);
-    //},
 
     // konvertuje objekt s nastavením mapových vrstev do mapových vrstev leafletu
     convertMapSettingsObjectToMapLayer: function (mapSettingsObject) {
@@ -197,19 +170,13 @@ var mapAPI = {
         return null;
     },
 
-    // konverze souřadnic z EPSG 4236 do EPSG 3857
-    convertPoint: function (originalPoint) {
-        return this.map.unproject(originalPoint, 0);
-    },
+    //////////////////////////
+    /// BLAZOR
+    //////////////////////////
 
-    toggleLayerGroup: function (name, selected) {
-        var groupName = name + "_group";
-        if (!selected) {
-            this.map.eachLayer(function (layer) { if (layer.options.id == groupName) layer.remove(); })
-        } else {
-            var groupToAdd = this.groups.find(a => a.options.id == groupName);
-            groupToAdd.addTo(this.map);
-        }
+    // připraví instanci blazor třídy Map.razor, abych ji pak mohl později odsud volat
+    initBlazorMapObject: function (dotNetObject) {
+        this.blazorMapObject = dotNetObject;
     },
 
     callBlazor_RefreshObjectsOnMap: function () {
@@ -222,6 +189,10 @@ var mapAPI = {
         var bbox = mapAPI.convertMousePositionToBBoxParameter();
         mapAPI.blazorMapObject.invokeMethodAsync("ShowPlaceInfo", bbox);
     },
+
+    //////////////////////////
+    /// OBJECTS
+    //////////////////////////
 
     // refreshují se pouze špendlíky, polygony se přidají na začátku a pak už se s nimi nic nedělá
     // (protože jich není moc, tak se můžou zobrazovat pořád)
@@ -245,19 +216,6 @@ var mapAPI = {
             }
         }
     },
-
-    // přidá objekty (polygony atd.) na mapu podle jsonu
-    addObjectsFromJsonString: function (jsonInfo) {
-
-        jsonInfo = JSON.parse(jsonInfo);
-
-        for (var i = 0; i < jsonInfo.features.length; i++) {
-            this.addObject(jsonInfo.features[i].geometry);
-        }
-        this.showPolygons();
-
-    },
-
 
     addObjectFromJsonString: function (jsonInfo) {
         var parsedObject = JSON.parse(jsonInfo);
@@ -310,10 +268,6 @@ var mapAPI = {
 
     },
 
-    addBluepoint: function (point, icon) {
-        var objectsGroup = this.groups.find(a => a.options.id == "AdditionalObjects_group");
-        L.marker(point, { icon: icon, type: "bluepoint" }).addTo(objectsGroup);
-    },
 
     removeAdditionalObjects: function () {
         var objectsGroup = this.groups.find(a => a.options.id == "AdditionalObjects_group");
@@ -324,18 +278,34 @@ var mapAPI = {
     	});
     },
 
-    removeBluepoint: function () {
-        var objectsGroup = this.groups.find(a => a.options.id == "AdditionalObjects_group");
-        objectsGroup.eachLayer(function (item) {
-            if (item.options.type !== undefined && item.options.type == "bluepoint") {
-                item.remove();
-            }
-        });
+    //////////////////////////
+    /// HELPER METHODS
+    //////////////////////////
+
+    toggleLayerGroup: function (name, selected) {
+        var groupName = name + "_group";
+        if (!selected) {
+            this.map.eachLayer(function (layer) { if (layer.options.id == groupName) layer.remove(); })
+        } else {
+            var groupToAdd = this.groups.find(a => a.options.id == groupName);
+            groupToAdd.addTo(this.map);
+        }
     },
 
-    goToLocation: function (pointString, zoom) {
-        var point = JSON.parse(pointString).coordinates;
-        this.map.setView([point[1],point[0]], zoom);
+    // převede pozici myši nad mapou do parametru bbox pro získání informací o daném místě (dotaz na QGIS server)
+    convertMousePositionToBBoxParameter: function () {
+
+        var sizeOfBox = 5;
+
+        var minx = this.coorx < sizeOfBox / 2 ? 0 : this.coorx - sizeOfBox / 2;
+        var miny = this.coory < sizeOfBox / 2 ? 0 : this.coory + sizeOfBox / 2;
+        var maxx = this.coorx < sizeOfBox / 2 ? 0 : this.coorx + sizeOfBox / 2;
+        var maxy = this.coory < sizeOfBox / 2 ? 0 : this.coory - sizeOfBox / 2;
+
+        var southWest = this.map.containerPointToLatLng([minx, maxy]);
+        var northEast = this.map.containerPointToLatLng([maxx, miny]);
+
+        return [{ X: southWest.lng, Y: southWest.lat }, { X: northEast.lng, Y: northEast.lat }];
     },
 
     getWindowWidth: function () {
@@ -367,35 +337,72 @@ var mapAPI = {
         return false;
     },
 
-    showMyLocation: function () {
+    //////////////////////////
+    /// TRACKING
+    //////////////////////////
+
+    applicationIsTrackingLocation: false,
+    actualLocation: null,
+
+    turnOnLocationTracking: function () {
         if (!navigator.geolocation) {
             console.log("Your browser doesn't support geolocation feature!")
         } else {
-            navigator.geolocation.getCurrentPosition(mapAPI.getPosition)
+            navigator.geolocation.getCurrentPosition(mapAPI.showMyLocation)
             this.trackingInterval = setInterval(() => {
-                navigator.geolocation.getCurrentPosition(mapAPI.getPosition)
+                navigator.geolocation.getCurrentPosition(mapAPI.showMyLocation)
             }, 5000);
         };
 
     },
 
-    getPosition: function (position) {
+    goToLocation: function (pointString, zoom) {
+        var point = JSON.parse(pointString).coordinates;
+        this.map.setView([point[1], point[0]], zoom);
+    },
+
+    goToMyLocation: function () {
+        lat = mapAPI.actualLocation.coords.latitude
+        long = mapAPI.actualLocation.coords.longitude
+        mapAPI.map.setView([lat, long], 15);
+    },
+
+    showMyLocation: function (position) {
+        mapAPI.actualLocation = position;
         lat = position.coords.latitude
         long = position.coords.longitude
-        accuracy = position.coords.accuracy
 
         mapAPI.removeBluepoint();
-        mapAPI.map.setView([lat, long], 15);
         mapAPI.addBluepoint([lat, long], mapAPI.bluepointIcon);
 
-        console.log("Your coordinate is: Lat: " + lat + " Long: " + long + " Accuracy: " + accuracy)
+        if (!mapAPI.applicationIsTrackingLocation) {
+            mapAPI.goToMyLocation();
+            mapAPI.applicationIsTrackingLocation = true;
+        }
     },
 
     hideMyLocation: function () {
         clearInterval(this.trackingInterval);
+        mapAPI.applicationIsTrackingLocation = false;
         mapAPI.removeBluepoint();
     },
 
+    addBluepoint: function (point, icon) {
+        var objectsGroup = this.groups.find(a => a.options.id == "AdditionalObjects_group");
+        L.marker(point, { icon: icon, type: "bluepoint" }).addTo(objectsGroup);
+    },
+    removeBluepoint: function () {
+        var objectsGroup = this.groups.find(a => a.options.id == "AdditionalObjects_group");
+        objectsGroup.eachLayer(function (item) {
+            if (item.options.type !== undefined && item.options.type == "bluepoint") {
+                item.remove();
+            }
+        });
+    },
+
+    //////////////////////////
+    /// DIALOG
+    //////////////////////////
 
     dialogWidth: null,
     dialogHeight: null,

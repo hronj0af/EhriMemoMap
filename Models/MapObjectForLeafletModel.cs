@@ -34,8 +34,8 @@ public partial class MapObjectForLeafletModel
 
         else if (PlaceType == Models.PlaceType.Address.ToString())
         {
-            var saturation = ((decimal)Citizens / CitizensTotal)?.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
-            HtmlIcon = "<div style='position:relative'><img src='images/address.png' height=23 width=23 style='opacity:1;filter:saturate(" + saturation + ")'/><span style='position:absolute;top:50%;left:80%;transform: translate(-50%, -50%);'>" + Citizens + "</span></div>";
+            var saturation = ((decimal)Citizens / CitizensTotal)?.ToString("0.00", CultureInfo.InvariantCulture);
+            HtmlIcon = $"<div style='position:relative'><img src='images/addresses/address_{Citizens}.png' height=23 width=23 style='opacity:1;filter:saturate(" + saturation + ")'/></div>";//<span style='position:absolute;top:50%;left:80%;transform: translate(-50%, -50%);'>" + Citizens + "</span></div>";
         }
     }
 

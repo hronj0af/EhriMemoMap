@@ -300,4 +300,7 @@
   <data name="zoomMapForMoreInfo" xml:space="preserve">
     <value>Zoom in on the map for more information.</value>
   </data>
+  <data name="showMyLocation" xml:space="preserve">
+    <value>Show my location on map</value>
+  </data>
 </root>
