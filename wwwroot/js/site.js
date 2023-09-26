@@ -182,12 +182,12 @@ var mapAPI = {
     callBlazor_RefreshObjectsOnMap: function () {
         var polygonsGroup = this.groups.find(a => a.options.id == "Polygons_group");
         var mapHasPolygonsYet = polygonsGroup.getLayers().length > 0;
-        mapAPI.blazorMapObject.invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet);
+        mapAPI.blazorMapObject.invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet, mapAPI.map.getZoom(), mapAPI.getMapBoundsForMapState());
     },
 
     callBlazor_ShowPlaceInfo: function () {
         var bbox = mapAPI.convertMousePositionToBBoxParameter();
-        mapAPI.blazorMapObject.invokeMethodAsync("ShowPlaceInfo", bbox);
+        mapAPI.blazorMapObject.invokeMethodAsync("ShowPlaceInfo", mapAPI.map.getZoom(), bbox);
     },
 
     //////////////////////////

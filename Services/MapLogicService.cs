@@ -66,7 +66,7 @@ namespace EhriMemoMap.Services
 
             // vyber objektu podle toho, do jake nalezi vrstvy
             var selectedLayerNames = new List<string?>();
-            foreach (var layer in _mapState.GetNotBaseLayers(true).Where(a => a.PlaceType != null))
+            foreach (var layer in _mapState.GetNotBaseLayers(true).Where(a => a.PlaceType != null && (withPolygons || a.Type != LayerType.Polygons)))
             {
                 // krome nazvu vrstvy zkoumam i to, jestli se pri danem zoomu mapy ma vrstva vubec zobrazovat
                 if ((layer.MinZoom != null && _mapState.MapZoom < layer.MinZoom) || (layer.MaxZoom != null && _mapState.MapZoom > layer.MaxZoom))

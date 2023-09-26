@@ -25,10 +25,6 @@
 <Zoom Position="PositionEnum.Bottom" Order="0" />
 
 @code {
-    protected override void OnInitialized()
-    {
-        //DialogService.OnSideClose += RemoveObjects;
-    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -50,9 +46,11 @@
             }
 
             await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet());
+
             MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.map.getZoom");
             MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
-            await RefreshObjectsOnMap(true);
+
+            await MapLogic.RefreshObjectsOnMap(true);
         }
     }
 
@@ -62,10 +60,10 @@
     /// </summary>
     /// <returns></returns>
     [JSInvokable("RefreshObjectsOnMap")]
-    public async Task RefreshObjectsOnMap(bool withPolygons)
+    public async Task RefreshObjectsOnMap(bool withPolygons, int zoom, Coordinate[] mapBounds)
     {
-        MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.map.getZoom");
-        MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
+        MapState.MapZoom = zoom;
+        MapState.SetBBox(mapBounds);
         await MapLogic.RefreshObjectsOnMap(withPolygons);
     }
 
@@ -76,7 +74,7 @@
     }
 
     [JSInvokable("ShowPlaceInfo")]
-    public async Task ShowPlaceInfo(Coordinate[] coordinates)
+    public async Task ShowPlaceInfo(int zoom, Coordinate[] coordinates)
     {
         var placesOnMap = MapLogic.GetMapObjects(true, coordinates);
 

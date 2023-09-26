@@ -122,7 +122,7 @@ else
                 Select(a => new AddressWithVictimsWrappwer
                     {
                         Address = a,
-                        Victims = context.PragueVictimsTimelines.Where(b => b.PlaceId == a.Id).ToList()
+                        Victims = context.PragueVictimsTimelines.Where(b => b.PlaceId == a.Id).OrderBy(a => a.Label).ToList()
                     }).
                 ToList();
         }
