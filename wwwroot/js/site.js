@@ -234,7 +234,7 @@ var mapAPI = {
 
         var result = L.marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
 
-        if (label != undefined && label != null) {
+        if (!mapAPI.isMobileBrowser && label != undefined && label != null) {
             result.bindTooltip(label, { sticky: true });
         }
 
