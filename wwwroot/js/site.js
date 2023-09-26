@@ -234,7 +234,7 @@ var mapAPI = {
 
         var result = L.marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
 
-        if (!mapAPI.isMobileBrowser && label != undefined && label != null) {
+        if (!mapAPI.isMobileBrowser() && label != undefined && label != null) {
             result.bindTooltip(label, { sticky: true });
         }
 
@@ -262,8 +262,10 @@ var mapAPI = {
         result = L.polygon(pointsArray, { fillColor: color != undefined && color != null ? color : '#E47867', color: '#222', weight: 0.5, fillOpacity: 0.8, opacity: 1 })
             .on('click', this.callBlazor_ShowPlaceInfo);
 
-        if (label != undefined && label != null)
+
+        if (!mapAPI.isMobileBrowser() && label != undefined && label != null) {
             result.bindTooltip(label, { sticky: true });
+        }
 
         return result;
 
@@ -327,7 +329,12 @@ var mapAPI = {
         return window.location.search;
     },
 
+    _isMobileBrowser: null,
+
     isMobileBrowser: function () {
+        if (mapAPI._isMobileBrowser != null)
+            return mapAPI._isMobileBrowser;
+
         if (navigator.userAgent.match(/Android/i)
             || navigator.userAgent.match(/webOS/i)
             || navigator.userAgent.match(/iPhone/i)
@@ -335,8 +342,11 @@ var mapAPI = {
             || navigator.userAgent.match(/iPod/i)
             || navigator.userAgent.match(/BlackBerry/i)
             || navigator.userAgent.match(/Windows Phone/i))
-            return true;
-        return false;
+            mapAPI._isMobileBrowser = true;
+        else
+            mapAPI._isMobileBrowser = false;
+
+        return mapAPI._isMobileBrowser;
     },
 
     //////////////////////////
