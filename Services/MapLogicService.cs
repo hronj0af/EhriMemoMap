@@ -76,6 +76,7 @@ namespace EhriMemoMap.Services
 
             query = query.Where(a => a.PlaceType != null && selectedLayerNames.Contains(a.PlaceType));
 
+            // a nakonec vyberu ty objekty, ktere jsou viditelne na zobrazenem vyrezu na mape
             if (customCoordinates != null && customCoordinates.Length == 2)
             {
                 var bbox = GetBBox(customCoordinates[0], customCoordinates[1]);
@@ -110,7 +111,6 @@ namespace EhriMemoMap.Services
 
         public Polygon GetBBox(Coordinate southWestPoint, Coordinate northEastPoint)
         {
-            // a nakonec vyberu ty objekty, ktere jsou viditelne na zobrazenem vyrezu na mape
             Coordinate[] imageOutlineCoordinates = new Coordinate[]
             {
                 new Coordinate(southWestPoint.X, northEastPoint.Y),
