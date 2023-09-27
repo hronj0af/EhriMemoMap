@@ -244,37 +244,37 @@
     <value>Body zájmu zahrnující místa pronásledování, židovské objekty a sklady zabaveného majetku.</value>
   </data>
   <data name="layer_incident_title" xml:space="preserve">
-    <value>Incidenty v prostoru města Prahy</value>
+    <value>Incidenty</value>
   </data>
   <data name="layer_incident_abstract" xml:space="preserve">
     <value>Incidenty v prostoru města Prahy, při nichž byli židovští obyvatelé zatčeni či vyšetřováni pro porušení protižidovských nařízení. Údaje byly v rámci projektu MemoMap Praha vyexcerpovány z digitalizovaných dokumentů pražské policie. Jde například o informace o nedodržování prostorových zákazů, o občanských průkazech neoznačených písmenem \"J\" (Jude), apod.</value>
   </data>
   <data name="layer_address_title" xml:space="preserve">
-    <value>Bydliště Židů v Praze v době okupace</value>
+    <value>Bydliště Židů</value>
   </data>
   <data name="layer_address_abstract" xml:space="preserve">
     <value>Adresy, na nichž podle databáze obětí, bydleli v době šoa židovští obyvatelé Prahy. Údaje většinou pocházejí z registrace Židů v Protektorátu, která byla na základě nařízení Ústředny pro židovské vystěhovalectví zahájena na podzim 1941. Vrstva zahrnuje údaje o počtu obyvatel jednotlivých domů, statistiku jejich osudů a počet přítomných k různým historickým datům. V některých případech, kdy bylo obtížné jednotlivé domy identifikovat, je pod stejnými koordináty seskupeno více adres (například v jedné ulici). Na zpřesnění umístění na mapě průběžně pracujeme. Použity jsou názvy ulic z doby okupace (cca 1941-1942).</value>
   </data>
   <data name="layer_victim_title" xml:space="preserve">
-    <value>Oběti holokaustu z Prahy</value>
+    <value>Oběti holokaustu</value>
   </data>
   <data name="layer_victim_abstract" xml:space="preserve">
     <value>Databáze židovských obyvatel Prahy, kteří zahynuli v důsledku nacistického pronásledování. Záznamy jsou navázané na jejich pražské adresy. Detaily jsou přístupné skrze odkazy na portál holocaust.cz.</value>
   </data>
   <data name="layer_inaccessible_title" xml:space="preserve">
-    <value>Nepřístupná místa v prostoru města Prahy</value>
+    <value>Nepřístupná místa</value>
   </data>
   <data name="layer_inaccessible_abstract" xml:space="preserve">
     <value>Místa nepřístupná Židům. Prostoové zobrazení je založeno na historické mapě z roku 1938, současné prostory se mohou lišit velikostí i tvarem.</value>
   </data>
   <data name="layer_statistics_title" xml:space="preserve">
-    <value>Statistika pražských čtvrtí</value>
+    <value>Statistika čtvrtí</value>
   </data>
   <data name="layer_statistics_abstract" xml:space="preserve">
     <value>Informace o počtu židovských obyvatel, incidentů a bodů zájmu v jednotlivých pražských čtvrtí. Pro zobrazení detailů přibližte mapu.</value>
   </data>
   <data name="layer_MGS-prague_historical_map_1938-v2_title" xml:space="preserve">
-    <value>Historická mapa Prahy (1938)</value>
+    <value>Historická mapa (1938)</value>
   </data>
   <data name="layer_MGS-prague_historical_map_1938-v2_abstract" xml:space="preserve">
     <value>Orientační plán hlavního města Prahy s okolím (1938). Do digitální podoby zpracovala Městská knihovna v Praze, georeferencování provedl Masarykův ústav a archiv Akademie věd České republiky. Dostupný také z WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
