@@ -68,6 +68,8 @@ namespace mapAPI {
     let dialogWidth: string = null;
     let dialogHeight: string = null;
     let isFullscreen: boolean = null;
+    let polygonColor: string = "#E47867";
+    let polygonColorSelected: string = "#794493";
 
     //////////////////////////
     /// INIT
@@ -236,8 +238,19 @@ namespace mapAPI {
     }
 
     export function callBlazor_ShowPlaceInfo(event) {
-        const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
 
+        // nejdřív odstraníme všechny dodatečné objekty
+        removeAdditionalObjects();
+
+        // a pak obarvíme vybraný polygon, respektive přidáme špendlík
+        if (event.target._latlng == undefined)
+            (event.target as L.Polygon).setStyle({ fillColor: polygonColorSelected });
+        else {
+            const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+            new L.Marker(event.target._latlng).addTo(objectsGroup);
+        }
+
+        const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
         blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox);
     }
@@ -271,7 +284,7 @@ namespace mapAPI {
 
     export function addObjectFromJsonString(jsonInfo) {
         const parsedObject = JSON.parse(jsonInfo);
-        const newObject = parsedObject.type == "Point" ? getPoint(parsedObject) : getPolygon(parsedObject, null, "#e500ff");
+        const newObject = parsedObject.type == "Point" ? getPoint(parsedObject) : getPolygon(parsedObject, null, polygonColor);
         const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.clearLayers();
         newObject.addTo(objectsGroup);
@@ -307,7 +320,7 @@ namespace mapAPI {
                 pointsArray[j].push(innerArray);
             }
         }
-        const result = new L.Polygon(pointsArray, { fillColor: color != undefined && color != null ? color : '#E47867', color: '#222', weight: 0.5, fillOpacity: 0.8, opacity: 1 })
+        const result = new L.Polygon(pointsArray, { fillColor: polygonColor, color: '#222', weight: 0.5, fillOpacity: 0.8, opacity: 1 })
             .on('click', callBlazor_ShowPlaceInfo);
 
 
@@ -325,6 +338,13 @@ namespace mapAPI {
                 item.remove();
             }
         });
+        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
+        polygonsGroup.eachLayer(function (item: L.Polygon) {
+            if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
+                item.setStyle({ fillColor: polygonColor });
+            }
+        });
+
     }
 
     //////////////////////////
@@ -377,7 +397,7 @@ namespace mapAPI {
     }
 
     export function isMobileBrowser(): boolean {
-        if (isMobileBrowser != null)
+        if (_isMobileBrowser != null)
             return _isMobileBrowser;
 
         if (navigator.userAgent.match(/Android/i)

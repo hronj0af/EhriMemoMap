@@ -18,6 +18,8 @@ var mapAPI;
     let dialogWidth = null;
     let dialogHeight = null;
     let isFullscreen = null;
+    let polygonColor = "#E47867";
+    let polygonColorSelected = "#794493";
     function initMap(jsonMapSettings) {
         fitMapToWindow();
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
@@ -136,6 +138,13 @@ var mapAPI;
     }
     mapAPI.callBlazor_RefreshObjectsOnMap = callBlazor_RefreshObjectsOnMap;
     function callBlazor_ShowPlaceInfo(event) {
+        removeAdditionalObjects();
+        if (event.target._latlng == undefined)
+            event.target.setStyle({ fillColor: polygonColorSelected });
+        else {
+            const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+            new L.Marker(event.target._latlng).addTo(objectsGroup);
+        }
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
         blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox);
@@ -163,7 +172,7 @@ var mapAPI;
     mapAPI.refreshObjectsOnMap = refreshObjectsOnMap;
     function addObjectFromJsonString(jsonInfo) {
         const parsedObject = JSON.parse(jsonInfo);
-        const newObject = parsedObject.type == "Point" ? getPoint(parsedObject) : getPolygon(parsedObject, null, "#e500ff");
+        const newObject = parsedObject.type == "Point" ? getPoint(parsedObject) : getPolygon(parsedObject, null, polygonColor);
         const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.clearLayers();
         newObject.addTo(objectsGroup);
@@ -196,7 +205,7 @@ var mapAPI;
                 pointsArray[j].push(innerArray);
             }
         }
-        const result = new L.Polygon(pointsArray, { fillColor: color != undefined && color != null ? color : '#E47867', color: '#222', weight: 0.5, fillOpacity: 0.8, opacity: 1 })
+        const result = new L.Polygon(pointsArray, { fillColor: polygonColor, color: '#222', weight: 0.5, fillOpacity: 0.8, opacity: 1 })
             .on('click', callBlazor_ShowPlaceInfo);
         if (!isMobileBrowser() && label != undefined && label != null) {
             result.bindTooltip(label, { sticky: true });
@@ -209,6 +218,12 @@ var mapAPI;
         objectsGroup.eachLayer(function (item) {
             if (item.options.type == undefined || item.options.type !== "bluepoint") {
                 item.remove();
+            }
+        });
+        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
+        polygonsGroup.eachLayer(function (item) {
+            if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
+                item.setStyle({ fillColor: polygonColor });
             }
         });
     }
@@ -255,7 +270,7 @@ var mapAPI;
     }
     mapAPI.getWindowLocationSearch = getWindowLocationSearch;
     function isMobileBrowser() {
-        if (isMobileBrowser != null)
+        if (_isMobileBrowser != null)
             return _isMobileBrowser;
         if (navigator.userAgent.match(/Android/i)
             || navigator.userAgent.match(/webOS/i)
