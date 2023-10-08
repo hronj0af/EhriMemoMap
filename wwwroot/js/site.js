@@ -158,7 +158,7 @@ var mapAPI;
     }
     mapAPI.callBlazor_RefreshObjectsOnMap = callBlazor_RefreshObjectsOnMap;
     function callBlazor_ShowPlaceInfo(event) {
-        const point = [lat, lng]; // event.target._latlng != undefined ? event.target._latlng : event.target._latlngs[0][0][0];
+        const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
         blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox);
     }

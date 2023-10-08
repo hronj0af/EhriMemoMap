@@ -49,6 +49,7 @@
         // Wait until a 'reload' button appears
         new MutationObserver((mutations, observer) => {
             if (document.querySelector('#components-reconnect-modal h5')) {
+                document.querySelector('#components-reconnect-modal').style.display = "none";
                 // Now every 10 seconds, see if the server appears to be back, and if so, reload
                 async function attemptReload() {
                     await fetch(''); // Check the server really is back
@@ -59,6 +60,6 @@
                 setInterval(attemptReload, 10000);
             }
         }).observe(document.body, { childList: true, subtree: true });
-    </script>
+    </script> 
 </body>
 </html>
