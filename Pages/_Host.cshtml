@@ -23,7 +23,7 @@
     <link href="css/leaflet.css" rel="stylesheet" />
     <script src="js/leaflet-src.js"></script>
     <link href="css/site.css" rel="stylesheet" />
-    <script src="js/site.js" ></script>
+    <script src="js/site.js"></script>
     <link href="EhriMemoMap.styles.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="stylesheet" href="radzen-custom/css/material-base.css">
@@ -45,5 +45,20 @@
 
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
     <script src="_framework/blazor.server.js"></script>
+    <script>
+        // Wait until a 'reload' button appears
+        new MutationObserver((mutations, observer) => {
+            if (document.querySelector('#components-reconnect-modal h5')) {
+                // Now every 10 seconds, see if the server appears to be back, and if so, reload
+                async function attemptReload() {
+                    await fetch(''); // Check the server really is back
+                    location.reload();
+                }
+                observer.disconnect();
+                attemptReload();
+                setInterval(attemptReload, 10000);
+            }
+        }).observe(document.body, { childList: true, subtree: true });
+    </script>
 </body>
 </html>

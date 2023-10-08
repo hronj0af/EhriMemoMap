@@ -47,7 +47,7 @@
 
             await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet());
 
-            MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.map.getZoom");
+            MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.getZoom");
             MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
 
             await MapLogic.RefreshObjectsOnMap(true);

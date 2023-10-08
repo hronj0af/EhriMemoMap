@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="scripts\site.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\site.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
       <PrivateAssets>all</PrivateAssets>
@@ -14,6 +22,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="7.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.2.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -29,6 +41,13 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="scripts\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\site.ts" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties tsconfig_1json__JsonSchema="http://json.schemastore.org/tsconfig" /></VisualStudio></ProjectExtensions>
 
 </Project>

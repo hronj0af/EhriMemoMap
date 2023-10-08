@@ -54,11 +54,11 @@
 
     private async Task ZoomIn()
     {
-        await JS.InvokeVoidAsync("mapAPI.map.zoomIn");
+        await JS.InvokeVoidAsync("mapAPI.zoomIn");
     }
 
     private async Task ZoomOut()
     {
-        await JS.InvokeVoidAsync("mapAPI.map.zoomOut");
+        await JS.InvokeVoidAsync("mapAPI.zoomOut");
     }
 }
