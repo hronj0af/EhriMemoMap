@@ -1,69 +1,63 @@
-// FUNKCE PRO OVLÁDÁNÍ MAPY
-let map;
-let lat;
-let lng;
-let coorx;
-let coory;
-let bluepointIcon;
-let addressIcon;
-let incidentIcon;
-let interestIcon;
-let blazorMapObject;
-let groups = [];
-let trackingInterval;
-let _isMobileBrowser;
-let applicationIsTrackingLocation;
-let actualLocation;
-let dialogWidth;
-let dialogHeight;
-let isFullscreen;
 var mapAPI;
 (function (mapAPI) {
-    //////////////////////////
-    /// INIT
-    //////////////////////////
-    // připraví mapu do úvodního stavu
+    class variables {
+    }
+    variables.map = null;
+    variables.lat = 0;
+    variables.lng = 0;
+    variables.coorx = 0;
+    variables.coory = 0;
+    variables.bluepointIcon = null;
+    variables.addressIcon = null;
+    variables.incidentIcon = null;
+    variables.interestIcon = null;
+    variables.blazorMapObject = null;
+    variables.groups = [];
+    variables.trackingInterval = null;
+    variables.isMobileBrowser = null;
+    variables.applicationIsTrackingLocation = null;
+    variables.actualLocation = null;
+    variables.dialogWidth = null;
+    variables.dialogHeight = null;
+    variables.isFullscreen = null;
+    mapAPI.variables = variables;
     function initMap(jsonMapSettings) {
         fitMapToWindow();
-        incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
-        addressIcon = new L.DivIcon();
-        interestIcon = new L.DivIcon({ className: 'leaflet-interest-icon' });
-        bluepointIcon = new L.Icon({
+        variables.incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
+        variables.addressIcon = new L.DivIcon();
+        variables.interestIcon = new L.DivIcon({ className: 'leaflet-interest-icon' });
+        variables.bluepointIcon = new L.Icon({
             iconUrl: 'images/blue-point.png',
             iconSize: [20, 20],
-            iconAnchor: [10, 10], // point of the icon which will correspond to marker's location
+            iconAnchor: [10, 10],
         });
-        map = new L.Map('map', { zoomControl: false });
+        variables.map = new L.Map('map', { zoomControl: false });
         if (!setMapWithInfoFromUrl())
-            map.setView([50.07905886, 14.43715096], 14);
-        // update url a obrázkových vrstev po té, co se změní poloha mapy
-        map.on("moveend", function () {
+            variables.map.setView([50.07905886, 14.43715096], 14);
+        variables.map.on("moveend", function () {
             document.getElementById("map").style.cursor = 'default';
             setUrlByMapInfo();
             callBlazor_RefreshObjectsOnMap();
         });
-        // při změně polohy myši se zapíšou její souřadnice do proměnných
-        map.addEventListener('mousemove', function (ev) {
-            lat = ev.latlng.lat;
-            lng = ev.latlng.lng;
-            coorx = ev.containerPoint.x;
-            coory = ev.containerPoint.y;
+        variables.map.addEventListener('mousemove', function (ev) {
+            variables.lat = ev.latlng.lat;
+            variables.lng = ev.latlng.lng;
+            variables.coorx = ev.containerPoint.x;
+            variables.coory = ev.containerPoint.y;
         });
         const mapSettings = JSON.parse(jsonMapSettings);
-        // konverze json objektu do jednotlivých vrstev mapy a jejich přidání k mapě
         for (let i = 0; i < mapSettings.length; i++) {
             const group = new L.LayerGroup(null, { id: mapSettings[i].name + "_group" });
             group.setZIndex(mapSettings[i].zIndex);
-            groups.push(group);
+            variables.groups.push(group);
             if (mapSettings[i].selected)
-                group.addTo(map);
+                group.addTo(variables.map);
             const layer = convertMapSettingsObjectToMapLayer(mapSettings[i]);
             if (layer != null)
                 group.addLayer(layer);
         }
     }
     mapAPI.initMap = initMap;
-    // nastaví mapu, aby lícovala s oknem
     function fitMapToWindow() {
         const mapElement = document.getElementById("map");
         if (mapElement == null || !mapElement)
@@ -72,10 +66,6 @@ var mapAPI;
         mapElement.style.height = mapHeight + "px";
     }
     mapAPI.fitMapToWindow = fitMapToWindow;
-    //////////////////////////
-    /// URL
-    //////////////////////////
-    // získá informace z URL pro nastavení polohy mapy
     function getMapInfoFromUrl() {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -92,40 +82,35 @@ var mapAPI;
         };
     }
     mapAPI.getMapInfoFromUrl = getMapInfoFromUrl;
-    // nastaví URL parametry pro pozdější nastavení mapy
     function setUrlByMapInfo() {
-        const bounds = map.getBounds();
+        const bounds = variables.map.getBounds();
         const urlBounds = bounds.getSouthWest().lat + "," + bounds.getSouthWest().lng + "," + bounds.getNorthEast().lat + "," + bounds.getNorthEast().lng;
         setUrlParam('bounds', urlBounds);
-        setUrlParam('zoom', map.getZoom());
+        setUrlParam('zoom', variables.map.getZoom());
     }
     mapAPI.setUrlByMapInfo = setUrlByMapInfo;
-    // nastaví jednotlivý parametr url
     function setUrlParam(paramName, paramValue) {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set(paramName, paramValue.toString());
         history.pushState({ pageID: '100' }, 'Mapa', "?" + urlParams);
     }
     mapAPI.setUrlParam = setUrlParam;
-    // získá parametr z url
     function getUrlParam(paramName) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(paramName);
     }
     mapAPI.getUrlParam = getUrlParam;
-    // nastaví mapu podle parametrů url
     function setMapWithInfoFromUrl() {
         const infoFromUrl = getMapInfoFromUrl();
         if (infoFromUrl == null)
             return false;
-        map.fitBounds(infoFromUrl.bounds);
+        variables.map.fitBounds(infoFromUrl.bounds);
         const latAvg = (infoFromUrl.bounds.getSouthWest().lat + infoFromUrl.bounds.getNorthEast().lat) / 2;
         const lngAvg = (infoFromUrl.bounds.getSouthWest().lng + infoFromUrl.bounds.getNorthEast().lng) / 2;
-        map.setView([latAvg, lngAvg], Number(infoFromUrl.zoom));
+        variables.map.setView([latAvg, lngAvg], Number(infoFromUrl.zoom));
         return true;
     }
     mapAPI.setMapWithInfoFromUrl = setMapWithInfoFromUrl;
-    // konvertuje objekt s nastavením mapových vrstev do mapových vrstev leafletu
     function convertMapSettingsObjectToMapLayer(mapSettingsObject) {
         if (mapSettingsObject.type == 'Base') {
             return new L.TileLayer(mapSettingsObject.url, {
@@ -143,34 +128,25 @@ var mapAPI;
         return null;
     }
     mapAPI.convertMapSettingsObjectToMapLayer = convertMapSettingsObjectToMapLayer;
-    //////////////////////////
-    /// BLAZOR
-    //////////////////////////
-    // připraví instanci blazor třídy Map.razor, abych ji pak mohl později odsud volat
     function initBlazorMapObject(dotNetObject) {
-        blazorMapObject = dotNetObject;
+        variables.blazorMapObject = dotNetObject;
     }
     mapAPI.initBlazorMapObject = initBlazorMapObject;
     function callBlazor_RefreshObjectsOnMap() {
-        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
+        const polygonsGroup = variables.groups.find(a => a.options.id == "Polygons_group");
         const mapHasPolygonsYet = polygonsGroup.getLayers().length > 0;
-        blazorMapObject.invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet, map.getZoom(), getMapBoundsForMapState());
+        variables.blazorMapObject.invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet, variables.map.getZoom(), getMapBoundsForMapState());
     }
     mapAPI.callBlazor_RefreshObjectsOnMap = callBlazor_RefreshObjectsOnMap;
     function callBlazor_ShowPlaceInfo(event) {
-        const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
+        const point = event.target._latlng != undefined ? event.target._latlng : [variables.lat, variables.lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
-        blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox);
+        variables.blazorMapObject.invokeMethodAsync("ShowPlaceInfo", variables.map.getZoom(), bbox);
     }
     mapAPI.callBlazor_ShowPlaceInfo = callBlazor_ShowPlaceInfo;
-    //////////////////////////
-    /// OBJECTS
-    //////////////////////////
-    // refreshují se pouze špendlíky, polygony se přidají na začátku a pak už se s nimi nic nedělá
-    // (protože jich není moc, tak se můžou zobrazovat pořád)
     function refreshObjectsOnMap(objectJson) {
-        const objectsGroup = groups.find(a => a.options.id == "Objects_group");
-        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
+        const objectsGroup = variables.groups.find(a => a.options.id == "Objects_group");
+        const polygonsGroup = variables.groups.find(a => a.options.id == "Polygons_group");
         objectsGroup.clearLayers();
         const objects = JSON.parse(objectJson);
         for (let i = 0; i < objects.length; i++) {
@@ -191,7 +167,7 @@ var mapAPI;
     function addObjectFromJsonString(jsonInfo) {
         const parsedObject = JSON.parse(jsonInfo);
         const newObject = parsedObject.type == "Point" ? getPoint(parsedObject) : getPolygon(parsedObject, null, "#e500ff");
-        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+        const objectsGroup = variables.groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.clearLayers();
         newObject.addTo(objectsGroup);
     }
@@ -232,7 +208,7 @@ var mapAPI;
     }
     mapAPI.getPolygon = getPolygon;
     function removeAdditionalObjects() {
-        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+        const objectsGroup = variables.groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.eachLayer(function (item) {
             if (item.options.type == undefined || item.options.type !== "bluepoint") {
                 item.remove();
@@ -240,31 +216,27 @@ var mapAPI;
         });
     }
     mapAPI.removeAdditionalObjects = removeAdditionalObjects;
-    //////////////////////////
-    /// HELPER METHODS
-    //////////////////////////
     function toggleLayerGroup(name, selected) {
         const groupName = name + "_group";
         if (!selected) {
-            map.eachLayer(function (layer) { if (layer.options.id == groupName)
+            variables.map.eachLayer(function (layer) { if (layer.options.id == groupName)
                 layer.remove(); });
         }
         else {
-            const groupToAdd = groups.find(a => a.options.id == groupName);
-            groupToAdd.addTo(map);
+            const groupToAdd = variables.groups.find(a => a.options.id == groupName);
+            groupToAdd.addTo(variables.map);
         }
     }
     mapAPI.toggleLayerGroup = toggleLayerGroup;
-    // převede pozici myši nad mapou do parametru bbox pro získání informací o daném místě (dotaz na QGIS server)
     function convertObjectPositionToBBoxParameter(point) {
-        const containerPosition = map.latLngToContainerPoint(point);
-        const sizeOfBox = 5; // isMobileBrowser() ? 20 : 5;
+        const containerPosition = variables.map.latLngToContainerPoint(point);
+        const sizeOfBox = 5;
         const minx = containerPosition.x < sizeOfBox / 2 ? 0 : containerPosition.x - sizeOfBox / 2;
         const miny = containerPosition.y < sizeOfBox / 2 ? 0 : containerPosition.y + sizeOfBox / 2;
         const maxx = containerPosition.x < sizeOfBox / 2 ? 0 : containerPosition.x + sizeOfBox / 2;
         const maxy = containerPosition.y < sizeOfBox / 2 ? 0 : containerPosition.y - sizeOfBox / 2;
-        const southWest = map.containerPointToLatLng([minx, maxy]);
-        const northEast = map.containerPointToLatLng([maxx, miny]);
+        const southWest = variables.map.containerPointToLatLng([minx, maxy]);
+        const northEast = variables.map.containerPointToLatLng([maxx, miny]);
         return [{ X: southWest.lng, Y: southWest.lat }, { X: northEast.lng, Y: northEast.lat }];
     }
     mapAPI.convertObjectPositionToBBoxParameter = convertObjectPositionToBBoxParameter;
@@ -277,7 +249,7 @@ var mapAPI;
     }
     mapAPI.getWindowHeight = getWindowHeight;
     function getMapBoundsForMapState() {
-        const bounds = map.getBounds();
+        const bounds = variables.map.getBounds();
         return [{ X: bounds.getSouthWest().lng, Y: bounds.getSouthWest().lat }, { X: bounds.getNorthEast().lng, Y: bounds.getNorthEast().lat }];
     }
     mapAPI.getMapBoundsForMapState = getMapBoundsForMapState;
@@ -286,8 +258,8 @@ var mapAPI;
     }
     mapAPI.getWindowLocationSearch = getWindowLocationSearch;
     function isMobileBrowser() {
-        if (_isMobileBrowser != null)
-            return _isMobileBrowser;
+        if (variables.isMobileBrowser != null)
+            return variables.isMobileBrowser;
         if (navigator.userAgent.match(/Android/i)
             || navigator.userAgent.match(/webOS/i)
             || navigator.userAgent.match(/iPhone/i)
@@ -295,34 +267,31 @@ var mapAPI;
             || navigator.userAgent.match(/iPod/i)
             || navigator.userAgent.match(/BlackBerry/i)
             || navigator.userAgent.match(/Windows Phone/i))
-            _isMobileBrowser = true;
+            variables.isMobileBrowser = true;
         else
-            _isMobileBrowser = false;
-        return _isMobileBrowser;
+            variables.isMobileBrowser = false;
+        return variables.isMobileBrowser;
     }
     mapAPI.isMobileBrowser = isMobileBrowser;
     function getZoom() {
-        return map.getZoom();
+        return variables.map.getZoom();
     }
     mapAPI.getZoom = getZoom;
     function zoomIn() {
-        map.zoomIn();
+        variables.map.zoomIn();
     }
     mapAPI.zoomIn = zoomIn;
     function zoomOut() {
-        map.zoomOut();
+        variables.map.zoomOut();
     }
     mapAPI.zoomOut = zoomOut;
-    //////////////////////////
-    /// TRACKING
-    //////////////////////////
     function turnOnLocationTracking() {
         if (!navigator.geolocation) {
             console.log("Your browser doesn't support geolocation feature!");
         }
         else {
             navigator.geolocation.getCurrentPosition(showMyLocation);
-            trackingInterval = setInterval(() => {
+            variables.trackingInterval = setInterval(() => {
                 navigator.geolocation.getCurrentPosition(showMyLocation);
             }, 5000);
         }
@@ -330,40 +299,40 @@ var mapAPI;
     mapAPI.turnOnLocationTracking = turnOnLocationTracking;
     function goToLocation(pointString, zoom) {
         const point = JSON.parse(pointString).coordinates;
-        map.setView([point[1], point[0]], zoom);
+        variables.map.setView([point[1], point[0]], zoom);
     }
     mapAPI.goToLocation = goToLocation;
     function goToMyLocation() {
-        const lat = actualLocation.coords.latitude;
-        const long = actualLocation.coords.longitude;
-        map.setView([lat, long], 15);
+        const lat = variables.actualLocation.coords.latitude;
+        const long = variables.actualLocation.coords.longitude;
+        variables.map.setView([lat, long], 15);
     }
     mapAPI.goToMyLocation = goToMyLocation;
     function showMyLocation(position) {
-        actualLocation = position;
+        variables.actualLocation = position;
         const lat = position.coords.latitude;
         const long = position.coords.longitude;
         removeBluepoint();
-        addBluepoint([lat, long], bluepointIcon);
-        if (!applicationIsTrackingLocation) {
+        addBluepoint([lat, long], variables.bluepointIcon);
+        if (!variables.applicationIsTrackingLocation) {
             goToMyLocation();
-            applicationIsTrackingLocation = true;
+            variables.applicationIsTrackingLocation = true;
         }
     }
     mapAPI.showMyLocation = showMyLocation;
     function hideMyLocation() {
-        clearInterval(trackingInterval);
-        applicationIsTrackingLocation = false;
+        clearInterval(variables.trackingInterval);
+        variables.applicationIsTrackingLocation = false;
         removeBluepoint();
     }
     mapAPI.hideMyLocation = hideMyLocation;
     function addBluepoint(point, icon) {
-        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+        const objectsGroup = variables.groups.find(a => a.options.id == "AdditionalObjects_group");
         new L.Marker(point, { icon: icon, type: "bluepoint" }).addTo(objectsGroup);
     }
     mapAPI.addBluepoint = addBluepoint;
     function removeBluepoint() {
-        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+        const objectsGroup = variables.groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.eachLayer(function (item) {
             if (item.options.type !== undefined && item.options.type == "bluepoint") {
                 item.remove();
@@ -371,23 +340,20 @@ var mapAPI;
         });
     }
     mapAPI.removeBluepoint = removeBluepoint;
-    //////////////////////////
-    /// DIALOG
-    //////////////////////////
     function fullscreenDialog(value) {
         if (value) {
-            if (!isFullscreen) {
-                dialogWidth = document.querySelector("aside").style.width;
-                dialogHeight = document.querySelector("aside").style.height;
+            if (!variables.isFullscreen) {
+                variables.dialogWidth = document.querySelector("aside").style.width;
+                variables.dialogHeight = document.querySelector("aside").style.height;
             }
-            isFullscreen = true;
+            variables.isFullscreen = true;
             document.querySelector("aside").style.width = "100%";
             document.querySelector("aside").style.height = "100%";
         }
-        else if (!value && isFullscreen && dialogHeight != null && dialogWidth != null) {
-            isFullscreen = false;
-            document.querySelector("aside").style.width = dialogWidth;
-            document.querySelector("aside").style.height = dialogHeight;
+        else if (!value && variables.isFullscreen && variables.dialogHeight != null && variables.dialogWidth != null) {
+            variables.isFullscreen = false;
+            document.querySelector("aside").style.width = variables.dialogWidth;
+            document.querySelector("aside").style.height = variables.dialogHeight;
         }
     }
     mapAPI.fullscreenDialog = fullscreenDialog;
