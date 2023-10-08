@@ -50,26 +50,24 @@ namespace mapAPI {
     /// VARIABLES
     //////////////////////////
 
-    export class variables {
-        static map: L.Map = null;
-        static lat: number = 0;
-        static lng: number = 0;
-        static coorx: number = 0;
-        static coory: number = 0;
-        static bluepointIcon: L.Icon = null;
-        static addressIcon: L.DivIcon = null;
-        static incidentIcon: L.DivIcon = null;
-        static interestIcon: L.DivIcon = null;
-        static blazorMapObject = null;
-        static groups: L.LayerGroup[] = [];
-        static trackingInterval: number = null;
-        static isMobileBrowser: boolean = null;
-        static applicationIsTrackingLocation: boolean = null;
-        static actualLocation: GeolocationPosition = null;
-        static dialogWidth: string = null;
-        static dialogHeight: string = null;
-        static isFullscreen: boolean = null;
-    }
+    let map: L.Map = null;
+    let lat: number = 0;
+    let lng: number = 0;
+    let coorx: number = 0;
+    let coory: number = 0;
+    let bluepointIcon: L.Icon = null;
+    let addressIcon: L.DivIcon = null;
+    let incidentIcon: L.DivIcon = null;
+    let interestIcon: L.DivIcon = null;
+    let blazorMapObject = null;
+    let groups: L.LayerGroup[] = [];
+    let trackingInterval: number = null;
+    let _isMobileBrowser: boolean = null;
+    let applicationIsTrackingLocation: boolean = null;
+    let actualLocation: GeolocationPosition = null;
+    let dialogWidth: string = null;
+    let dialogHeight: string = null;
+    let isFullscreen: boolean = null;
 
     //////////////////////////
     /// INIT
@@ -80,34 +78,34 @@ namespace mapAPI {
 
         fitMapToWindow();
 
-        variables.incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
-        variables.addressIcon = new L.DivIcon();
-        variables.interestIcon = new L.DivIcon({ className: 'leaflet-interest-icon' });
+        incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
+        addressIcon = new L.DivIcon();
+        interestIcon = new L.DivIcon({ className: 'leaflet-interest-icon' });
 
-        variables.bluepointIcon = new L.Icon({
+        bluepointIcon = new L.Icon({
             iconUrl: 'images/blue-point.png',
             iconSize: [20, 20], // size of the icon
             iconAnchor: [10, 10], // point of the icon which will correspond to marker's location
         });
 
-        variables.map = new L.Map('map', { zoomControl: false });
+        map = new L.Map('map', { zoomControl: false });
 
         if (!setMapWithInfoFromUrl())
-            variables.map.setView([50.07905886, 14.43715096], 14);
+            map.setView([50.07905886, 14.43715096], 14);
 
         // update url a obrázkových vrstev po té, co se změní poloha mapy
-        variables.map.on("moveend", function () {
+        map.on("moveend", function () {
             document.getElementById("map").style.cursor = 'default';
             setUrlByMapInfo();
             callBlazor_RefreshObjectsOnMap();
         });
 
         // při změně polohy myši se zapíšou její souřadnice do proměnných
-        variables.map.addEventListener('mousemove', function (ev) {
-            variables.lat = ev.latlng.lat;
-            variables.lng = ev.latlng.lng;
-            variables.coorx = ev.containerPoint.x;
-            variables.coory = ev.containerPoint.y;
+        map.addEventListener('mousemove', function (ev) {
+            lat = ev.latlng.lat;
+            lng = ev.latlng.lng;
+            coorx = ev.containerPoint.x;
+            coory = ev.containerPoint.y;
         });
 
         const mapSettings = JSON.parse(jsonMapSettings) as LayerForLeafletModel[];
@@ -116,10 +114,10 @@ namespace mapAPI {
         for (let i = 0; i < mapSettings.length; i++) {
             const group = new L.LayerGroup(null, { id: mapSettings[i].name + "_group" });
             group.setZIndex(mapSettings[i].zIndex);
-            variables.groups.push(group);
+            groups.push(group);
 
             if (mapSettings[i].selected)
-                group.addTo(variables.map);
+                group.addTo(map);
 
             const layer = convertMapSettingsObjectToMapLayer(mapSettings[i]);
             if (layer != null)
@@ -169,12 +167,12 @@ namespace mapAPI {
 
     // nastaví URL parametry pro pozdější nastavení mapy
     export function setUrlByMapInfo(): void {
-        const bounds = variables.map.getBounds();
+        const bounds = map.getBounds();
 
         const urlBounds = bounds.getSouthWest().lat + "," + bounds.getSouthWest().lng + "," + bounds.getNorthEast().lat + "," + bounds.getNorthEast().lng;
 
         setUrlParam('bounds', urlBounds);
-        setUrlParam('zoom', variables.map.getZoom());
+        setUrlParam('zoom', map.getZoom());
     }
 
     // nastaví jednotlivý parametr url
@@ -195,12 +193,12 @@ namespace mapAPI {
         const infoFromUrl = getMapInfoFromUrl();
         if (infoFromUrl == null)
             return false;
-        variables.map.fitBounds(infoFromUrl.bounds);
+        map.fitBounds(infoFromUrl.bounds);
 
         const latAvg = (infoFromUrl.bounds.getSouthWest().lat + infoFromUrl.bounds.getNorthEast().lat) / 2;
         const lngAvg = (infoFromUrl.bounds.getSouthWest().lng + infoFromUrl.bounds.getNorthEast().lng) / 2;
 
-        variables.map.setView([latAvg, lngAvg], Number(infoFromUrl.zoom));
+        map.setView([latAvg, lngAvg], Number(infoFromUrl.zoom));
 
         return true;
     }
@@ -229,19 +227,19 @@ namespace mapAPI {
 
     // připraví instanci blazor třídy Map.razor, abych ji pak mohl později odsud volat
     export function initBlazorMapObject(dotNetObject) {
-        variables.blazorMapObject = dotNetObject;
+        blazorMapObject = dotNetObject;
     }
     export function callBlazor_RefreshObjectsOnMap() {
-        const polygonsGroup = variables.groups.find(a => a.options.id == "Polygons_group");
+        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
         const mapHasPolygonsYet = polygonsGroup.getLayers().length > 0;
-        variables.blazorMapObject.invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet, variables.map.getZoom(), getMapBoundsForMapState());
+        blazorMapObject.invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet, map.getZoom(), getMapBoundsForMapState());
     }
 
     export function callBlazor_ShowPlaceInfo(event) {
-        const point = event.target._latlng != undefined ? event.target._latlng : [variables.lat, variables.lng];
+        const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
 
         const bbox = convertObjectPositionToBBoxParameter(point);
-        variables.blazorMapObject.invokeMethodAsync("ShowPlaceInfo", variables.map.getZoom(), bbox);
+        blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox);
     }
 
     //////////////////////////
@@ -251,8 +249,8 @@ namespace mapAPI {
     // refreshují se pouze špendlíky, polygony se přidají na začátku a pak už se s nimi nic nedělá
     // (protože jich není moc, tak se můžou zobrazovat pořád)
     export function refreshObjectsOnMap(objectJson) {
-        const objectsGroup = variables.groups.find(a => a.options.id == "Objects_group");
-        const polygonsGroup = variables.groups.find(a => a.options.id == "Polygons_group");
+        const objectsGroup = groups.find(a => a.options.id == "Objects_group");
+        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
         objectsGroup.clearLayers();
         const objects = JSON.parse(objectJson) as MapObjectForLeafletModel[];
 
@@ -274,7 +272,7 @@ namespace mapAPI {
     export function addObjectFromJsonString(jsonInfo) {
         const parsedObject = JSON.parse(jsonInfo);
         const newObject = parsedObject.type == "Point" ? getPoint(parsedObject) : getPolygon(parsedObject, null, "#e500ff");
-        const objectsGroup = variables.groups.find(a => a.options.id == "AdditionalObjects_group");
+        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.clearLayers();
         newObject.addTo(objectsGroup);
     }
@@ -318,11 +316,10 @@ namespace mapAPI {
         }
 
         return result;
-
-
     }
+
     export function removeAdditionalObjects(): void {
-        const objectsGroup = variables.groups.find(a => a.options.id == "AdditionalObjects_group");
+        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.eachLayer(function (item) {
             if (item.options.type == undefined || item.options.type !== "bluepoint") {
                 item.remove();
@@ -334,20 +331,20 @@ namespace mapAPI {
     /// HELPER METHODS
     //////////////////////////
 
-    export function toggleLayerGroup(name, selected): void {
+    export function toggleLayerGroup(name: string, selected: boolean): void {
         const groupName = name + "_group";
         if (!selected) {
-            variables.map.eachLayer(function (layer) { if (layer.options.id == groupName) layer.remove(); })
+            map.eachLayer(function (layer) { if (layer.options.id == groupName) layer.remove(); })
         } else {
-            const groupToAdd = variables.groups.find(a => a.options.id == groupName);
-            groupToAdd.addTo(variables.map);
+            const groupToAdd = groups.find(a => a.options.id == groupName);
+            groupToAdd.addTo(map);
         }
     }
 
-    // převede pozici myši nad mapou do parametru bbox pro získání informací o daném místě (dotaz na QGIS server)
+    // převede pozici myši nad mapou do parametru bbox pro získání informací o daném místě (dotaz na server)
     export function convertObjectPositionToBBoxParameter(point): Coordinates[] {
 
-        const containerPosition = variables.map.latLngToContainerPoint(point);
+        const containerPosition = map.latLngToContainerPoint(point);
 
         const sizeOfBox = 5;// isMobileBrowser() ? 20 : 5;
 
@@ -356,8 +353,8 @@ namespace mapAPI {
         const maxx = containerPosition.x < sizeOfBox / 2 ? 0 : containerPosition.x + sizeOfBox / 2;
         const maxy = containerPosition.y < sizeOfBox / 2 ? 0 : containerPosition.y - sizeOfBox / 2;
 
-        const southWest = variables.map.containerPointToLatLng([minx, maxy]);
-        const northEast = variables.map.containerPointToLatLng([maxx, miny]);
+        const southWest = map.containerPointToLatLng([minx, maxy]);
+        const northEast = map.containerPointToLatLng([maxx, miny]);
 
         return [{ X: southWest.lng, Y: southWest.lat }, { X: northEast.lng, Y: northEast.lat }];
     }
@@ -371,7 +368,7 @@ namespace mapAPI {
     }
 
     export function getMapBoundsForMapState(): Coordinates[] {
-        const bounds = variables.map.getBounds();
+        const bounds = map.getBounds();
         return [{ X: bounds.getSouthWest().lng, Y: bounds.getSouthWest().lat }, { X: bounds.getNorthEast().lng, Y: bounds.getNorthEast().lat }];
     }
 
@@ -380,8 +377,8 @@ namespace mapAPI {
     }
 
     export function isMobileBrowser(): boolean {
-        if (variables.isMobileBrowser != null)
-            return variables.isMobileBrowser;
+        if (isMobileBrowser != null)
+            return _isMobileBrowser;
 
         if (navigator.userAgent.match(/Android/i)
             || navigator.userAgent.match(/webOS/i)
@@ -390,23 +387,23 @@ namespace mapAPI {
             || navigator.userAgent.match(/iPod/i)
             || navigator.userAgent.match(/BlackBerry/i)
             || navigator.userAgent.match(/Windows Phone/i))
-            variables.isMobileBrowser = true;
+            _isMobileBrowser = true;
         else
-            variables.isMobileBrowser = false;
+            _isMobileBrowser = false;
 
-        return variables.isMobileBrowser;
+        return _isMobileBrowser;
     }
 
     export function getZoom(): number {
-        return variables.map.getZoom();
+        return map.getZoom();
     }
 
     export function zoomIn(): void {
-        variables.map.zoomIn();
+        map.zoomIn();
     }
 
     export function zoomOut(): void {
-        variables.map.zoomOut();
+        map.zoomOut();
     }
 
     //////////////////////////
@@ -418,7 +415,7 @@ namespace mapAPI {
             console.log("Your browser doesn't support geolocation feature!")
         } else {
             navigator.geolocation.getCurrentPosition(showMyLocation)
-            variables.trackingInterval = setInterval(() => {
+            trackingInterval = setInterval(() => {
                 navigator.geolocation.getCurrentPosition(showMyLocation)
             }, 5000);
         }
@@ -427,42 +424,42 @@ namespace mapAPI {
 
     export function goToLocation(pointString, zoom: number): void {
         const point = (JSON.parse(pointString) as PointModel).coordinates;
-        variables.map.setView([point[1], point[0]], zoom);
+        map.setView([point[1], point[0]], zoom);
     }
 
     export function goToMyLocation(): void {
-        const lat = variables.actualLocation.coords.latitude;
-        const long = variables.actualLocation.coords.longitude;
-        variables.map.setView([lat, long], 15);
+        const lat = actualLocation.coords.latitude;
+        const long = actualLocation.coords.longitude;
+        map.setView([lat, long], 15);
     }
 
     export function showMyLocation(position): void {
-        variables.actualLocation = position;
+        actualLocation = position;
         const lat = position.coords.latitude;
         const long = position.coords.longitude;
 
         removeBluepoint();
-        addBluepoint([lat, long], variables.bluepointIcon);
+        addBluepoint([lat, long], bluepointIcon);
 
-        if (!variables.applicationIsTrackingLocation) {
+        if (!applicationIsTrackingLocation) {
             goToMyLocation();
-            variables.applicationIsTrackingLocation = true;
+            applicationIsTrackingLocation = true;
         }
     }
 
     export function hideMyLocation(): void {
-        clearInterval(variables.trackingInterval);
-        variables.applicationIsTrackingLocation = false;
+        clearInterval(trackingInterval);
+        applicationIsTrackingLocation = false;
         removeBluepoint();
     }
 
     export function addBluepoint(point, icon: L.Icon): void {
-        const objectsGroup = variables.groups.find(a => a.options.id == "AdditionalObjects_group");
+        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
         new L.Marker(point, { icon: icon, type: "bluepoint" }).addTo(objectsGroup);
     }
 
     export function removeBluepoint(): void {
-        const objectsGroup = variables.groups.find(a => a.options.id == "AdditionalObjects_group");
+        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.eachLayer(function (item) {
             if (item.options.type !== undefined && item.options.type == "bluepoint") {
                 item.remove();
@@ -477,17 +474,17 @@ namespace mapAPI {
 
     export function fullscreenDialog(value): void {
         if (value) {
-            if (!variables.isFullscreen) {
-                variables.dialogWidth = document.querySelector("aside").style.width;
-                variables.dialogHeight = document.querySelector("aside").style.height;
+            if (!isFullscreen) {
+                dialogWidth = document.querySelector("aside").style.width;
+                dialogHeight = document.querySelector("aside").style.height;
             }
-            variables.isFullscreen = true;
+            isFullscreen = true;
             document.querySelector("aside").style.width = "100%";
             document.querySelector("aside").style.height = "100%";
-        } else if (!value && variables.isFullscreen && variables.dialogHeight != null && variables.dialogWidth != null) {
-            variables.isFullscreen = false;
-            document.querySelector("aside").style.width = variables.dialogWidth;
-            document.querySelector("aside").style.height = variables.dialogHeight;
+        } else if (!value && isFullscreen && dialogHeight != null && dialogWidth != null) {
+            isFullscreen = false;
+            document.querySelector("aside").style.width = dialogWidth;
+            document.querySelector("aside").style.height = dialogHeight;
 
         }
     }
