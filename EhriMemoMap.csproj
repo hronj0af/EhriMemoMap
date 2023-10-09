@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="Cache\" />
     <Folder Include="scripts\" />
   </ItemGroup>
 

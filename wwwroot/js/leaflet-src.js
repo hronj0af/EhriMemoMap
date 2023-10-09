@@ -12368,7 +12368,7 @@
 
             srs: "EPSG:3857",
             crs: "EPSG:3857",
-            tiled: false,
+            tiled: true,
             dpi: 96,
             opacities: "255,255,217,255,205,255",
             map: ""

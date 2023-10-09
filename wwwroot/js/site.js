@@ -118,9 +118,8 @@ var mapAPI;
             });
         }
         else if (mapSettingsObject.type == 'WMS') {
-            return new L.TileLayer.WMS(mapSettingsObject.url, {
+            return new L.TileLayer.WMS("WMSProxy/Get", {
                 tileSize: 512,
-                map: mapSettingsObject.mapParameter,
                 layers: mapSettingsObject.layersParameter
             });
         }
