@@ -18,8 +18,8 @@ var mapAPI;
     let dialogWidth = null;
     let dialogHeight = null;
     let isFullscreen = null;
-    let polygonColor = "#E47867";
-    let polygonColorSelected = "#794493";
+    let polygonColor = "#ff3333";
+    let polygonColorSelected = "#cc1111";
     function initMap(jsonMapSettings) {
         fitMapToWindow();
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
@@ -204,7 +204,7 @@ var mapAPI;
                 pointsArray[j].push(innerArray);
             }
         }
-        const result = new L.Polygon(pointsArray, { fillColor: polygonColor, color: '#222', weight: 0.5, fillOpacity: 0.8, opacity: 1 })
+        const result = new L.Polygon(pointsArray, { fillColor: polygonColor, color: '#222', weight: 0.5, fillOpacity: 0.504, opacity: 1 })
             .on('click', callBlazor_ShowPlaceInfo);
         if (!isMobileBrowser() && label != undefined && label != null) {
             result.bindTooltip(label, { sticky: true });

@@ -103,8 +103,8 @@ namespace EhriMemoMap.Services
             if (_mapState.MapZoom < layer.MinZoom && _mapState.MapZoom >= layer.MinZoom - 2)
                 return _context.PragueQuartersStats.Where(a => a.Type.Contains("total")).GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
 
-            if (_mapState.MapZoom >= layer.MinZoom && _mapState.MapZoom <= layer.MaxZoom)
-                return _context.PragueQuartersStats.Where(a=>!a.Type.Contains("total")).GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
+            //if (_mapState.MapZoom >= layer.MinZoom && _mapState.MapZoom <= layer.MaxZoom)
+            //    return _context.PragueQuartersStats.Where(a=>!a.Type.Contains("total")).GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
 
             return new List<MapObjectForLeafletModel>();
         }

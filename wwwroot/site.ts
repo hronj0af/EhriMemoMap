@@ -68,8 +68,8 @@ namespace mapAPI {
     let dialogWidth: string = null;
     let dialogHeight: string = null;
     let isFullscreen: boolean = null;
-    let polygonColor: string = "#E47867";
-    let polygonColorSelected: string = "#794493";
+    let polygonColor: string = "#ff3333";
+    let polygonColorSelected: string = "#cc1111";
 
     //////////////////////////
     /// INIT
@@ -320,7 +320,7 @@ namespace mapAPI {
                 pointsArray[j].push(innerArray);
             }
         }
-        const result = new L.Polygon(pointsArray, { fillColor: polygonColor, color: '#222', weight: 0.5, fillOpacity: 0.8, opacity: 1 })
+        const result = new L.Polygon(pointsArray, { fillColor: polygonColor, color: '#222', weight: 0.5, fillOpacity: 0.504, opacity: 1 })
             .on('click', callBlazor_ShowPlaceInfo);
 
 

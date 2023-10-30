@@ -6,6 +6,7 @@
 @inject IStringLocalizer<CommonResources> cl
 @inject NavigationManager Navigation
 @inject IHttpContextAccessor httpContextAccesor
+@inject ILogger<Language> logger
 
 <RadzenButton Style="@style.ButtonStyle" title="@(cl[otherLanguageTitle])"
               ButtonStyle="ButtonStyle.Dark"
@@ -46,7 +47,7 @@
         get => CultureInfo.CurrentCulture;
         set
         {
-            if (CultureInfo.CurrentCulture != value)
+            if (CultureInfo.CurrentCulture.ToString() != value.ToString())
             {
                 var cultureEscaped = Uri.EscapeDataString(value.Name);
                 var uriEscaped = Uri.EscapeDataString(currentUri);

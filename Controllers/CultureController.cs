@@ -10,6 +10,7 @@ namespace EhriMemoMap.Controllers
         {
             if (culture != null)
             {
+                HttpContext.Response.Cookies.Delete(CookieRequestCultureProvider.DefaultCookieName);
                 HttpContext.Response.Cookies.Append(
                     CookieRequestCultureProvider.DefaultCookieName,
                     CookieRequestCultureProvider.MakeCookieValue(
