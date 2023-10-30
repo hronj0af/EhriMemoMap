@@ -11,12 +11,20 @@
 
 @if (layers != null && layers.Count() > 0 && MapState.IsLayersOpen)
 {
-    <RadzenCard Style="@(style.BoxStyle + (!MapState.IsMobileBrowser ? ";width:220px" : ""))">
+    <RadzenCard Style="@(style.BoxStyle + (!MapState.IsMobileBrowser ? ";width:400px" : ""))">
         @foreach (var item in layers.OrderBy(a => a.Order))
         {
-            <RadzenCheckBox  TValue="bool" @bind-Value=@item.Selected onclick="@(() => OnLayerClick(@item))" />
-            <RadzenLabel Text="@cl["layer_" + item.Name + "_title"]" Style="margin-left: 8px; vertical-align: middle" />
-            <RadzenIcon onclick="@(() => ShowLayerAbstract(item))" title="@cl["moreInfo"]" IconStyle="IconStyle.Dark" style="font-size: 20px;cursor:pointer" Icon="help"></RadzenIcon>
+            <RadzenRow Gap="0.5rem" AlignItems="AlignItems.Start">
+                <RadzenColumn Size="1">
+                    <RadzenCheckBox TValue="bool" @bind-Value=@item.Selected onclick="@(() => OnLayerClick(@item))" />
+                </RadzenColumn>
+                <RadzenColumn Size="10">
+                    <RadzenLabel Text="@cl["layer_" + item.Name + "_title"]" />
+                </RadzenColumn>
+                <RadzenColumn Size="1">
+                    <RadzenIcon onclick="@(() => ShowLayerAbstract(item))" title="@cl["moreInfo"]" IconStyle="IconStyle.Dark" style="font-size: 20px;cursor:pointer" Icon="help"></RadzenIcon>
+                </RadzenColumn>
+            </RadzenRow>
             <br />
         }
     </RadzenCard>

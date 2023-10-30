@@ -102,3 +102,11 @@ path.leaflet-interactive:focus {
     outline: none;
 
 }
+
+.statistics-title-text {
+    color: black;
+    -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+    -webkit-text-stroke: 1px white;
+    font-weight: 900;
+    font-size:32px;
+}

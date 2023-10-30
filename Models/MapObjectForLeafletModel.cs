@@ -34,12 +34,21 @@ public partial class MapObjectForLeafletModel
 
         else if (PlaceType == Models.PlaceType.Address.ToString())
         {
-            var saturation = ((decimal)Citizens / CitizensTotal)?.ToString("0.00", CultureInfo.InvariantCulture);
-            HtmlIcon = $"<div style='position:relative'><img src='images/addresses/address_{Citizens}.png' height=23 width=23 style='opacity:1;filter:saturate(" + saturation + ")'/></div>";//<span style='position:absolute;top:50%;left:80%;transform: translate(-50%, -50%);'>" + Citizens + "</span></div>";
+            var percents = (decimal)Citizens / CitizensTotal;
+            string iconFile = percents switch
+            { 
+                1 => "victims_100",
+                < 1 and >= 0.5M => "victims_051",
+                < 0.5M and > 0 => "victims_001",
+                0 => "victims_000",
+                _ => "victims_100"
+            };
+
+            HtmlIcon = $"<div style='position:relative'><img src='images/addresses/{iconFile}_{Citizens}.png' height=23 width=23 style='opacity:1;'/></div>";
         }
     }
 
-    public MapObjectForLeafletModel(List<PragueQuartersStat> quarterStatistics, IStringLocalizer<CommonResources> cl)
+    public MapObjectForLeafletModel(List<PragueQuartersStat> quarterStatistics, IStringLocalizer<CommonResources> cl, bool isMobileBrowser)
     {
         if (quarterStatistics == null || quarterStatistics.Count == 0)
             return;
@@ -58,31 +67,54 @@ public partial class MapObjectForLeafletModel
         var interests = quarterStatistics.FirstOrDefault(a => a.Type.Contains("pois_points"))?.Count;
         var inaccessibles = quarterStatistics.FirstOrDefault(a => a.Type.Contains("pois_polygons"))?.Count;
 
-        var totalStatistics = quarterStatistics.Any(a => a.Type.Contains("total"));
-        var iconWidth = totalStatistics ? "400px" : "200px";
-        var iconHeight = totalStatistics ? "480px" : "240px";
-        var fontSize = totalStatistics ? "16px" : "14px";
-        var padding = totalStatistics ? "40px" : "10px";
-        var center = totalStatistics ? "text-align:center;padding-right:80px" : "text-align:center;padding-right:20px";
-
-
         MapPoint = JsonConvert.SerializeObject(new { Coordinates = new double[] { quarterStatistics.FirstOrDefault().Geography.Coordinate.X, quarterStatistics.FirstOrDefault().Geography.Coordinate.Y } }, serializerSettings);
 
-        HtmlIcon = @$"<div style='width:{iconWidth};height:{iconHeight};position:relative'>
-            <img src='css/images/address.png' style='position:absolute;width:100%;opacity:0.9;filter:saturate(0.5)'/>
-            <div style='position:absolute;padding:{padding};bottom:0;width:100%'>
-            <div style='position:relative;width:100%'>
-            <div style='{center}'>
-            <p style='font-weight:700;font-size:{fontSize}'>{(CultureInfo.CurrentCulture.Name == "en-US" ? quarterStatistics.FirstOrDefault().QuarterEn.ToUpper() : quarterStatistics.FirstOrDefault().QuarterCs.ToUpper())}</p>
-            </div>
-            <p style='font-weight:700;font-size:{fontSize}'><img src='css/images/address.png' width=20 height=20 style='opacity:0.8;vertical-align:middle;margin-right:10px' />{victims} {cl["countJews"]}</p>
-            <p style='font-weight:700;font-size:{fontSize}'><img src='css/images/incident.png' width=20 height=20 style='opacity:0.8;vertical-align:middle;margin-right:10px' />{incidents} {cl["countIncidents"]}</p>
-            <p style='font-weight:700;font-size:{fontSize}'><img src='css/images/interest.png' width=20 height=20 style='opacity:0.8;vertical-align:middle;margin-right:10px' />{interests} {cl["countPointsOfInterest"]}</p>
-            <p style='font-weight:700;font-size:{fontSize}'><img src='css/images/interest.png' width=20 height=20 style='opacity:0.8;vertical-align:middle;margin-right:10px' />{inaccessibles} {cl["countInaccessiblePlaces"]}</p>
-            {(totalStatistics ? $"<p style='font-weight:700;font-size:{fontSize}'>{cl["zoomMapForMoreInfo"]}" : "")}
-            </div>
-            </div>
-            </div>";
+        HtmlIcon = @$"
+            <table style='width:{(isMobileBrowser ? "350px" : "500px")}'>
+                <tr >
+                    <td colspan='2'>
+                        <span class='statistics-title-text' style='margin-bottom:20px'>{(CultureInfo.CurrentCulture.Name == "en-US" ? quarterStatistics.FirstOrDefault().QuarterEn.ToUpper() : quarterStatistics.FirstOrDefault().QuarterCs.ToUpper())}</span>
+                    </td>       
+                <tr>
+                    <td style='width:10%;vertical-align:top;'>
+                        <img src='css/images/address.png' width=50 height=50 style='opacity:0.8;vertical-align:middle;margin-right:10px' />
+                    </td>
+                    <td style='width:90%;vertical-align:top;'>
+                        <span class='statistics-title-text'>{victims} {cl["countJews"]}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style='width:10%;vertical-align:top;'>
+                        <img src='css/images/incident.png' width=50 height=50 style='opacity:0.8;vertical-align:middle;margin-right:10px' />
+                    </td>
+                    <td style='width:90%;vertical-align:top;'>
+                        <span class='statistics-title-text'>{incidents} {cl["countIncidents"]}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style='width:10%;vertical-align:top;'>
+                        <img src='css/images/interest.png' width=50 height=50 style='opacity:0.8;vertical-align:middle;margin-right:10px' />
+                    </td>
+                    <td style='width:90%;vertical-align:top;'>
+                        <span class='statistics-title-text'>{interests} {cl["countPointsOfInterest"]}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style='width:10%;vertical-align:top;'>
+                        <img src='css/images/polygon.png' width=50 height=50 style='opacity:0.8;vertical-align:middle;margin-right:10px' />
+                    </td>
+                    <td style='width:90%;vertical-align:top;'>
+                        <span class='statistics-title-text'>{inaccessibles} {cl["countInaccessiblePlaces"]}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style='width:10%;vertical-align:top;'>
+                    </td>
+                    <td style='width:90%;vertical-align:top;'>
+                        <span class='statistics-title-text' style='font-size:20px'>{cl["zoomMapForMoreInfo"]}</span>
+                    </td>
+                </tr>
+            </table>";
 
     }
     public bool Clickable { get; set; }
