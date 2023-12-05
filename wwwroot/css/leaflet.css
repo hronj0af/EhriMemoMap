@@ -437,28 +437,35 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-left .leaflet-control-scale {
 	margin-left: 5px;
 	}
+
 .leaflet-bottom .leaflet-control-scale {
-	margin-bottom: 5px;
-	}
+	margin-bottom: 18px;
+	margin-left: 70px;
+	background-color: #d5d2b8;
+	padding: 10px;
+}
 .leaflet-control-scale-line {
-	border: 2px solid #777;
+	border: 2px solid #771646;
 	border-top: none;
 	line-height: 1.1;
 	padding: 2px 5px 1px;
 	white-space: nowrap;
 	-moz-box-sizing: border-box;
-	     box-sizing: border-box;
-	background: rgba(255, 255, 255, 0.8);
-	text-shadow: 1px 1px #fff;
+	box-sizing: border-box;
+	background: #d5d2b8;
+	font-family: Barlow;
+	font-weight: 700;
+	color: #771646;
+	font-size: 14px;
+}
+	.leaflet-control-scale-line:not(:first-child) {
+		border-top: 2px solid #771646;
+		border-bottom: none;
+		margin-top: -2px;
 	}
-.leaflet-control-scale-line:not(:first-child) {
-	border-top: 2px solid #777;
-	border-bottom: none;
-	margin-top: -2px;
-	}
-.leaflet-control-scale-line:not(:first-child):not(:last-child) {
-	border-bottom: 2px solid #777;
-	}
+		.leaflet-control-scale-line:not(:first-child):not(:last-child) {
+			border-bottom: 2px solid #771646;
+		}
 
 .leaflet-touch .leaflet-control-attribution,
 .leaflet-touch .leaflet-control-layers,

@@ -19,34 +19,47 @@
         "selected": true,
         "opacities": "255",
         "zIndex": "100",
-        "order": 100
+        "order": 100,
+        "backgroundColor": "#D5D2B8",
+        "fontColor": "#46463d"
       },
       {
         "name": "inaccessible",
         "placeType": "inaccessible",
         "order": 10,
-        "type": "polygons"
+        "type": "polygons",
+        "backgroundColor": "#e3a1a2",
+        "fontColor": "#46463d"
       },
       {
         "name": "address",
         "placeType": "address",
-        "order": 3,
+        "order": 1,
         "type": "objects",
-        "minZoom": 17
+        "minZoom": 17,
+        "quickAccess": true,
+        "backgroundColor": "#46463D",
+        "fontColor": "#fff"
       },
       {
         "name": "interest",
         "placeType": "interest",
         "order": 2,
         "type": "objects",
-        "minZoom": 17
+        "minZoom": 17,
+        "quickAccess": true,
+        "backgroundColor": "#7E469B",
+        "fontColor": "#fff"
       },
       {
         "name": "incident",
         "placeType": "incident",
-        "order": 1,
+        "order": 3,
         "type": "objects",
-        "minZoom": 17
+        "minZoom": 17,
+        "quickAccess": true,
+        "backgroundColor": "#C5222C",
+        "fontColor": "#fff"
       }
     ],
     "timeline": [
@@ -151,7 +164,9 @@
             "order": 0,
             "type": "objects",
             "maxZoom": 16,
-            "minZoom": 15
+            "minZoom": 15,
+            "backgroundColor": "#d5d2b8",
+            "fontColor": "#46463d"
           }
         ]
       }

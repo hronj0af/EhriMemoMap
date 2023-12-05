@@ -92,7 +92,7 @@ namespace mapAPI {
 
         map = new L.Map('map', { zoomControl: false });
         map.attributionControl.setPosition('bottomleft');
-
+        L.control.scale().addTo(map);
 
         if (!setMapWithInfoFromUrl())
             map.setView([50.07905886, 14.43715096], 14);

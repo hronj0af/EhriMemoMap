@@ -303,4 +303,13 @@
   <data name="showMyLocation" xml:space="preserve">
     <value>Show my location on map</value>
   </data>
+  <data name="layer_interest_title_short" xml:space="preserve">
+    <value>Points of Interest</value>
+  </data>
+  <data name="layer_incident_title_short" xml:space="preserve">
+    <value>Incidents</value>
+  </data>
+  <data name="layer_address_title_short" xml:space="preserve">
+    <value>Homes</value>
+  </data>
 </root>

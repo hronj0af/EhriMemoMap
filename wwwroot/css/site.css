@@ -116,3 +116,11 @@ path.leaflet-interactive:focus {
 .customWmsLayer {
     filter: grayscale(40%) brightness(1.2);
 }
+
+.center {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+}

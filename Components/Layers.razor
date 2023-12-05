@@ -7,28 +7,7 @@
 
 @inject IStringLocalizer<CommonResources> cl
 
-<RadzenImage Path="images/layers.png" Style="@style.ButtonStyle" title="@(cl["layers"] + "...")" Click="(() => MapState.IsLayersOpen = !MapState.IsLayersOpen)"></RadzenImage>
-
-@if (layers != null && layers.Count() > 0 && MapState.IsLayersOpen)
-{
-    <RadzenCard Style="@(style.BoxStyle + (!MapState.IsMobileBrowser ? ";width:400px" : ""))">
-        @foreach (var item in layers.OrderBy(a => a.Order))
-        {
-            <RadzenRow Gap="0.5rem" AlignItems="AlignItems.Start">
-                <RadzenColumn Size="1">
-                    <RadzenCheckBox TValue="bool" @bind-Value=@item.Selected onclick="@(() => OnLayerClick(@item))" />
-                </RadzenColumn>
-                <RadzenColumn Size="10">
-                    <RadzenLabel Text="@cl["layer_" + item.Name + "_title"]" />
-                </RadzenColumn>
-                <RadzenColumn Size="1">
-                    <RadzenIcon onclick="@(() => ShowLayerAbstract(item))" title="@cl["moreInfo"]" IconStyle="IconStyle.Dark" style="font-size: 20px;cursor:pointer" Icon="help"></RadzenIcon>
-                </RadzenColumn>
-            </RadzenRow>
-            <br />
-        }
-    </RadzenCard>
-}
+<RadzenImage Path="images/layers.png" Style="@style.ButtonStyle" title="@(cl["layers"] + "...")" Click="(() => ShowLayersList())"></RadzenImage>
 
 @code {
     (string ButtonStyle, string BoxStyle) style;
@@ -77,23 +56,17 @@
         });
     }
 
-    private async Task OnLayerClick(LayerModel layer)
+    private async Task ShowLayersList()
     {
-        if (layer.Type == LayerType.WMS)
-            await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", layer.Name, layer.Selected);
-
-        else if (layer.Type == LayerType.Polygons)
-            await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", LayerType.Polygons.ToString(), layer.Selected);
-
-        else if (layer.Type == LayerType.Objects)
-            await MapLogic.RefreshObjectsOnMap(false);
-
-        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapState.GetLayersForUrlParameter());
-    }
-
-    private async Task ShowLayerAbstract(LayerModel layer)
-    {
-        MapState.SetDialogIsOpen(true);
-        await DialogService.OpenSideAsync<LayerInformation>(cl["layerInfo"], parameters: new Dictionary<string, object> { { "Layer", layer } }, options: MapState.GetDialogOptions());
+        if (MapState.DialogIsOpen)
+        {
+            MapState.SetDialogIsOpen(false);
+            DialogService.CloseSide();
+        }
+        else
+        {
+            MapState.SetDialogIsOpen(true);
+            await DialogService.OpenSideAsync<LayersList>(cl["layerInfo"], options: MapState.GetDialogOptions());
+        }
     }
 }

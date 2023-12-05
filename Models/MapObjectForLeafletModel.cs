@@ -27,10 +27,10 @@ public partial class MapObjectForLeafletModel
         MapPolygon = mapObject.MapPolygon;
 
         if (PlaceType == Models.PlaceType.Incident.ToString())
-            HtmlIcon = "<img src='images/incident.png' height=23 width=23 style='opacity:1'/>";
+            HtmlIcon = "<img src='images/incident-map.png' height=23 width=23 style='opacity:1'/>";
 
         else if (PlaceType == Models.PlaceType.Interest.ToString())
-            HtmlIcon = "<img src='images/interest.png' height=23 width=23 style='opacity:1'/>";
+            HtmlIcon = "<img src='images/interest-map.png' height=23 width=23 style='opacity:1'/>";
 
         else if (PlaceType == Models.PlaceType.Address.ToString())
         {

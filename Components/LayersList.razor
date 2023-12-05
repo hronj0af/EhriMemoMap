@@ -1,0 +1,90 @@
+﻿@using EhriMemoMap.Helpers;
+@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapStateService MapState
+@inject MapLogicService MapLogic
+
+@inject IStringLocalizer<CommonResources> cl
+
+<DialogButtons />
+
+
+@if (layers != null && layers.Count() > 0)
+{
+    <div style="display:flex;gap:10px;flex-direction:column">
+
+        @foreach (var item in layers.OrderBy(a => a.Order))
+        {
+            <div style="color: @(item.FontColor); background-color: @(item.BackgroundColor); border-radius: 6px; order:@(item.Order);height: 50px;justify-content:space-between" class="center">
+                <div style="display:flex;justify-content:start;align-items: center;">
+                    <RadzenImage style="cursor:pointer;width:30px" class="rz-px-1" Click="@(() => OnLayerClick(item))" Path="@(item.Selected ? "images/checkbox-true.png" : "images/checkbox-false.png")"></RadzenImage>
+                    <span class="rz-px-1" style="font-size: 18px; font-family: Barlow; font-weight: 500;">@cl["layer_" + item.Name + "_title"]</span>
+                </div>
+                <div style="display:flex;justify-content:end">
+                    <RadzenImage class="rz-px-2" Style="width:30px;" Path="@("images/" + item.Name + ".png")"></RadzenImage>
+                </div>
+            </div>
+
+
+        }
+    </div>
+
+}
+
+@code {
+    [Parameter]
+    public int Order { get; set; }
+
+    IEnumerable<LayerModel>? layers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        layers = MapState.GetNotBaseLayers().ToList();
+        MapState.OnChange += OnMyChangeHandler;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            StateHasChanged();
+        }
+    }
+
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            layers = MapState.GetNotBaseLayers().ToList();
+            StateHasChanged();
+        });
+    }
+
+    private async Task OnLayerClick(LayerModel layer)
+    {
+        layer.Selected = !layer.Selected;
+        if (layer.Type == LayerType.WMS)
+            await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", layer.Name, layer.Selected);
+
+        else if (layer.Type == LayerType.Polygons)
+            await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", LayerType.Polygons.ToString(), layer.Selected);
+
+        else if (layer.Type == LayerType.Objects)
+            await MapLogic.RefreshObjectsOnMap(false);
+
+        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapState.GetLayersForUrlParameter());
+    }
+
+    private async Task ShowLayerAbstract(LayerModel layer)
+    {
+        MapState.SetDialogIsOpen(true);
+        await DialogService.OpenSideAsync<LayerInformation>(cl["layerInfo"], parameters: new Dictionary<string, object> { { "Layer", layer } }, options: MapState.GetDialogOptions());
+    }
+}

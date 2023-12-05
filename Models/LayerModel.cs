@@ -21,7 +21,10 @@ namespace EhriMemoMap.Models
         public string? LayersParameter { get; set; }
         public bool Selected { get; set; }
         public int Order { get; set; }
-        
+        public bool QuickAccess { get; set; }
+        public string? BackgroundColor { get; set; }
+        public string? FontColor { get; set; }
+
         /// <summary>
         /// Od jakého minimálního stupně přiblížení se bude vrstva zobrazovat 
         /// (když bude zoom menší a mapa méně podrobná, vrstva se zobrazovat nebude)

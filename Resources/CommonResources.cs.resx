@@ -303,4 +303,13 @@
   <data name="showMyLocation" xml:space="preserve">
     <value>Zobrazit moji polohu na mapě</value>
   </data>
+  <data name="layer_interest_title_short" xml:space="preserve">
+    <value>Body zájmu</value>
+  </data>
+  <data name="layer_incident_title_short" xml:space="preserve">
+    <value>Incidenty</value>
+  </data>
+  <data name="layer_address_title_short" xml:space="preserve">
+    <value>Adresy</value>
+  </data>
 </root>
