@@ -8,31 +8,54 @@
 @inject IHttpContextAccessor httpContextAccesor
 @inject ILogger<Language> logger
 
-<RadzenButton Style="@style.ButtonStyle" title="@(cl[otherLanguageTitle])"
-              ButtonStyle="ButtonStyle.Dark"
-              Variant="Variant.Filled"
-              Click="ChangeLanguage">@otherLanguage</RadzenButton>
+<RadzenImage Path="@imagePath" Style="@style.ButtonStyle" title="@(cl[otherLanguageTitle])" Click="ChangeLanguage"></RadzenImage>
 
 @code {
     [Parameter]
     public int Order { get; set; }
 
     [Parameter]
-    public PositionEnum Position { get; set; }
+    public VerticalPositionEnum VerticalPosition { get; set; }
 
-
+    [Parameter]
+    public HorizontalPositionEnum HorizontalPosition { get; set; }
 
     string otherLanguage;
     string otherLanguageTitle;
     string currentUri;
+    string imagePath;
 
     (string ButtonStyle, string BoxStyle) style;
 
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
     protected override async Task OnInitializedAsync()
     {
-        style = await MapState.GetStyleOfMapComponent(Position, Order);
+        MapState.OnChange += OnMyChangeHandler;
+        style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
         otherLanguage = Culture.ToString() == "cs-CZ" ? "EN" : "CS";
         otherLanguageTitle = Culture.ToString() == "cs-CZ" ? "english" : "czech";
+        imagePath = $"images/{otherLanguage.ToLower()}.png";
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
+            StateHasChanged();
+        }
     }
 
 

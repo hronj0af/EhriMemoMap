@@ -169,7 +169,7 @@
     <value>Incidents</value>
   </data>
   <data name="featureType_Interest" xml:space="preserve">
-    <value>Inaccessible Places</value>
+    <value>Points of Interest</value>
   </data>
   <data name="featureType_Inaccessible" xml:space="preserve">
     <value>Inaccessible Places</value>

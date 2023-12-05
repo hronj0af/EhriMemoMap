@@ -7,7 +7,7 @@
 
 @inject IStringLocalizer<CommonResources> cl
 
-<RadzenButton Style="@style.ButtonStyle" title="@(cl["layers"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => MapState.IsLayersOpen = !MapState.IsLayersOpen)"><RadzenIcon Icon="menu" /></RadzenButton>
+<RadzenImage Path="images/layers.png" Style="@style.ButtonStyle" title="@(cl["layers"] + "...")" Click="(() => MapState.IsLayersOpen = !MapState.IsLayersOpen)"></RadzenImage>
 
 @if (layers != null && layers.Count() > 0 && MapState.IsLayersOpen)
 {
@@ -37,14 +37,19 @@
     public int Order { get; set; }
 
     [Parameter]
-    public PositionEnum Position { get; set; }
+    public VerticalPositionEnum VerticalPosition { get; set; }
+
+    [Parameter]
+    public HorizontalPositionEnum HorizontalPosition { get; set; }
+
+    private int width;
 
     IEnumerable<LayerModel>? layers;
 
     protected override async Task OnInitializedAsync()
     {
-        var width = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
-        style = await MapState.GetStyleOfMapComponent(Position, Order, width);
+        width = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
+        style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order, width);
         MapState.OnChange += OnMyChangeHandler;
     }
 
@@ -52,6 +57,16 @@
     {
         MapState.OnChange -= OnMyChangeHandler;
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order, width);
+            StateHasChanged();
+        }
+    }
+
 
     private async void OnMyChangeHandler()
     {
@@ -78,6 +93,7 @@
 
     private async Task ShowLayerAbstract(LayerModel layer)
     {
+        MapState.SetDialogIsOpen(true);
         await DialogService.OpenSideAsync<LayerInformation>(cl["layerInfo"], parameters: new Dictionary<string, object> { { "Layer", layer } }, options: MapState.GetDialogOptions());
     }
 }

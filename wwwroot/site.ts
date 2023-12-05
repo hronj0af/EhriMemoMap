@@ -91,6 +91,8 @@ namespace mapAPI {
         });
 
         map = new L.Map('map', { zoomControl: false });
+        map.attributionControl.setPosition('bottomleft');
+
 
         if (!setMapWithInfoFromUrl())
             map.setView([50.07905886, 14.43715096], 14);
@@ -217,7 +219,8 @@ namespace mapAPI {
             return new L.TileLayer.WMS("WMSProxy/Get", {
                 tileSize: 512,
                 //map: mapSettingsObject.mapParameter,
-                layers: mapSettingsObject.layersParameter
+                layers: mapSettingsObject.layersParameter,
+                className: "customWmsLayer"
             });
         }
         return null;

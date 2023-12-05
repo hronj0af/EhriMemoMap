@@ -31,6 +31,7 @@ var mapAPI;
             iconAnchor: [10, 10],
         });
         map = new L.Map('map', { zoomControl: false });
+        map.attributionControl.setPosition('bottomleft');
         if (!setMapWithInfoFromUrl())
             map.setView([50.07905886, 14.43715096], 14);
         map.on("moveend", function () {
@@ -120,7 +121,8 @@ var mapAPI;
         else if (mapSettingsObject.type == 'WMS') {
             return new L.TileLayer.WMS("WMSProxy/Get", {
                 tileSize: 512,
-                layers: mapSettingsObject.layersParameter
+                layers: mapSettingsObject.layersParameter,
+                className: "customWmsLayer"
             });
         }
         return null;

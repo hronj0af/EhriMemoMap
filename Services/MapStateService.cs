@@ -22,6 +22,16 @@ namespace EhriMemoMap.Services
             NotifyStateChanged();
         }
 
+        public bool DialogIsOpen = false;
+        public void SetDialogIsOpen(bool value)
+        {
+            DialogIsOpen = value;
+            NotifyStateChanged();
+        }
+
+        public string WidthOfDialog = "33%";
+        public string HeightOfDialog = "50%";
+        
         public bool MapStateWasInit = false;
 
         public event Action OnChange;
@@ -90,8 +100,8 @@ namespace EhriMemoMap.Services
             }
         }
 
-        private int topOfElement = 10;
-        private int rightOfElement = 10;
+        private int topOfElement = 30;
+        private string rightOfElement = "0%";
 
         /// <summary>
         /// Aktuálně nastavený zoom mapy
@@ -121,13 +131,15 @@ namespace EhriMemoMap.Services
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        public async Task<(string Button, string Box)> GetStyleOfMapComponent(PositionEnum position, int index, int? windowWidth = null)
+        public async Task<(string Button, string Box)> GetStyleOfMapComponent(VerticalPositionEnum verticalPosition, HorizontalPositionEnum horizontalPosition, int index, int? windowWidth = null, int horizontalMargin = 0, int verticalMargin = 0, int step = 53)
         {
-            var y = topOfElement + 45 * index + (position == PositionEnum.Bottom ? 20 : 0);
-            var x = rightOfElement;
+            var y = (verticalMargin > 0 ? verticalMargin : topOfElement) + step * index;
+            var x = DialogIsOpen && !IsMobileBrowser && horizontalPosition == HorizontalPositionEnum.Right
+                    ? WidthOfDialog 
+                    : $"{horizontalMargin}px";
 
-            var buttonStyle = $"position:absolute;{position.ToString().ToLower()}:{y}px;right:{x}px;z-index:600";
-            var boxStyle = $"{(windowWidth != null ? $"width:{windowWidth - 110}px;" : null)}position:absolute;{position.ToString().ToLower()}:{y}px;right:{x + 60}px;z-index:600";
+            var buttonStyle = $"cursor:pointer;position:absolute;{verticalPosition.ToString().ToLower()}:{y}px;{horizontalPosition.ToString().ToLower()}:{x};z-index:6000";
+            var boxStyle = $"{(windowWidth != null ? $"width:{windowWidth - 110}px;" : null)}position:absolute;{verticalPosition.ToString().ToLower()}:{y}px;{horizontalPosition.ToString().ToLower()}:{x + 60}px;z-index:600";
 
             return (buttonStyle, boxStyle);
         }
@@ -321,12 +333,11 @@ namespace EhriMemoMap.Services
             {
                 ShowClose = true,
                 ShowTitle = false,
-                Position = IsMobileBrowser ? DialogPosition.Bottom : DialogPosition.Left,
+                Position = IsMobileBrowser ? DialogPosition.Bottom : DialogPosition.Right,
                 ShowMask = false,
                 CssClass = IsMobileBrowser ? "" : "side-dialog",
-                Style = "background-color:#eeeeee",
-                Height = IsMobileBrowser ? "50%" : "",
-                Width = !IsMobileBrowser ? "33%" : ""
+                Height = IsMobileBrowser ? HeightOfDialog : "",
+                Width = !IsMobileBrowser ? WidthOfDialog : ""
             };
 
         }

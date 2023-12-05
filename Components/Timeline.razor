@@ -8,7 +8,7 @@
 
 @if (timeline != null && timeline.Count > 1)
 {
-    <RadzenButton Style="@style.ButtonStyle" title="@(cl["timeline"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => MapState.IsTimelineOpen = !MapState.IsTimelineOpen)"><RadzenIcon Icon="lock_clock" /></RadzenButton>
+    <RadzenImage Path="images/timeline.png" Style="@style.ButtonStyle" title="@(cl["timeline"] + "...")" Click="(() => MapState.IsTimelineOpen = !MapState.IsTimelineOpen)"></RadzenImage>
 
     @if (MapState.IsTimelineOpen)
     {
@@ -35,18 +35,32 @@
     public int Order { get; set; }
 
     [Parameter]
-    public PositionEnum Position { get; set; }
+    public VerticalPositionEnum VerticalPosition { get; set; }
 
+    [Parameter]
+    public HorizontalPositionEnum HorizontalPosition { get; set; }
+
+    private int width;
 
     List<TimelinePointModel>? timeline;
 
     protected override async Task OnInitializedAsync()
     {
-        var width = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
-        style = await MapState.GetStyleOfMapComponent(Position, Order, width);
+        width = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
+        style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order, width);
         timeline = MapState.GetTimeline();
         MapState.OnChange += OnMyChangeHandler;
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order, width);
+            StateHasChanged();
+        }
+    }
+
 
     public void Dispose()
     {

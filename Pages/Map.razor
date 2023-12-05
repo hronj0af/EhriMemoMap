@@ -16,16 +16,15 @@
 
 <div id="map" style="cursor:default"></div>
 
-<Home Position="PositionEnum.Top" Order="0" />
-<Search Position="PositionEnum.Top" Order="1" />
-<Timeline Position="PositionEnum.Top" Order="2" />
-<Layers Position="PositionEnum.Top" Order="3" />
-<Help Position="PositionEnum.Top" Order="4" />
-<Language Position="PositionEnum.Top" Order="5" />
-<Zoom Position="PositionEnum.Bottom" Order="0" />
+<Home VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="0" />
+<Search VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="1" />
+<Timeline VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="2" />
+<Layers VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="3" />
+<Help VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="4" />
+<Language VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="5" />
+<Zoom VerticalPosition="VerticalPositionEnum.Bottom" HorizontalPosition="HorizontalPositionEnum.Left" Order="0" />
 
 @code {
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         base.OnAfterRender(firstRender);
@@ -83,6 +82,7 @@
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
         var mapLocationJson = JsonConvert.SerializeObject(new { type = "Point", coordinates = new double[] { coordinates[0].X, coordinates[1].Y } }, serializerSettings);
+        MapState.SetDialogIsOpen(true);
         await DialogService.OpenSideAsync<PlaceInformation>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, MapState.GetDialogOptions());
     }
 

@@ -8,7 +8,7 @@
 
 @if (MapState.IsSearchOpen)
 {
-    <RadzenButton Style="@style.ButtonStyle" title="@(cl["search"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => MapState.IsSearchOpen = !MapState.IsSearchOpen)"><RadzenIcon Icon="close" /></RadzenButton>
+    <RadzenImage Path="images/search.png" Style="@style.ButtonStyle" title="@(cl["search"] + "...")" Click="(() => MapState.IsSearchOpen = !MapState.IsSearchOpen)"></RadzenImage>
     <RadzenAutoComplete Change="@ShowPlace" @bind-Value=@selectedPlaceName Data=@places TextProperty="@(CultureInfo.CurrentCulture == new CultureInfo("cs-CZ") ? "DropDownInfoCs" : "DropDownInfoEn")" LoadData=@LoadData Style="@style.BoxStyle">
         <Template>
             <span onclick="@(() => ShowPlace((Place)context))">
@@ -27,7 +27,7 @@
 }
 else
 {
-    <RadzenButton Style="@style.ButtonStyle" title="@(cl["search"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => MapState.IsSearchOpen = !MapState.IsSearchOpen)"><RadzenIcon Icon="search" /></RadzenButton>
+    <RadzenImage Path="images/search.png" Style="@style.ButtonStyle" title="@(cl["search"] + "...")" Click="(() => MapState.IsSearchOpen = !MapState.IsSearchOpen)"></RadzenImage>
 
 }
 
@@ -36,9 +36,12 @@ else
     public int Order { get; set; }
 
     [Parameter]
-    public PositionEnum Position { get; set; }
+    public VerticalPositionEnum VerticalPosition { get; set; }
 
+    [Parameter]
+    public HorizontalPositionEnum HorizontalPosition { get; set; }
 
+    private int width;
 
     string selectedPlaceName;
     IEnumerable<Place> places;
@@ -46,10 +49,20 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var width = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
-        style = await MapState.GetStyleOfMapComponent(Position, Order, width);
+        width = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
+        style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order, width);
         MapState.OnChange += OnMyChangeHandler;
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order, width);
+            StateHasChanged();
+        }
+    }
+
 
     public void Dispose()
     {

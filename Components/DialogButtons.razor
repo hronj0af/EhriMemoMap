@@ -13,6 +13,7 @@
     {
         await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
         DialogService.CloseSide();
+        MapState.SetDialogIsOpen(false);
     }
 
     private async Task OnFullscreen()

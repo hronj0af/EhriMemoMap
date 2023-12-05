@@ -5,25 +5,20 @@
 @inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
 
-<RadzenButton Style="@styleLocation.ButtonStyle" title="@((myLocationIsVisible ? cl["showMyLocation"] : cl["myLocationOn"]) + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => OnLocationClick())">
-    @if (myLocationIsVisible)
-    {
-        <RadzenIcon Icon="my_location" />
-    }
-    else 
-    {
-        <RadzenIcon Icon="location_searching" />
-    }
-</RadzenButton>
-<RadzenButton Style="@styleZoomIn.ButtonStyle" title="@(cl["zoomIn"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => ZoomIn())"><RadzenIcon Icon="add" /></RadzenButton>
-<RadzenButton Style="@styleZoomOut.ButtonStyle" title="@(cl["zoomOut"] + "...")" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Filled" Click="(() => ZoomOut())"><RadzenIcon Icon="remove" /></RadzenButton>
+<RadzenImage Path="@(myLocationIsVisible ? "images/location.png" : "images/location-searching.png")" Style="@styleLocation.ButtonStyle" title="@((myLocationIsVisible ? cl["showMyLocation"] : cl["myLocationOn"]) + "...")" Click="(() => OnLocationClick())"></RadzenImage>
+<RadzenImage Path="images/zoom-in.png" Style="@styleZoomIn.ButtonStyle" title="@(cl["zoomIn"] + "...")" Click="(() => ZoomIn())"></RadzenImage>
+<RadzenImage Path="images/zoom-out.png" Style="@styleZoomOut.ButtonStyle" title="@(cl["zoomOut"] + "...")" Click="(() => ZoomOut())"></RadzenImage>
+
 
 @code {
     [Parameter]
     public int Order { get; set; }
 
     [Parameter]
-    public PositionEnum Position { get; set; }
+    public VerticalPositionEnum VerticalPosition { get; set; }
+
+    [Parameter]
+    public HorizontalPositionEnum HorizontalPosition { get; set; }
 
     (string ButtonStyle, string BoxStyle) styleLocation;
     (string ButtonStyle, string BoxStyle) styleZoomIn;
@@ -32,9 +27,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        styleZoomOut = await MapState.GetStyleOfMapComponent(Position, Order);
-        styleZoomIn = await MapState.GetStyleOfMapComponent(Position, Order + 1);
-        styleLocation = await MapState.GetStyleOfMapComponent(Position, Order + 2);
+        var step = 45;
+        var horizontalMargin = 15;
+        var verticalMargin = 35;
+        styleZoomOut = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order, null, horizontalMargin, verticalMargin, step);
+        styleZoomIn = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order + 1, null, horizontalMargin, verticalMargin, step);
+        styleLocation = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order + 2, null, horizontalMargin, verticalMargin, step);
 
     }
 

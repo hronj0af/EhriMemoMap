@@ -5,21 +5,34 @@
 @inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
 
-<RadzenButton Style="@style.ButtonStyle" title="@(cl["help"] + "...")" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Filled" Click="(() => ShowHelp())"><RadzenIcon Icon="help" /></RadzenButton>
+<RadzenImage Path="images/help.png" Style="@style.ButtonStyle" title="@(cl["help"] + "...")" Click="(() => ShowHelp())"></RadzenImage>
+
 
 @code {
     [Parameter]
     public int Order { get; set; }
 
     [Parameter]
-    public PositionEnum Position { get; set; }
+    public VerticalPositionEnum VerticalPosition { get; set; }
+
+    [Parameter]
+    public HorizontalPositionEnum HorizontalPosition { get; set; }
 
     (string ButtonStyle, string BoxStyle) style;
 
     protected override async Task OnInitializedAsync()
     {
-        style = await MapState.GetStyleOfMapComponent(Position, Order);
+        style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
         MapState.OnChange += OnMyChangeHandler;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
+            StateHasChanged();
+        }
     }
 
     public void Dispose()
@@ -37,6 +50,7 @@
 
     private async Task ShowHelp()
     {
+        MapState.SetDialogIsOpen(true);
         await DialogService.OpenSideAsync<HelpInformation>(cl["help"], options: MapState.GetDialogOptions());
     }
 }

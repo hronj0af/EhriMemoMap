@@ -1,7 +1,12 @@
 ﻿namespace EhriMemoMap.Models
 {
-    public enum PositionEnum
+    public enum VerticalPositionEnum
     {
         Top, Bottom
+    }
+
+    public enum HorizontalPositionEnum
+    {
+        Left, Right
     }
 }
