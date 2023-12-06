@@ -50,6 +50,9 @@
 
     private async Task ShowHelp()
     {
+        MapState.IsLayersOpen = false;
+        MapState.IsSearchOpen = false;
+        MapState.IsTimelineOpen = false;
         MapState.SetDialogIsOpen(true);
         await DialogService.OpenSideAsync<HelpInformation>(cl["help"], options: MapState.GetDialogOptions());
     }

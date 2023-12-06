@@ -8,7 +8,11 @@
 @inject IHttpContextAccessor httpContextAccesor
 @inject ILogger<Language> logger
 
-<RadzenImage Path="@imagePath" Style="@style.ButtonStyle" title="@(cl[otherLanguageTitle])" Click="ChangeLanguage"></RadzenImage>
+<div style="@style.ButtonStyle" onclick="@(() => ChangeLanguage())">
+    <RadzenImage Style="width:39px" Path="images/language.png" title="@(cl[otherLanguageTitle])" ></RadzenImage>
+    <div style="color:white; position: absolute;top: 50%;left: 55%;transform: translate(-50%, -55%);"><h3><b>@otherLanguage</b></h3></div>
+</div>
+
 
 @code {
     [Parameter]

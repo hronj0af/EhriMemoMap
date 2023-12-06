@@ -286,16 +286,16 @@
     <value>Show statistics</value>
   </data>
   <data name="countInaccessiblePlaces" xml:space="preserve">
-    <value>inaccessible places</value>
+    <value>Inaccessible places</value>
   </data>
   <data name="countPointsOfInterest" xml:space="preserve">
-    <value>points of interest</value>
+    <value>Points of interest</value>
   </data>
   <data name="countJews" xml:space="preserve">
     <value>Jews</value>
   </data>
   <data name="countIncidents" xml:space="preserve">
-    <value>incidents</value>
+    <value>Incidents</value>
   </data>
   <data name="zoomMapForMoreInfo" xml:space="preserve">
     <value>Zoom in on the map for more information.</value>
@@ -311,5 +311,17 @@
   </data>
   <data name="layer_address_title_short" xml:space="preserve">
     <value>Homes</value>
+  </data>
+  <data name="welcomeText" xml:space="preserve">
+    <value>The MemoMap historical geographical information system displays data on more than 30,000 Holocaust victims, 1,700 cases of violations of anti-Jewish laws and regulations, and 200 points of interest onto an interactive map of European cities. </value>
+  </data>
+  <data name="goToMap" xml:space="preserve">
+    <value>Go to map</value>
+  </data>
+  <data name="useNavigation" xml:space="preserve">
+    <value>Use navigation on right to adjust map...</value>
+  </data>
+  <data name="layerHelp" xml:space="preserve">
+    <value>You can filter the results according to selected layers...</value>
   </data>
 </root>

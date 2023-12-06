@@ -12,17 +12,24 @@
 
 @if (layers != null && layers.Count() > 0)
 {
-    <div style="display:flex;gap:10px;flex-direction:column">
+    <div style="padding:0 1.5rem 0 1.5rem;display:flex;gap:10px;flex-direction:column">
 
+        <h1 style="color:var(--Wine-Red)">@cl["layers"]</h1>
+        <p>@cl["layerHelp"]</p>
         @foreach (var item in layers.OrderBy(a => a.Order))
         {
-            <div style="color: @(item.FontColor); background-color: @(item.BackgroundColor); border-radius: 6px; order:@(item.Order);height: 50px;justify-content:space-between" class="center">
+            var iconFilter = item.FontColor == FontColor.Dark ? "filter: brightness(30%);width:30px;" : "width:30px;";
+            var fontColor = item.FontColor == FontColor.Light ? "var(--Beige-LIGHT)" : "var(--Grey)";
+
+            <div style="color: @fontColor; background-color: @(item.BackgroundColor); border-radius: 6px; order:@(item.Order);height: 50px;justify-content:space-between" class="center">
                 <div style="display:flex;justify-content:start;align-items: center;">
-                    <RadzenImage style="cursor:pointer;width:30px" class="rz-px-1" Click="@(() => OnLayerClick(item))" Path="@(item.Selected ? "images/checkbox-true.png" : "images/checkbox-false.png")"></RadzenImage>
-                    <span class="rz-px-1" style="font-size: 18px; font-family: Barlow; font-weight: 500;">@cl["layer_" + item.Name + "_title"]</span>
+                    <RadzenImage Style="@(iconFilter + "cursor:pointer;")" class="rz-px-1" Click="@(() => OnLayerClick(item))" Path="@(item.Selected ? "images/checkbox-true.png" : "images/checkbox-false.png")"></RadzenImage>
+                    <div class="rz-px-1">
+                        <span style="font-size: 18px; font-family: Barlow; font-weight: 500;">@cl["layer_" + item.Name + "_title"]</span>
+                    </div>
                 </div>
                 <div style="display:flex;justify-content:end">
-                    <RadzenImage class="rz-px-2" Style="width:30px;" Path="@("images/" + item.Name + ".png")"></RadzenImage>
+                    <RadzenImage onerror="this.onerror=null; this.remove();" class="rz-px-2" Style="@iconFilter" Path="@("images/" + item.Name + ".png")"></RadzenImage>
                 </div>
             </div>
 

@@ -1,12 +1,12 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
 @inject MapStateService MapState
 
-<RadzenColumn Size="MapState.DialogIsFullscreen && !MapState.IsMobileBrowser ? 2 : 6">
+<RadzenColumn Size="MapState.DialogIsFullscreen && !MapState.IsMobileBrowser ? 2 : 4">
     <a href="@Victim.DetailsCs" target="_blank" style="text-decoration:none;color:black">
-        <RadzenCard  Style="@(!MapState.IsMobileBrowser ? "height:230px" : "height:280px")" >
+        <RadzenCard Style="@(!MapState.IsMobileBrowser ? "height:230px" : "height:280px")" >
             <RadzenStack Orientation="Orientation.Vertical" Style="height:200px" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
                 <RadzenImage Style="max-height:85%;max-width:100%;" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" ? Victim.Photo : "images/face.png")" />
-                <div class="rz-text-align-center" style="height:15%; width:100%"><small>@Victim.Label</small></div>
+                <div class="rz-text-align-center" style="height:15%; width:100%; font-family:Barlow Regular; font-size:16px"><small>@Victim.Label</small></div>
             </RadzenStack>
         </RadzenCard>
     </a>

@@ -3,8 +3,16 @@
 
 
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin:0px;
+    font-family: Noto Serif Regular;
+    margin: 0px;
+    color:var(--Grey);
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: Barlow Regular;
+    line-height:1;
+    margin-block-start:0;
+    margin-block-end:0;
 }
 
 h1:focus {
@@ -123,4 +131,30 @@ path.leaflet-interactive:focus {
     justify-content: center;
     align-items: center;
 
+}
+
+.cell {
+    vertical-align: top;
+    font-family:Barlow Regular;
+    font-size:18px;
+    line-height:2rem;
+}
+
+.firstCell {
+    vertical-align: middle;
+    width: 5%;
+    color: var(--Wine-Red);
+    filter: brightness(20%);
+    padding-right: 10px;
+}
+
+.secondCell {
+    width: 70%;
+    color: var(--Grey);
+}
+
+.thirdCell {
+    width: 25%;
+    color: var(--Wine-Red);
+    text-align:right;
 }

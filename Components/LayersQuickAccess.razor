@@ -12,13 +12,16 @@
     <div style="position:absolute;top:20px;left:20px;z-index:2000">
         <div style="display:flex;gap:10px">
             @foreach (var item in layers.Where(a => a.QuickAccess).OrderBy(a => a.Order))
-        {
-                <div style="background-color: @(item.BackgroundColor); color: @(item.FontColor); border-radius: 6px; order:@(item.Order);height: 38px;" class="center">
-                <RadzenImage style="cursor:pointer;width:20px" class="rz-px-1" Click="@(() => OnLayerClick(item))" Path="@(item.Selected ? "images/checkbox-true.png" : "images/checkbox-false.png")"></RadzenImage>
-                <span class="rz-px-1" style="font-size: 16px; font-family: Barlow; font-weight: 700;">@cl["layer_" + item.Name + "_title_short"]</span>
-                <RadzenImage class="rz-px-2" Style="width:20px" Path="@("images/" + item.Name + ".png")"></RadzenImage>
-            </div>
-        }
+            {
+                var iconFilter = item.FontColor == FontColor.Dark ? "filter: brightness(30%);width:20px;" : "width:20px;";
+                var fontColor = item.FontColor == FontColor.Light ? "var(--Beige-LIGHT)" : "var(--Grey)";
+
+                <div style="background-color: @(item.BackgroundColor); color: @(fontColor); border-radius: 6px; order:@(item.Order);height: 38px;" class="center">
+                    <RadzenImage Style="@(iconFilter + "cursor:pointer")" class="rz-px-1" Click="@(() => OnLayerClick(item))" Path="@(item.Selected ? "images/checkbox-true.png" : "images/checkbox-false.png")"></RadzenImage>
+                    <span class="rz-px-1" style="font-size: 16px; font-family: Barlow; font-weight: 700;">@cl["layer_" + item.Name + "_title_short"]</span>
+                    <RadzenImage class="rz-px-2" Style="@iconFilter" Path="@("images/" + item.Name + ".png")"></RadzenImage>
+                </div>
+            }
         </div>
     </div>
 
@@ -58,6 +61,13 @@
 
     private async Task OnLayerClick(LayerModel layer)
     {
+        if (MapState.IsLayersOpen)
+        {
+            MapState.IsLayersOpen = false;
+            MapState.SetDialogIsOpen(false);
+            DialogService.CloseSide();
+        }
+
         layer.Selected = !layer.Selected;
         if (layer.Type == LayerType.WMS)
             await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", layer.Name, layer.Selected);

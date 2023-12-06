@@ -7,9 +7,9 @@
 <RadzenRow class="rz-mb-4">
     <RadzenCard Style="width:100%">
 
-        <ul class="no-bullets">
-            <li><b>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</b></li>
-            <li><i>@Place.DateIso?.ToString("d. M. yyyy")</i></li>
+        <h3>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</h3>
+        <h5>@Place.DateIso?.ToString("d. M. yyyy")</h5>
+        <ul class="no-bullets rz-mt-4">
             <li>@cl["place"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.PlaceEn : Place.PlaceCs)</li>
             @if (!string.IsNullOrEmpty(Place.DescriptionCs))
             {

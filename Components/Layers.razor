@@ -58,14 +58,16 @@
 
     private async Task ShowLayersList()
     {
-        if (MapState.DialogIsOpen)
+        if (MapState.IsLayersOpen)
         {
             MapState.SetDialogIsOpen(false);
+            MapState.IsLayersOpen = false;
             DialogService.CloseSide();
         }
         else
         {
             MapState.SetDialogIsOpen(true);
+            MapState.IsLayersOpen = true;
             await DialogService.OpenSideAsync<LayersList>(cl["layerInfo"], options: MapState.GetDialogOptions());
         }
     }

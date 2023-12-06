@@ -23,7 +23,7 @@ namespace EhriMemoMap.Models
         public int Order { get; set; }
         public bool QuickAccess { get; set; }
         public string? BackgroundColor { get; set; }
-        public string? FontColor { get; set; }
+        public FontColor? FontColor { get; set; }
 
         /// <summary>
         /// Od jakého minimálního stupně přiblížení se bude vrstva zobrazovat 
@@ -43,5 +43,10 @@ namespace EhriMemoMap.Models
     public enum LayerType
     {
         Images, Objects, WMS, Base, Polygons
+    }
+
+    public enum FontColor
+    {
+        Light, Dark
     }
 }

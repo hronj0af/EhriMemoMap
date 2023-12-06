@@ -32,6 +32,8 @@
 
         if (firstRender)
         {
+            // DialogService.Open<WelcomeInformation>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "33%"});
+
             // musím do javascriptu šoupnout odkaz na instanci téhle třídy Map,
             // abych pak mohl z javascriptu volat metodu RefreshObjectsOnMap a ShowPlaceInfo
             var dotNetReference = DotNetObjectReference.Create(this);

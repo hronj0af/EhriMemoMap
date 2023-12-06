@@ -7,9 +7,9 @@
 <RadzenRow class="rz-mb-4">
     <RadzenCard Style="width:100%">
 
+        <h3>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</h3>
+        <h5>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h5>
         <ul class="no-bullets">
-            <li><b>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</b></li>
-            <li><i>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</i></li>
             <li>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn : Place.DescriptionCs)</li>
         </ul>
 

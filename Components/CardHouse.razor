@@ -3,68 +3,72 @@
 
 <RadzenRow Gap="1rem" JustifyContent=JustifyContent.Left>
     <RadzenColumn Size="12">
-        <RadzenCard>
-            <ul class="no-bullets">
-
-                @if (House.Address.Murdered != null)
-                {
-                    <li>@cl["murdered"]: @House.Address.Murdered</li>
-                }
-                @if (House.Address.Survived != null)
-                {
-                    <li>@cl["survived"]: @House.Address.Survived</li>
-                }
-                @if (House.Address.FateUnknown != null)
-                {
-                    <li>@cl["fateUnknown"]: @House.Address.FateUnknown</li>
-                }
-                @if (!StatisticsIsOpen)
-                {
-                    <li>
-                        <RadzenButton class="rz-mt-2" title="@(cl["showStatistics"] + "...")" ButtonStyle="ButtonStyle.Dark" Size="ButtonSize.Small" Icon="add" Variant="Variant.Filled" Click="(() => StatisticsIsOpen = !StatisticsIsOpen)" />
-                    </li>
-
-                }
-
-                else
-                {
-                    <li>
-                        <RadzenButton class="rz-mt-2" title="@(cl["hideStatistics"] + "...")" ButtonStyle="ButtonStyle.Dark" Size="ButtonSize.Small" Icon="remove" Variant="Variant.Filled" Click="(() => StatisticsIsOpen = !StatisticsIsOpen)" />
-                    </li>
-                    @if (House.Statistics != null && House.Statistics.Count > 0)
+        <RadzenCard Style="background-color: var(--Beige);padding:1rem;color:var(--Grey)">
+            <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenColumn Size="11">
+                    @if (House.Address.Murdered != null)
                     {
-                        <table class="rz-grid-table rz-grid-table-fixed" style="width:100%">
+                        <span class="rz-mr-2">@cl["murdered"]: @House.Address.Murdered</span>
+                    }
+                    @if (House.Address.Survived != null)
+                    {
+                        <span class="rz-mr-2">@cl["survived"]: @House.Address.Survived</span>
+                    }
+                    @if (House.Address.FateUnknown != null)
+                    {
+                        <span class="rz-mr-2">@cl["fateUnknown"]: @House.Address.FateUnknown</span>
+                    }
+                </RadzenColumn>
+                <RadzenColumn Size="1">
+                    @if (!StatisticsIsOpen)
+                    {
+                        <RadzenImage Style="height:17px;cursor:pointer" Path="images/arrow-right.png" title="@(cl["showStatistics"] + "...")" Click="(() => StatisticsIsOpen = !StatisticsIsOpen)"></RadzenImage>
+
+                    }
+                    else
+                    {
+                        <RadzenImage Style="width:17px;cursor:pointer"  Path="images/arrow-down.png" title="@(cl["hideStatistics"] + "...")" Click="(() => StatisticsIsOpen = !StatisticsIsOpen)"></RadzenImage>
+                    }
+
+                </RadzenColumn>
+            </RadzenRow>
+
+
+            @if (StatisticsIsOpen)
+            {
+                @if (House.Statistics != null && House.Statistics.Count > 0)
+                {
+                    <table class="rz-grid-table rz-grid-table-fixed" style="width:100%">
+                        <tr>
+                            <th style="width:50%"></th>
+                            @if (House.Statistics.Any(a => a.NumberPresent != null))
+                            {
+                                <th style="text-align:left;font-family:Barlow Regular;">@cl["present"]</th>
+
+                            }
+                            @if (House.Statistics.Any(a => a.NumberAbsent != null))
+                            {
+                                <th style="text-align:left;font-family:Barlow Regular;">@cl["absent"]</th>
+                            }
+                        </tr>
+
+                        @foreach (var statistic in House.Statistics.Where(a => MapState.GetTimelinePoint() != null ? (a.Date == new DateTime(1941, 10, 01) || a.Date == MapState.GetTimelinePoint()) : 1 == 1))
+                        {
                             <tr>
-                                <th></th>
+                                <td>@statistic.Date.ToString("d. M. yyyy")</td>
                                 @if (House.Statistics.Any(a => a.NumberPresent != null))
                                 {
-                                    <th style="text-align:left">@cl["present"]</th>
-
+                                    <td>@statistic.NumberPresent</td>
                                 }
                                 @if (House.Statistics.Any(a => a.NumberAbsent != null))
                                 {
-                                    <th style="text-align:left">@cl["absent"]</th>
+                                    <td>@statistic.NumberAbsent</td>
                                 }
                             </tr>
-
-                            @foreach (var statistic in House.Statistics.Where(a=> MapState.GetTimelinePoint() != null ? (a.Date == new DateTime(1941,10,01) || a.Date == MapState.GetTimelinePoint()) : 1 == 1))
-                            {
-                                <tr>
-                                    <td>@statistic.Date.ToString("d. M. yyyy")</td>
-                                    @if (House.Statistics.Any(a => a.NumberPresent != null))
-                                    {
-                                        <td>@statistic.NumberPresent</td>
-                                    }
-                                    @if (House.Statistics.Any(a => a.NumberAbsent != null))
-                                    {
-                                        <td>@statistic.NumberAbsent</td>
-                                    }
-                                </tr>
-                            }
-                        </table>
-                    }
+                        }
+                    </table>
                 }
-            </ul>
+            }
         </RadzenCard>
     </RadzenColumn>
 </RadzenRow>
