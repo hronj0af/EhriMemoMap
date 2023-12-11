@@ -5,19 +5,23 @@
 @inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
 
-<div style="@style">
-    <RadzenRow Gap="5" RowGap="5px" JustifyContent="justifyContent">
-        <RadzenColumn Size="size">
-            <div class="icon-small icon-location" title="@((myLocationIsVisible ? cl["showMyLocation"] : cl["myLocationOn"]) + "...")" onclick="@(() => OnLocationClick())"></div>
-        </RadzenColumn>
-        <RadzenColumn Size="size">
-            <div class="icon-small icon-zoom-in" title="@(cl["zoomIn"] + " ...")" onclick="@(() => ZoomIn())"></div>
-        </RadzenColumn>
-        <RadzenColumn Size="size">
-            <div class="icon-small icon-zoom-out" title="@(cl["zoomOut"] + "...")" onclick="@(() => ZoomOut())"></div>
-        </RadzenColumn>
-    </RadzenRow>
-</div>
+@if (!string.IsNullOrEmpty(style))
+{
+    <div style="@style">
+        <RadzenRow Gap="5" RowGap="5px" JustifyContent="justifyContent">
+            <RadzenColumn Size="size">
+                <div class="icon-small icon-location" title="@((myLocationIsVisible ? cl["showMyLocation"] : cl["myLocationOn"]) + "...")" onclick="@(() => OnLocationClick())"></div>
+            </RadzenColumn>
+            <RadzenColumn Size="size">
+                <div class="icon-small icon-zoom-in" title="@(cl["zoomIn"] + " ...")" onclick="@(() => ZoomIn())"></div>
+            </RadzenColumn>
+            <RadzenColumn Size="size">
+                <div class="icon-small icon-zoom-out" title="@(cl["zoomOut"] + "...")" onclick="@(() => ZoomOut())"></div>
+            </RadzenColumn>
+        </RadzenRow>
+    </div>
+
+}
 
 
 

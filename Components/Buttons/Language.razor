@@ -8,13 +8,42 @@
 @inject IHttpContextAccessor httpContextAccesor
 @inject ILogger<Language> logger
 
-<div style="cursor:pointer;position:absolute;right:0" onclick="@(() => ChangeLanguage())">
-    <RadzenImage Style="width:39px" Path="images/language.png" title="@(cl[otherLanguageTitle])" ></RadzenImage>
-    <div style="color:white; position: absolute;top: 50%;left: 55%;transform: translate(-50%, -55%);"><h3><b>@otherLanguage</b></h3></div>
-</div>
+@if (MobileTopBar)
+{
+    <RadzenButton Size="ButtonSize.ExtraSmall" Variant="Variant.Flat" id="btn-language-topbar" Click="ChangeLanguage">
+        <b>@otherLanguage</b>
+    </RadzenButton>
+}
+else
+{
+    <div style="cursor:pointer;position:absolute;right:0" onclick="@(() => ChangeLanguage())">
+        @* <div class="icon-small icon-language" title="@(cl["otherLanguageTitle"] + "...")"></div> *@
 
+        <RadzenImage Style="width:39px" Path="images/language.png" title="@(cl[otherLanguageTitle])"></RadzenImage>
+        <div style="color:white; position: absolute;top: 50%;left: 55%;transform: translate(-50%, -55%);"><h3><b>@otherLanguage</b></h3></div>
+    </div>
 
+}
+
+<style>
+    #btn-language-topbar {
+        background-color: var(--Beige-LIGHT);
+        color: var(--Wine-Red);
+        font-family: Barlow Regular;
+        font-weight: 700;
+    }
+
+        #btn-language-topbar:hover {
+            color: var(--Beige-LIGHT);
+            background-color: var(--Wine-Red);
+            font-family: Barlow Regular;
+            font-weight: 700;
+        }
+</style>
 @code {
+    [Parameter]
+    public bool MobileTopBar { get; set; } = false;
+
     string otherLanguage;
     string otherLanguageTitle;
     string currentUri;

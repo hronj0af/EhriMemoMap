@@ -1,40 +1,63 @@
 ﻿@inject MapStateService MapState
 
-<div style="@style">
-    <RadzenRow Gap="0" RowGap="5px" JustifyContent="justifyContent">
+@if (!string.IsNullOrEmpty(style))
+{
+    <div style="@style">
         @if (isMobileBrowser == false)
         {
-            <RadzenColumn Size="size">
-                <Home />
-            </RadzenColumn>
+            <RadzenRow Gap="0" RowGap="5px" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
+                <RadzenColumn Size="12">
+                    <Home />
+                </RadzenColumn>
+                <RadzenColumn Size="12">
+                    <Search />
+                </RadzenColumn>
+                <RadzenColumn Size="12">
+                    <Timeline />
+                </RadzenColumn>
+                <RadzenColumn Size="12">
+                    <Layers />
+                </RadzenColumn>
+                <RadzenColumn Size="12">
+                    <Help />
+                </RadzenColumn>
+                <RadzenColumn Size="12">
+                    <Language />
+                </RadzenColumn>
+            </RadzenRow>
+
         }
-        <RadzenColumn Size="size">
-            <Search />
-        </RadzenColumn>
-        <RadzenColumn Size="size">
-            <Timeline />
-        </RadzenColumn>
-        <RadzenColumn Size="size">
-            <Layers />
-        </RadzenColumn>
-        @if (isMobileBrowser == false)
+        else
         {
-            <RadzenColumn Size="size">
-                <Help />
-            </RadzenColumn>
-            <RadzenColumn Size="size">
-                <Language />
-            </RadzenColumn>
+            <RadzenRow Gap="0" RowGap="5px" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
+                <RadzenColumn Size="3" Style="@rightBorder">
+                    <RadzenStack JustifyContent="JustifyContent.Center" Style="color:white">
+                        <Search />
+                    </RadzenStack>
+                </RadzenColumn>
+                <RadzenColumn Size="3" Style="@rightBorder">
+                    <RadzenStack JustifyContent="JustifyContent.Center" Style="color:white">
+                        <Timeline />
+                    </RadzenStack>
+                </RadzenColumn>
+                <RadzenColumn Size="3" Style="@rightBorder">
+                    <RadzenStack Orientation="Orientation.Horizontal"  JustifyContent="JustifyContent.End" Style="color:white">
+                        <Layers />
+                    </RadzenStack>
+                </RadzenColumn>
+            </RadzenRow>
+
         }
-    </RadzenRow>
-</div>
+    </div>
+
+}
 
 @code {
     public string style;
     public string gap;
-    public int size;
     public JustifyContent justifyContent;
     public bool? isMobileBrowser;
+    public string rightBorder = "border-right: 1px solid white;";
 
     protected override async Task OnInitializedAsync()
     {
@@ -45,9 +68,8 @@
     {
         if (!firstRender)
         {
-            size = MapState.IsMobileBrowser ? 2 : 12;
             isMobileBrowser = MapState.IsMobileBrowser;
-            justifyContent = MapState.IsMobileBrowser ? JustifyContent.SpaceAround : JustifyContent.End;
+            justifyContent = MapState.IsMobileBrowser ? JustifyContent.Center : JustifyContent.End;
             style = GetStyle();
             StateHasChanged();
         }
