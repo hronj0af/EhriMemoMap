@@ -16,44 +16,44 @@
 
 <div id="map" style="cursor:default"></div>
 
-<Home VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="0" />
-<Search VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="1" />
-<Timeline VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="2" />
-<Layers VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="3" />
-<Help VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="4" />
-<Language VerticalPosition="VerticalPositionEnum.Top" HorizontalPosition="HorizontalPositionEnum.Right" Order="5" />
-<Zoom VerticalPosition="VerticalPositionEnum.Bottom" HorizontalPosition="HorizontalPositionEnum.Left" Order="0" />
-<LayersQuickAccess/>
+<ControlButtonsWrapper />
+<ZoomButtonsWrapper/>
+@if (isMobileBrowser == false)
+{
+    <LayersQuickAccess />
+}
 
 @code {
+    bool? isMobileBrowser = null;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        base.OnAfterRender(firstRender);
+        // DialogService.Open<WelcomeDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "33%"});
 
-        if (firstRender)
+
+        if (firstRender && !MapState.MapStateWasInit)
         {
-            // DialogService.Open<WelcomeInformation>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "33%"});
-
             // musím do javascriptu šoupnout odkaz na instanci téhle třídy Map,
             // abych pak mohl z javascriptu volat metodu RefreshObjectsOnMap a ShowPlaceInfo
+
             var dotNetReference = DotNetObjectReference.Create(this);
             await JS.InvokeVoidAsync("mapAPI.initBlazorMapObject", dotNetReference);
-
-            if (!MapState.MapStateWasInit)
-            {
-                string layers = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "layers");
-                string timelinePointName = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "timeline");
-                MapState.IsMobileBrowser = await JS.InvokeAsync<bool>("mapAPI.isMobileBrowser");
-                MapState.Init(layers, timelinePointName);
-            }
-
+            string layers = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "layers");
+            string timelinePointName = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "timeline");
+            MapState.IsMobileBrowser = await JS.InvokeAsync<bool>("mapAPI.isMobileBrowser");
+            MapState.Init(layers, timelinePointName);
             await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet());
 
             MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.getZoom");
             MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
 
             await MapLogic.RefreshObjectsOnMap(true);
+            isMobileBrowser = MapState.IsMobileBrowser;
+            StateHasChanged();
+
         }
+
+
     }
 
     /// <summary>
@@ -85,8 +85,8 @@
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
         var mapLocationJson = JsonConvert.SerializeObject(new { type = "Point", coordinates = new double[] { coordinates[0].X, coordinates[1].Y } }, serializerSettings);
-        MapState.SetDialogIsOpen(true);
-        await DialogService.OpenSideAsync<PlaceInformation>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, MapState.GetDialogOptions());
+        MapState.SetDialogType(DialogTypeEnum.Place);
+        await DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, MapState.GetDialogOptions());
     }
 
 }

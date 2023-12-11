@@ -1,0 +1,77 @@
+﻿@using EhriMemoMap.Helpers;
+@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapStateService MapState
+@inject IStringLocalizer<CommonResources> cl
+
+<div style="@style">
+    <RadzenRow Gap="0" RowGap="5px" JustifyContent="justifyContent">
+        <RadzenColumn Size="size">
+            <div class="icon-small icon-location" title="@((myLocationIsVisible ? cl["showMyLocation"] : cl["myLocationOn"]) + "...")" onclick="@(() => OnLocationClick())"></div>
+        </RadzenColumn>
+        <RadzenColumn Size="size">
+            <div class="icon-small icon-zoom-in" title="@(cl["zoomIn"] + " ...")" onclick="@(() => ZoomIn())"></div>
+        </RadzenColumn>
+        <RadzenColumn Size="size">
+            <div class="icon-small icon-zoom-out" title="@(cl["zoomOut"] + "...")" onclick="@(() => ZoomOut())"></div>
+        </RadzenColumn>
+    </RadzenRow>
+</div>
+
+
+
+@code {
+    private bool myLocationIsVisible = false;
+
+    public string style;
+    public string gap;
+    public int size;
+    public JustifyContent justifyContent;
+    public bool? isMobileBrowser;
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            size = MapState.IsMobileBrowser ? 2 : 12;
+            isMobileBrowser = MapState.IsMobileBrowser;
+            justifyContent = MapState.IsMobileBrowser ? JustifyContent.SpaceAround : JustifyContent.End;
+            style = GetStyle();
+            StateHasChanged();
+        }
+    }
+
+
+    private async Task OnLocationClick()
+    {
+        if (!myLocationIsVisible)
+        {
+            myLocationIsVisible = true;
+            await JS.InvokeVoidAsync("mapAPI.turnOnLocationTracking");
+        }
+        else
+        {
+            await JS.InvokeVoidAsync("mapAPI.goToMyLocation");
+        }
+    }
+
+    private async Task ZoomIn()
+    {
+        await JS.InvokeVoidAsync("mapAPI.zoomIn");
+    }
+
+    private async Task ZoomOut()
+    {
+        await JS.InvokeVoidAsync("mapAPI.zoomOut");
+    }
+
+    public string GetStyle()
+    {
+        if (MapState.IsMobileBrowser)
+            return $"position:absolute;top:10px;right:10px;z-index:6000;";
+        return $"position:absolute;bottom:34px;left:15px;z-index:6000";
+    }
+
+}

@@ -441,30 +441,31 @@ svg.leaflet-image-layer.leaflet-interactive path {
 .leaflet-bottom .leaflet-control-scale {
 	margin-bottom: 18px;
 	margin-left: 70px;
-	background-color: #d5d2b8;
+	background-color: #46463D;
 	padding: 10px;
+	border-radius:4px;
 }
 .leaflet-control-scale-line {
-	border: 2px solid #771646;
+	border: 2px solid var(--Beige);
 	border-top: none;
 	line-height: 1.1;
 	padding: 2px 5px 1px;
 	white-space: nowrap;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
-	background: #d5d2b8;
+	background: #46463D;
 	font-family: Barlow;
 	font-weight: 700;
-	color: #771646;
+	color: var(--Beige-LIGHT);
 	font-size: 14px;
 }
 	.leaflet-control-scale-line:not(:first-child) {
-		border-top: 2px solid #771646;
+		border-top: 2px solid var(--Beige);
 		border-bottom: none;
 		margin-top: -2px;
 	}
 		.leaflet-control-scale-line:not(:first-child):not(:last-child) {
-			border-bottom: 2px solid #771646;
+			border-bottom: 2px solid var(--Beige);
 		}
 
 .leaflet-touch .leaflet-control-attribution,

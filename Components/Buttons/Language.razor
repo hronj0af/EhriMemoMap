@@ -8,28 +8,17 @@
 @inject IHttpContextAccessor httpContextAccesor
 @inject ILogger<Language> logger
 
-<div style="@style.ButtonStyle" onclick="@(() => ChangeLanguage())">
+<div style="cursor:pointer;position:absolute;right:0" onclick="@(() => ChangeLanguage())">
     <RadzenImage Style="width:39px" Path="images/language.png" title="@(cl[otherLanguageTitle])" ></RadzenImage>
     <div style="color:white; position: absolute;top: 50%;left: 55%;transform: translate(-50%, -55%);"><h3><b>@otherLanguage</b></h3></div>
 </div>
 
 
 @code {
-    [Parameter]
-    public int Order { get; set; }
-
-    [Parameter]
-    public VerticalPositionEnum VerticalPosition { get; set; }
-
-    [Parameter]
-    public HorizontalPositionEnum HorizontalPosition { get; set; }
-
     string otherLanguage;
     string otherLanguageTitle;
     string currentUri;
     string imagePath;
-
-    (string ButtonStyle, string BoxStyle) style;
 
     public void Dispose()
     {
@@ -47,7 +36,7 @@
     protected override async Task OnInitializedAsync()
     {
         MapState.OnChange += OnMyChangeHandler;
-        style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
+        // style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
         otherLanguage = Culture.ToString() == "cs-CZ" ? "EN" : "CS";
         otherLanguageTitle = Culture.ToString() == "cs-CZ" ? "english" : "czech";
         imagePath = $"images/{otherLanguage.ToLower()}.png";
@@ -57,7 +46,7 @@
     {
         if (!firstRender)
         {
-            style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
+            // style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
             StateHasChanged();
         }
     }

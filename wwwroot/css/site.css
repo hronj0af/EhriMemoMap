@@ -5,19 +5,19 @@
 html, body {
     font-family: Noto Serif Regular;
     margin: 0px;
-    color:var(--Grey);
+    color: var(--Grey);
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
     font-family: Barlow Regular;
-    line-height:1;
-    margin-block-start:0;
-    margin-block-end:0;
+    line-height: 1;
+    margin-block-start: 0;
+    margin-block-end: 0;
 }
 
-h1:focus {
-    outline: none;
-}
+    h1:focus {
+        outline: none;
+    }
 
 a, .btn-link {
     color: #0071c1;
@@ -30,7 +30,7 @@ a, .btn-link {
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -80,19 +80,23 @@ a, .btn-link {
 
 
 img.leaflet-tile {
-    margin: 0!important;
-    border:2px black !important;
+    margin: 0 !important;
+    border: 2px black !important;
 }
 
-.rz-autocomplete-input {height: 1.2rem !important;}
-.rz-autocomplete-panel {max-height: 400px !important;}
+.rz-autocomplete-input {
+    height: 1.2rem !important;
+}
+
+.rz-autocomplete-panel {
+    max-height: 400px !important;
+}
 
 
 ul.no-bullets {
     list-style-type: none; /* Remove bullets */
     padding: 0; /* Remove padding */
-    margin:0; /* Remove margins */
-
+    margin: 0; /* Remove margins */
 }
 
 li.indented {
@@ -102,23 +106,19 @@ li.indented {
 }
 
 .side-dialog {
-    position:absolute;
-    top:0;
+    position: absolute;
+    top: 0;
 }
 
 path.leaflet-interactive:focus {
     outline: none;
-
 }
 
 .statistics-title-text {
     color: black;
     font-weight: 900;
-    font-size:32px;
-    text-shadow: -1px 1px 2px #fff,
-	  1px 1px 2px #fff,
-	  1px -1px 0 #fff,
-	  -1px -1px 0 #fff;
+    font-size: 32px;
+    text-shadow: -1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff;
 }
 
 .customWmsLayer {
@@ -130,14 +130,13 @@ path.leaflet-interactive:focus {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-
 }
 
 .cell {
     vertical-align: top;
-    font-family:Barlow Regular;
-    font-size:18px;
-    line-height:2rem;
+    font-family: Barlow Regular;
+    font-size: 18px;
+    line-height: 2rem;
 }
 
 .firstCell {
@@ -156,5 +155,113 @@ path.leaflet-interactive:focus {
 .thirdCell {
     width: 25%;
     color: var(--Wine-Red);
-    text-align:right;
+    text-align: right;
+}
+
+.icon {
+    height: 49px;
+    cursor: pointer;
+}
+
+.icon-small {
+    height: 37px;
+    width: 36px;
+    cursor: pointer;
+}
+
+.icon-home {
+    background-image: url(/images/home.svg);
+}
+
+    .icon-home:hover {
+        background-image: url(/images/home-selected.svg);
+    }
+
+.icon-home-selected {
+    background-image: url(/images/home-selected.svg);
+}
+
+.icon-timeline {
+    background-image: url(/images/timeline.svg);
+}
+
+    .icon-timeline:hover {
+        background-image: url(/images/timeline-selected.svg);
+    }
+
+.icon-timeline-selected {
+    background-image: url(/images/timeline-selected.svg);
+}
+
+.icon-search {
+    background-image: url(/images/search.svg);
+}
+
+    .icon-search:hover {
+        background-image: url(/images/search-selected.svg);
+    }
+
+.icon-search-selected {
+    background-image: url(/images/search-selected.svg);
+}
+
+
+.icon-help {
+    background-image: url(/images/help.svg);
+}
+
+    .icon-help:hover {
+        background-image: url(/images/help-selected.svg);
+    }
+
+.icon-help-selected {
+    background-image: url(/images/help-selected.svg);
+}
+
+.icon-layers {
+    background-image: url(/images/layers.svg);
+}
+
+    .icon-layers:hover {
+        background-image: url(/images/layers-selected.svg);
+    }
+
+.icon-layers-selected {
+    background-image: url(/images/layers-selected.svg);
+}
+
+.icon-zoom-in {
+    background-image: url(/images/zoom-in.svg);
+}
+
+    .icon-zoom-in:hover {
+        background-image: url(/images/zoom-in-selected.svg);
+    }
+
+.icon-zoom-in-selected {
+    background-image: url(/images/zoom-in-selected.svg);
+}
+
+.icon-zoom-out {
+    background-image: url(/images/zoom-out.svg);
+}
+
+    .icon-zoom-out:hover {
+        background-image: url(/images/zoom-out-selected.svg);
+    }
+
+.icon-zoom-out-selected {
+    background-image: url(/images/zoom-out-selected.svg);
+}
+
+.icon-location {
+    background-image: url(/images/location.svg);
+}
+
+    .icon-location:hover {
+        background-image: url(/images/location-selected.svg);
+    }
+
+.icon-location-selected {
+    background-image: url(/images/location-selected.svg);
 }

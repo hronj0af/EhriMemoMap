@@ -1,0 +1,50 @@
+﻿@using EhriMemoMap.Helpers;
+@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapStateService MapState
+@inject IStringLocalizer<CommonResources> cl
+
+<div class="icon @(MapState.DialogType == DialogTypeEnum.Help ? "icon-help-selected" : "icon-help")" title="@(cl["help"] + "...")" onclick="@(() => ShowHelp())"></div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        MapState.OnChange += OnMyChangeHandler;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    private async Task ShowHelp()
+    {
+        if (MapState.DialogType != DialogTypeEnum.Help)
+        {
+            MapState.SetDialogType(DialogTypeEnum.Help);
+            await DialogService.OpenSideAsync<HelpDialog>(cl["help"], options: MapState.GetDialogOptions());
+        }
+        else
+        {
+            MapState.SetDialogType(DialogTypeEnum.None);
+            DialogService.CloseSide();
+        }
+    }
+}

@@ -2,20 +2,9 @@
 @inject IStringLocalizer<CommonResources> cl
 @inject NavigationManager NavManager
 
-<RadzenImage Path="images/home.png" Style="@style.ButtonStyle" title="@(cl["home"] + "...")" Click="(() => ShowHome())"></RadzenImage>
+<div class="icon icon-home" title="@(cl["home"] + "...")" onclick="@(() => ShowHome())"></div>
 
 @code {
-    [Parameter]
-    public int Order { get; set; }
-
-    [Parameter]
-    public VerticalPositionEnum VerticalPosition { get; set; }
-
-    [Parameter]
-    public HorizontalPositionEnum HorizontalPosition { get; set; }
-
-    (string ButtonStyle, string BoxStyle) style;
-
     protected override async Task OnInitializedAsync()
     {
         MapState.OnChange += OnMyChangeHandler;
@@ -25,7 +14,6 @@
     {
         if (!firstRender)
         {
-            style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
             StateHasChanged();
         }
     }

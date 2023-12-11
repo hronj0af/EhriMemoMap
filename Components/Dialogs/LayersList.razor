@@ -23,13 +23,13 @@
 
             <div style="color: @fontColor; background-color: @(item.BackgroundColor); border-radius: 6px; order:@(item.Order);height: 50px;justify-content:space-between" class="center">
                 <div style="display:flex;justify-content:start;align-items: center;">
-                    <RadzenImage Style="@(iconFilter + "cursor:pointer;")" class="rz-px-1" Click="@(() => OnLayerClick(item))" Path="@(item.Selected ? "images/checkbox-true.png" : "images/checkbox-false.png")"></RadzenImage>
+                    <RadzenImage Style="@(iconFilter + "cursor:pointer;")" class="rz-px-1" Click="@(() => OnLayerClick(item))" Path="@(item.Selected ? "images/checkbox-true.svg" : "images/checkbox-false.svg")"></RadzenImage>
                     <div class="rz-px-1">
                         <span style="font-size: 18px; font-family: Barlow; font-weight: 500;">@cl["layer_" + item.Name + "_title"]</span>
                     </div>
                 </div>
                 <div style="display:flex;justify-content:end">
-                    <RadzenImage onerror="this.onerror=null; this.remove();" class="rz-px-2" Style="@iconFilter" Path="@("images/" + item.Name + ".png")"></RadzenImage>
+                    <RadzenImage onerror="this.onerror=null; this.remove();" class="rz-px-2" Style="@iconFilter" Path="@("images/" + item.Name + ".svg")"></RadzenImage>
                 </div>
             </div>
 
@@ -91,7 +91,7 @@
 
     private async Task ShowLayerAbstract(LayerModel layer)
     {
-        MapState.SetDialogIsOpen(true);
-        await DialogService.OpenSideAsync<LayerInformation>(cl["layerInfo"], parameters: new Dictionary<string, object> { { "Layer", layer } }, options: MapState.GetDialogOptions());
+        // MapState.SetDialogIsOpen(true);
+        // await DialogService.OpenSideAsync<LayerInformation>(cl["layerInfo"], parameters: new Dictionary<string, object> { { "Layer", layer } }, options: MapState.GetDialogOptions());
     }
 }

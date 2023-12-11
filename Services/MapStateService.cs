@@ -22,13 +22,6 @@ namespace EhriMemoMap.Services
             NotifyStateChanged();
         }
 
-        public bool DialogIsOpen = false;
-        public void SetDialogIsOpen(bool value)
-        {
-            DialogIsOpen = value;
-            NotifyStateChanged();
-        }
-
         public string WidthOfDialog = "33%";
         public string HeightOfDialog = "50%";
         
@@ -53,51 +46,11 @@ namespace EhriMemoMap.Services
             }
         }
 
-        private bool isLayersOpen = false;
-        /// <summary>
-        /// Je otevřený seznam vrstev?
-        /// </summary>
-        public bool IsLayersOpen
+        public DialogTypeEnum DialogType = DialogTypeEnum.None;
+        public void SetDialogType(DialogTypeEnum value)
         {
-            get { return isLayersOpen; }
-            set
-            {
-                isLayersOpen = value;
-                if (IsTimelineOpen)
-                    isTimelineOpen = !IsTimelineOpen;
-                NotifyStateChanged();
-            }
-        }
-
-        private bool isTimelineOpen = false;
-        /// <summary>
-        /// Je otevřený seznam s časovou osou?
-        /// </summary>
-        public bool IsTimelineOpen
-        {
-            get { return isTimelineOpen; }
-            set
-            {
-                isTimelineOpen = value;
-                if (IsLayersOpen)
-                    isLayersOpen = !IsLayersOpen;
-                NotifyStateChanged();
-            }
-        }
-
-        private bool isSearchOpen = false;
-
-        /// <summary>
-        /// Je otevřené pole pro fulltextové hledání?
-        /// </summary>
-        public bool IsSearchOpen
-        {
-            get { return isSearchOpen; }
-            set
-            {
-                isSearchOpen = value;
-                NotifyStateChanged();
-            }
+            DialogType = value;
+            NotifyStateChanged();
         }
 
         private int topOfElement = 30;
@@ -131,17 +84,16 @@ namespace EhriMemoMap.Services
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        public async Task<(string Button, string Box)> GetStyleOfMapComponent(VerticalPositionEnum verticalPosition, HorizontalPositionEnum horizontalPosition, int index, int? windowWidth = null, int horizontalMargin = 0, int verticalMargin = 0, int step = 53)
+        public async Task<string> GetStyleOfMapComponent(VerticalPositionEnum verticalPosition, HorizontalPositionEnum horizontalPosition, int horizontalMargin = 0, int verticalMargin = 0)
         {
-            var y = (verticalMargin > 0 ? verticalMargin : topOfElement) + step * index;
-            var x = DialogIsOpen && !IsMobileBrowser && horizontalPosition == HorizontalPositionEnum.Right
+            var y = verticalMargin > 0 ? verticalMargin : topOfElement;
+            var x = DialogType != DialogTypeEnum.None && !IsMobileBrowser && horizontalPosition == HorizontalPositionEnum.Right
                     ? WidthOfDialog 
                     : $"{horizontalMargin}px";
 
             var buttonStyle = $"cursor:pointer;position:absolute;{verticalPosition.ToString().ToLower()}:{y}px;{horizontalPosition.ToString().ToLower()}:{x};z-index:6000";
-            var boxStyle = $"{(windowWidth != null ? $"width:{windowWidth - 110}px;" : null)}position:absolute;{verticalPosition.ToString().ToLower()}:{y}px;{horizontalPosition.ToString().ToLower()}:{x + 60}px;z-index:600";
 
-            return (buttonStyle, boxStyle);
+            return buttonStyle;
         }
 
         /// <summary>
@@ -279,12 +231,7 @@ namespace EhriMemoMap.Services
         /// </summary>
         /// <returns></returns>
         public List<TimelinePointModel>? GetTimeline()
-        {
-            if (Map == null || Map.Timeline == null || Map.Timeline.Count == 0)
-                return new List<TimelinePointModel>();
-
-            return Map.Timeline;
-        }
+            => Map?.Timeline;
 
         /// <summary>
         /// 

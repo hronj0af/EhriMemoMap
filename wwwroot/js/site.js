@@ -63,7 +63,7 @@ var mapAPI;
         const mapElement = document.getElementById("map");
         if (mapElement == null || !mapElement)
             return;
-        const mapHeight = window.innerHeight - mapElement.offsetTop - 1;
+        const mapHeight = window.innerHeight - mapElement.offsetTop;
         mapElement.style.height = mapHeight + "px";
     }
     mapAPI.fitMapToWindow = fitMapToWindow;

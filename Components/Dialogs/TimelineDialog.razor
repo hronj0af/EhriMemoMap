@@ -1,18 +1,15 @@
-﻿@inject IJSRuntime JS
-@inject IHttpClientFactory clientFactory
+﻿@inject IHttpClientFactory clientFactory
 @inject DialogService DialogService
 @inject MapLogicService MapLogic
 @inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
+@inject IJSRuntime JS
 
+<DialogButtons />
 
 @if (timeline != null && timeline.Count > 1)
 {
-    <RadzenImage Path="images/timeline.png" Style="@style.ButtonStyle" title="@(cl["timeline"] + "...")" Click="(() => MapState.IsTimelineOpen = !MapState.IsTimelineOpen)"></RadzenImage>
-
-    @if (MapState.IsTimelineOpen)
-    {
-        <RadzenCard Style="@style.BoxStyle">
+        <RadzenCard>
             <RadzenRow>
                 @foreach (var group in timeline.GroupBy(a => a.To?.Year).OrderBy(a => a.Key))
                 {
@@ -26,41 +23,16 @@
                 }
             </RadzenRow>
         </RadzenCard>
-    }
 }
 @code {
-    (string ButtonStyle, string BoxStyle) style;
-
-    [Parameter]
-    public int Order { get; set; }
-
-    [Parameter]
-    public VerticalPositionEnum VerticalPosition { get; set; }
-
-    [Parameter]
-    public HorizontalPositionEnum HorizontalPosition { get; set; }
-
-    private int width;
 
     List<TimelinePointModel>? timeline;
 
     protected override async Task OnInitializedAsync()
     {
-        width = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
-        style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order, width);
         timeline = MapState.GetTimeline();
         MapState.OnChange += OnMyChangeHandler;
     }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-        {
-            style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order, width);
-            StateHasChanged();
-        }
-    }
-
 
     public void Dispose()
     {

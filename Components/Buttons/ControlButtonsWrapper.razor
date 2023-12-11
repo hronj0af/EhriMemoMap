@@ -1,0 +1,76 @@
+﻿@inject MapStateService MapState
+
+<div style="@style">
+    <RadzenRow Gap="0" RowGap="5px" JustifyContent="justifyContent">
+        @if (isMobileBrowser == false)
+        {
+            <RadzenColumn Size="size">
+                <Home />
+            </RadzenColumn>
+        }
+        <RadzenColumn Size="size">
+            <Search />
+        </RadzenColumn>
+        <RadzenColumn Size="size">
+            <Timeline />
+        </RadzenColumn>
+        <RadzenColumn Size="size">
+            <Layers />
+        </RadzenColumn>
+        @if (isMobileBrowser == false)
+        {
+            <RadzenColumn Size="size">
+                <Help />
+            </RadzenColumn>
+            <RadzenColumn Size="size">
+                <Language />
+            </RadzenColumn>
+        }
+    </RadzenRow>
+</div>
+
+@code {
+    public string style;
+    public string gap;
+    public int size;
+    public JustifyContent justifyContent;
+    public bool? isMobileBrowser;
+
+    protected override async Task OnInitializedAsync()
+    {
+        MapState.OnChange += OnMyChangeHandler;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            size = MapState.IsMobileBrowser ? 2 : 12;
+            isMobileBrowser = MapState.IsMobileBrowser;
+            justifyContent = MapState.IsMobileBrowser ? JustifyContent.SpaceAround : JustifyContent.End;
+            style = GetStyle();
+            StateHasChanged();
+        }
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    public string GetStyle()
+    {
+        if (MapState.IsMobileBrowser)
+            return $"position:absolute;bottom:0px;z-index:6000;background-color:var(--Grey);width:100%";
+        return $"position:absolute;top:30px;right:{(MapState.DialogType == DialogTypeEnum.None ? "0px" : MapState.WidthOfDialog)};z-index:6000;width:47px";
+    }
+
+}

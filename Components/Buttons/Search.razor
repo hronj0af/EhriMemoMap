@@ -1,0 +1,36 @@
+﻿@using EhriMemoMap.Services;
+@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapStateService MapState
+@inject IStringLocalizer<CommonResources> cl
+
+<div class="icon @(MapState.DialogType == DialogTypeEnum.Search ? "icon-search-selected" : "icon-search")" title="@(cl["layers"] + "...")" onclick="@(() => ShowSearch())"></div>
+
+@code {
+    private int width;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async Task ShowSearch()
+    {
+        if (MapState.DialogType == DialogTypeEnum.Search)
+        {
+            MapState.SetDialogType(DialogTypeEnum.None);
+            DialogService.CloseSide();
+        }
+        else
+        {
+            MapState.SetDialogType(DialogTypeEnum.Search);
+            await DialogService.OpenSideAsync<SearchDialog>(cl["search"], options: MapState.GetDialogOptions());
+        }
+    }
+
+
+}

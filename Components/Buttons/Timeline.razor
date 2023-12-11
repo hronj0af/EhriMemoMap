@@ -1,0 +1,37 @@
+﻿@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapLogicService MapLogic
+@inject MapStateService MapState
+@inject IStringLocalizer<CommonResources> cl
+
+
+@if (timeline != null && timeline.Count > 1)
+{
+    <div class="icon @(MapState.DialogType == DialogTypeEnum.Timeline ? "icon-timeline-selected" : "icon-timeline")" title="@(cl["timeline"] + "...")" onclick="@(() => ShowTimeline())"></div>
+}
+
+@code {
+    List<TimelinePointModel>? timeline;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        timeline = MapState.GetTimeline();
+        StateHasChanged();
+    }
+
+    private async Task ShowTimeline()
+    {
+        if (MapState.DialogType == DialogTypeEnum.Timeline)
+        {
+            MapState.SetDialogType(DialogTypeEnum.None);
+            DialogService.CloseSide();
+        }
+        else
+        {
+            MapState.SetDialogType(DialogTypeEnum.Timeline);
+            await DialogService.OpenSideAsync<TimelineDialog>(cl["timeline"], options: MapState.GetDialogOptions());
+        }
+    }
+
+}
