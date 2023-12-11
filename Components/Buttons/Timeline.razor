@@ -30,7 +30,7 @@
         else
         {
             MapState.SetDialogType(DialogTypeEnum.Timeline);
-            await DialogService.OpenSideAsync<TimelineDialog>(cl["timeline"], options: MapState.GetDialogOptions());
+            await DialogService.OpenSideAsync<TimelineDialog>(cl["timeline"], options: await MapState.GetDialogOptions());
         }
     }
 

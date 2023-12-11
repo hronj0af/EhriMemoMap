@@ -438,13 +438,14 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	margin-left: 5px;
 	}
 
-.leaflet-bottom .leaflet-control-scale {
+.leaflet-bottom .leaflet-control-scale, .leaflet-top .leaflet-control-scale {
 	margin-bottom: 18px;
 	margin-left: 70px;
 	background-color: #46463D;
 	padding: 10px;
-	border-radius:4px;
+	border-radius: 4px;
 }
+
 .leaflet-control-scale-line {
 	border: 2px solid var(--Beige);
 	border-top: none;

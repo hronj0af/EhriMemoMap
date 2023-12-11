@@ -5,9 +5,12 @@
 @inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
 
-<div class="icon @(MapState.DialogType == DialogTypeEnum.Help ? "icon-help-selected" : "icon-help")" title="@(cl["help"] + "...")" onclick="@(() => ShowHelp())"></div>
+<div class="@(!string.IsNullOrEmpty(Icon) ? Icon : "icon " + (MapState.DialogType == DialogTypeEnum.Help ? "icon-help-selected" : "icon-help"))" title="@(cl["help"] + "...")" onclick="@(() => ShowHelp())"></div>
 
 @code {
+    [Parameter]
+    public string? Icon { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         MapState.OnChange += OnMyChangeHandler;
@@ -39,7 +42,7 @@
         if (MapState.DialogType != DialogTypeEnum.Help)
         {
             MapState.SetDialogType(DialogTypeEnum.Help);
-            await DialogService.OpenSideAsync<HelpDialog>(cl["help"], options: MapState.GetDialogOptions());
+            await DialogService.OpenSideAsync<HelpDialog>(cl["help"], options: await MapState.GetDialogOptions());
         }
         else
         {

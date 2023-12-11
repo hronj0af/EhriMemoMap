@@ -28,7 +28,7 @@
         else
         {
             MapState.SetDialogType(DialogTypeEnum.Search);
-            await DialogService.OpenSideAsync<SearchDialog>(cl["search"], options: MapState.GetDialogOptions());
+            await DialogService.OpenSideAsync<SearchDialog>(cl["search"], options: await MapState.GetDialogOptions());
         }
     }
 

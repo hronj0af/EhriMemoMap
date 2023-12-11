@@ -32,7 +32,7 @@ var mapAPI;
         });
         map = new L.Map('map', { zoomControl: false });
         map.attributionControl.setPosition('bottomleft');
-        L.control.scale().addTo(map);
+        L.control.scale().setPosition(mapAPI.isMobileBrowser() ? 'topright' : 'bottomleft').addTo(map);
         if (!setMapWithInfoFromUrl())
             map.setView([50.07905886, 14.43715096], 14);
         map.on("moveend", function () {
@@ -61,10 +61,15 @@ var mapAPI;
     mapAPI.initMap = initMap;
     function fitMapToWindow() {
         const mapElement = document.getElementById("map");
+        const pageElement = document.getElementsByClassName("page");
         if (mapElement == null || !mapElement)
             return;
-        const mapHeight = window.innerHeight - mapElement.offsetTop;
+        const pageHeight = window.innerHeight - mapElement.offsetTop;
+        const mapHeight = !mapAPI.isMobileBrowser() ? pageHeight : pageHeight - 49 - 44;
         mapElement.style.height = mapHeight + "px";
+        if (mapAPI.isMobileBrowser())
+            mapElement.style.marginTop = "44px";
+        pageElement.item(0).style.height = pageHeight + "px";
     }
     mapAPI.fitMapToWindow = fitMapToWindow;
     function getMapInfoFromUrl() {

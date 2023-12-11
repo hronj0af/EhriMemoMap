@@ -92,7 +92,7 @@ namespace mapAPI {
 
         map = new L.Map('map', { zoomControl: false });
         map.attributionControl.setPosition('bottomleft');
-        L.control.scale().addTo(map);
+        L.control.scale().setPosition(mapAPI.isMobileBrowser() ? 'topright' : 'bottomleft').addTo(map);
 
         if (!setMapWithInfoFromUrl())
             map.setView([50.07905886, 14.43715096], 14);
@@ -131,14 +131,21 @@ namespace mapAPI {
 
     // nastaví mapu, aby lícovala s oknem
     export function fitMapToWindow(): void {
-
         const mapElement = document.getElementById("map");
+        const pageElement = document.getElementsByClassName("page");
 
         if (mapElement == null || !mapElement)
             return;
 
-        const mapHeight = window.innerHeight - mapElement.offsetTop;
+        const pageHeight = window.innerHeight - mapElement.offsetTop;
+        const mapHeight = !mapAPI.isMobileBrowser() ? pageHeight : pageHeight - 49 - 44; // 49 je spodní panel, 44 je horní panel
         mapElement.style.height = mapHeight + "px";
+
+        if (mapAPI.isMobileBrowser())
+            mapElement.style.marginTop = "44px";
+        pageElement.item(0).style.height = pageHeight + "px";
+
+
     }
 
     //////////////////////////

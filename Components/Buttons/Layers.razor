@@ -53,7 +53,7 @@
         else
         {
             MapState.SetDialogType(DialogTypeEnum.Layers);
-            await DialogService.OpenSideAsync<LayersList>(cl["layerInfo"], options: MapState.GetDialogOptions());
+            await DialogService.OpenSideAsync<LayersList>(cl["layerInfo"], options: await MapState.GetDialogOptions());
         }
     }
 }

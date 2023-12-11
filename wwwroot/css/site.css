@@ -161,12 +161,21 @@ path.leaflet-interactive:focus {
 .icon {
     height: 49px;
     cursor: pointer;
+    background-repeat: no-repeat;
 }
 
 .icon-small {
     height: 37px;
     width: 36px;
     cursor: pointer;
+    background-repeat: no-repeat;
+}
+
+.icon-extra-small {
+    height: 22px;
+    width: 22px;
+    cursor: pointer;
+    background-repeat: no-repeat;
 }
 
 .icon-home {
@@ -218,6 +227,10 @@ path.leaflet-interactive:focus {
     background-image: url(/images/help-selected.svg);
 }
 
+.icon-help-small {
+    background-image: url(/images/help-small.svg);
+}
+
 .icon-layers {
     background-image: url(/images/layers.svg);
 }
@@ -264,4 +277,8 @@ path.leaflet-interactive:focus {
 
 .icon-location-selected {
     background-image: url(/images/location-selected.svg);
+}
+
+.z-index-10000 {
+    z-index: 10000;
 }

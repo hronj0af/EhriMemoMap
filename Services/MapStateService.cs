@@ -1,4 +1,5 @@
 ﻿using EhriMemoMap.Models;
+using Microsoft.JSInterop;
 using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -14,6 +15,12 @@ namespace EhriMemoMap.Services
     /// </summary>
     public class MapStateService
     {
+        private readonly IJSRuntime _js;
+        public MapStateService(IJSRuntime js)
+        {
+            _js = js;
+        }
+
         public bool DialogIsFullscreen = false;
 
         public void SetDialogIsFullscreen(bool value)
@@ -274,8 +281,9 @@ namespace EhriMemoMap.Services
         /// Vrátí nastavení pro dialogové okno, aby se dobře vykreslovalo na mobilech i desktopech
         /// </summary>
         /// <returns></returns>
-        public SideDialogOptions GetDialogOptions()
+        public async Task<SideDialogOptions> GetDialogOptions()
         {
+            var height = await _js.InvokeAsync<int>("mapAPI.getWindowHeight");
             return new SideDialogOptions()
             {
                 ShowClose = true,
@@ -283,7 +291,8 @@ namespace EhriMemoMap.Services
                 Position = IsMobileBrowser ? DialogPosition.Bottom : DialogPosition.Right,
                 ShowMask = false,
                 CssClass = IsMobileBrowser ? "" : "side-dialog",
-                Height = IsMobileBrowser ? HeightOfDialog : "",
+                Style = IsMobileBrowser ? "z-index:10000" : "",
+                Height = IsMobileBrowser ? (DialogType == DialogTypeEnum.Help ? height + "px" : (height - 49) + "px") : "",
                 Width = !IsMobileBrowser ? WidthOfDialog : ""
             };
 
