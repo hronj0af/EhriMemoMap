@@ -159,136 +159,32 @@ path.leaflet-interactive:focus {
 }
 
 .icon {
-    height: 49px;
     cursor: pointer;
     background-repeat: no-repeat;
 }
 
-.icon-small {
-    height: 37px;
-    width: 36px;
-    cursor: pointer;
-    background-repeat: no-repeat;
-}
-
-.icon-extra-small {
-    height: 22px;
-    width: 22px;
-    cursor: pointer;
-    background-repeat: no-repeat;
-}
-
-.icon-home {
-    background-image: url(/images/home.svg);
-}
-
-    .icon-home:hover {
-        background-image: url(/images/home-selected.svg);
+    .icon:hover .foreground {
+        fill: var(--Wine-Red);
     }
 
-.icon-home-selected {
-    background-image: url(/images/home-selected.svg);
-}
-
-.icon-timeline {
-    background-image: url(/images/timeline.svg);
-}
-
-    .icon-timeline:hover {
-        background-image: url(/images/timeline-selected.svg);
+    .icon:hover .background {
+        fill: var(--Beige-LIGHT);
     }
 
-.icon-timeline-selected {
-    background-image: url(/images/timeline-selected.svg);
-}
-
-.icon-search {
-    background-image: url(/images/search.svg);
-}
-
-    .icon-search:hover {
-        background-image: url(/images/search-selected.svg);
+    .icon:hover rect {
+        fill: var(--Beige-LIGHT);
     }
 
-.icon-search-selected {
-    background-image: url(/images/search-selected.svg);
+.icon-selected .foreground {
+    fill: var(--Wine-Red);
 }
 
-
-.icon-help {
-    background-image: url(/images/help.svg);
+.icon-selected .background {
+    fill: var(--Beige-LIGHT);
 }
 
-    .icon-help:hover {
-        background-image: url(/images/help-selected.svg);
-    }
-
-.icon-help-selected {
-    background-image: url(/images/help-selected.svg);
-}
-
-.icon-help-small {
-    background-image: url(/images/help-small.svg);
-}
-
-.icon-language {
-    background-image: url(/images/language.svg);
-}
-
-    .icon-language:hover {
-        background-image: url(/images/language-selected.svg);
-    }
-
-.icon-language-selected {
-    background-image: url(/images/language-selected.svg);
-}
-
-.icon-layers {
-    background-image: url(/images/layers.svg);
-}
-
-    .icon-layers:hover {
-        background-image: url(/images/layers-selected.svg);
-    }
-
-.icon-layers-selected {
-    background-image: url(/images/layers-selected.svg);
-}
-
-.icon-zoom-in {
-    background-image: url(/images/zoom-in.svg);
-}
-
-    .icon-zoom-in:hover {
-        background-image: url(/images/zoom-in-selected.svg);
-    }
-
-.icon-zoom-in-selected {
-    background-image: url(/images/zoom-in-selected.svg);
-}
-
-.icon-zoom-out {
-    background-image: url(/images/zoom-out.svg);
-}
-
-    .icon-zoom-out:hover {
-        background-image: url(/images/zoom-out-selected.svg);
-    }
-
-.icon-zoom-out-selected {
-    background-image: url(/images/zoom-out-selected.svg);
-}
-
-.icon-location {
-    background-image: url(/images/location.svg);
-}
-
-    .icon-location:hover {
-        background-image: url(/images/location-selected.svg);
-    }
-
-.icon-location-selected {
-    background-image: url(/images/location-selected.svg);
+.icon-selected rect {
+    fill: var(--Beige-LIGHT);
 }
 
 .z-index-10000 {
@@ -301,3 +197,32 @@ path.leaflet-interactive:focus {
     font-family: Barlow Regular;
     font-weight: 700;
 }
+
+.mobile-menu-icon, .border {
+    border-right: 1px solid var(--Beige-LIGHT);
+}
+
+.mobile-menu-icon {
+    padding: 8px;
+    background-color: var(--Grey);
+    cursor: pointer;
+}
+
+    .mobile-menu-icon:hover {
+        background-color: var(--Beige-LIGHT);
+        color: black;
+    }
+
+        .mobile-menu-icon:hover path {
+            fill: var(--Wine-Red);
+        }
+
+.mobile-menu-icon-selected {
+    padding: 8px;
+    background-color: var(--Beige-LIGHT);
+    cursor: pointer;
+}
+
+    .mobile-menu-icon-selected path {
+        fill: var(--Wine-Red);
+    }

@@ -65,7 +65,7 @@ var mapAPI;
         if (mapElement == null || !mapElement)
             return;
         const pageHeight = window.innerHeight - mapElement.offsetTop;
-        const mapHeight = !mapAPI.isMobileBrowser() ? pageHeight : pageHeight - 49 - 44;
+        const mapHeight = !mapAPI.isMobileBrowser() ? pageHeight : pageHeight - 42 - 44;
         mapElement.style.height = mapHeight + "px";
         if (mapAPI.isMobileBrowser())
             mapElement.style.marginTop = "44px";
@@ -277,7 +277,6 @@ var mapAPI;
     }
     mapAPI.getWindowLocationSearch = getWindowLocationSearch;
     function isMobileBrowser() {
-        return true;
         if (_isMobileBrowser != null)
             return _isMobileBrowser;
         if (navigator.userAgent.match(/Android/i)

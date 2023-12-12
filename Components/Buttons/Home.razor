@@ -2,7 +2,26 @@
 @inject IStringLocalizer<CommonResources> cl
 @inject NavigationManager NavManager
 
-<div class="icon icon-home" title="@(cl["home"] + "...")" onclick="@(() => ShowHome())"></div>
+<div class="icon" title="@(cl["home"] + "...")" onclick="@(() => ShowHome())">
+
+    <svg width="47" height="49" viewBox="0 0 47 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="Group 54">
+            <path id="Rectangle 23" d="M0 3.99999C0 1.79086 1.79086 0 4 0H47.1795V48.7521H4C1.79086 48.7521 0 46.9613 0 44.7521V3.99999Z" fill="#46463D" class="background"/>
+            <g id="home">
+                <mask id="mask0_1806_1097" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="6" y="6" width="35" height="35">
+                    <rect id="Bounding box" x="6.29059" y="6.86325" width="33.812" height="33.812" fill="#D9D9D9"/>
+                </mask>
+                <g mask="url(#mask0_1806_1097)">
+                    <g id="home_2">
+                        <path d="M14.7436 33.6311H18.9701V25.1781H27.4231V33.6311H31.6495V20.9516L23.1966 14.6118L14.7436 20.9516V33.6311ZM11.9259 36.4487V19.5427L23.1966 11.0897L34.4672 19.5427V36.4487H24.6054V27.9957H21.7877V36.4487H11.9259Z" fill="white" class="foreground"/>
+                        <path d="M14.7436 33.6311H18.9701V25.1781H27.4231V33.6311H31.6495V20.9516L23.1966 14.6118L14.7436 20.9516V33.6311ZM11.9259 36.4487V19.5427L23.1966 11.0897L34.4672 19.5427V36.4487H24.6054V27.9957H21.7877V36.4487H11.9259Z" fill="#D5D2B8" fill-opacity="0.2" />
+                    </g>
+                </g>
+            </g>
+        </g>
+    </svg>
+
+</div>
 
 @code {
     protected override async Task OnInitializedAsync()

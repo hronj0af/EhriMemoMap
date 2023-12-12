@@ -29,21 +29,15 @@
         }
         else
         {
-            <RadzenRow Gap="0" RowGap="5px" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
-                <RadzenColumn Size="3" Style="@rightBorder">
-                    <RadzenStack JustifyContent="JustifyContent.Center" Style="color:white">
-                        <Search />
-                    </RadzenStack>
+            <RadzenRow Gap="0" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
+                <RadzenColumn Size="4" >
+                    <Search MobileVersion="true" Border="true" />
                 </RadzenColumn>
-                <RadzenColumn Size="3" Style="@rightBorder">
-                    <RadzenStack JustifyContent="JustifyContent.Center" Style="color:white">
-                        <Timeline />
-                    </RadzenStack>
+                <RadzenColumn Size="4" >
+                    <Timeline MobileVersion="true" Border="true" />
                 </RadzenColumn>
-                <RadzenColumn Size="3" Style="@rightBorder">
-                    <RadzenStack Orientation="Orientation.Horizontal"  JustifyContent="JustifyContent.End" Style="color:white">
-                        <Layers />
-                    </RadzenStack>
+                <RadzenColumn Size="4">
+                    <Layers MobileVersion="true" />
                 </RadzenColumn>
             </RadzenRow>
 
@@ -57,7 +51,6 @@
     public string gap;
     public JustifyContent justifyContent;
     public bool? isMobileBrowser;
-    public string rightBorder = "border-right: 1px solid white;";
 
     protected override async Task OnInitializedAsync()
     {
@@ -91,7 +84,7 @@
     public string GetStyle()
     {
         if (MapState.IsMobileBrowser)
-            return $"position:absolute;{(MapState.DialogType != DialogTypeEnum.None && MapState.DialogType != DialogTypeEnum.Help ? "top" : "bottom")}:0px;z-index:1005;background-color:var(--Grey);width:100%";
+            return $"position:absolute;{(MapState.DialogType != DialogTypeEnum.None && MapState.DialogType != DialogTypeEnum.Help ? "top" : "bottom")}:0px;z-index:10005;background-color:var(--Grey);width:100%";
         return $"position:absolute;top:30px;right:{(MapState.DialogType == DialogTypeEnum.None ? "0px" : MapState.WidthOfDialog)};z-index:1005;width:47px";
     }
 

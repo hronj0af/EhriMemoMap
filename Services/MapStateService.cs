@@ -291,8 +291,8 @@ namespace EhriMemoMap.Services
                 Position = IsMobileBrowser ? DialogPosition.Bottom : DialogPosition.Right,
                 ShowMask = false,
                 CssClass = IsMobileBrowser ? "" : "side-dialog",
-                Style = IsMobileBrowser ? "z-index:10000" : "",
-                Height = IsMobileBrowser ? (DialogType == DialogTypeEnum.Help ? height + "px" : (height - 49) + "px") : "",
+                Style = IsMobileBrowser ? (DialogType == DialogTypeEnum.Help ? "z-index:50000" : "z-index:10000") : "",
+                Height = IsMobileBrowser ? (DialogType == DialogTypeEnum.Help ? height + "px" : (height - 42) + "px") : "",
                 Width = !IsMobileBrowser ? WidthOfDialog : ""
             };
 

@@ -8,7 +8,7 @@
 @inject IHttpContextAccessor httpContextAccesor
 @inject ILogger<Language> logger
 
-@if (MobileTopBar)
+@if (MobileVersion)
 {
     <RadzenButton Size="ButtonSize.ExtraSmall" Variant="Variant.Flat" id="btn-language-topbar" Click="ChangeLanguage">
         <b>@otherLanguage</b>
@@ -42,7 +42,7 @@ else
 </style>
 @code {
     [Parameter]
-    public bool MobileTopBar { get; set; } = false;
+    public bool MobileVersion { get; set; } = false;
 
     string otherLanguage;
     string otherLanguageTitle;

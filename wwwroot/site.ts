@@ -138,7 +138,7 @@ namespace mapAPI {
             return;
 
         const pageHeight = window.innerHeight - mapElement.offsetTop;
-        const mapHeight = !mapAPI.isMobileBrowser() ? pageHeight : pageHeight - 49 - 44; // 49 je spodní panel, 44 je horní panel
+        const mapHeight = !mapAPI.isMobileBrowser() ? pageHeight : pageHeight - 42 - 44; // 42 je spodní panel, 44 je horní panel
         mapElement.style.height = mapHeight + "px";
 
         if (mapAPI.isMobileBrowser())
@@ -407,7 +407,7 @@ namespace mapAPI {
     }
 
     export function isMobileBrowser(): boolean {
-        return true;
+        //return true;
         if (_isMobileBrowser != null)
             return _isMobileBrowser;
 
