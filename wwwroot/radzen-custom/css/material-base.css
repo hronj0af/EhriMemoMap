@@ -551,7 +551,7 @@
   --rz-body-font-size: 1rem;
   --rz-body-line-height: 1.5;
   --rz-body-background-color: var(--rz-base-100);
-  --rz-text-font-family: Noto Serif Regular;
+  --rz-text-font-family: 'Noto Serif Regular';
   --rz-icon-size: 1.5rem;
   --rz-icon-font-family: Material Icons;
 }
@@ -16031,7 +16031,7 @@ ul.rz-profile-menu .rz-navigation-menu .rz-fileupload-row .rz-paginator-element 
   text-transform: var(--rz-tabs-tab-text-transform);
   letter-spacing: var(--rz-tabs-tab-letter-spacing);
   text-decoration: none;
-  font-family: Barlow Regular;
+  font-family: 'Barlow Regular';
 }
 .rz-tabview-nav li a:hover {
   text-decoration: none;

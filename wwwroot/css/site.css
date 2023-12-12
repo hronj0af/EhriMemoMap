@@ -226,3 +226,11 @@ path.leaflet-interactive:focus {
     .mobile-menu-icon-selected path {
         fill: var(--Wine-Red);
     }
+
+.hide {
+    display: none;
+}
+
+.layerInfo:hover .hide {
+    display: block;
+}
