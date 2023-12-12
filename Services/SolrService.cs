@@ -28,7 +28,7 @@ namespace EhriMemoMap.Services
                 new KeyValuePair<string, string>("indent", "true" ),
                 new KeyValuePair<string, string>("q.op", "OR" ),
 
-                new KeyValuePair<string, string>("fl", "label_cs, label_en, place_cs, place_en, map_location, map_object"),
+                new KeyValuePair<string, string>("fl", "label_cs, label_en, place_cs, place_en, map_location, map_object, type, place_date"),
                 new KeyValuePair<string, string>("q", !string.IsNullOrEmpty(query) ? query + "* " + query: "*"),
                 new KeyValuePair<string, string>("qf", "label_cs label_en place_cs place_en"),
                 new KeyValuePair<string, string>("wt", "json"),
@@ -48,6 +48,8 @@ namespace EhriMemoMap.Services
             {
                 result.Add(new Place
                 {
+                    Date = !string.IsNullOrEmpty(item["place_date"]?[0].ToString()) ? DateTime.Parse(item["place_date"]?[0].ToString()) : null,
+                    Type = item["type"]?.ToString(),
                     LabelCs = item["label_cs"]?.ToString(),
                     LabelEn = item["label_en"]?.ToString(),
                     PlaceCs = item["place_cs"]?.ToString(),

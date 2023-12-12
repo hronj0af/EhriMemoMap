@@ -324,4 +324,7 @@
   <data name="layerHelp" xml:space="preserve">
     <value>You can filter the results according to selected layers...</value>
   </data>
+  <data name="resultsFor" xml:space="preserve">
+    <value>Results for</value>
+  </data>
 </root>

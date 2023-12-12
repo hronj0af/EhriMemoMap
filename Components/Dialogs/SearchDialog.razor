@@ -3,69 +3,107 @@
 @inject IJSRuntime JS
 @inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
-
 <DialogButtons />
 
-<RadzenAutoComplete Change="@ShowPlace" @bind-Value=@selectedPlaceName Data=@places TextProperty="@(CultureInfo.CurrentCulture == new CultureInfo("cs-CZ") ? "DropDownInfoCs" : "DropDownInfoEn")" LoadData=@LoadData>
-    <Template>
-        <span onclick="@(() => ShowPlace((Place)context))">
-            @if (CultureInfo.CurrentCulture == new CultureInfo("cs-CZ"))
+<div class="rz-p-6">
+    <h1 class="rz-pb-4" style="color:var(--Wine-Red)">@cl["search"]</h1>
+    <RadzenRow AlignItems="AlignItems.End" class="rz-pr-5">
+        <RadzenColumn Size="12">
+            <RadzenTextBox Change="LoadData" @bind-Value=@selectedPlaceName Style="width:98%">
+            </RadzenTextBox>
+        </RadzenColumn>
+        <RadzenColumn Size="2" Offset="10">
+            <RadzenButton ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Click="LoadData">
+                @cl["search"]
+            </RadzenButton>
+        </RadzenColumn>
+    </RadzenRow>
+
+    @if (places != null)
+    {
+        <div class="rz-py-4" style="font-size:18px;color:var(--Wine-Red);font-family:'Barlow Bold';">
+            @cl["resultsFor"]: "@(selectedPlaceName)"
+        </div>
+
+            @foreach (var place in places)
             {
-                @context.DropDownInfoCs
+                <RadzenRow class="rz-pt-4" RowGap="0" onclick="@(() => ShowPlace(place))" style="cursor:pointer" >
+                        <RadzenColumn Size="1">
+                            <RadzenImage style="height:25px" Path="@("images/" + place.Type + "-wine.svg")"></RadzenImage>
+                        </RadzenColumn>
+                        <RadzenColumn Size="11">
+                            <h4>
+                                @if (CultureInfo.CurrentCulture == new CultureInfo("cs-CZ"))
+                                {
+                                    @place.LabelCs
+                                }
+                                else
+                                {
+                                    @place.LabelEn
+                                }
+                            </h4>
+                        </RadzenColumn>
+                        @if (place.Date != null)
+                        {
+                            <RadzenColumn Size="11" Offset="1">
+                                <h5>@place.Date?.ToString("d. M. yyyy")</h5>
+                            </RadzenColumn>
+                        }
+
+                </RadzenRow>
             }
-            else
+
+    }
+
+
+
+</div>
+
+
+        @code {
+
+            string selectedPlaceName;
+            IEnumerable<Place> places;
+
+            public async Task ShowPlace(Place place)
             {
-                @context.DropDownInfoEn
+                if (place != null)
+                {
+                    var zoom = 15;
+                    if (place.MapObject == null || !place.MapObject.Contains("Polygon"))
+                        zoom = 18;
+                    await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, zoom);
+                    await JS.InvokeVoidAsync("mapAPI.addObjectFromJsonString", place.MapLocation);
+                }
+                else
+                    await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
+
             }
-        </span>
-    </Template>
-</RadzenAutoComplete>
 
-
-@code {
-
-    string selectedPlaceName;
-    IEnumerable<Place> places;
-
-    public async Task ShowPlace(Place place)
-    {
-        if (place != null)
-        {
-            var zoom = 15;
-            if (place.MapObject == null || !place.MapObject.Contains("Polygon"))
-                zoom = 18;
-            await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, zoom);
-            await JS.InvokeVoidAsync("mapAPI.addObjectFromJsonString", place.MapLocation);
-        }
-        else
-            await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
-
-    }
-
-    async Task LoadData(LoadDataArgs args)
-    {
-        places = await solr.SolrExecuteDocument(args.Filter);
-        await InvokeAsync(StateHasChanged);
-    }
-
-    public async Task ShowPlace()
-    {
-        var place = places.FirstOrDefault(a => CultureInfo.CurrentCulture == new CultureInfo("cs-CZ") ? a.DropDownInfoCs == selectedPlaceName : a.DropDownInfoEn == selectedPlaceName);
-        await ShowPlace(place);
-    }
-
-    private async void OnMyChangeHandler()
-    {
-        await InvokeAsync(() =>
-        {
-            if (MapState.DialogType != DialogTypeEnum.Search)
+            async Task LoadData()
             {
-                JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
-                selectedPlaceName = "";
+                places = await solr.SolrExecuteDocument(selectedPlaceName);
+                await InvokeAsync(StateHasChanged);
             }
-            StateHasChanged();
-        });
+
+            public async Task ShowPlace()
+            {
+                var place = places.FirstOrDefault(a => CultureInfo.CurrentCulture == new CultureInfo("cs-CZ") ? a.DropDownInfoCs == selectedPlaceName : a.DropDownInfoEn == selectedPlaceName);
+                await ShowPlace(place);
+            }
+
+            private async void OnMyChangeHandler()
+            {
+                await InvokeAsync(() =>
+                {
+                    if (MapState.DialogType != DialogTypeEnum.Search)
+                    {
+                        JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
+                        selectedPlaceName = "";
+                    }
+                    StateHasChanged();
+                });
+            }
+
+
     }
-
-
-}

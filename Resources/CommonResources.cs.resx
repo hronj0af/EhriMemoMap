@@ -324,4 +324,7 @@
   <data name="layerHelp" xml:space="preserve">
     <value>Body na mapě můžete filtrovat podle vybraných vrstev...</value>
   </data>
+  <data name="resultsFor" xml:space="preserve">
+    <value>Výsledky pro hledaný řetězec</value>
+  </data>
 </root>
