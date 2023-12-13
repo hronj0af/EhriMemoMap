@@ -11,6 +11,8 @@ public partial class PragueVictimsTimeline
     public int? EntityId { get; set; }
 
     public string? Label { get; set; }
+    public string? GetLabelForPicture()
+        => Label?.Insert(0, "<b>").Replace(" (*", "</b><br/>(*");
 
     public string? DetailsCs { get; set; }
 
@@ -25,4 +27,5 @@ public partial class PragueVictimsTimeline
     public DateTime? TransportDate { get; set; }
 
     public string? Photo { get; set; }
+
 }
