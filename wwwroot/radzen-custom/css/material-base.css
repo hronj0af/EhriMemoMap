@@ -9823,7 +9823,7 @@ p-button[type] {
   min-height: 2.25rem;
   min-width: 2.25rem;
   letter-spacing: 1.25px;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
 }
 .rz-button-md .rz-button-box, .rz-scheduler-nav-views .rz-button.rz-primary .rz-button-box, .rz-scheduler-nav-views .rz-primary.rz-paginator-element .rz-button-box, .rz-date-filter-buttons .rz-button .rz-button-box, .rz-date-filter-buttons .rz-paginator-element .rz-button-box, .rz-fileupload-choose .rz-button-box, .rz-selectbutton .rz-button.rz-fileupload-choose .rz-button-box, .rz-selectbutton .rz-fileupload-choose.rz-paginator-element .rz-button-box, .rz-selectbutton .rz-button.rz-button-md .rz-button-box, .rz-selectbutton .rz-button-md.rz-paginator-element .rz-button-box {
   line-height: 1.25rem;
@@ -16184,6 +16184,7 @@ ul.rz-profile-menu .rz-navigation-menu .rz-fileupload-row .rz-paginator-element 
   transition: top 0.2s, left 0.2s;
   top: 0;
   left: 0;
+  z-index:99999;
 }
 
 .rz-tooltip-content {

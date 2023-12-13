@@ -4,26 +4,15 @@
 @inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
 @inject IJSRuntime JS
+@inject TooltipService tooltipService
 
 <DialogButtons />
 
-@if (timeline != null && timeline.Count > 1)
-{
-        <RadzenCard>
-            <RadzenRow>
-                @foreach (var group in timeline.GroupBy(a => a.To?.Year).OrderBy(a => a.Key))
-                {
-                    <RadzenColumn Size="MapState.IsMobileBrowser ? 4 : null">
-                        <span><b>@group.Key</b></span><br />
-                        @foreach (var item in group)
-                        {
-                            <RadzenButton class="rz-mb-1" ButtonStyle="item.Selected ? ButtonStyle.Dark : ButtonStyle.Secondary" Shade="Shade.Light" Size="ButtonSize.Small" Variant="Variant.Flat" Click="(() => OnCollectionClick(item))">@item.Title</RadzenButton>
-                        }
-                    </RadzenColumn>
-                }
-            </RadzenRow>
-        </RadzenCard>
-}
+<div class="rz-p-6" style="height:400px">
+    <h1 class="rz-pb-4">@cl["timeline"]</h1>
+    <CardTimeline Timeline="timeline" Width="500" MobileVersion="true" />
+</div>
+
 @code {
 
     List<TimelinePointModel>? timeline;
@@ -32,6 +21,7 @@
     {
         timeline = MapState.GetTimeline();
         MapState.OnChange += OnMyChangeHandler;
+        StateHasChanged();
     }
 
     public void Dispose()
@@ -47,16 +37,4 @@
             StateHasChanged();
         });
     }
-
-    private async Task OnCollectionClick(TimelinePointModel point)
-    {
-        if (point.Selected)
-            return;
-
-        MapState.ToggleTimeLinePoint(point);
-
-        await MapLogic.RefreshObjectsOnMap(false);
-        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "timeline", MapState.GetTimelineForUrlParameter());
-    }
-
 }

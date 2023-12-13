@@ -234,3 +234,75 @@ path.leaflet-interactive:focus {
 .layerInfo:hover .hide {
     display: block;
 }
+
+.timeline-baseline {
+    border-bottom: 2px solid var(--Beige);
+    position: absolute;
+    bottom: 5px;
+    width: 100%
+}
+
+.timeline-year-point {
+    position: absolute;
+    border-right: 2px solid var(--Beige);
+    width: 1px;
+    height: 10px;
+    bottom:0;
+}
+
+.timeline-year-label {
+    position: absolute;
+    bottom: 30px;
+    height: 10px;
+    color: var(--Beige);
+    font-family: 'Barlow Regular'
+}
+
+.timeline-quarter-point {
+    position: absolute;
+    border-right: 2px solid var(--Beige-LIGHT);
+    width: 1px;
+    height: 5px;
+    bottom: 0;
+}
+
+.timeline-point {
+    cursor:pointer;
+    position: absolute;
+    width: 10px;
+    bottom: 5px;
+    height: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.timeline-tooltip {
+    display:none;
+}
+
+.timeline-selected-point {
+    display: block;
+    position: absolute;
+    bottom: 20px;
+    background-color: var(--Beige-LIGHT);
+    padding: 5px;
+    border-radius: 5px;
+    color: var(--Grey);
+    font-family: 'Barlow Regular';
+    font-size: 12px;
+    z-index: 1000;
+}
+}
+
+.timeline-point:hover + .timeline-tooltip {
+    display:block;
+    position: absolute;
+    bottom: 20px;
+    background-color: var(--Beige-LIGHT);
+    padding: 5px;
+    border-radius: 5px;
+    color: var(--Wine-Red);
+    font-family: 'Barlow Regular';
+    font-size: 12px;
+    z-index: 1000;
+}

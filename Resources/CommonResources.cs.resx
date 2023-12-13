@@ -327,4 +327,7 @@
   <data name="resultsFor" xml:space="preserve">
     <value>Výsledky pro hledaný řetězec</value>
   </data>
+  <data name="all" xml:space="preserve">
+    <value>Všechno</value>
+  </data>
 </root>

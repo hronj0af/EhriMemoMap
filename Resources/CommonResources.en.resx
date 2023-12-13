@@ -327,4 +327,7 @@
   <data name="resultsFor" xml:space="preserve">
     <value>Results for</value>
   </data>
+  <data name="all" xml:space="preserve">
+    <value>All</value>
+  </data>
 </root>
