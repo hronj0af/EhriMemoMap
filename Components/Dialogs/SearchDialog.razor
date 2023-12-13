@@ -3,55 +3,54 @@
 @inject IJSRuntime JS
 @inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
+@inject DialogService DialogService
 <DialogButtons />
 
 <div class="rz-p-6">
     <h1 class="rz-pb-4" style="color:var(--Wine-Red)">@cl["search"]</h1>
-    <RadzenRow AlignItems="AlignItems.End" class="rz-pr-5">
-        <RadzenColumn Size="12">
-            <RadzenTextBox Change="LoadData" @bind-Value=@selectedPlaceName Style="width:98%">
-            </RadzenTextBox>
-        </RadzenColumn>
-        <RadzenColumn Size="2" Offset="10">
-            <RadzenButton ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Click="LoadData">
-                @cl["search"]
-            </RadzenButton>
-        </RadzenColumn>
-    </RadzenRow>
+    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End">
+        <RadzenTextBox Change="LoadData" @bind-Value=@MapState.SearchedPlaceString Style="width:100%;box-sizing: border-box;">
+        </RadzenTextBox>
+        <RadzenButton ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Click="LoadData">
+            @cl["search"]
+        </RadzenButton>
+    </RadzenStack>
 
-    @if (places != null)
+    @if (MapState.SearchedPlaces != null)
     {
         <div class="rz-py-4" style="font-size:18px;color:var(--Wine-Red);font-family:'Barlow Bold';">
-            @cl["resultsFor"]: "@(selectedPlaceName)"
+            @cl["resultsFor"]: "@(MapState.SearchedPlaceString)"
         </div>
 
-            @foreach (var place in places)
-            {
-                <RadzenRow class="rz-pt-4" RowGap="0" onclick="@(() => ShowPlace(place))" style="cursor:pointer" >
-                        <RadzenColumn Size="1">
-                            <RadzenImage style="height:25px" Path="@("images/" + place.Type + "-wine.svg")"></RadzenImage>
-                        </RadzenColumn>
-                        <RadzenColumn Size="11">
-                            <h4>
-                                @if (CultureInfo.CurrentCulture == new CultureInfo("cs-CZ"))
-                                {
-                                    @place.LabelCs
-                                }
-                                else
-                                {
-                                    @place.LabelEn
-                                }
-                            </h4>
-                        </RadzenColumn>
-                        @if (place.Date != null)
+        @foreach (var place in MapState.SearchedPlaces)
+        {
+            <RadzenRow class="rz-pt-4" RowGap="0" onclick="@(() => ShowPlace(place))" style="cursor:pointer">
+                <RadzenColumn Size="1">
+                    <RadzenImage style="height:25px" Path="@("images/" + place.Type + "-wine.svg")"></RadzenImage>
+                </RadzenColumn>
+                <RadzenColumn Size="11">
+                    <h3 class="rz-mb-1">
+                        @if (CultureInfo.CurrentCulture == new CultureInfo("cs-CZ"))
                         {
-                            <RadzenColumn Size="11" Offset="1">
-                                <h5>@place.Date?.ToString("d. M. yyyy")</h5>
-                            </RadzenColumn>
+                            @place.LabelCs
                         }
+                        else
+                        {
+                            @place.LabelEn
+                        }
+                    </h3>
+                    @if (place.Date != null)
+                    {
+                        <h5>@place.Date?.ToString("d. M. yyyy")</h5>
+                    }
+                    @if (place.PlaceCs != null)
+                    {
+                        <span style="font-size:14px">@place.PlaceCs</span>
+                    }
+                </RadzenColumn>
 
-                </RadzenRow>
-            }
+            </RadzenRow>
+        }
 
     }
 
@@ -60,50 +59,51 @@
 </div>
 
 
-        @code {
+@code {
 
-            string selectedPlaceName;
-            IEnumerable<Place> places;
+    public async Task ShowPlace(Place place)
+    {
+        if (place != null)
+        {
+            var zoom = 15;
+            if (place.MapObject == null || !place.MapObject.Contains("Polygon"))
+                zoom = 18;
+            await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, zoom);
+            await JS.InvokeVoidAsync("mapAPI.addObjectFromJsonString", place.MapLocation);
 
-            public async Task ShowPlace(Place place)
-            {
-                if (place != null)
-                {
-                    var zoom = 15;
-                    if (place.MapObject == null || !place.MapObject.Contains("Polygon"))
-                        zoom = 18;
-                    await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, zoom);
-                    await JS.InvokeVoidAsync("mapAPI.addObjectFromJsonString", place.MapLocation);
-                }
-                else
-                    await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
+            if (!MapState.IsMobileBrowser)
+                return;
 
-            }
-
-            async Task LoadData()
-            {
-                places = await solr.SolrExecuteDocument(selectedPlaceName);
-                await InvokeAsync(StateHasChanged);
-            }
-
-            public async Task ShowPlace()
-            {
-                var place = places.FirstOrDefault(a => CultureInfo.CurrentCulture == new CultureInfo("cs-CZ") ? a.DropDownInfoCs == selectedPlaceName : a.DropDownInfoEn == selectedPlaceName);
-                await ShowPlace(place);
-            }
-
-            private async void OnMyChangeHandler()
-            {
-                await InvokeAsync(() =>
-                {
-                    if (MapState.DialogType != DialogTypeEnum.Search)
-                    {
-                        JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
-                        selectedPlaceName = "";
-                    }
-                    StateHasChanged();
-                });
-            }
-
+            MapState.SetDialogType(DialogTypeEnum.None);
+            DialogService.CloseSide();
+        }
+        else
+            await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
 
     }
+
+    async Task LoadData()
+    {
+        MapState.SearchedPlaces = await solr.SolrExecuteDocument(MapState.SearchedPlaceString);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public async Task ShowPlace()
+    {
+        var place = MapState.SearchedPlaces.FirstOrDefault(a => CultureInfo.CurrentCulture == new CultureInfo("cs-CZ") ? a.DropDownInfoCs == MapState.SearchedPlaceString : a.DropDownInfoEn == MapState.SearchedPlaceString);
+        await ShowPlace(place);
+    }
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            if (MapState.DialogType != DialogTypeEnum.Search)
+            {
+                JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
+                MapState.SearchedPlaceString = "";
+            }
+            StateHasChanged();
+        });
+    }
+}

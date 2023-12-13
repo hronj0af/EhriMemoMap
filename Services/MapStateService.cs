@@ -35,6 +35,9 @@ namespace EhriMemoMap.Services
         public int WindowHeight = 0;
         public int WindowWidth = 0;
 
+        public string SearchedPlaceString = "";
+        public IEnumerable<Place> SearchedPlaces;
+
         public bool MapStateWasInit = false;
 
         public event Action OnChange;
