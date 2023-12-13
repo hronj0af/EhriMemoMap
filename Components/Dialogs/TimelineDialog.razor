@@ -8,33 +8,11 @@
 
 <DialogButtons />
 
-<div class="rz-p-6" style="height:400px">
-    <h1 class="rz-pb-4">@cl["timeline"]</h1>
-    <CardTimeline Timeline="timeline" Width="500" MobileVersion="true" />
-</div>
-
-@code {
-
-    List<TimelinePointModel>? timeline;
-
-    protected override async Task OnInitializedAsync()
-    {
-        timeline = MapState.GetTimeline();
-        MapState.OnChange += OnMyChangeHandler;
-        StateHasChanged();
-    }
-
-    public void Dispose()
-    {
-        MapState.OnChange -= OnMyChangeHandler;
-    }
-
-    private async void OnMyChangeHandler()
-    {
-        await InvokeAsync(() =>
-        {
-            timeline = MapState.GetTimeline();
-            StateHasChanged();
-        });
-    }
+@if (MapState.WindowWidth > 0)
+{
+    <div class="rz-p-6" style="height:400px">
+        <h1 class="rz-pb-4">@cl["timeline"]</h1>
+        <CardTimeline Width="MapState.WindowWidth - 50" MobileVersion="true" />
+    </div>
 }
+

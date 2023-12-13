@@ -14,18 +14,21 @@
 @inject IHttpContextAccessor httpContextAccesor
 @inject EhriMemoMap.Data.MemogisContext context
 
-<div id="map" style="cursor:default"></div>
+<div id="map" style="cursor:default;"></div>
 
     <ControlButtonsWrapper />
     <ZoomButtonsWrapper />
     @if (isMobileBrowser == false)
     {
         <LayersQuickAccess />
+        <TimelineWrapper />
     }
     else if (isMobileBrowser == true)
     {
         <MobileTopBarWrapper />
     }
+
+
 
 @code {
     bool? isMobileBrowser = null;
@@ -50,6 +53,8 @@
             MapState.Init(layers, timelinePointName);
             await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet());
 
+            MapState.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
+            MapState.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
             MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.getZoom");
             MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
 

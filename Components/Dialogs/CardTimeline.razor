@@ -6,72 +6,76 @@
 @inject IJSRuntime JS
 @inject TooltipService tooltipService
 
-@if (Timeline != null && Timeline.Any(a => a.From != null && a.To != null))
+
+@if (timeline != null && timeline.Any(a => a.From != null && a.To != null))
 {
-    <RadzenRow Style="@("height:" + (height + 20) + "px")">
+    <RadzenStack Orientation="Orientation.Horizontal" Gap="0" AlignItems="AlignItems.Start" class="timeline-inner-wrapper" >
         @if (!MobileVersion)
         {
-            <RadzenColumn Size="2">
-                <h3>@cl["timeline"]</h3>
-                <br />
-                @if (Timeline.Any(a => a.From == null && a.To == null))
+            <div class="timeline-firstcolumn" style="height:@(height - 10)px;width:@(Width - timelineWidth)px;">
+                <h4 class="rz-mb-2">@cl["timeline"]</h4>
+                @if (timeline.Any(a => a.From == null && a.To == null))
                 {
-                    <RadzenButton Click="(() => OnCollectionClick(Timeline.FirstOrDefault(a => a.From == null && a.To == null)))" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined">
+                    <RadzenButton Size="ButtonSize.ExtraSmall" Click="(() => OnCollectionClick(timeline.FirstOrDefault(a => a.From == null && a.To == null)))" ButtonStyle="ButtonStyle.Secondary" Variant="Variant.Outlined">
                         @cl["all"]
                     </RadzenButton>
                 }
-            </RadzenColumn>
+            </div>
         }
 
-        <RadzenColumn Size="@(!MobileVersion ? 10 : 12)">
-            <RadzenCard Style="@timelineStyle">
-                <div class="timeline-baseline"></div>
-                @{
-                    var margin = 25;
-                    var step = (Width - 2 * margin) / (Timeline.Count(a => a.From != null && a.To != null) - 1);
-                    var left = margin;
-                    var year = Timeline.FirstOrDefault()?.From?.Year;
-                }
-                @foreach (var point in Timeline.Where(a => a.From != null && a.To != null))
+        <RadzenCard class="timeline" Style="@timelineStyle">
+            <div class="timeline-baseline"></div>
+            @{
+                var margin = 25;
+                var step = (timelineWidth - 2 * margin) / (timeline.Count(a => a.From != null && a.To != null) - 1);
+                var left = margin;
+                var year = timeline.FirstOrDefault()?.From?.Year;
+            }
+            @foreach (var point in timeline.Where(a => a.From != null && a.To != null))
+            {
+                if (point.From?.Year != year)
                 {
-                    if (point.From?.Year != year)
-                    {
-                        year = point.From?.Year;
-                        <div class="timeline-point" @onclick="() => OnCollectionClick(point)" style="left:@(left)px">
-                            <div class="timeline-year-point"></div>
+                    year = point.From?.Year;
+                    <div class="timeline-point" @onclick="() => OnCollectionClick(point)" style="left:@(left)px">
+                        <div class="timeline-year-point"></div>
+                    </div>
+                    <div style="position:absolute;left:@(left - 30)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-tooltip-selected")">
+                        <img src="/images/tooltip.svg" />
+                        <div class="timeline-tooltip-text">
+                            @point.Title
                         </div>
-                        <div style="left:@(left - step / 2)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-selected-point")">@point.Title</div>
-                        <div class="timeline-year-label" style="left:@(left - step / 2)px">@year</div>
-                    }
-                    else
-                    {
-                        <div class="timeline-point" @onclick="() => OnCollectionClick(point)" style="left:@(left)px">
-                            <div class="timeline-quarter-point"></div>
+                    </div>
+                    <div class="timeline-year-label" style="left:@(left - 12)px">@year</div>
+                }
+                else
+                {
+                    <div class="timeline-point" @onclick="() => OnCollectionClick(point)" style="left:@(left)px">
+                        <div class="timeline-quarter-point"></div>
+                    </div>
+                    <div style="left:@(left - 30)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-tooltip-selected")">
+                        <img src="/images/tooltip.svg" />
+                        <div class="timeline-tooltip-text">
+                            @point.Title
                         </div>
-                        <div style="left:@(left - step / 2)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-selected-point")">@point.Title</div>
-                    }
-                    left += step;
-                })
-            </RadzenCard>
-        </RadzenColumn>
+                    </div>
+                }
+                left += step;
+            }
+        </RadzenCard>
 
-        @if (MobileVersion && Timeline.Any(a => a.From == null && a.To == null))
-        {
-            <RadzenButton Click="(() => OnCollectionClick(Timeline.FirstOrDefault(a => a.From == null && a.To == null)))" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Style="@("width:" + Width + "px")">
+    </RadzenStack>
+
+    @if (MobileVersion && timeline.Any(a => a.From == null && a.To == null))
+    {
+        <div>
+            <RadzenButton Click="(() => OnCollectionClick(timeline.FirstOrDefault(a => a.From == null && a.To == null)))" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" class="rz-mt-4" Style="@("width:" + timelineWidth + "px")">
                 @cl["all"]
             </RadzenButton>
-        }
-
-
-    </RadzenRow>
+        </div>
+    }
 
 }
 @code {
-
-    ElementReference timelinePoint;
-
-    [Parameter]
-    public List<TimelinePointModel>? Timeline { get; set; }
 
     [Parameter]
     public int Width { get; set; }
@@ -79,13 +83,16 @@
     [Parameter]
     public bool MobileVersion { get; set; } = false;
 
+    List<TimelinePointModel>? timeline;
     string? timelineStyle;
-    int height = 50;
-
+    int height = 72;
+    int timelineWidth;
+    int firstColumnWidth = 100;
 
     protected override void OnInitialized()
     {
-        timelineStyle = $"background-color:var(--Grey);width:{Width}px;height:{height}px;position:relative;";
+        timelineWidth = MobileVersion ? Width : Width - firstColumnWidth;
+        timelineStyle = $"background-color: var(--Grey);position: relative;width:{timelineWidth}px;height:{height}px;";
     }
 
     private async Task OnCollectionClick(TimelinePointModel point)
@@ -98,5 +105,28 @@
         await MapLogic.RefreshObjectsOnMap(false);
         await JS.InvokeVoidAsync("mapAPI.setUrlParam", "timeline", MapState.GetTimelineForUrlParameter());
     }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        timeline = MapState.GetTimeline();
+        MapState.OnChange += OnMyChangeHandler;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            timeline = MapState.GetTimeline();
+            StateHasChanged();
+        });
+    }
+
 
 }

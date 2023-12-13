@@ -32,6 +32,9 @@ namespace EhriMemoMap.Services
         public string WidthOfDialog = "33%";
         public string HeightOfDialog = "50%";
         
+        public int WindowHeight = 0;
+        public int WindowWidth = 0;
+
         public bool MapStateWasInit = false;
 
         public event Action OnChange;

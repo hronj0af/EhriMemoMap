@@ -238,7 +238,7 @@ path.leaflet-interactive:focus {
 .timeline-baseline {
     border-bottom: 2px solid var(--Beige);
     position: absolute;
-    bottom: 5px;
+    bottom: 15px;
     width: 100%
 }
 
@@ -246,13 +246,13 @@ path.leaflet-interactive:focus {
     position: absolute;
     border-right: 2px solid var(--Beige);
     width: 1px;
-    height: 10px;
+    height: 12px;
     bottom:0;
 }
 
 .timeline-year-label {
     position: absolute;
-    bottom: 30px;
+    bottom: 40px;
     height: 10px;
     color: var(--Beige);
     font-family: 'Barlow Regular'
@@ -260,9 +260,9 @@ path.leaflet-interactive:focus {
 
 .timeline-quarter-point {
     position: absolute;
-    border-right: 2px solid var(--Beige-LIGHT);
+    border-right: 2px solid var(--Beige);
     width: 1px;
-    height: 5px;
+    height: 7px;
     bottom: 0;
 }
 
@@ -270,7 +270,7 @@ path.leaflet-interactive:focus {
     cursor:pointer;
     position: absolute;
     width: 10px;
-    bottom: 5px;
+    bottom: 15px;
     height: 10px;
     display: flex;
     justify-content: center;
@@ -280,29 +280,49 @@ path.leaflet-interactive:focus {
     display:none;
 }
 
-.timeline-selected-point {
-    display: block;
+.timeline-point:hover + .timeline-tooltip {
+    display: flex;
+    justify-content: center;
+    z-index: 99999;
     position: absolute;
-    bottom: 20px;
-    background-color: var(--Beige-LIGHT);
-    padding: 5px;
-    border-radius: 5px;
-    color: var(--Grey);
-    font-family: 'Barlow Regular';
-    font-size: 12px;
-    z-index: 1000;
-}
+    top: 12px;
 }
 
-.timeline-point:hover + .timeline-tooltip {
-    display:block;
+.timeline-tooltip-selected {
     position: absolute;
-    bottom: 20px;
-    background-color: var(--Beige-LIGHT);
-    padding: 5px;
-    border-radius: 5px;
-    color: var(--Wine-Red);
-    font-family: 'Barlow Regular';
-    font-size: 12px;
-    z-index: 1000;
+    top: 12px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    z-index: 99999;
+}
+
+.timeline-tooltip-text {
+    position: absolute;
+    top: 6px;
+    left: 12px;
+    color: var(--Grey);
+    font-family: 'Barlow SemiBold';
+    font-size: 14px;
+}
+
+
+.timeline-wrapper {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    z-index: 1001;
+}
+
+.timeline-inner-wrapper {
+    border-radius: 6px;
+    background-color: var(--Grey);
+}
+
+.timeline-firstcolumn {
+    background-color: var(--Grey);
+    color: var(--Beige-LIGHT);
+    padding: 10px 0 0 10px;
+    border-radius: 6px;
 }
