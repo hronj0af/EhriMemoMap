@@ -1,5 +1,6 @@
 ﻿using EhriMemoMap.Models;
 using Newtonsoft.Json.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EhriMemoMap.Services
 {
@@ -46,9 +47,8 @@ namespace EhriMemoMap.Services
 
             foreach (var item in solrResultObject["response"]["docs"])
             {
-                result.Add(new Place
+                var newPlace = new Place
                 {
-                    Date = !string.IsNullOrEmpty(item["place_date"]?[0].ToString()) ? DateTime.Parse(item["place_date"]?[0].ToString()) : null,
                     Type = item["type"]?.ToString(),
                     LabelCs = item["label_cs"]?.ToString(),
                     LabelEn = item["label_en"]?.ToString(),
@@ -56,7 +56,15 @@ namespace EhriMemoMap.Services
                     PlaceEn = item["place_en"]?.ToString(),
                     MapLocation = item["map_location"]?.ToString(),
                     MapObject = item["map_object"]?.ToString(),
-                });
+                };
+
+                if (!string.IsNullOrEmpty(item["place_date"]?[0].ToString()) && DateTime.TryParse(item["place_date"]?[0].ToString(), out DateTime newPlaceDate))
+                {
+                    newPlace.Date = newPlaceDate;
+                }
+
+
+                result.Add(newPlace);
 
             }
 
