@@ -30,7 +30,7 @@
                 </RadzenColumn>
                 <RadzenColumn Size="11">
                     <h3 class="rz-mb-1">
-                        @if (CultureInfo.CurrentCulture == new CultureInfo("cs-CZ"))
+                        @if (CultureInfo.CurrentCulture.ToString() == "cs-CZ")
                         {
                             @place.LabelCs
                         }
@@ -90,7 +90,7 @@
 
     public async Task ShowPlace()
     {
-        var place = MapState.SearchedPlaces.FirstOrDefault(a => CultureInfo.CurrentCulture == new CultureInfo("cs-CZ") ? a.DropDownInfoCs == MapState.SearchedPlaceString : a.DropDownInfoEn == MapState.SearchedPlaceString);
+        var place = MapState.SearchedPlaces.FirstOrDefault(a => CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? a.DropDownInfoCs == MapState.SearchedPlaceString : a.DropDownInfoEn == MapState.SearchedPlaceString);
         await ShowPlace(place);
     }
 
