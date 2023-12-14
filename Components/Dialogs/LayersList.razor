@@ -18,7 +18,7 @@
         <p>@cl["layerHelp"]</p>
         @foreach (var item in layers.OrderBy(a => a.Order))
         {
-            var iconFilter = item.FontColor == FontColor.Dark ? "filter: brightness(30%);height:18px;" : "height:18px;";
+            var iconFilter = item.FontColor == FontColor.Dark ? "filter: brightness(30%);width:18px;" : "width:18px;";
             var fontColor = item.FontColor == FontColor.Light ? "var(--Beige-LIGHT)" : "var(--Grey)";
 
             <RadzenCard Style="@("padding:5px;background-color:" + item.BackgroundColor + ";color:" + fontColor)" class="rz-p-3 layerInfo">
@@ -26,14 +26,14 @@
                     <RadzenColumn Size="1">
                         <RadzenImage Style="@(iconFilter + "cursor:pointer;")" Click="@(() => OnLayerClick(item))" Path="@(item.Selected ? "images/checkbox-true.svg" : "images/checkbox-false.svg")"></RadzenImage>
                     </RadzenColumn>
-                    <RadzenColumn Size="10" >
-                        <div style="font-size: 18px; font-family: 'Barlow SemiBold';">@cl["layer_" + item.Name + "_title"]</div>
+                    <RadzenColumn Size="11" >
+                        <RadzenStack JustifyContent="JustifyContent.SpaceBetween" Orientation="Orientation.Horizontal">
+                            <div style="font-size: 14px; font-family: 'Barlow SemiBold';">@cl["layer_" + item.Name + "_title"]</div>
+                            <RadzenImage onerror="this.onerror=null; this.remove();" Style="@iconFilter" Path="@("images/" + item.Name + ".svg")"></RadzenImage>
+                        </RadzenStack>
                     </RadzenColumn>
-                    <RadzenColumn Size="1">
-                        <RadzenImage onerror="this.onerror=null; this.remove();" Style="@iconFilter" Path="@("images/" + item.Name + ".svg")"></RadzenImage>
-                    </RadzenColumn>
-                    <RadzenColumn Size="11" Offset="1" class="hide">
-                        <div style="font-size:16px;font-family: 'Noto Serif Regular'">@cl["layer_" + item.Name + "_abstract"]</div>
+                    <RadzenColumn Size="10" Offset="1" class="hide">
+                        <div style="font-size:12px;font-family: 'Noto Serif Regular'">@cl["layer_" + item.Name + "_abstract"]</div>
                     </RadzenColumn>
                 </RadzenRow>
             </RadzenCard>
