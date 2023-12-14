@@ -160,6 +160,7 @@
         "to": null,
         "additionalLayers": [
           {
+            "clickable": false,
             "name": "statistics",
             "placeType": "statistics",
             "order": 10,

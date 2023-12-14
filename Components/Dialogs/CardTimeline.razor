@@ -39,7 +39,7 @@
                     <div class="timeline-point" @onclick="() => OnCollectionClick(point)" style="left:@(left)px">
                         <div class="timeline-year-point"></div>
                     </div>
-                    <div style="position:absolute;left:@(left - 30)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-tooltip-selected")">
+                    <div style="position:absolute;left:@(left - 25)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-tooltip-selected")">
                         <img src="/images/tooltip.svg" />
                         <div class="timeline-tooltip-text">
                             @point.Title
@@ -52,7 +52,7 @@
                     <div class="timeline-point" @onclick="() => OnCollectionClick(point)" style="left:@(left)px">
                         <div class="timeline-quarter-point"></div>
                     </div>
-                    <div style="left:@(left - 30)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-tooltip-selected")">
+                    <div style="left:@(left - 25)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-tooltip-selected")">
                         <img src="/images/tooltip.svg" />
                         <div class="timeline-tooltip-text">
                             @point.Title

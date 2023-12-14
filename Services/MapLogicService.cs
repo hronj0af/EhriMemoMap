@@ -61,8 +61,14 @@ namespace EhriMemoMap.Services
                     query = query.Where(a => a.DateFrom == null && a.DateTo == null);
 
                 // anebo vyberu objekty, ktere lezi v casovem intervalu daneho bodu casove osy
-                else if (timelimePoint != null)
-                    query = query.Where(a => (a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To) || (a.DateFrom == null && a.DateTo == null));
+                // v případě, že je zadán parametr customCoordinates, tedy když se hledají objekty na mapě v místě, kam uživatel klikl,
+                // pak k tomu přidám i vrstvu s typem "polygons", protože ty nemají datum a zobrazují se na mapě vždy
+                else if (timelimePoint != null && customCoordinates == null)
+                    query = query.Where(a => (a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To));
+
+                else if (timelimePoint != null && customCoordinates == null)
+                    query = query.Where(a => (a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To) || (a.PlaceType == "Inaccessible"));
+
             }
 
             // vyber objektu podle toho, do jake nalezi vrstvy

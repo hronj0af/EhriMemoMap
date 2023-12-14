@@ -169,7 +169,7 @@ var mapAPI;
             let newObject;
             if (objects[i].mapPolygon != null) {
                 const polygonObject = JSON.parse(objects[i].mapPolygon);
-                newObject = getPolygon(polygonObject, objects[i].label, null, objects[i].customTooltipClass, objects[i].customPolygonClass);
+                newObject = getPolygon(polygonObject, objects[i].clickable, objects[i].label, null, objects[i].customTooltipClass, objects[i].customPolygonClass);
                 if (objects[i].placeType == "Inaccessible")
                     newObject.addTo(polygonsGroup);
                 else
@@ -205,7 +205,7 @@ var mapAPI;
         return result;
     }
     mapAPI.getPoint = getPoint;
-    function getPolygon(polygonObject, label, color, customTooltipClass, customPolygonClass) {
+    function getPolygon(polygonObject, clickable, label, color, customTooltipClass, customPolygonClass) {
         const pointsArray = [];
         for (let j = 0; j < polygonObject.coordinates.length; j++) {
             for (let m = 0; m < polygonObject.coordinates[j].length; m++) {
@@ -225,9 +225,11 @@ var mapAPI;
         const polygonOptions = customPolygonClass != undefined && customPolygonClass != null
             ? { className: customPolygonClass, color: null, weight: null, fillOpacity: null, opacity: null, fillColor: null }
             : { fillColor: '#C5222C', color: '#222', weight: 0.5, fillOpacity: 0.40, opacity: 1 };
-        const result = new L.Polygon(pointsArray, polygonOptions)
-            .on('click', callBlazor_ShowPlaceInfo);
-        if (!isMobileBrowser() && label != undefined && label != null) {
+        const result = new L.Polygon(pointsArray, polygonOptions);
+        if (clickable) {
+            result.on('click', callBlazor_ShowPlaceInfo);
+        }
+        if (label != undefined && label != null) {
             result.bindTooltip(label, { sticky: true, className: customTooltipClass != undefined && customTooltipClass != null ? customTooltipClass : null });
         }
         return result;
@@ -297,7 +299,6 @@ var mapAPI;
     }
     mapAPI.getWindowLocationSearch = getWindowLocationSearch;
     function isMobileBrowser() {
-        return true;
         if (_isMobileBrowser != null)
             return _isMobileBrowser;
         if (navigator.userAgent.match(/Android/i)
