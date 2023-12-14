@@ -61,7 +61,7 @@ namespace EhriMemoMap.Services
 
                 // anebo vyberu objekty, ktere lezi v casovem intervalu daneho bodu casove osy
                 else if (timelimePoint != null)
-                    query = query.Where(a => a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To);
+                    query = query.Where(a => (a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To) || (a.DateFrom == null && a.DateTo == null));
             }
 
             // vyber objektu podle toho, do jake nalezi vrstvy

@@ -410,7 +410,7 @@ namespace mapAPI {
     }
 
     export function isMobileBrowser(): boolean {
-        return true;
+        //return true;
         if (_isMobileBrowser != null)
             return _isMobileBrowser;
 
