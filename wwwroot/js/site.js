@@ -21,7 +21,7 @@ var mapAPI;
     let polygonColor = "#ff3333";
     let polygonColorSelected = "#cc1111";
     function initMap(jsonMapSettings) {
-        fitMapToWindow();
+        fitMapToWindow(null);
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
         addressIcon = new L.DivIcon();
         interestIcon = new L.DivIcon({ className: 'leaflet-interest-icon' });
@@ -149,11 +149,11 @@ var mapAPI;
     mapAPI.callBlazor_RefreshObjectsOnMap = callBlazor_RefreshObjectsOnMap;
     function callBlazor_ShowPlaceInfo(event) {
         removeAdditionalObjects();
+        unselectAllSelectedPoints();
         if (event.target._latlng == undefined)
             event.target.setStyle({ fillColor: polygonColorSelected });
         else {
-            const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
-            new L.Marker(event.target._latlng).addTo(objectsGroup);
+            event.target._icon.className = event.target._icon.className.replace('map-point', 'map-point-selected');
         }
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
@@ -191,7 +191,7 @@ var mapAPI;
     function getPoint(markerObject, clickable, label, htmlIcon) {
         let iconOptions = null;
         if (htmlIcon != undefined && htmlIcon != null)
-            iconOptions = { icon: new L.DivIcon({ className: "", html: htmlIcon }) };
+            iconOptions = { icon: new L.DivIcon({ className: "map-point", html: htmlIcon }) };
         const result = new L.Marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
         if (!isMobileBrowser() && label != undefined && label != null) {
             result.bindTooltip(label, { sticky: true });
@@ -238,6 +238,13 @@ var mapAPI;
         });
     }
     mapAPI.removeAdditionalObjects = removeAdditionalObjects;
+    function unselectAllSelectedPoints() {
+        var selectedPoints = document.getElementsByClassName('map-point-selected');
+        for (var i = 0; i < selectedPoints.length; i++) {
+            selectedPoints[i].className = selectedPoints[i].className.replace('map-point-selected', 'map-point');
+        }
+    }
+    mapAPI.unselectAllSelectedPoints = unselectAllSelectedPoints;
     function toggleLayerGroup(name, selected) {
         const groupName = name + "_group";
         if (!selected) {

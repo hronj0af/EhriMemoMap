@@ -133,6 +133,8 @@ path.leaflet-interactive:focus {
     align-items: center;
 }
 
+/* WELCOME DIALOG */
+
 .cell {
     vertical-align: top;
     font-family: Barlow Regular;
@@ -158,6 +160,8 @@ path.leaflet-interactive:focus {
     color: var(--Wine-Red);
     text-align: right;
 }
+
+/* ICONS BUTTONS */
 
 .icon {
     cursor: pointer;
@@ -191,6 +195,8 @@ path.leaflet-interactive:focus {
 .z-index-10000 {
     z-index: 10000;
 }
+
+/* CONTROL BUTTONS */
 
 .btn-language-topbar {
     background-color: var(--Beige-LIGHT);
@@ -228,6 +234,8 @@ path.leaflet-interactive:focus {
         fill: var(--Wine-Red);
     }
 
+/* LAYERS */
+
 .hide {
     display: none;
 }
@@ -235,6 +243,8 @@ path.leaflet-interactive:focus {
 .layerInfo:hover .hide {
     display: block;
 }
+
+/* TIMELINE */
 
 .timeline-baseline {
     border-bottom: 2px solid var(--Beige);
@@ -346,4 +356,17 @@ path.leaflet-interactive:focus {
 .victim-card {
     background-color: var(--Beige);
     height: 250px;
+}
+
+/* MAP POINTS */
+.map-point img {
+    height: 23px;
+    width: 23px;
+    opacity:1;
+}
+
+.map-point-selected img {
+    height: 40px;
+    width: 40px;
+    opacity: 1;
 }

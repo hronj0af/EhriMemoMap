@@ -27,10 +27,10 @@ public partial class MapObjectForLeafletModel
         MapPolygon = mapObject.MapPolygon;
 
         if (PlaceType == Models.PlaceType.Incident.ToString())
-            HtmlIcon = "<img src='images/incident-map.png' height=23 width=23 style='opacity:1'/>";
+            HtmlIcon = "<img src='images/incident-map.png' />";
 
         else if (PlaceType == Models.PlaceType.Interest.ToString())
-            HtmlIcon = "<img src='images/interest-map.png' height=23 width=23 style='opacity:1'/>";
+            HtmlIcon = "<img src='images/interest-map.png' />";
 
         else if (PlaceType == Models.PlaceType.Address.ToString())
         {
@@ -44,7 +44,7 @@ public partial class MapObjectForLeafletModel
                 _ => "victims_100"
             };
 
-            HtmlIcon = $"<div style='position:relative'><img src='images/addresses/{iconFile}_{Citizens}.png' height=23 width=23 style='opacity:1;'/></div>";
+            HtmlIcon = $"<div style='position:relative'><img src='images/addresses/{iconFile}_{Citizens}.png' /></div>";
         }
     }
 

@@ -78,7 +78,7 @@ namespace mapAPI {
     // připraví mapu do úvodního stavu
     export function initMap(jsonMapSettings: string): void {
 
-        fitMapToWindow();
+        fitMapToWindow(null);
 
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
         addressIcon = new L.DivIcon();
@@ -254,13 +254,15 @@ namespace mapAPI {
 
         // nejdřív odstraníme všechny dodatečné objekty
         removeAdditionalObjects();
+        unselectAllSelectedPoints();
 
         // a pak obarvíme vybraný polygon, respektive přidáme špendlík
         if (event.target._latlng == undefined)
             (event.target as L.Polygon).setStyle({ fillColor: polygonColorSelected });
         else {
-            const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
-            new L.Marker(event.target._latlng).addTo(objectsGroup);
+            event.target._icon.className = event.target._icon.className.replace('map-point', 'map-point-selected');
+        //    const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+        //    new L.Marker(event.target._latlng).addTo(objectsGroup);
         }
 
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
@@ -305,7 +307,7 @@ namespace mapAPI {
     export function getPoint(markerObject: PointModel, clickable?: boolean, label?: string, htmlIcon?: string) {
         let iconOptions = null;
         if (htmlIcon != undefined && htmlIcon != null)
-            iconOptions = { icon: new L.DivIcon({ className: "", html: htmlIcon }) }
+            iconOptions = { icon: new L.DivIcon({ className: "map-point", html: htmlIcon }) }
 
         const result = new L.Marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
 
@@ -358,6 +360,13 @@ namespace mapAPI {
             }
         });
 
+    }
+
+    export function unselectAllSelectedPoints(): void {
+        var selectedPoints = document.getElementsByClassName('map-point-selected');
+        for (var i = 0; i < selectedPoints.length; i++) {
+            selectedPoints[i].className = selectedPoints[i].className.replace('map-point-selected', 'map-point');
+        }
     }
 
     //////////////////////////
