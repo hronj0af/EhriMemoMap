@@ -148,7 +148,7 @@ namespace mapAPI {
 
         if (mapAPI.isMobileBrowser())
             mapElement.style.marginTop = "44px";
-        //pageElement.item(0).style.height = pageHeight + "px";
+        pageElement.item(0).style.height = pageHeight + "px";
 
         if (map != null)
             map.invalidateSize();
@@ -436,7 +436,7 @@ namespace mapAPI {
     }
 
     export function isMobileBrowser(): boolean {
-        //return true;
+        return true;
         if (_isMobileBrowser != null)
             return _isMobileBrowser;
 

@@ -70,6 +70,7 @@ var mapAPI;
         mapElement.style.height = mapHeight + "px";
         if (mapAPI.isMobileBrowser())
             mapElement.style.marginTop = "44px";
+        pageElement.item(0).style.height = pageHeight + "px";
         if (map != null)
             map.invalidateSize();
     }
@@ -296,6 +297,7 @@ var mapAPI;
     }
     mapAPI.getWindowLocationSearch = getWindowLocationSearch;
     function isMobileBrowser() {
+        return true;
         if (_isMobileBrowser != null)
             return _isMobileBrowser;
         if (navigator.userAgent.match(/Android/i)

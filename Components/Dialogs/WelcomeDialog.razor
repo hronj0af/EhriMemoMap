@@ -1,66 +1,165 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
 @inject DialogService DialogService
+@inject MemogisContext Context;
+@inject IJSRuntime JS
+@inject MapStateService MapState
 
-<RadzenRow>
-    <RadzenColumn Size="6" Style="background-color:var(--Wine-Red);color:var(--Beige)">
-        <div style="padding:1.5rem">
-            <h1 style="padding-bottom:10px;font-size:48px;">Memomap</h1>
-            <div style="font-size:12px;padding-bottom:10px">
-                @cl["welcomeText"]
-            </div>
-            <RadzenButton Click="@(() => DialogService.Close())" Style="text-transform:none; border:1px solid var(--Beige);color:var(--Beige)" Variant="Variant.Outlined">@cl["goToMap"]</RadzenButton>
-            </div>
-        </RadzenColumn>
-        <RadzenColumn Size="6" Style="color:var(--Grey)">
+@if (!MapState.IsMobileBrowser)
+{
+    <RadzenRow>
+
+        <RadzenColumn Size="6" Style="background-color:var(--Wine-Red);color:var(--Beige)">
             <div style="padding:1.5rem">
-                <h1 style="padding-bottom:10px;padding-top:15px;">Prague</h1>
-                <table style="padding-bottom:15px">
+                <h1 style="padding-bottom:10px;font-size:48px;">Memomap</h1>
+                <div style="font-size:12px;padding-bottom:10px">
+                    @cl["welcomeText"]
+                </div>
+                <RadzenButton Click="OnClose" Style="text-transform:none; border:1px solid var(--Beige);color:var(--Beige)" Variant="Variant.Outlined">@cl["goToMap"]</RadzenButton>
+                </div>
+            </RadzenColumn>
+            <RadzenColumn Size="6" Style="color:var(--Grey)">
+                <div style="padding:1.5rem">
+                    <h1 style="padding-bottom:10px;padding-top:15px;">Prague</h1>
+                    <table style="padding-bottom:15px">
+                        <tr>
+                            <td class='cell firstCell'>
+                                <img src='images/address.png' width=30 />
+                            </td>
+                            <td class='cell secondCell'>
+                                @cl["countJews"]
+                        </td>
+                        <td class='cell thirdCell'>
+                            @victims
+                        </td>
+                    </tr>
                     <tr>
                         <td class='cell firstCell'>
-                            <img src='images/address.png' width=30 />
+                            <img src='images/incident.png' width=30 />
                         </td>
                         <td class='cell secondCell'>
-                            @cl["countJews"]
-                    </td>
-                    <td class='cell thirdCell'>
-                        41645
-                    </td>
-                </tr>
-                <tr>
-                    <td class='cell firstCell'>
-                        <img src='images/incident.png' width=30 />
-                    </td>
-                    <td class='cell secondCell'>
-                        @cl["countIncidents"]
-                    </td>
-                    <td class='cell thirdCell'>
-                        1743
-                    </td>
-                </tr>
-                <tr>
-                    <td class='cell firstCell'>
-                        <img src='images/interest.png' width=30 />
-                    </td>
-                    <td class='cell secondCell'>
-                        @cl["countPointsOfInterest"]
-                    </td>
-                    <td class='cell thirdCell'>
-                        124
-                    </td>
-                </tr>
-                <tr>
-                    <td class='cell firstCell'>
-                        <img src='images/inaccessible.png' width=30 />
-                    </td>
-                    <td class='cell secondCell'>
-                        @cl["countInaccessiblePlaces"]
-                    </td>
-                    <td class='cell thirdCell'>
-                        109
-                    </td>
-                </tr>
-            </table>
-            <div style="font-size:12px">@cl["useNavigation"]</div>
-        </div>
-    </RadzenColumn>
-</RadzenRow>
+                            @cl["countIncidents"]
+                        </td>
+                        <td class='cell thirdCell'>
+                            @incidents
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='cell firstCell'>
+                            <img src='images/interest.png' width=30 />
+                        </td>
+                        <td class='cell secondCell'>
+                            @cl["countPointsOfInterest"]
+                        </td>
+                        <td class='cell thirdCell'>
+                            @interests
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='cell firstCell'>
+                            <img src='images/inaccessible.png' width=30 />
+                        </td>
+                        <td class='cell secondCell'>
+                            @cl["countInaccessiblePlaces"]
+                        </td>
+                        <td class='cell thirdCell'>
+                            @inaccessibles
+                        </td>
+                    </tr>
+                </table>
+                <div style="font-size:12px">@cl["useNavigation"]</div>
+            </div>
+        </RadzenColumn>
+    </RadzenRow>
+}
+else
+{
+    <RadzenRow>
+
+        <RadzenColumn Size="12" Style="color:var(--Grey))">
+            <div style="padding:1.5rem">
+                <h1 style="padding-bottom:10px;font-size:48px;">Memomap</h1>
+                <div style="font-size:12px;">
+                    @cl["welcomeText"]
+                </div>
+                </div>
+                <div style="padding:1.5rem">
+                    <table style="padding-bottom:15px">
+                        <tr>
+                            <td class='cell firstCell'>
+                                <img src='images/address.png' width=30 />
+                            </td>
+                            <td class='cell secondCell'>
+                                @cl["countJews"]
+                        </td>
+                        <td class='cell thirdCell'>
+                            @victims
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='cell firstCell'>
+                            <img src='images/incident.png' width=30 />
+                        </td>
+                        <td class='cell secondCell'>
+                            @cl["countIncidents"]
+                        </td>
+                        <td class='cell thirdCell'>
+                            @incidents
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='cell firstCell'>
+                            <img src='images/interest.png' width=30 />
+                        </td>
+                        <td class='cell secondCell'>
+                            @cl["countPointsOfInterest"]
+                        </td>
+                        <td class='cell thirdCell'>
+                            @interests
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class='cell firstCell'>
+                            <img src='images/inaccessible.png' width=30 />
+                        </td>
+                        <td class='cell secondCell'>
+                            @cl["countInaccessiblePlaces"]
+                        </td>
+                        <td class='cell thirdCell'>
+                            @inaccessibles
+                        </td>
+                    </tr>
+                </table>
+                <RadzenButton class="rz-mt-4" ButtonStyle="ButtonStyle.Primary" Click="OnClose" Variant="Variant.Outlined">@cl["goToMap"]</RadzenButton>
+                </div>
+        </RadzenColumn>
+    </RadzenRow>
+
+}
+
+
+@code {
+
+    decimal? victims;
+    decimal? incidents;
+    decimal? interests;
+    decimal? inaccessibles;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var statistics = Context.MapStatistics.Where(a => a.QuarterCs == "Praha").ToList();
+        victims = statistics.FirstOrDefault(a => a.Type.Contains("victims"))?.Count;
+        incidents = statistics.FirstOrDefault(a => a.Type.Contains("incidents"))?.Count;
+        interests = statistics.FirstOrDefault(a => a.Type.Contains("pois_points"))?.Count;
+        inaccessibles = statistics.FirstOrDefault(a => a.Type.Contains("pois_polygons"))?.Count;
+    }
+
+    private async Task OnClose()
+    {
+        DialogService.CloseSide();
+        DialogService.Close();
+        MapState.SetDialogType(DialogTypeEnum.None);
+        await JS.InvokeVoidAsync("mapAPI.fitMapToWindow");
+        await JS.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
+    }
+
+}

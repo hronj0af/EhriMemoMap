@@ -59,7 +59,8 @@ else if (isMobileBrowser == true)
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         this.firstRender = firstRender;
-        // DialogService.Open<WelcomeDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "33%"});
+
+
 
 
         if (firstRender && !MapState.MapStateWasInit)
@@ -82,6 +83,14 @@ else if (isMobileBrowser == true)
 
             await MapLogic.RefreshObjectsOnMap(true);
             isMobileBrowser = MapState.IsMobileBrowser;
+
+            if (!MapState.IsMobileBrowser)
+                DialogService.Open<WelcomeDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "33%" });
+            else
+            {
+                MapState.SetDialogType(DialogTypeEnum.Welcome);
+                await DialogService.OpenSideAsync<WelcomeDialog>(" ", options: await MapState.GetDialogOptions());
+            }
 
             StateHasChanged();
         }
