@@ -6,6 +6,7 @@ html, body {
     font-family: Noto Serif Regular;
     margin: 0px;
     color: var(--Grey);
+    background-color: var(--Grey);
 }
 
 h1, h2, h3, h4, h5, h6 {

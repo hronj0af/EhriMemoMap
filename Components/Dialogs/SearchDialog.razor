@@ -70,12 +70,6 @@
                 zoom = 18;
             await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, zoom);
             await JS.InvokeVoidAsync("mapAPI.addObjectFromJsonString", place.MapLocation);
-
-            if (!MapState.IsMobileBrowser)
-                return;
-
-            MapState.SetDialogType(DialogTypeEnum.None);
-            DialogService.CloseSide();
         }
         else
             await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");

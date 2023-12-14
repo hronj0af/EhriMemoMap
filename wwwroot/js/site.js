@@ -59,17 +59,20 @@ var mapAPI;
         }
     }
     mapAPI.initMap = initMap;
-    function fitMapToWindow() {
+    function fitMapToWindow(mobileDialogHeightPercents) {
+        const mobileDialogHeight = mobileDialogHeightPercents != null ? window.innerHeight * (mobileDialogHeightPercents / 100) : 0;
         const mapElement = document.getElementById("map");
         const pageElement = document.getElementsByClassName("page");
         if (mapElement == null || !mapElement)
             return;
-        const pageHeight = window.innerHeight - mapElement.offsetTop;
-        const mapHeight = !mapAPI.isMobileBrowser() ? pageHeight : pageHeight - 42 - 44;
+        const pageHeight = window.innerHeight;
+        const mapHeight = !mapAPI.isMobileBrowser() ? pageHeight : pageHeight - 44 - 44 - mobileDialogHeight;
         mapElement.style.height = mapHeight + "px";
         if (mapAPI.isMobileBrowser())
             mapElement.style.marginTop = "44px";
         pageElement.item(0).style.height = pageHeight + "px";
+        if (map != null)
+            map.invalidateSize();
     }
     mapAPI.fitMapToWindow = fitMapToWindow;
     function getMapInfoFromUrl() {
@@ -277,6 +280,7 @@ var mapAPI;
     }
     mapAPI.getWindowLocationSearch = getWindowLocationSearch;
     function isMobileBrowser() {
+        return true;
         if (_isMobileBrowser != null)
             return _isMobileBrowser;
         if (navigator.userAgent.match(/Android/i)

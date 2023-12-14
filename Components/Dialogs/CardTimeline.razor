@@ -104,12 +104,6 @@
 
         await MapLogic.RefreshObjectsOnMap(false);
         await JS.InvokeVoidAsync("mapAPI.setUrlParam", "timeline", MapState.GetTimelineForUrlParameter());
-
-        if (MapState.DialogType != DialogTypeEnum.Timeline)
-            return;
-        MapState.SetDialogType(DialogTypeEnum.None);
-        DialogService.CloseSide();
-
     }
 
 

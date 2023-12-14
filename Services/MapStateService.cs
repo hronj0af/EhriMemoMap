@@ -21,16 +21,8 @@ namespace EhriMemoMap.Services
             _js = js;
         }
 
-        public bool DialogIsFullscreen = false;
-
-        public void SetDialogIsFullscreen(bool value)
-        {
-            DialogIsFullscreen = value;
-            NotifyStateChanged();
-        }
-
         public string WidthOfDialog = "33%";
-        public string HeightOfDialog = "50%";
+        public int HeightOfDialog = 70;
         
         public int WindowHeight = 0;
         public int WindowWidth = 0;
@@ -63,11 +55,11 @@ namespace EhriMemoMap.Services
         public void SetDialogType(DialogTypeEnum value)
         {
             DialogType = value;
+            _js.InvokeVoidAsync("mapAPI.fitMapToWindow", HeightOfDialog);
             NotifyStateChanged();
         }
 
         private int topOfElement = 30;
-        private string rightOfElement = "0%";
 
         /// <summary>
         /// Aktuálně nastavený zoom mapy
@@ -289,7 +281,7 @@ namespace EhriMemoMap.Services
         /// <returns></returns>
         public async Task<SideDialogOptions> GetDialogOptions()
         {
-            var height = await _js.InvokeAsync<int>("mapAPI.getWindowHeight");
+            //var height = await _js.InvokeAsync<int>("mapAPI.getWindowHeight");
             return new SideDialogOptions()
             {
                 ShowClose = true,
@@ -298,7 +290,7 @@ namespace EhriMemoMap.Services
                 ShowMask = false,
                 CssClass = IsMobileBrowser ? "" : "side-dialog",
                 Style = IsMobileBrowser ? (DialogType == DialogTypeEnum.Help ? "z-index:50000" : "z-index:10000") : "",
-                Height = IsMobileBrowser ? (DialogType == DialogTypeEnum.Help ? height + "px" : (height - 42) + "px") : "",
+                Height = IsMobileBrowser ? (DialogType == DialogTypeEnum.Help ? WindowHeight + "px" : HeightOfDialog + "%") : "",
                 Width = !IsMobileBrowser ? WidthOfDialog : ""
             };
 

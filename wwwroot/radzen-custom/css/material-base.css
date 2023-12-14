@@ -16488,7 +16488,7 @@ ul.rz-profile-menu .rz-navigation-menu .rz-fileupload-row .rz-paginator-element 
 
 .rz-dialog-side-content {
   flex: 0 1 auto;
-  padding: var(--rz-dialog-side-content-padding);
+/*  padding: var(--rz-dialog-side-content-padding);*/
   overflow: auto;
 }
 
