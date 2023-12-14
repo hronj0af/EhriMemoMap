@@ -157,19 +157,19 @@
         "name": "all",
         "title": "All",
         "from": null,
-        "to": null
-        //"additionalLayers": [
-        //  {
-        //    "name": "statistics",
-        //    "placeType": "statistics",
-        //    "order": 0,
-        //    "type": "objects",
-        //    "maxZoom": 16,
-        //    "minZoom": 15,
-        //    "backgroundColor": "#d5d2b8",
-        //    "fontColor": "#46463d"
-        //  }
-        //]
+        "to": null,
+        "additionalLayers": [
+          {
+            "name": "statistics",
+            "placeType": "statistics",
+            "order": 10,
+            "type": "objects",
+            "maxZoom": 16,
+            "minZoom": 15,
+            "backgroundColor": "#d5d2b8",
+            "fontColor": "Dark"
+          }
+        ]
       }
     ]
   }

@@ -370,3 +370,50 @@ path.leaflet-interactive:focus {
     width: 40px;
     opacity: 1;
 }
+
+/* MAP TOOLTIPS FOR STATISTICS */
+
+
+.statistics-tooltip {
+    position: absolute;
+    padding: 10px;
+    background-color: #1C6379;
+    border-radius: 6px;
+    color: var(--Beige-LIGHT);
+    white-space: nowrap;
+    width: 195px;
+    height: 133px;
+    opacity:1;
+}
+
+
+.statistics-table {
+    width:100%
+}
+
+.statistics-table-firstcell {
+    width: 10%;
+    vertical-align: top;
+    color: white;
+    font-size: 18px;
+    font-family: 'Barlow Regular';
+    font-weight: 400;
+    line-height: 22px;
+    word-wrap: break-word
+}
+
+.statistics-table-secondcell {
+    color: white;
+    font-size: 18px;
+    font-family: 'Barlow Regular';
+    font-weight: 400;
+    line-height: 22px;
+    word-wrap: break-word;
+    width: 90%;
+    vertical-align: top;
+}
+
+div.leaflet-overlay-pane svg > g path.statistics-polygon {
+    filter: url(#inset-shadow);
+    fill: #1C6379;
+}

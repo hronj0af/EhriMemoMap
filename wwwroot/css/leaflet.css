@@ -587,8 +587,8 @@ svg.leaflet-image-layer.leaflet-interactive path {
 	position: absolute;
 	padding: 6px;
 	background-color: #fff;
-	border: 1px solid #fff;
-	border-radius: 3px;
+/*	border: 1px solid #fff;
+*/	border-radius: 3px;
 	color: #222;
 	white-space: nowrap;
 	-webkit-user-select: none;
@@ -668,3 +668,4 @@ svg.leaflet-image-layer.leaflet-interactive path {
 		print-color-adjust: exact;
 		}
 	}
+

@@ -11,6 +11,10 @@ interface MapObjectForLeafletModel {
     mapPoint: string | null;
     mapPolygon: string | null;
     htmlIcon: string | null;
+    customTooltipClass: string | null;
+    customPolygonClass: string | null;
+
+
 }
 interface LayerForLeafletModel {
     name: string | null;
@@ -144,7 +148,7 @@ namespace mapAPI {
 
         if (mapAPI.isMobileBrowser())
             mapElement.style.marginTop = "44px";
-        pageElement.item(0).style.height = pageHeight + "px";
+        //pageElement.item(0).style.height = pageHeight + "px";
 
         if (map != null)
             map.invalidateSize();
@@ -274,8 +278,7 @@ namespace mapAPI {
     /// OBJECTS
     //////////////////////////
 
-    // refreshují se pouze špendlíky, polygony se přidají na začátku a pak už se s nimi nic nedělá
-    // (protože jich není moc, tak se můžou zobrazovat pořád)
+    // refreshuje se všechno, kromě nepřístupných míst, protože ta jsou vidět pořád
     export function refreshObjectsOnMap(objectJson) {
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
         const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
@@ -287,8 +290,11 @@ namespace mapAPI {
 
             if (objects[i].mapPolygon != null) {
                 const polygonObject = JSON.parse(objects[i].mapPolygon) as PolygonModel;
-                newObject = getPolygon(polygonObject, objects[i].label);
-                newObject.addTo(polygonsGroup);
+                newObject = getPolygon(polygonObject, objects[i].label, null, objects[i].customTooltipClass, objects[i].customPolygonClass);
+                if (objects[i].placeType == "Inaccessible")
+                    newObject.addTo(polygonsGroup);
+                else
+                    newObject.addTo(objectsGroup);
             } else {
                 const markerObject = JSON.parse(objects[i].mapPoint) as PointModel;
                 newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon);
@@ -322,7 +328,7 @@ namespace mapAPI {
         return result;
     }
 
-    export function getPolygon(polygonObject: PolygonModel, label: string, color?: string): L.Polygon {
+    export function getPolygon(polygonObject: PolygonModel, label: string, color?: string, customTooltipClass?: string, customPolygonClass?: string): L.Polygon {
         const pointsArray = [];
         for (let j = 0; j < polygonObject.coordinates.length; j++) {
             for (let m = 0; m < polygonObject.coordinates[j].length; m++) {
@@ -330,17 +336,28 @@ namespace mapAPI {
                 pointsArray.push([]);
                 const innerArray = [];
                 for (let k = 0; k < polygon.length; k++) {
-                    innerArray.push([polygon[k][1], polygon[k][0]]);
+                    if (polygon[k][0] != undefined && polygon[k][1] != undefined)
+                        innerArray.push([polygon[k][1], polygon[k][0]]);
+                    else
+                        innerArray.push([polygon[1], polygon[0]]);
+
                 }
-                pointsArray[j].push(innerArray);
+                if (innerArray.length > 0)
+                    pointsArray[j].push(innerArray);
             }
         }
-        const result = new L.Polygon(pointsArray, { fillColor: polygonColor, color: '#222', weight: 0.5, fillOpacity: 0.504, opacity: 1 })
+
+        const polygonOptions = customPolygonClass != undefined && customPolygonClass != null
+            ? { className: customPolygonClass, color: null, weight: null, fillOpacity: null, opacity: null, fillColor: null }
+            : { fillColor: '#C5222C', color: '#222', weight: 0.5, fillOpacity: 0.40, opacity: 1 };
+
+        const result = new L.Polygon(pointsArray, polygonOptions)
             .on('click', callBlazor_ShowPlaceInfo);
 
+        
 
         if (!isMobileBrowser() && label != undefined && label != null) {
-            result.bindTooltip(label, { sticky: true });
+            result.bindTooltip(label, { sticky: true, className: customTooltipClass != undefined && customTooltipClass != null ? customTooltipClass : null });
         }
 
         return result;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using EhriMemoMap.Models;
 using NetTopologySuite.Geometries;
 using NodaTime;
