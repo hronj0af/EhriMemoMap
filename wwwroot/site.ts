@@ -299,6 +299,7 @@ namespace mapAPI {
             } else {
                 const markerObject = JSON.parse(objects[i].mapPoint) as PointModel;
                 newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon);
+                newObject.options.guid = objects[i].guid;
                 newObject.addTo(objectsGroup);
             }
         }
@@ -390,6 +391,16 @@ namespace mapAPI {
         }
     }
 
+    export function selectPointOnMap(guidArrayJson: string): void {
+        const guidArray = JSON.parse(guidArrayJson) as string[];
+        const objectsGroup = groups.find(a => a.options.id == "Objects_group");
+        objectsGroup.eachLayer(function (item) {
+            if (item.options.guid !== undefined && guidArray.includes(item.options.guid)) {
+                item._icon.className = item._icon.className.replace('map-point', 'map-point-selected');
+            }
+        });
+    }
+
     //////////////////////////
     /// HELPER METHODS
     //////////////////////////
@@ -440,7 +451,7 @@ namespace mapAPI {
     }
 
     export function isMobileBrowser(): boolean {
-        return true;
+        //return true;
         if (_isMobileBrowser != null)
             return _isMobileBrowser;
 

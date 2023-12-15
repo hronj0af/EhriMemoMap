@@ -179,6 +179,7 @@ var mapAPI;
             else {
                 const markerObject = JSON.parse(objects[i].mapPoint);
                 newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon);
+                newObject.options.guid = objects[i].guid;
                 newObject.addTo(objectsGroup);
             }
         }
@@ -259,6 +260,16 @@ var mapAPI;
         }
     }
     mapAPI.unselectAllSelectedPoints = unselectAllSelectedPoints;
+    function selectPointOnMap(guidArrayJson) {
+        const guidArray = JSON.parse(guidArrayJson);
+        const objectsGroup = groups.find(a => a.options.id == "Objects_group");
+        objectsGroup.eachLayer(function (item) {
+            if (item.options.guid !== undefined && guidArray.includes(item.options.guid)) {
+                item._icon.className = item._icon.className.replace('map-point', 'map-point-selected');
+            }
+        });
+    }
+    mapAPI.selectPointOnMap = selectPointOnMap;
     function toggleLayerGroup(name, selected) {
         const groupName = name + "_group";
         if (!selected) {
@@ -301,7 +312,6 @@ var mapAPI;
     }
     mapAPI.getWindowLocationSearch = getWindowLocationSearch;
     function isMobileBrowser() {
-        return true;
         if (_isMobileBrowser != null)
             return _isMobileBrowser;
         if (navigator.userAgent.match(/Android/i)

@@ -1,5 +1,6 @@
 ﻿@page "/"
 
+@using EhriMemoMap.Helpers
 @using NetTopologySuite.Geometries;
 @using Newtonsoft.Json.Linq;
 @using System.Xml;
@@ -47,6 +48,7 @@ else if (isMobileBrowser == true)
 @code {
     bool? isMobileBrowser = null;
     bool firstRender = true;
+    string? selectedPointGuidsJson;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -97,6 +99,9 @@ else if (isMobileBrowser == true)
         MapState.MapZoom = zoom;
         MapState.SetBBox(mapBounds);
         await MapLogic.RefreshObjectsOnMap(withPolygons);
+        if (!string.IsNullOrEmpty(selectedPointGuidsJson))
+            await JS.InvokeVoidAsync("mapAPI.selectPointOnMap", selectedPointGuidsJson);
+
     }
 
     public void RemoveObjects(dynamic obj)
@@ -109,15 +114,24 @@ else if (isMobileBrowser == true)
     public async Task ShowPlaceInfo(int zoom, Coordinate[] coordinates)
     {
         var placesOnMap = MapLogic.GetMapObjects(true, coordinates);
+        if (placesOnMap.Count == 0)
+            return;
+
+        selectedPointGuidsJson = JsonConvert.SerializeObject(placesOnMap.Select(a => a.Guid).ToArray());
 
         var serializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
+        
         var mapLocationJson = JsonConvert.SerializeObject(new { type = "Point", coordinates = new double[] { coordinates[0].X, coordinates[1].Y } }, serializerSettings);
+        
         MapState.SetDialogType(DialogTypeEnum.Place);
-        await DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, await MapState.GetDialogOptions());
-        await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates, zoom);
+        DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, await MapState.GetDialogOptions());
+        
+        if (MapState.IsMobileBrowser)
+            await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), zoom);
+
 
     }
 

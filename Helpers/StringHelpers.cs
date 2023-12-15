@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using NetTopologySuite.Geometries;
+using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace EhriMemoMap.Helpers
 {
@@ -22,6 +24,16 @@ namespace EhriMemoMap.Helpers
                 RegexOptions.IgnoreCase);
 
             return text;
+        }
+
+        public static string AsJson(this Coordinate[] coordinates)
+        {
+            var json = new 
+            {
+                type = "Point",
+                coordinates = new object[] { coordinates[0].X, coordinates[0].Y }
+            };
+            return JsonConvert.SerializeObject(json);
         }
     }
 }
