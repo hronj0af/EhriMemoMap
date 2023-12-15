@@ -10,7 +10,7 @@
 @if (Places.GroupBy(a => a.PlaceType).Count() == 1)
 {
     <div style="padding: 0 2.5rem 0 2.5rem">
-            <h2 class="rz-mb-12" style="color:var(--Wine-Red);">@cl["featureType_" + Places.FirstOrDefault()?.PlaceType]</h2>
+        <h2 class="rz-mb-12" style="color:var(--Wine-Red);">@cl["featureType_" + Places.FirstOrDefault()?.PlaceType]</h2>
 
 
 
@@ -43,37 +43,37 @@ else
             {
                 <RadzenTabsItem Text="@(cl["featureType_" + placeType.ToString()])">
                     <div style="padding:1.5rem">
-                    @if (placeType == PlaceType.Incident)
-                    {
-                        foreach (var place in Incidents ?? new List<PragueIncidentsTimeline>())
+                        @if (placeType == PlaceType.Incident)
                         {
-                            <CardIncident Place="place" />
+                            foreach (var place in Incidents ?? new List<PragueIncidentsTimeline>())
+                            {
+                                <CardIncident Place="place" />
+                            }
                         }
-                    }
 
-                    @if (placeType == PlaceType.Interest)
-                    {
-                        foreach (var place in PlacesOfInterest ?? new List<PraguePlacesOfInterestTimeline>())
+                        @if (placeType == PlaceType.Interest)
                         {
-                            <CardInterest Place="place" />
+                            foreach (var place in PlacesOfInterest ?? new List<PraguePlacesOfInterestTimeline>())
+                            {
+                                <CardInterest Place="place" />
+                            }
                         }
-                    }
 
-                    @if (placeType == PlaceType.Inaccessible)
-                    {
-                        foreach (var place in InaccessiblePlaces ?? new List<PraguePlacesOfInterestTimeline>())
+                        @if (placeType == PlaceType.Inaccessible)
                         {
-                            <CardInterest Place="place" />
+                            foreach (var place in InaccessiblePlaces ?? new List<PraguePlacesOfInterestTimeline>())
+                            {
+                                <CardInterest Place="place" />
+                            }
                         }
-                    }
 
-                    @if (placeType == PlaceType.Address)
-                    {
-                        foreach (var place in Addresses ?? new List<AddressWithVictimsWrappwer>())
+                        @if (placeType == PlaceType.Address)
                         {
-                            <CardAddress House="place" />
+                            foreach (var place in Addresses ?? new List<AddressWithVictimsWrappwer>())
+                            {
+                                <CardAddress House="place" />
+                            }
                         }
-                    }
                     </div>
                 </RadzenTabsItem>
             }
@@ -101,6 +101,11 @@ else
     {
         if (Places == null)
             return;
+
+        Incidents = null;
+        PlacesOfInterest = null;
+        InaccessiblePlaces = null;
+        Addresses = null;
 
         if (Places.Any(a => a.PlaceType == PlaceType.Incident.ToString()))
         {

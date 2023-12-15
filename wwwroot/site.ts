@@ -395,7 +395,7 @@ namespace mapAPI {
         const guidArray = JSON.parse(guidArrayJson) as string[];
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
         objectsGroup.eachLayer(function (item) {
-            if (item.options.guid !== undefined && guidArray.includes(item.options.guid)) {
+            if (item.options.guid !== undefined && guidArray.includes(item.options.guid) && !item._icon.className.includes('map-point-selected')) {
                 item._icon.className = item._icon.className.replace('map-point', 'map-point-selected');
             }
         });
