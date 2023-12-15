@@ -14,25 +14,17 @@
 @inject IHttpContextAccessor httpContextAccesor
 @inject EhriMemoMap.Data.MemogisContext context
 
-
-
 <div id="map" style="cursor:default;">
+    <!-- TOTO JE FILTR, KTERÝ SE POUŽÍVÁ PRO HEZČÍ VYKRESLENÍ HRANIC OKRESŮ, 
+         RESP. CELÉ PRAHY (viz soubor site.css, řádek div.leaflet-overlay-pane svg > g path.statistics-polygon) -->
     <svg xmlns="w3.org/2000/svg" ; version="1.1">
         <defs>
             <filter id='inset-shadow'>
-                <feOffset dx='0'
-                          dy='0' />
-
+                <feOffset dx='0' dy='0' />
                 <!-- Shadow blur -->
-                <feGaussianBlur stdDeviation='10'
-                                result='offset-blur' />
-
+                <feGaussianBlur stdDeviation='5' result='offset-blur' />
                 <!-- Invert drop shadow to make an inset shadow -->
-                <feComposite operator='out'
-                             in='SourceGraphic'
-                             in2='offset-blur'
-                             result='inverse' />
-
+                <feComposite operator='out' in='SourceGraphic' in2='offset-blur' result='inverse' />
             </filter>
         </defs>
     </svg>
@@ -59,9 +51,6 @@ else if (isMobileBrowser == true)
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         this.firstRender = firstRender;
-
-
-
 
         if (firstRender && !MapState.MapStateWasInit)
         {
@@ -99,7 +88,7 @@ else if (isMobileBrowser == true)
 
     /// <summary>
     /// Tahle metoda na obnovení špendlíků a polygonů na mapě se volá vždycky z javascriptu, když se s mapou nějak pohne,
-    // protože tady v aplikaci nemám spolehlivý přehled o tom, kdy se mapa někam pohne, nebo zazoomuje
+    /// protože tady v aplikaci nemám spolehlivý přehled o tom, kdy se mapa někam pohne, nebo zazoomuje
     /// </summary>
     /// <returns></returns>
     [JSInvokable("RefreshObjectsOnMap")]
@@ -128,6 +117,8 @@ else if (isMobileBrowser == true)
         var mapLocationJson = JsonConvert.SerializeObject(new { type = "Point", coordinates = new double[] { coordinates[0].X, coordinates[1].Y } }, serializerSettings);
         MapState.SetDialogType(DialogTypeEnum.Place);
         await DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, await MapState.GetDialogOptions());
+        await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates, zoom);
+
     }
 
 }

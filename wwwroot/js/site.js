@@ -18,8 +18,9 @@ var mapAPI;
     let dialogWidth = null;
     let dialogHeight = null;
     let isFullscreen = null;
-    let polygonColor = "#ff3333";
-    let polygonColorSelected = "#cc1111";
+    let polygonStrokeColor = "#222";
+    let polygonColor = "#C5222C";
+    let polygonColorSelected = "#000";
     function initMap(jsonMapSettings) {
         fitMapToWindow(null);
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
@@ -48,7 +49,7 @@ var mapAPI;
         });
         const mapSettings = JSON.parse(jsonMapSettings);
         for (let i = 0; i < mapSettings.length; i++) {
-            const group = new L.LayerGroup(null, { id: mapSettings[i].name + "_group" });
+            const group = new L.FeatureGroup(null, { id: mapSettings[i].name + "_group" });
             group.setZIndex(mapSettings[i].zIndex);
             groups.push(group);
             if (mapSettings[i].selected)
@@ -70,7 +71,7 @@ var mapAPI;
         mapElement.style.height = mapHeight + "px";
         if (mapAPI.isMobileBrowser())
             mapElement.style.marginTop = "44px";
-        pageElement.item(0).style.height = pageHeight + "px";
+        pageElement[0].style.height = pageHeight + "px";
         if (map != null)
             map.invalidateSize();
     }
@@ -181,6 +182,7 @@ var mapAPI;
                 newObject.addTo(objectsGroup);
             }
         }
+        polygonsGroup.bringToFront();
     }
     mapAPI.refreshObjectsOnMap = refreshObjectsOnMap;
     function addObjectFromJsonString(jsonInfo) {
@@ -224,7 +226,7 @@ var mapAPI;
         }
         const polygonOptions = customPolygonClass != undefined && customPolygonClass != null
             ? { className: customPolygonClass, color: null, weight: null, fillOpacity: null, opacity: null, fillColor: null }
-            : { fillColor: '#C5222C', color: '#222', weight: 0.5, fillOpacity: 0.40, opacity: 1 };
+            : { fillColor: polygonColor, color: polygonStrokeColor, weight: 0.5, fillOpacity: 0.40, opacity: 1 };
         const result = new L.Polygon(pointsArray, polygonOptions);
         if (clickable) {
             result.on('click', callBlazor_ShowPlaceInfo);
@@ -299,6 +301,7 @@ var mapAPI;
     }
     mapAPI.getWindowLocationSearch = getWindowLocationSearch;
     function isMobileBrowser() {
+        return true;
         if (_isMobileBrowser != null)
             return _isMobileBrowser;
         if (navigator.userAgent.match(/Android/i)

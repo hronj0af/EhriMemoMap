@@ -415,5 +415,5 @@ path.leaflet-interactive:focus {
 
 div.leaflet-overlay-pane svg > g path.statistics-polygon {
     filter: url(#inset-shadow);
-    fill: #1C6379;
+    fill: #03465b;
 }

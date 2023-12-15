@@ -64,7 +64,7 @@ namespace mapAPI {
     let incidentIcon: L.DivIcon = null;
     let interestIcon: L.DivIcon = null;
     let blazorMapObject = null;
-    let groups: L.LayerGroup[] = [];
+    let groups: L.FeatureGroup[] = [];
     let trackingInterval: number = null;
     let _isMobileBrowser: boolean = null;
     let applicationIsTrackingLocation: boolean = null;
@@ -72,8 +72,9 @@ namespace mapAPI {
     let dialogWidth: string = null;
     let dialogHeight: string = null;
     let isFullscreen: boolean = null;
-    let polygonColor: string = "#ff3333";
-    let polygonColorSelected: string = "#cc1111";
+    let polygonStrokeColor: string = "#222";
+    let polygonColor: string = "#C5222C";
+    let polygonColorSelected: string = "#000"; // "#cc1111";
 
     //////////////////////////
     /// INIT
@@ -120,7 +121,7 @@ namespace mapAPI {
 
         // konverze json objektu do jednotlivých vrstev mapy a jejich přidání k mapě
         for (let i = 0; i < mapSettings.length; i++) {
-            const group = new L.LayerGroup(null, { id: mapSettings[i].name + "_group" });
+            const group = new L.FeatureGroup(null, { id: mapSettings[i].name + "_group" });
             group.setZIndex(mapSettings[i].zIndex);
             groups.push(group);
 
@@ -148,7 +149,7 @@ namespace mapAPI {
 
         if (mapAPI.isMobileBrowser())
             mapElement.style.marginTop = "44px";
-        pageElement.item(0).style.height = pageHeight + "px";
+        pageElement[0].style.height = pageHeight + "px";
 
         if (map != null)
             map.invalidateSize();
@@ -301,6 +302,7 @@ namespace mapAPI {
                 newObject.addTo(objectsGroup);
             }
         }
+        polygonsGroup.bringToFront();
     }
 
     export function addObjectFromJsonString(jsonInfo) {
@@ -348,8 +350,8 @@ namespace mapAPI {
         }
 
         const polygonOptions = customPolygonClass != undefined && customPolygonClass != null
-            ? { className: customPolygonClass, color: null, weight: null, fillOpacity: null, opacity: null, fillColor: null }
-            : { fillColor: '#C5222C', color: '#222', weight: 0.5, fillOpacity: 0.40, opacity: 1 };
+            ? { className: customPolygonClass, color: null, weight: null, fillOpacity: null, opacity: null, fillColor: null } // tohle se používá pro statistiku čtvrtí
+            : { fillColor: polygonColor, color: polygonStrokeColor, weight: 0.5, fillOpacity: 0.40, opacity: 1 }; // tohle se používá pro nepřístupná místa
 
         const result = new L.Polygon(pointsArray, polygonOptions);
 
@@ -438,7 +440,7 @@ namespace mapAPI {
     }
 
     export function isMobileBrowser(): boolean {
-        //return true;
+        return true;
         if (_isMobileBrowser != null)
             return _isMobileBrowser;
 
