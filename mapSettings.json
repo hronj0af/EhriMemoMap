@@ -1,5 +1,10 @@
 ﻿{
   "map": {
+    "initialVariables": {
+      "zoom": 14,
+      "lat": 50.07905886,
+      "lng": 14.43715096
+    },
     "layers": [
       {
         "name": "OSM",

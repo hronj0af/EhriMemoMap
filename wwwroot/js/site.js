@@ -12,7 +12,7 @@ var mapAPI;
     let blazorMapObject = null;
     let groups = [];
     let trackingInterval = null;
-    let _isMobileBrowser = null;
+    let _isMobileView = null;
     let applicationIsTrackingLocation = null;
     let actualLocation = null;
     let dialogWidth = null;
@@ -22,6 +22,7 @@ var mapAPI;
     let polygonColor = "#C5222C";
     let polygonColorSelected = "#000";
     function initMap(jsonMapSettings) {
+        const mapSettings = JSON.parse(jsonMapSettings);
         fitMapToWindow(null);
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
         addressIcon = new L.DivIcon();
@@ -33,9 +34,12 @@ var mapAPI;
         });
         map = new L.Map('map', { zoomControl: false });
         map.attributionControl.setPosition('bottomleft');
-        L.control.scale().setPosition(mapAPI.isMobileBrowser() ? 'topright' : 'bottomleft').addTo(map);
+        L.control.scale().setPosition(mapAPI.isMobileView() ? 'topright' : 'bottomleft').addTo(map);
         if (!setMapWithInfoFromUrl())
-            map.setView([50.07905886, 14.43715096], 14);
+            if (mapSettings.initialVariables == null)
+                map.setView([50.07905886, 14.43715096], 14);
+            else
+                map.setView([mapSettings.initialVariables.lat, mapSettings.initialVariables.lng], mapSettings.initialVariables.zoom);
         map.on("moveend", function () {
             document.getElementById("map").style.cursor = 'default';
             setUrlByMapInfo();
@@ -47,19 +51,23 @@ var mapAPI;
             coorx = ev.containerPoint.x;
             coory = ev.containerPoint.y;
         });
-        const mapSettings = JSON.parse(jsonMapSettings);
-        for (let i = 0; i < mapSettings.length; i++) {
-            const group = new L.FeatureGroup(null, { id: mapSettings[i].name + "_group" });
-            group.setZIndex(mapSettings[i].zIndex);
+        for (let i = 0; i < mapSettings.layers.length; i++) {
+            const group = new L.FeatureGroup(null, { id: mapSettings.layers[i].name + "_group" });
+            group.setZIndex(mapSettings.layers[i].zIndex);
             groups.push(group);
-            if (mapSettings[i].selected)
+            if (mapSettings.layers[i].selected)
                 group.addTo(map);
-            const layer = convertMapSettingsObjectToMapLayer(mapSettings[i]);
+            const layer = convertMapSettingsObjectToMapLayer(mapSettings.layers[i]);
             if (layer != null)
                 group.addLayer(layer);
         }
     }
     mapAPI.initMap = initMap;
+    function onResizeWindow() {
+        fitMapToWindow(null);
+        blazorMapObject.invokeMethodAsync("SetMobileView", isMobileView());
+    }
+    mapAPI.onResizeWindow = onResizeWindow;
     function fitMapToWindow(mobileDialogHeightPercents) {
         const mobileDialogHeight = mobileDialogHeightPercents != null ? window.innerHeight * (mobileDialogHeightPercents / 100) : 0;
         const mapElement = document.getElementById("map");
@@ -67,9 +75,9 @@ var mapAPI;
         if (mapElement == null || !mapElement)
             return;
         const pageHeight = window.innerHeight;
-        const mapHeight = !mapAPI.isMobileBrowser() ? pageHeight : pageHeight - 44 - 44 - mobileDialogHeight;
+        const mapHeight = !mapAPI.isMobileView() ? pageHeight : pageHeight - 44 - 44 - mobileDialogHeight;
         mapElement.style.height = mapHeight + "px";
-        if (mapAPI.isMobileBrowser())
+        if (mapAPI.isMobileView())
             mapElement.style.marginTop = "44px";
         pageElement[0].style.height = pageHeight + "px";
         if (map != null)
@@ -199,7 +207,7 @@ var mapAPI;
         if (htmlIcon != undefined && htmlIcon != null)
             iconOptions = { icon: new L.DivIcon({ className: "map-point", html: htmlIcon }) };
         const result = new L.Marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
-        if (!isMobileBrowser() && label != undefined && label != null) {
+        if (!isMobileView() && label != undefined && label != null) {
             result.bindTooltip(label, { sticky: true });
         }
         if (clickable) {
@@ -311,9 +319,11 @@ var mapAPI;
         return window.location.search;
     }
     mapAPI.getWindowLocationSearch = getWindowLocationSearch;
-    function isMobileBrowser() {
-        if (_isMobileBrowser != null)
-            return _isMobileBrowser;
+    function isMobileView() {
+        if (window.innerWidth < 768)
+            return true;
+        if (_isMobileView != null)
+            return _isMobileView;
         if (navigator.userAgent.match(/Android/i)
             || navigator.userAgent.match(/webOS/i)
             || navigator.userAgent.match(/iPhone/i)
@@ -321,12 +331,12 @@ var mapAPI;
             || navigator.userAgent.match(/iPod/i)
             || navigator.userAgent.match(/BlackBerry/i)
             || navigator.userAgent.match(/Windows Phone/i))
-            _isMobileBrowser = true;
+            _isMobileView = true;
         else
-            _isMobileBrowser = false;
-        return _isMobileBrowser;
+            _isMobileView = false;
+        return _isMobileView;
     }
-    mapAPI.isMobileBrowser = isMobileBrowser;
+    mapAPI.isMobileView = isMobileView;
     function getZoom() {
         return map.getZoom();
     }
@@ -412,5 +422,5 @@ var mapAPI;
     }
     mapAPI.fullscreenDialog = fullscreenDialog;
 })(mapAPI || (mapAPI = {}));
-window.addEventListener("resize", mapAPI.fitMapToWindow);
+window.addEventListener("resize", mapAPI.onResizeWindow);
 //# sourceMappingURL=site.js.map

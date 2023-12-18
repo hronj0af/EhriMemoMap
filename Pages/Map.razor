@@ -47,12 +47,12 @@
 
 <ControlButtonsWrapper />
 <ZoomButtonsWrapper />
-@if (isMobileBrowser == false)
+@if (isMobileView == false)
 {
     <LayersQuickAccess />
     <TimelineWrapper />
 }
-else if (isMobileBrowser == true)
+else if (isMobileView == true)
 {
     <MobileTopBarWrapper />
 }
@@ -60,10 +60,16 @@ else if (isMobileBrowser == true)
 
 
 @code {
-    bool? isMobileBrowser = null;
+    bool? isMobileView = null;
     bool firstRender = true;
     string? selectedPointGuidsJson;
 
+
+    /// <summary>
+    /// Initialiazece mapy se děje až po prvním renderu, protože až v tomto okamžiku mám k dispozici všechny potřebné informace
+    /// </summary>
+    /// <param name="firstRender"></param>
+    /// <returns></returns>
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         this.firstRender = firstRender;
@@ -72,34 +78,61 @@ else if (isMobileBrowser == true)
         {
             // musím do javascriptu šoupnout odkaz na instanci téhle třídy Map,
             // abych pak mohl z javascriptu volat metodu RefreshObjectsOnMap a ShowPlaceInfo
-
             var dotNetReference = DotNetObjectReference.Create(this);
             await JS.InvokeVoidAsync("mapAPI.initBlazorMapObject", dotNetReference);
+
+            // získám parametry z url o vrstvách, bodu na časové ose a ohraničení mapy
             string layers = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "layers");
             string timelinePointName = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "timeline");
-            MapState.IsMobileBrowser = await JS.InvokeAsync<bool>("mapAPI.isMobileBrowser");
+            string? bounds = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "bounds");
+
+            // zjistím, jestli se jedná o mobilní zařízení
+            MapState.IsMobileView = await JS.InvokeAsync<bool>("mapAPI.isMobileView");
+            isMobileView = MapState.IsMobileView;
+
+            // inicializace hlavního objektu mapy
+            // pokud jsou v url parametry layers a timeline, tak se použijí, jinak se použijí defaultní hodnoty
             MapState.Init(layers, timelinePointName);
+
+            // voláme javascriptovou metodu leafletu, která inicializuje mapu
+            // jako parametr předám informace o vrstvách a počátečním zobrazení mapy
             await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet());
 
+            // tady se zjistí šířka a výška okna kvůli zobrazení dialogového okna s dalšími informacemi
             MapState.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
             MapState.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
+
+            // tady se zase zjistí, jak je velká oblast, která se zobrazuje na mapě
             MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.getZoom");
             MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
 
+            // a posledně zmiňované informace se pak použijí pro zobrazení špendlíků a polygonů na mapě
             await MapLogic.RefreshObjectsOnMap(true);
-            isMobileBrowser = MapState.IsMobileBrowser;
 
-            if (!MapState.IsMobileBrowser)
-                DialogService.Open<WelcomeDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "33%" });
-            else
-            {
-                MapState.SetDialogType(DialogTypeEnum.Welcome);
-                await DialogService.OpenSideAsync<WelcomeDialog>(" ", options: await MapState.GetDialogOptions());
-            }
+            // pokud není v url parametr bounds (uživatel s mapou ještě nezačal pracovat), 
+            // tak se zobrazí dialog s vysvětlením, jak se v mapě pohybovat
+            // pokud už s mapou začal pracovat, tak ho s tímto uvítacím dialogem nebudeme otravovat
+            if (string.IsNullOrEmpty(bounds))
+                if (!MapState.IsMobileView)
+                    DialogService.Open<WelcomeDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "33%" });
+                else
+                {
+                    MapState.SetDialogType(DialogTypeEnum.Welcome);
+                    await DialogService.OpenSideAsync<WelcomeDialog>(" ", options: await MapState.GetDialogOptions());
+                }
 
             StateHasChanged();
         }
 
+    }
+
+    [JSInvokable("SetMobileView")]
+    public void SetMobileView(bool value)
+    {
+        MapState.IsMobileView = value;
+        isMobileView = value;
+        MapState.NotifyStateChanged();
+        StateHasChanged();
     }
 
     /// <summary>
@@ -115,12 +148,11 @@ else if (isMobileBrowser == true)
         await MapLogic.RefreshObjectsOnMap(withPolygons);
         if (!string.IsNullOrEmpty(selectedPointGuidsJson))
             await JS.InvokeVoidAsync("mapAPI.selectPointOnMap", selectedPointGuidsJson);
-
     }
 
     public void RemoveObjects(dynamic obj)
     {
-        if (!MapState.IsMobileBrowser)
+        if (!MapState.IsMobileView)
             JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
     }
 
@@ -143,7 +175,7 @@ else if (isMobileBrowser == true)
         MapState.SetDialogType(DialogTypeEnum.Place);
         DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, await MapState.GetDialogOptions());
         
-        if (MapState.IsMobileBrowser)
+        if (MapState.IsMobileView)
             await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), zoom);
 
 

@@ -79,15 +79,15 @@
     public string gap;
     public int size;
     public JustifyContent justifyContent;
-    public bool? isMobileBrowser;
+    public bool? isMobileView;
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        size = MapState.IsMobileBrowser ? 4 : 12;
-        isMobileBrowser = MapState.IsMobileBrowser;
-        justifyContent = MapState.IsMobileBrowser ? JustifyContent.SpaceAround : JustifyContent.End;
-        gap = MapState.IsMobileBrowser ? "5" : "0";
+        size = MapState.IsMobileView ? 4 : 12;
+        isMobileView = MapState.IsMobileView;
+        justifyContent = MapState.IsMobileView ? JustifyContent.SpaceAround : JustifyContent.End;
+        gap = MapState.IsMobileView ? "5" : "0";
         style = GetStyle();
         StateHasChanged();
     }
@@ -118,7 +118,7 @@
 
     public string GetStyle()
     {
-        if (MapState.IsMobileBrowser)
+        if (MapState.IsMobileView)
             return $"position:absolute;top:54px;left:10px;z-index:1002;";
         return $"position:absolute;bottom:34px;left:15px;z-index:1002";
     }

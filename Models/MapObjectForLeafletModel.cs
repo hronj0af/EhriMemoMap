@@ -48,7 +48,7 @@ public partial class MapObjectForLeafletModel
         }
     }
 
-    public MapObjectForLeafletModel(List<MapStatistics> statistics, IStringLocalizer<CommonResources> cl, bool isMobileBrowser)
+    public MapObjectForLeafletModel(List<MapStatistics> statistics, IStringLocalizer<CommonResources> cl, bool isMobileView)
     {
         if (statistics == null || statistics.Count == 0)
             return;

@@ -10,9 +10,17 @@ namespace EhriMemoMap.Models
     /// </summary>
     public class MapModel
     {
+
+        public InitialVariables? InitialVariables { get; set; }
         public List<LayerModel>? Layers { get; set; }
         public List<TimelinePointModel>? Timeline { get; set; }
     }
 
+    public class InitialVariables
+    {
+        public int Zoom { get; set; }
+        public double Lat { get; set; }
+        public double Lng { get; set; }
+    }
 
 }

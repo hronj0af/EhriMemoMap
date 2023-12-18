@@ -1,51 +1,5 @@
 ﻿// FUNKCE PRO OVLÁDÁNÍ MAPY
 
-interface MapObjectForLeafletModel {
-    clickable: boolean;
-    placeType: string | null;
-    citizens: number | null;
-    citizensTotal: number | null;
-    id: number | null;
-    guid: string | null;
-    label: string | null;
-    mapPoint: string | null;
-    mapPolygon: string | null;
-    htmlIcon: string | null;
-    customTooltipClass: string | null;
-    customPolygonClass: string | null;
-
-
-}
-interface LayerForLeafletModel {
-    name: string | null;
-    url: string | null;
-    type: string | null;
-    selected: boolean | null;
-    attribution: string | null;
-    mapParameter: string | null;
-    layersParameter: string | null;
-    zIndex: number | null;
-}
-
-interface PolygonModel {
-    type: string;
-    coordinates: number[][][]
-}
-
-interface PointModel {
-    type: string;
-    coordinates: number[]
-}
-
-interface Coordinates {
-    X: number;
-    Y: number;
-}
-
-interface MapInfo {
-    zoom: string;
-    bounds: L.LatLngBounds;
-}
 
 namespace mapAPI {
 
@@ -66,7 +20,7 @@ namespace mapAPI {
     let blazorMapObject = null;
     let groups: L.FeatureGroup[] = [];
     let trackingInterval: number = null;
-    let _isMobileBrowser: boolean = null;
+    let _isMobileView: boolean = null;
     let applicationIsTrackingLocation: boolean = null;
     let actualLocation: GeolocationPosition = null;
     let dialogWidth: string = null;
@@ -82,6 +36,7 @@ namespace mapAPI {
 
     // připraví mapu do úvodního stavu
     export function initMap(jsonMapSettings: string): void {
+        const mapSettings = JSON.parse(jsonMapSettings) as MapSettingsForLeafletModel;
 
         fitMapToWindow(null);
 
@@ -97,10 +52,13 @@ namespace mapAPI {
 
         map = new L.Map('map', { zoomControl: false });
         map.attributionControl.setPosition('bottomleft');
-        L.control.scale().setPosition(mapAPI.isMobileBrowser() ? 'topright' : 'bottomleft').addTo(map);
+        L.control.scale().setPosition(mapAPI.isMobileView() ? 'topright' : 'bottomleft').addTo(map);
 
         if (!setMapWithInfoFromUrl())
-            map.setView([50.07905886, 14.43715096], 14);
+            if (mapSettings.initialVariables == null)
+                map.setView([50.07905886, 14.43715096], 14); // defaultně nastavíme mapu na Prahu
+            else
+                map.setView([mapSettings.initialVariables.lat, mapSettings.initialVariables.lng], mapSettings.initialVariables.zoom);
 
         // update url a obrázkových vrstev po té, co se změní poloha mapy
         map.on("moveend", function () {
@@ -117,21 +75,26 @@ namespace mapAPI {
             coory = ev.containerPoint.y;
         });
 
-        const mapSettings = JSON.parse(jsonMapSettings) as LayerForLeafletModel[];
 
         // konverze json objektu do jednotlivých vrstev mapy a jejich přidání k mapě
-        for (let i = 0; i < mapSettings.length; i++) {
-            const group = new L.FeatureGroup(null, { id: mapSettings[i].name + "_group" });
-            group.setZIndex(mapSettings[i].zIndex);
+        for (let i = 0; i < mapSettings.layers.length; i++) {
+            const group = new L.FeatureGroup(null, { id: mapSettings.layers[i].name + "_group" });
+            group.setZIndex(mapSettings.layers[i].zIndex);
             groups.push(group);
 
-            if (mapSettings[i].selected)
+            if (mapSettings.layers[i].selected)
                 group.addTo(map);
 
-            const layer = convertMapSettingsObjectToMapLayer(mapSettings[i]);
+            const layer = convertMapSettingsObjectToMapLayer(mapSettings.layers[i]);
             if (layer != null)
                 group.addLayer(layer);
         }
+    }
+
+    export function onResizeWindow(): void {
+        fitMapToWindow(null);
+        blazorMapObject.invokeMethodAsync("SetMobileView", isMobileView());
+
     }
 
     // nastaví mapu, aby lícovala s oknem
@@ -144,10 +107,10 @@ namespace mapAPI {
             return;
 
         const pageHeight = window.innerHeight;
-        const mapHeight = !mapAPI.isMobileBrowser() ? pageHeight : pageHeight - 44 - 44 - mobileDialogHeight; // 44 je horní a dolní panel
+        const mapHeight = !mapAPI.isMobileView() ? pageHeight : pageHeight - 44 - 44 - mobileDialogHeight; // 44 je horní a dolní panel
         mapElement.style.height = mapHeight + "px";
 
-        if (mapAPI.isMobileBrowser())
+        if (mapAPI.isMobileView())
             mapElement.style.marginTop = "44px";
         pageElement[0].style.height = pageHeight + "px";
 
@@ -320,7 +283,7 @@ namespace mapAPI {
 
         const result = new L.Marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
 
-        if (!isMobileBrowser() && label != undefined && label != null) {
+        if (!isMobileView() && label != undefined && label != null) {
             result.bindTooltip(label, { sticky: true });
         }
 
@@ -420,7 +383,7 @@ namespace mapAPI {
 
         const containerPosition = map.latLngToContainerPoint(point);
 
-        const sizeOfBox = 5;// isMobileBrowser() ? 20 : 5;
+        const sizeOfBox = 5;// isMobileView() ? 20 : 5;
 
         const minx = containerPosition.x < sizeOfBox / 2 ? 0 : containerPosition.x - sizeOfBox / 2;
         const miny = containerPosition.y < sizeOfBox / 2 ? 0 : containerPosition.y + sizeOfBox / 2;
@@ -450,10 +413,13 @@ namespace mapAPI {
         return window.location.search;
     }
 
-    export function isMobileBrowser(): boolean {
+    export function isMobileView(): boolean {
         //return true;
-        if (_isMobileBrowser != null)
-            return _isMobileBrowser;
+        if (window.innerWidth < 768)
+            return true;
+
+        if (_isMobileView != null)
+            return _isMobileView;
 
         if (navigator.userAgent.match(/Android/i)
             || navigator.userAgent.match(/webOS/i)
@@ -462,11 +428,11 @@ namespace mapAPI {
             || navigator.userAgent.match(/iPod/i)
             || navigator.userAgent.match(/BlackBerry/i)
             || navigator.userAgent.match(/Windows Phone/i))
-            _isMobileBrowser = true;
+            _isMobileView = true;
         else
-            _isMobileBrowser = false;
+            _isMobileView = false;
 
-        return _isMobileBrowser;
+        return _isMobileView;
     }
 
     export function getZoom(): number {
@@ -565,4 +531,67 @@ namespace mapAPI {
     }
 }
 
-window.addEventListener("resize", mapAPI.fitMapToWindow);
+window.addEventListener("resize", mapAPI.onResizeWindow);
+
+//////////////////////////
+/// INTERFACES
+//////////////////////////
+
+interface MapObjectForLeafletModel {
+    clickable: boolean;
+    placeType: string | null;
+    citizens: number | null;
+    citizensTotal: number | null;
+    id: number | null;
+    guid: string | null;
+    label: string | null;
+    mapPoint: string | null;
+    mapPolygon: string | null;
+    htmlIcon: string | null;
+    customTooltipClass: string | null;
+    customPolygonClass: string | null;
+
+
+}
+
+interface MapSettingsForLeafletModel {
+    initialVariables: InitialVariables;
+    layers: LayerForLeafletModel[];
+}
+
+interface InitialVariables {
+    zoom: number | null;
+    lat: number | null;
+    lng: number | null;
+}
+
+interface LayerForLeafletModel {
+    name: string | null;
+    url: string | null;
+    type: string | null;
+    selected: boolean | null;
+    attribution: string | null;
+    mapParameter: string | null;
+    layersParameter: string | null;
+    zIndex: number | null;
+}
+
+interface PolygonModel {
+    type: string;
+    coordinates: number[][][]
+}
+
+interface PointModel {
+    type: string;
+    coordinates: number[]
+}
+
+interface Coordinates {
+    X: number;
+    Y: number;
+}
+
+interface MapInfo {
+    zoom: string;
+    bounds: L.LatLngBounds;
+}

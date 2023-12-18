@@ -62,11 +62,10 @@
 
     private async Task OnLayerClick(LayerModel layer)
     {
+        // když kliknu na tlačítko a je otevřené dialogové okno s vrstvami
+        // tak notifikuju MapState, aby se změna propsala i v dialogovém okně
         if (MapState.DialogType == DialogTypeEnum.Layers)
-        {
-            MapState.SetDialogType(DialogTypeEnum.None);
-            DialogService.CloseSide();
-        }
+            MapState.NotifyStateChanged();
 
         layer.Selected = !layer.Selected;
         if (layer.Type == LayerType.WMS)

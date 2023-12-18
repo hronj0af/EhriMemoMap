@@ -33,20 +33,20 @@ namespace EhriMemoMap.Services
         public bool MapStateWasInit = false;
 
         public event Action OnChange;
-        private void NotifyStateChanged()
+        public void NotifyStateChanged()
             => OnChange?.Invoke();
 
 
-        private bool isMobileBrowser;
+        private bool isMobileView;
         /// <summary>
         /// Prohlíží si uživatel mapu na mobilu?
         /// </summary>
-        public bool IsMobileBrowser
+        public bool IsMobileView
         {
-            get { return isMobileBrowser; }
+            get { return isMobileView; }
             set
             {
-                isMobileBrowser = value;
+                isMobileView = value;
                 NotifyStateChanged();
             }
         }
@@ -92,7 +92,7 @@ namespace EhriMemoMap.Services
         public async Task<string> GetStyleOfMapComponent(VerticalPositionEnum verticalPosition, HorizontalPositionEnum horizontalPosition, int horizontalMargin = 0, int verticalMargin = 0)
         {
             var y = verticalMargin > 0 ? verticalMargin : topOfElement;
-            var x = DialogType != DialogTypeEnum.None && !IsMobileBrowser && horizontalPosition == HorizontalPositionEnum.Right
+            var x = DialogType != DialogTypeEnum.None && !IsMobileView && horizontalPosition == HorizontalPositionEnum.Right
                     ? WidthOfDialog 
                     : $"{horizontalMargin}px";
 
@@ -131,7 +131,7 @@ namespace EhriMemoMap.Services
             }).
             ToList();
 
-            return JsonConvert.SerializeObject(result, serializerSettings);
+            return JsonConvert.SerializeObject(new { initialVariables = Map.InitialVariables, layers = result }, serializerSettings);
 
         }
 
@@ -286,12 +286,12 @@ namespace EhriMemoMap.Services
             {
                 ShowClose = true,
                 ShowTitle = false,
-                Position = IsMobileBrowser ? DialogPosition.Bottom : DialogPosition.Right,
+                Position = IsMobileView ? DialogPosition.Bottom : DialogPosition.Right,
                 ShowMask = false,
-                CssClass = IsMobileBrowser ? "" : "side-dialog",
-                Style = IsMobileBrowser ? (DialogType == DialogTypeEnum.Help || DialogType == DialogTypeEnum.Welcome ? "z-index:50000" : "z-index:10000") : "",
-                Height = IsMobileBrowser ? (DialogType == DialogTypeEnum.Help || DialogType == DialogTypeEnum.Welcome ? WindowHeight + "px" : HeightOfDialog + "%") : "",
-                Width = !IsMobileBrowser ? WidthOfDialog : ""
+                CssClass = IsMobileView ? "" : "side-dialog",
+                Style = IsMobileView ? (DialogType == DialogTypeEnum.Help || DialogType == DialogTypeEnum.Welcome ? "z-index:50000" : "z-index:10000") : "",
+                Height = IsMobileView ? (DialogType == DialogTypeEnum.Help || DialogType == DialogTypeEnum.Welcome ? WindowHeight + "px" : HeightOfDialog + "%") : "",
+                Width = !IsMobileView ? WidthOfDialog : ""
             };
 
         }

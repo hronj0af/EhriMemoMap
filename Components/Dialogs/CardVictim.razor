@@ -1,7 +1,7 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
 @inject MapStateService MapState
 
-<RadzenColumn Size="MapState.IsMobileBrowser ? 6 : 4">
+<RadzenColumn Size="MapState.IsMobileView ? 6 : 4">
     <a href="@Victim.DetailsCs" target="_blank" style="text-decoration:none;color:black">
         <RadzenCard class="victim-card">
             <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
