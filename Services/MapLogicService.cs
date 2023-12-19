@@ -107,7 +107,7 @@ namespace EhriMemoMap.Services
             if (layer == null) 
                 return new List<MapObjectForLeafletModel>();
 
-            if (_mapState.MapZoom < layer.MinZoom && _mapState.MapZoom >= layer.MinZoom - 2)
+            if (_mapState.MapZoom < layer.MinZoom && _mapState.MapZoom >= 0)
                 return _context.MapStatistics.Where(a => a.Type.Contains("total")).GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl, _mapState.IsMobileView)).ToList();
 
             if (_mapState.MapZoom >= layer.MinZoom && _mapState.MapZoom <= layer.MaxZoom)
