@@ -114,7 +114,7 @@ else if (isMobileView == true)
             // pokud už s mapou začal pracovat, tak ho s tímto uvítacím dialogem nebudeme otravovat
             if (string.IsNullOrEmpty(bounds))
                 if (!MapState.IsMobileView)
-                    DialogService.Open<WelcomeDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "33%" });
+                    DialogService.Open<WelcomeDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "640px" });
                 else
                 {
                     MapState.SetDialogType(DialogTypeEnum.Welcome);

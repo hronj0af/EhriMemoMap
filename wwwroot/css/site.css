@@ -261,7 +261,8 @@ path.leaflet-interactive:focus {
     border-right: 2px solid var(--Beige);
     width: 1px;
     height: 12px;
-    bottom:0;
+    bottom: 0;
+    left: 50%;
 }
 
 .timeline-year-label {
@@ -280,23 +281,25 @@ path.leaflet-interactive:focus {
     width: 1px;
     height: 7px;
     bottom: 0;
+    left: 50%;
 }
 
 .timeline-point {
-    cursor:pointer;
+    cursor: pointer;
     position: absolute;
-    width: 20px;
     bottom: 15px;
-    height: 10px;
+    height: 20px;
     display: flex;
     justify-content: center;
 }
 
 .timeline-tooltip {
     display:none;
+    cursor: pointer;
 }
 
 .timeline-point:hover + .timeline-tooltip {
+    cursor: pointer;
     display: flex;
     justify-content: center;
     z-index: 99999;
@@ -311,6 +314,7 @@ path.leaflet-interactive:focus {
     display: flex;
     justify-content: center;
     z-index: 99999;
+    cursor: pointer;
 }
 
 .timeline-tooltip-text {

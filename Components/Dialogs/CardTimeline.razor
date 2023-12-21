@@ -9,7 +9,7 @@
 
 @if (timeline != null && timeline.Any(a => a.From != null && a.To != null))
 {
-    <RadzenStack Orientation="Orientation.Horizontal" Gap="0" AlignItems="AlignItems.Start" class="timeline-inner-wrapper" >
+    <RadzenStack Orientation="Orientation.Horizontal" Gap="0" AlignItems="AlignItems.Start" class="timeline-inner-wrapper">
         @if (!MobileVersion)
         {
             <div class="timeline-firstcolumn" style="height:@(height - 10)px;width:@(Width - timelineWidth)px;">
@@ -36,10 +36,12 @@
                 if (point.From?.Year != year)
                 {
                     year = point.From?.Year;
-                    <div class="timeline-point" @onclick="() => OnCollectionClick(point)" style="left:@(left)px">
-                        <div class="timeline-year-point"></div>
+                    <div class="timeline-point" @onclick="() => OnCollectionClick(point)" style="left:@(left - step / 2)px;width:@(step)px">
+                        <div style="position:relative;width:100%">
+                            <div class="timeline-year-point"></div>
+                        </div>
                     </div>
-                    <div @onclick="() => OnCollectionClick(point)" style="position:absolute;left:@(left - 25)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-tooltip-selected")">
+                    <div @onclick="() => OnCollectionClick(point)" style="position:absolute;left:@(left - 34)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-tooltip-selected")">
                         <img src="/images/tooltip.svg" />
                         <div class="timeline-tooltip-text">
                             @point.Title
@@ -49,10 +51,12 @@
                 }
                 else
                 {
-                    <div class="timeline-point" @onclick="() => OnCollectionClick(point)" style="left:@(left)px">
-                        <div class="timeline-quarter-point"></div>
+                    <div class="timeline-point" @onclick="() => OnCollectionClick(point)" style="left:@(left - step / 2)px;width:@(step)px">
+                        <div style="position:relative;width:100%">
+                            <div class="timeline-quarter-point"></div>
+                        </div>
                     </div>
-                    <div @onclick="() => OnCollectionClick(point)" style="left:@(left - 25)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-tooltip-selected")">
+                    <div @onclick="() => OnCollectionClick(point)" style="left:@(left - 34)px" class="@(!point.Selected ? "timeline-tooltip" : "timeline-tooltip-selected")">
                         <img src="/images/tooltip.svg" />
                         <div class="timeline-tooltip-text">
                             @point.Title
