@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using NetTopologySuite.Geometries;
 using NodaTime;
 
@@ -46,4 +47,7 @@ public partial class PragueIncidentsTimeline
     public Geometry? Geography { get; set; }
 
     public DateTime? DateIso { get; set; }
+
+    [NotMapped]
+    public List<PragueIncidentsDocument>? Documents { get; set; }
 }

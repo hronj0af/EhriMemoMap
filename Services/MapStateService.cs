@@ -125,9 +125,9 @@ namespace EhriMemoMap.Services
             }).
             Union(new List<LayerForLeafletModel>
             {
-                new LayerForLeafletModel { Name = LayerType.Objects.ToString(), Type = LayerType.Objects.ToString(), Selected = true },
-                new LayerForLeafletModel { Name = LayerType.Polygons.ToString(), Type = LayerType.Polygons.ToString(), Selected = true },
-                new LayerForLeafletModel { Name = "AdditionalObjects", Type = LayerType.Polygons.ToString(), Selected = true, ZIndex = 9999 }
+                new() { Name = LayerType.Objects.ToString(), Type = LayerType.Objects.ToString(), Selected = true },
+                new() { Name = LayerType.Polygons.ToString(), Type = LayerType.Polygons.ToString(), Selected = true },
+                new() { Name = "AdditionalObjects", Type = LayerType.Polygons.ToString(), Selected = true, ZIndex = 9999 }
             }).
             ToList();
 

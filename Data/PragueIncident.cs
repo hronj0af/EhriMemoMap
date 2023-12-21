@@ -43,4 +43,5 @@ public partial class PragueIncident
     public string? DocumentsEn { get; set; }
 
     public Geometry? Geography { get; set; }
+
 }

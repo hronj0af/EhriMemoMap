@@ -58,7 +58,7 @@ namespace mapAPI {
             if (mapSettings.initialVariables == null)
                 map.setView([50.07905886, 14.43715096], 14); // defaultně nastavíme mapu na Prahu
             else
-                map.setView([mapSettings.initialVariables.lat, mapSettings.initialVariables.lng], mapSettings.initialVariables.zoom);
+                map.setView([mapSettings.initialVariables.lat, mapSettings.initialVariables.lng], isMobileView() ? mapSettings.initialVariables.zoomMobile : mapSettings.initialVariables.zoom);
 
         // update url a obrázkových vrstev po té, co se změní poloha mapy
         map.on("moveend", function () {
@@ -229,6 +229,8 @@ namespace mapAPI {
             (event.target as L.Polygon).setStyle({ fillColor: polygonColorSelected });
         else {
             event.target._icon.className = event.target._icon.className.replace('map-point', 'map-point-selected');
+            event.target._icon.style.zIndex = '200';
+
         //    const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
         //    new L.Marker(event.target._latlng).addTo(objectsGroup);
         }
@@ -282,6 +284,9 @@ namespace mapAPI {
             iconOptions = { icon: new L.DivIcon({ className: "map-point", html: htmlIcon }) }
 
         const result = new L.Marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
+
+        var pos = map.latLngToLayerPoint(result.getLatLng()).round();
+        result.setZIndexOffset(100 - pos.y);
 
         if (!isMobileView() && label != undefined && label != null) {
             result.bindTooltip(label, { sticky: true });
@@ -350,7 +355,11 @@ namespace mapAPI {
     export function unselectAllSelectedPoints(): void {
         var selectedPoints = document.getElementsByClassName('map-point-selected');
         for (var i = 0; i < selectedPoints.length; i++) {
+            console.log(selectedPoints[i]);
             selectedPoints[i].className = selectedPoints[i].className.replace('map-point-selected', 'map-point');
+            if (selectedPoints[i] !== undefined)
+                selectedPoints[i].style.zIndex = '100';
+
         }
     }
 
@@ -360,6 +369,8 @@ namespace mapAPI {
         objectsGroup.eachLayer(function (item) {
             if (item.options.guid !== undefined && guidArray.includes(item.options.guid) && !item._icon.className.includes('map-point-selected')) {
                 item._icon.className = item._icon.className.replace('map-point', 'map-point-selected');
+                item._icon.style.zIndex = '200';
+
             }
         });
     }
@@ -561,6 +572,7 @@ interface MapSettingsForLeafletModel {
 
 interface InitialVariables {
     zoom: number | null;
+    zoomMobile: number | null;
     lat: number | null;
     lng: number | null;
 }

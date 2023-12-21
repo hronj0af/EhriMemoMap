@@ -111,6 +111,14 @@ else
         {
             var ids = Places.Where(a => a.PlaceType == PlaceType.Incident.ToString()).Select(a => a.Id);
             Incidents = context.PragueIncidentsTimelines.Where(p => ids.ToArray().Contains(p.Id)).ToList();
+            
+            // protože v databázi neexistuje vazba mezi incidentem a dokumentem, musíme si ji vytvořit ručně
+            // tabulka prague_incident_x_documents obsahuje sloupec incident_id, 
+            // který je vazbou na tabulku prague_incidents_timelines, 
+            // jenže v ní je sloupec id, který není primárním klíčem
+            // databázi spravuje Aneta Plzáková, nikoli já - takže to prozatím necháme takto
+            foreach (var incident in Incidents)
+                incident.Documents = context.PragueIncidentsDocuments.Where(a => a.IncidentId == incident.Id).ToList();
         }
 
         if (Places.Any(a => a.PlaceType == PlaceType.Interest.ToString()))

@@ -19,6 +19,7 @@ namespace EhriMemoMap.Models
     public class InitialVariables
     {
         public int Zoom { get; set; }
+        public int ZoomMobile { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
     }

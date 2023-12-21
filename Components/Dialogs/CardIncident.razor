@@ -3,6 +3,7 @@
 @using System.Xml;
 @using System.Xml.Linq;
 @inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
 
 <RadzenRow class="rz-mb-4">
     <RadzenCard Style="width:100%">
@@ -20,8 +21,29 @@
             {
                 <li>@cl["specification"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.Spec1En : Place.Spec1Cs)</li>
             }
-            <li>@cl["documents"]: @((MarkupString)(CultureInfo.CurrentCulture.Name == "en-US" ? Place.DocumentsEn : Place.DocumentsCs)?.Linkify())</li>
         </ul>
+
+        @if (Place.Documents != null && Place.Documents.Count > 0)
+        {
+            <RadzenRow class="rz-mt-2 rz-mb-4">
+                @foreach (var doc in Place.Documents)
+                {
+                    <RadzenColumn Size="MapState.IsMobileView ? 3 : 2">
+                        <a href="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.DocumentCs : doc.DocumentEn)" target="_blank" style="text-decoration:none;color:black">
+                            <RadzenCard class="document-card">
+                                <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
+                                    <div style="position:relative">
+                                        <RadzenImage class="document-photo" Path="@doc.Img" />
+                                        <RadzenImage class="document-forward-icon" Path="/images/forward.svg"></RadzenImage>
+                                    </div>
+                                </RadzenStack>
+                            </RadzenCard>
+                        </a>
+                    </RadzenColumn>
+                }
+
+            </RadzenRow>
+        }
 
     </RadzenCard>
 </RadzenRow>

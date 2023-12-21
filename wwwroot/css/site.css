@@ -358,6 +358,25 @@ path.leaflet-interactive:focus {
     height: 250px;
 }
 
+
+/* DOCUMENTS */
+
+.document-photo {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+}
+
+.document-card {
+    background-color: var(--Beige);
+    height: 100px;
+}
+
+.document-forward-icon {
+    position:absolute;
+    right: 3px;
+}
+
 /* MAP POINTS */
 .map-point img {
     height: 23px;
