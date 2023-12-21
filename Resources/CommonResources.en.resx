@@ -139,7 +139,7 @@
     <value>No information has been found for the location...</value>
   </data>
   <data name="layers" xml:space="preserve">
-    <value>Layers</value>
+    <value>All layers</value>
   </data>
   <data name="placeInfo" xml:space="preserve">
     <value>Information about the place</value>
@@ -172,7 +172,7 @@
     <value>Points of Interest</value>
   </data>
   <data name="featureType_Inaccessible" xml:space="preserve">
-    <value>Inaccessible Places</value>
+    <value>Forbidden Places</value>
   </data>
   <data name="featureType_Obeti_holokaustu_z_Prahy" xml:space="preserve">
     <value>Victims</value>
@@ -253,7 +253,7 @@
     <value>Places that Jews were forbidden to enter. Based on the historical map from year 1938. Current shape of the place can differ.</value>
   </data>
   <data name="layer_inaccessible_title" xml:space="preserve">
-    <value>Inaccessible Places Within the City of Prague</value>
+    <value>Forbidden Places Within the City of Prague</value>
   </data>
   <data name="layer_victim_title" xml:space="preserve">
     <value>Holocaust victims</value>
@@ -286,13 +286,13 @@
     <value>Show statistics</value>
   </data>
   <data name="countInaccessiblePlaces" xml:space="preserve">
-    <value>Inaccessible places</value>
+    <value>Forbidden places</value>
   </data>
   <data name="countPointsOfInterest" xml:space="preserve">
     <value>Points of interest</value>
   </data>
   <data name="countJews" xml:space="preserve">
-    <value>Jews</value>
+    <value>Jewish residents</value>
   </data>
   <data name="countIncidents" xml:space="preserve">
     <value>Incidents</value>
@@ -319,7 +319,7 @@
     <value>Go to map</value>
   </data>
   <data name="useNavigation" xml:space="preserve">
-    <value>Use navigation on right to adjust map...</value>
+    <value>Use navigation to adjust map...</value>
   </data>
   <data name="layerHelp" xml:space="preserve">
     <value>You can filter the results according to selected layers...</value>

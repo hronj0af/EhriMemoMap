@@ -32,7 +32,7 @@ var mapAPI;
             iconSize: [20, 20],
             iconAnchor: [10, 10],
         });
-        map = new L.Map('map', { zoomControl: false });
+        map = new L.Map('map', { zoomControl: false, maxZoom: mapSettings.initialVariables.maxZoom, minZoom: mapSettings.initialVariables.minZoom });
         map.attributionControl.setPosition('bottomleft');
         L.control.scale().setPosition(mapAPI.isMobileView() ? 'topright' : 'bottomleft').addTo(map);
         if (!setMapWithInfoFromUrl())

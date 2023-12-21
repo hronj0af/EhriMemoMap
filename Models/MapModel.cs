@@ -20,6 +20,8 @@ namespace EhriMemoMap.Models
     {
         public int Zoom { get; set; }
         public int ZoomMobile { get; set; }
+        public int MinZoom { get; set; }
+        public int MaxZoom { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
     }

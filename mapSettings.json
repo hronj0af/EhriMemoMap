@@ -4,7 +4,9 @@
       "zoom": 12,
       "zoomMobile": 11,
       "lat": 50.07905886,
-      "lng": 14.43715096
+      "lng": 14.43715096,
+      "minZoom": 11,
+      "maxZoom": 18
     },
     "layers": [
       {
@@ -44,8 +46,8 @@
         "type": "objects",
         "minZoom": 17,
         "quickAccess": true,
-        "backgroundColor": "#46463D",
-        "fontColor": "Light"
+        "backgroundColor": "#FFD93D",
+        "fontColor": "Dark"
       },
       {
         "name": "interest",
@@ -172,7 +174,7 @@
             "order": 10,
             "type": "objects",
             "maxZoom": 16,
-            "minZoom": 15,
+            "minZoom": 13,
             "backgroundColor": "#d5d2b8",
             "fontColor": "Dark"
           }

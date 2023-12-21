@@ -139,7 +139,7 @@
     <value>Pro dané místo nebyly nalezeny žádné informace...</value>
   </data>
   <data name="layers" xml:space="preserve">
-    <value>Vrstvy</value>
+    <value>Všechny vrstvy</value>
   </data>
   <data name="placeInfo" xml:space="preserve">
     <value>Informace o místě</value>
@@ -166,7 +166,7 @@
     <value>Zapnout sledování polohy</value>
   </data>
   <data name="featureType_Inaccessible" xml:space="preserve">
-    <value>Nepřístupná místa</value>
+    <value>Zakázaná místa</value>
   </data>
   <data name="featureType_Obeti_holokaustu_z_Prahy" xml:space="preserve">
     <value>Oběti</value>
@@ -262,10 +262,10 @@
     <value>Databáze židovských obyvatel Prahy, kteří zahynuli v důsledku nacistického pronásledování. Záznamy jsou navázané na jejich pražské adresy. Detaily jsou přístupné skrze odkazy na portál holocaust.cz.</value>
   </data>
   <data name="layer_inaccessible_title" xml:space="preserve">
-    <value>Nepřístupná místa v prostoru města Prahy</value>
+    <value>Zakázaná místa v prostoru města Prahy</value>
   </data>
   <data name="layer_inaccessible_abstract" xml:space="preserve">
-    <value>Místa nepřístupná Židům. Prostoové zobrazení je založeno na historické mapě z roku 1938, současné prostory se mohou lišit velikostí i tvarem.</value>
+    <value>Místa nepřístupná Židům. Prostorové zobrazení je založeno na historické mapě z roku 1938, současné prostory se mohou lišit velikostí i tvarem.</value>
   </data>
   <data name="layer_statistics_title" xml:space="preserve">
     <value>Statistika čtvrtí</value>
@@ -289,10 +289,10 @@
     <value>Bodů zájmu</value>
   </data>
   <data name="countJews" xml:space="preserve">
-    <value>Židů</value>
+    <value>Židovských obyvatel</value>
   </data>
   <data name="countInaccessiblePlaces" xml:space="preserve">
-    <value>Nepřístupných míst</value>
+    <value>Zakázaných míst</value>
   </data>
   <data name="countIncidents" xml:space="preserve">
     <value>Incidentů</value>

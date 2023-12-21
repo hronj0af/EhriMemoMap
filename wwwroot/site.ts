@@ -50,7 +50,7 @@ namespace mapAPI {
             iconAnchor: [10, 10], // point of the icon which will correspond to marker's location
         });
 
-        map = new L.Map('map', { zoomControl: false });
+        map = new L.Map('map', { zoomControl: false, maxZoom: mapSettings.initialVariables.maxZoom, minZoom: mapSettings.initialVariables.minZoom });
         map.attributionControl.setPosition('bottomleft');
         L.control.scale().setPosition(mapAPI.isMobileView() ? 'topright' : 'bottomleft').addTo(map);
 
@@ -575,6 +575,8 @@ interface InitialVariables {
     zoomMobile: number | null;
     lat: number | null;
     lng: number | null;
+    minZoom: number | null;
+    maxZoom: number | null;
 }
 
 interface LayerForLeafletModel {
