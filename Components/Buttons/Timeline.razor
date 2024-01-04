@@ -54,8 +54,26 @@
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         timeline = MapState.GetTimeline();
-        StateHasChanged();
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        MapState.OnChange += OnMyChangeHandler;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
 
     private async Task ShowTimeline()
     {
@@ -72,6 +90,8 @@
             MapState.SetDialogType(DialogTypeEnum.Timeline);
             await DialogService.OpenSideAsync<TimelineDialog>(cl["timeline"], options: await MapState.GetDialogOptions());
         }
+        MapState.NotifyStateChanged();
+
     }
 
 }

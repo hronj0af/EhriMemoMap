@@ -34,7 +34,9 @@ namespace EhriMemoMap.Services
 
         public event Action OnChange;
         public void NotifyStateChanged()
-            => OnChange?.Invoke();
+        {
+            OnChange?.Invoke();
+        }
 
 
         private bool isMobileView;

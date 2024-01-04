@@ -161,7 +161,7 @@ namespace mapAPI {
     export function setUrlParam(paramName: string, paramValue: string | number) {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set(paramName, paramValue.toString());
-        history.pushState({ pageID: '100' }, 'Mapa', "?" + urlParams);
+        history.pushState({ pageID: '100' }, 'Mapa', "praha?" + urlParams);
     }
 
     // získá parametr z url

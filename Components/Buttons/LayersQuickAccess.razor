@@ -42,14 +42,6 @@
         MapState.OnChange -= OnMyChangeHandler;
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-        {
-            StateHasChanged();
-        }
-    }
-
 
     private async void OnMyChangeHandler()
     {

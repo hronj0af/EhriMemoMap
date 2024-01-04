@@ -27,10 +27,10 @@
         else
         {
             <RadzenRow Gap="0" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
-                <RadzenColumn Size="4" >
+                <RadzenColumn Size="4">
                     <Search MobileVersion="true" Border="true" />
                 </RadzenColumn>
-                <RadzenColumn Size="4" >
+                <RadzenColumn Size="4">
                     <Timeline MobileVersion="true" Border="true" />
                 </RadzenColumn>
                 <RadzenColumn Size="4">
@@ -56,12 +56,11 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        isMobileView = MapState.IsMobileView;
+        style = GetStyle();
         if (!firstRender)
         {
-            isMobileView = MapState.IsMobileView;
             justifyContent = MapState.IsMobileView ? JustifyContent.Center : JustifyContent.End;
-            style = GetStyle();
-            StateHasChanged();
         }
     }
 
@@ -74,6 +73,7 @@
     {
         await InvokeAsync(() =>
         {
+            style = GetStyle();
             StateHasChanged();
         });
     }

@@ -47,14 +47,6 @@ else
         MapState.OnChange += OnMyChangeHandler;
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-        {
-            StateHasChanged();
-        }
-    }
-
     public void Dispose()
     {
         MapState.OnChange -= OnMyChangeHandler;
@@ -80,5 +72,8 @@ else
             MapState.SetDialogType(DialogTypeEnum.None);
             DialogService.CloseSide();
         }
+
+        MapState.NotifyStateChanged();
+
     }
 }

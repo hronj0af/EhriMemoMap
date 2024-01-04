@@ -110,7 +110,7 @@ var mapAPI;
     function setUrlParam(paramName, paramValue) {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set(paramName, paramValue.toString());
-        history.pushState({ pageID: '100' }, 'Mapa', "?" + urlParams);
+        history.pushState({ pageID: '100' }, 'Mapa', "praha?" + urlParams);
     }
     mapAPI.setUrlParam = setUrlParam;
     function getUrlParam(paramName) {

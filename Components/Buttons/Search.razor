@@ -46,12 +46,22 @@ else
 
     private int width;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        if (!firstRender)
+        MapState.OnChange += OnMyChangeHandler;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
         {
             StateHasChanged();
-        }
+        });
     }
 
     private async Task ShowSearch()
@@ -69,6 +79,7 @@ else
             MapState.SetDialogType(DialogTypeEnum.Search);
             await DialogService.OpenSideAsync<SearchDialog>(cl["search"], options: await MapState.GetDialogOptions());
         }
+        MapState.NotifyStateChanged();
     }
 
 

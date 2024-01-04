@@ -71,16 +71,6 @@ else
         imagePath = $"images/{otherLanguage.ToLower()}.png";
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-        {
-            // style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
-            StateHasChanged();
-        }
-    }
-
-
     async Task ChangeLanguage()
     {
         currentUri = "~/" + await JS.InvokeAsync<string>("mapAPI.getWindowLocationSearch");

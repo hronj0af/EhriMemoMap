@@ -1,4 +1,5 @@
 ﻿@page "/"
+@page "/{City}"
 
 @using EhriMemoMap.Helpers
 @using NetTopologySuite.Geometries;
@@ -14,6 +15,7 @@
 @inject MapLogicService MapLogic
 @inject IHttpContextAccessor httpContextAccesor
 @inject EhriMemoMap.Data.MemogisContext context
+@inject NavigationManager Navigation
 
 <div id="map" style="cursor:default;">
     <!-- TOTO JE FILTR, KTERÝ SE POUŽÍVÁ PRO HEZČÍ VYKRESLENÍ HRANIC OKRESŮ, 
@@ -64,6 +66,8 @@ else if (isMobileView == true)
     bool firstRender = true;
     string? selectedPointGuidsJson;
 
+    [Parameter]
+    public string? City { get; set; }
 
     /// <summary>
     /// Initialiazece mapy se děje až po prvním renderu, protože až v tomto okamžiku mám k dispozici všechny potřebné informace
@@ -73,6 +77,9 @@ else if (isMobileView == true)
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         this.firstRender = firstRender;
+
+        if (City == null)
+            Navigation.NavigateTo("/praha");
 
         if (firstRender && !MapState.MapStateWasInit)
         {

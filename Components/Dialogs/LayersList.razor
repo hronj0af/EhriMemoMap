@@ -12,7 +12,7 @@
 
 @if (layers != null && layers.Count() > 0)
 {
-    <div style="padding:0 1.5rem 0 1.5rem;display:flex;gap:10px;flex-direction:column">
+    <div class="rz-p-6" style="display:flex;gap:10px;flex-direction:column">
 
         <h1 style="color:var(--Wine-Red)">@cl["layers"]</h1>
         <p>@cl["layerHelp"]</p>
@@ -59,14 +59,6 @@
         MapState.OnChange -= OnMyChangeHandler;
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (!firstRender)
-        {
-            StateHasChanged();
-        }
-    }
-
 
     private async void OnMyChangeHandler()
     {
@@ -90,11 +82,7 @@
             await MapLogic.RefreshObjectsOnMap(false);
 
         await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapState.GetLayersForUrlParameter());
+        MapState.NotifyStateChanged();
     }
 
-    private async Task ShowLayerAbstract(LayerModel layer)
-    {
-        // MapState.SetDialogIsOpen(true);
-        // await DialogService.OpenSideAsync<LayerInformation>(cl["layerInfo"], parameters: new Dictionary<string, object> { { "Layer", layer } }, options: MapState.GetDialogOptions());
-    }
 }
