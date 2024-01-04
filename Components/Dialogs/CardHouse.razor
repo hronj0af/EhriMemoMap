@@ -40,15 +40,15 @@
                 {
                     <table class="rz-grid-table rz-grid-table-fixed" style="width:100%">
                         <tr>
-                            <th style="width:50%"></th>
+                            <th style="@(MapState.IsMobileView ? "width:30%" : "width:50%")"></th>
                             @if (House.Statistics.Any(a => a.NumberPresent != null))
                             {
-                                <th style="text-align:left;font-family:Barlow Regular;">@cl["present"]</th>
+                                <th style="text-align:left;font-family:'Barlow';font-size:12px">@cl["present"]</th>
 
                             }
                             @if (House.Statistics.Any(a => a.NumberAbsent != null))
                             {
-                                <th style="text-align:left;font-family:Barlow Regular;">@cl["absent"]</th>
+                                <th style="text-align:left;font-family:'Barlow';font-size:12px">@cl["absent"]</th>
                             }
                         </tr>
 

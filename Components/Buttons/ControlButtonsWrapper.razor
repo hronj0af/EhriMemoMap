@@ -74,6 +74,7 @@
         await InvokeAsync(() =>
         {
             style = GetStyle();
+            isMobileView = MapState.IsMobileView;
             StateHasChanged();
         });
     }

@@ -51,11 +51,6 @@
 
     List<TimelinePointModel>? timeline;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        timeline = MapState.GetTimeline();
-    }
-
     protected override async Task OnInitializedAsync()
     {
         MapState.OnChange += OnMyChangeHandler;
@@ -70,6 +65,7 @@
     {
         await InvokeAsync(() =>
         {
+            timeline = MapState.GetTimeline();
             StateHasChanged();
         });
     }

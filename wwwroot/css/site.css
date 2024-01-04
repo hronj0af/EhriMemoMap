@@ -137,6 +137,18 @@ path.leaflet-interactive:focus {
 
 /* WELCOME DIALOG */
 
+.welcomeBtn {
+    text-transform: none;
+    border: 1px solid var(--Beige);
+    color: var(--Beige)
+}
+
+.welcomeBtn:hover {
+    background-color: var(--Beige-LIGHT);
+    color: var(--Wine-Red);
+
+}
+
 .cell {
     vertical-align: top;
     font-family: 'Barlow';
@@ -148,20 +160,20 @@ path.leaflet-interactive:focus {
 .firstCell {
     vertical-align: middle;
     width: 5%;
-    color: var(--Wine-Red);
-    filter: brightness(20%);
     padding-right: 10px;
 }
 
 .secondCell {
     width: 70%;
     color: var(--Grey);
+    font-weight: 700;
 }
 
 .thirdCell {
     width: 25%;
     color: var(--Wine-Red);
     text-align: right;
+    font-weight: 700;
 }
 
 /* ICONS BUTTONS */
@@ -239,12 +251,42 @@ path.leaflet-interactive:focus {
 
 /* LAYERS */
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 .hide {
     display: none;
 }
 
 .layerInfo:hover .hide {
     display: block;
+    opacity: 1;
+    animation: fadeIn 0.2s;
+}
+
+.layerInfo:hover {
+    height: 200px;
+    transition: height 0.2s;
+}
+
+@media only screen and (max-width: 600px) {
+    .layerInfo:hover {
+        height: 300px;
+        transition: height 0.2s;
+    }
+}
+
+
+.layerInfo {
+    height: 25px;
+    transition: height 0.2s;
 }
 
 /* TIMELINE */
@@ -253,7 +295,7 @@ path.leaflet-interactive:focus {
     border-bottom: 2px solid var(--Beige);
     position: absolute;
     bottom: 15px;
-    width: 100%
+    width: 100%;
 }
 
 .timeline-year-point {
@@ -410,7 +452,7 @@ path.leaflet-interactive:focus {
     border-radius: 6px;
     color: var(--Beige-LIGHT);
     white-space: nowrap;
-    width: 195px;
+    width: 220px;
     height: 133px;
     opacity:1;
 }

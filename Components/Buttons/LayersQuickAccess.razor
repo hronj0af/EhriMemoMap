@@ -13,13 +13,16 @@
         <div style="display:flex;gap:10px">
             @foreach (var item in layers.Where(a => a.QuickAccess).OrderBy(a => a.Order))
             {
-                var iconFilter = item.FontColor == FontColor.Dark ? "filter: brightness(30%);width:20px;" : "width:20px;";
-                var fontColor = item.FontColor == FontColor.Light ? "var(--Beige-LIGHT)" : "var(--Grey)";
+                var iconFilter = item.FontColor == FontColor.Dark ? "filter: brightness(30%);width:18px;height:auto" : "width:18px;height:auto";
+                var fontColor = item.FontColor == FontColor.Light ? "var(--Beige-LIGHT)" : "var(--Grey)"; 
+                var opacity = item.Selected ? "opacity:1" : "opacity:0.6";
 
-                <div style="background-color: @(item.BackgroundColor); color: @(fontColor); border-radius: 6px; order:@(item.Order);height: 38px;" class="center">
-                    <RadzenImage Style="@(iconFilter + "cursor:pointer")" class="rz-px-1" Click="@(() => OnLayerClick(item))" Path="@(item.Selected ? "images/checkbox-true.svg" : "images/checkbox-false.svg")"></RadzenImage>
-                    <span class="rz-px-1" style="font-size: 16px; font-family: Barlow; font-weight: 700;">@cl["layer_" + item.Name + "_title_short"]</span>
-                    <RadzenImage class="rz-px-2" Style="@iconFilter" Path="@("images/" + item.Name + ".png")"></RadzenImage>
+                <div onclick="@(() => OnLayerClick(item))" style="cursor:pointer;background-color: @(item.BackgroundColor); color: @(fontColor); border-radius: 6px; order:@(item.Order); padding: 0 5px 0 5px">
+                    <div style="@opacity;height: 38px;" class="center">
+                        <RadzenImage Style="@iconFilter" class="rz-px-1" Path="@(item.Selected ? "images/checkbox-true.svg" : "images/checkbox-false.svg")"></RadzenImage>
+                        <div class="rz-px-1" style="margin-bottom:2px;font-size: 16px; font-family: Barlow; font-weight: 700;">@cl["layer_" + item.Name + "_title_short"]</div>
+                        <RadzenImage class="rz-px-2" Style="@iconFilter" Path="@("images/" + item.Name + ".png")"></RadzenImage>
+                    </div>
                 </div>
             }
         </div>
@@ -70,5 +73,6 @@
             await MapLogic.RefreshObjectsOnMap(false);
 
         await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapState.GetLayersForUrlParameter());
+        StateHasChanged();
     }
 }
