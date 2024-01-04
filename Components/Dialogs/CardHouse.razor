@@ -4,7 +4,7 @@
 <RadzenRow Gap="1rem" JustifyContent=JustifyContent.Left>
     <RadzenColumn Size="12">
         <RadzenCard Style="background-color: var(--Beige);padding:1rem;color:var(--Grey)">
-            <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween">
+            <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween" style="cursor:pointer;" onclick="@(() => ToggleStatistics())">
                 <RadzenColumn Size="11">
                     @if (House.Address.Murdered != null)
                     {
@@ -22,12 +22,12 @@
                 <RadzenColumn Size="1">
                     @if (!StatisticsIsOpen)
                     {
-                        <RadzenImage Style="height:17px;cursor:pointer" Path="images/arrow-right.png" title="@(cl["showStatistics"] + "...")" Click="(() => StatisticsIsOpen = !StatisticsIsOpen)"></RadzenImage>
+                        <RadzenImage Style="height:17px;cursor:pointer" Path="images/arrow-right.png" title="@(cl["showStatistics"] + "...")" ></RadzenImage>
 
                     }
                     else
                     {
-                        <RadzenImage Style="width:17px;cursor:pointer"  Path="images/arrow-down.png" title="@(cl["hideStatistics"] + "...")" Click="(() => StatisticsIsOpen = !StatisticsIsOpen)"></RadzenImage>
+                        <RadzenImage Style="width:17px;cursor:pointer"  Path="images/arrow-down.png" title="@(cl["hideStatistics"] + "...")" ></RadzenImage>
                     }
 
                 </RadzenColumn>
@@ -78,4 +78,10 @@
     public AddressWithVictimsWrappwer? House { get; set; }
 
     public bool StatisticsIsOpen { get; set; } = false;
+
+    public void ToggleStatistics()
+    {
+        StatisticsIsOpen = !StatisticsIsOpen;
+        StateHasChanged();
+    }
 }
