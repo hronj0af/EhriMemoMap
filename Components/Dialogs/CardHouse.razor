@@ -5,7 +5,7 @@
     <RadzenColumn Size="12">
         <RadzenCard Style="background-color: var(--Beige);padding:1rem;color:var(--Grey)">
             <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween" style="cursor:pointer;" onclick="@(() => ToggleStatistics())">
-                <RadzenColumn Size="11">
+                <RadzenColumn Size="11" Style="font-size:14px">
                     @if (House.Address.Murdered != null)
                     {
                         <span class="rz-mr-2">@cl["murdered"]: @House.Address.Murdered</span>
