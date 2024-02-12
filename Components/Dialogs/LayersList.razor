@@ -18,7 +18,7 @@
         <p>@cl["layerHelp"]</p>
         @foreach (var item in layers.OrderBy(a => a.Order))
         {
-            var iconFilter = item.FontColor == FontColor.Dark ? "filter: brightness(30%);height:18px;width:auto;" : "height:18px;width:auto;";
+            var iconFilter = item.FontColor == FontColor.Dark ? "filter: brightness(30%);height:24px;width:auto;" : "height:24px;width:auto;";
             var fontColor = item.FontColor == FontColor.Light ? "var(--Beige-LIGHT)" : "var(--Grey)";
 
             <RadzenCard Style="@("padding:5px;background-color:" + item.BackgroundColor + ";color:" + fontColor)" class="rz-p-3 layerInfo">
