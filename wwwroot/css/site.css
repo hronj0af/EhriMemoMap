@@ -362,7 +362,7 @@ path.leaflet-interactive:focus {
 .timeline-tooltip-text {
     position: absolute;
     top: 6px;
-    left: 12px;
+    left: 6px;
     color: var(--Grey);
     font-family: 'Barlow';
     font-weight: 700;
@@ -417,6 +417,7 @@ path.leaflet-interactive:focus {
     width: 100%;
     height: 100px;
     object-fit: cover;
+    position:absolute;
 }
 
 .document-card {

@@ -267,7 +267,6 @@ var mapAPI;
     function unselectAllSelectedPoints() {
         var selectedPoints = document.getElementsByClassName('map-point-selected');
         for (var i = 0; i < selectedPoints.length; i++) {
-            console.log(selectedPoints[i]);
             selectedPoints[i].className = selectedPoints[i].className.replace('map-point-selected', 'map-point');
             if (selectedPoints[i] !== undefined)
                 selectedPoints[i].style.zIndex = '100';

@@ -30,11 +30,11 @@ namespace EhriMemoMap.Services
                 new KeyValuePair<string, string>("q.op", "OR" ),
 
                 new KeyValuePair<string, string>("fl", "label_cs, label_en, place_cs, place_en, map_location, map_object, type, place_date"),
-                new KeyValuePair<string, string>("q", !string.IsNullOrEmpty(query) ? query + "* " + query: "*"),
+                new KeyValuePair<string, string>("q", !string.IsNullOrEmpty(query) ? "\"" + query + "\"" : "*"),
                 new KeyValuePair<string, string>("qf", "label_cs label_en place_cs place_en"),
                 new KeyValuePair<string, string>("wt", "json"),
                 new KeyValuePair<string, string>("stopwords", "true"),
-                new KeyValuePair<string, string>("rows", !string.IsNullOrEmpty(query) && query.Length > 3 ? "100" : "0")
+                new KeyValuePair<string, string>("rows", !string.IsNullOrEmpty(query) && query.Length > 3 ? "1000" : "0")
             };
 
             var url = _solrUrl + "select?" + parameters.Select(a => a.Key + "=" + a.Value).Aggregate((x, y) => x + "&" + y);
@@ -47,9 +47,10 @@ namespace EhriMemoMap.Services
 
             foreach (var item in solrResultObject["response"]["docs"])
             {
+                var itemType = item["type"]?.ToString();
                 var newPlace = new Place
                 {
-                    Type = item["type"]?.ToString(),
+                    Type = itemType?[0].ToString().ToUpper() + itemType?[1..],
                     LabelCs = item["label_cs"]?.ToString(),
                     LabelEn = item["label_en"]?.ToString(),
                     PlaceCs = item["place_cs"]?.ToString(),
