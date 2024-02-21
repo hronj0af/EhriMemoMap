@@ -154,7 +154,10 @@ else if (isMobileView == true)
         MapState.SetBBox(mapBounds);
         await MapLogic.RefreshObjectsOnMap(withPolygons);
         if (!string.IsNullOrEmpty(selectedPointGuidsJson))
+        {
             await JS.InvokeVoidAsync("mapAPI.selectPointOnMap", selectedPointGuidsJson);
+
+        }
     }
 
     public void RemoveObjects(dynamic obj)

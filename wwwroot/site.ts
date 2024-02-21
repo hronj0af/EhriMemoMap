@@ -228,7 +228,7 @@ namespace mapAPI {
         if (event.target._latlng == undefined)
             (event.target as L.Polygon).setStyle({ fillColor: polygonColorSelected });
         else {
-            event.target._icon.className = event.target._icon.className.replace('map-point', 'map-point-selected');
+            event.target._icon.className = event.target._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
             event.target._icon.style.zIndex = '200';
 
         //    const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
@@ -354,13 +354,12 @@ namespace mapAPI {
 
     export function unselectAllSelectedPoints(): void {
         var selectedPoints = document.getElementsByClassName('map-point-selected');
-        for (var i = 0; i < selectedPoints.length; i++) {
-            //console.log(selectedPoints[i]);
-            selectedPoints[i].className = selectedPoints[i].className.replace('map-point-selected', 'map-point');
-            if (selectedPoints[i] !== undefined)
-                selectedPoints[i].style.zIndex = '100';
 
-        }
+        Array.from(selectedPoints).forEach(function (item) {
+            item.className = item.className.replace('map-point-selected', 'map-point');
+            if (item !== undefined)
+                item.style.zIndex = '100';
+        });
     }
 
     export function selectPointOnMap(guidArrayJson: string): void {
@@ -368,7 +367,7 @@ namespace mapAPI {
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
         objectsGroup.eachLayer(function (item) {
             if (item.options.guid !== undefined && guidArray.includes(item.options.guid) && !item._icon.className.includes('map-point-selected')) {
-                item._icon.className = item._icon.className.replace('map-point', 'map-point-selected');
+                item._icon.className = item._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
                 item._icon.style.zIndex = '200';
 
             }
