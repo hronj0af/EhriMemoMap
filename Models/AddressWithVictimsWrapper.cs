@@ -22,93 +22,87 @@ namespace EhriMemoMap.Models
                     {
                         new AddressStatistics
                         {
-                            Date = new DateTime(1941, 10, 01),
-                            NumberPresent = Address.Survived + Address.Murdered + Address.FateUnknown,
-                            NumberAbsent = 0,
+                            Date = new DateTime(1942, 1, 1),
+                            NumberPresent = Address.Present19420101,
+                            NumberAbsent = Address.Deported19420101,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1941, 12, 31),
-                            NumberPresent = Address.Present19411231,
-                            NumberAbsent = Address.Deported19411231,
+                            Date = new DateTime(1942, 04, 01),
+                            NumberPresent = Address.Present19420401,
+                            NumberAbsent = Address.Deported19420401,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1942, 03, 31),
-                            NumberPresent = Address.Present19420331,
-                            NumberAbsent = Address.Deported19420331,
+                            Date = new DateTime(1942, 07, 01),
+                            NumberPresent = Address.Present19420701,
+                            NumberAbsent = Address.Deported19420701,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1942, 06, 30),
-                            NumberPresent = Address.Present19420630,
-                            NumberAbsent = Address.Deported19420630,
+                            Date = new DateTime(1942, 10, 01),
+                            NumberPresent = Address.Present19421001,
+                            NumberAbsent = Address.Deported19421001,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1942, 09, 30),
-                            NumberPresent = Address.Present19420930,
-                            NumberAbsent = Address.Deported19420930,
+                            Date = new DateTime(1943, 01, 01),
+                            NumberPresent = Address.Present19430101,
+                            NumberAbsent = Address.Deported19430101,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1942, 12, 31),
-                            NumberPresent = Address.Present19421231,
-                            NumberAbsent = Address.Deported19421231,
+                            Date = new DateTime(1943, 04, 01),
+                            NumberPresent = Address.Present19430401,
+                            NumberAbsent = Address.Deported19430401,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1943, 03, 31),
-                            NumberPresent = Address.Present19430331,
-                            NumberAbsent = Address.Deported19430331,
+                            Date = new DateTime(1943, 07, 01),
+                            NumberPresent = Address.Present19430701,
+                            NumberAbsent = Address.Deported19430701,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1943, 06, 30),
-                            NumberPresent = Address.Present19430630,
-                            NumberAbsent = Address.Deported19430630,
+                            Date = new DateTime(1943, 10, 01),
+                            NumberPresent = Address.Present19431001,
+                            NumberAbsent = Address.Deported19431001,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1943, 09, 30),
-                            NumberPresent = Address.Present19430930,
-                            NumberAbsent = Address.Deported19430930,
+                            Date = new DateTime(1944, 01, 01),
+                            NumberPresent = Address.Present19440101,
+                            NumberAbsent = Address.Deported19440101,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1943, 12, 31),
-                            NumberPresent = Address.Present19431231,
-                            NumberAbsent = Address.Deported19431231,
+                            Date = new DateTime(1944, 04, 01),
+                            NumberPresent = Address.Present19440401,
+                            NumberAbsent = Address.Deported19440401,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1944, 03, 31),
-                            NumberPresent = Address.Present19440331,
-                            NumberAbsent = Address.Deported19440331,
+                            Date = new DateTime(1944, 07, 01),
+                            NumberPresent = Address.Present19440701,
+                            NumberAbsent = Address.Deported19440701,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1944, 06, 30),
-                            NumberPresent = Address.Present19440630,
-                            NumberAbsent = Address.Deported19440630,
+                            Date = new DateTime(1944, 10, 01),
+                            NumberPresent = Address.Present19441001,
+                            NumberAbsent = Address.Deported19441001,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1944, 09, 30),
-                            NumberPresent = Address.Present19440930,
-                            NumberAbsent = Address.Deported19440930,
+                            Date = new DateTime(1945, 01, 01),
+                            NumberPresent = Address.Present19450101,
+                            NumberAbsent = Address.Deported19450101,
                         },
                         new AddressStatistics
                         {
-                            Date = new DateTime(1944, 12, 31),
-                            NumberPresent = Address.Present19441231,
-                            NumberAbsent = Address.Deported19441231,
-                        },
-                        new AddressStatistics
-                        {
-                            Date = new DateTime(1945, 03, 31),
-                            NumberPresent = Address.Present19450331,
-                            NumberAbsent = Address.Deported19450331,
+                            Date = new DateTime(1945, 04, 01),
+                            NumberPresent = Address.Present19450401,
+                            NumberAbsent = Address.Deported19450401,
                         },
                         new AddressStatistics
                         {

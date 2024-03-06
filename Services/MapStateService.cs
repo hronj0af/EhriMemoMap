@@ -254,10 +254,10 @@ namespace EhriMemoMap.Services
 
         public DateTime? GetTimelinePoint()
         {
-            if (Map.Timeline == null || !Map.Timeline.Any(a => a.Selected && a.To != null))
+            if (Map.Timeline == null || !Map.Timeline.Any(a => a.Selected && a.From != null))
                 return null;
 
-            return Map.Timeline.FirstOrDefault(a => a.Selected && a.To != null)?.To;
+            return Map.Timeline.FirstOrDefault(a => a.Selected && a.From != null)?.From;
         }
 
         /// <summary>

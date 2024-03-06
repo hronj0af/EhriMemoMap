@@ -16,7 +16,7 @@ namespace EhriMemoMap.Controllers
 
         public async Task<IActionResult> Get()
         {
-            var url = "https://geodata.ehri-project-test.eu/geoserver/ehri/wms?" + HttpContext.Request.QueryString.Value;
+            var url = "https://geodata.ehri-project.eu/geoserver/ehri/wms?" + HttpContext.Request.QueryString.Value;
             var imageFileName = url.GetHashCode() + ".png";
             var imageFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache/" + imageFileName);
 

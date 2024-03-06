@@ -29,7 +29,7 @@
                 var margin = 25;
                 var step = (timelineWidth - 2 * margin) / (timeline.Count(a => a.From != null && a.To != null) - 1);
                 var left = margin;
-                var year = timeline.FirstOrDefault()?.From?.Year;
+                int? year = null;
             }
             @foreach (var point in timeline.Where(a => a.From != null && a.To != null))
             {

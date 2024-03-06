@@ -16,89 +16,89 @@ public partial class PragueAddressesStatsTimeline
 
     public short? Count { get; set; }
 
-    public short? Present19411231 { get; set; }
+    public short? Present19420101 { get; set; }
 
-    public short? Deported19411231 { get; set; }
+    public short? Deported19420101 { get; set; }
 
-    public float? Present19411231Perc { get; set; }
+    public float? Present19420101Perc { get; set; }
 
-    public short? Present19420331 { get; set; }
+    public short? Present19420401 { get; set; }
 
-    public short? Deported19420331 { get; set; }
+    public short? Deported19420401 { get; set; }
 
-    public float? Present19420331Perc { get; set; }
+    public float? Present19420401Perc { get; set; }
 
-    public short? Present19420630 { get; set; }
+    public short? Present19420701 { get; set; }
 
-    public short? Deported19420630 { get; set; }
+    public short? Deported19420701 { get; set; }
 
-    public float? Present19420630Perc { get; set; }
+    public float? Present19420701Perc { get; set; }
 
-    public short? Present19420930 { get; set; }
+    public short? Present19421001 { get; set; }
 
-    public short? Deported19420930 { get; set; }
+    public short? Deported19421001 { get; set; }
 
-    public float? Present19420930Perc { get; set; }
+    public float? Present19421001Perc { get; set; }
 
-    public short? Present19421231 { get; set; }
+    public short? Present19430101 { get; set; }
 
-    public short? Deported19421231 { get; set; }
+    public short? Deported19430101 { get; set; }
 
-    public float? Present19421231Perc { get; set; }
+    public float? Present19430101Perc { get; set; }
 
-    public short? Present19430331 { get; set; }
+    public short? Present19430401 { get; set; }
 
-    public short? Deported19430331 { get; set; }
+    public short? Deported19430401 { get; set; }
 
-    public float? Present19430331Perc { get; set; }
+    public float? Present19430401Perc { get; set; }
 
-    public short? Present19430630 { get; set; }
+    public short? Present19430701 { get; set; }
 
-    public short? Deported19430630 { get; set; }
+    public short? Deported19430701 { get; set; }
 
-    public float? Present19430630Perc { get; set; }
+    public float? Present19430701Perc { get; set; }
 
-    public short? Present19430930 { get; set; }
+    public short? Present19431001 { get; set; }
 
-    public short? Deported19430930 { get; set; }
+    public short? Deported19431001 { get; set; }
 
-    public float? Present19430930Perc { get; set; }
+    public float? Present19431001Perc { get; set; }
 
-    public short? Present19431231 { get; set; }
+    public short? Present19440101 { get; set; }
 
-    public short? Deported19431231 { get; set; }
+    public short? Deported19440101 { get; set; }
 
-    public float? Present19431231Perc { get; set; }
+    public float? Present19440101Perc { get; set; }
 
-    public short? Present19440331 { get; set; }
+    public short? Present19440401 { get; set; }
 
-    public short? Deported19440331 { get; set; }
+    public short? Deported19440401 { get; set; }
 
-    public float? Present19440331Perc { get; set; }
+    public float? Present19440401Perc { get; set; }
 
-    public short? Present19440630 { get; set; }
+    public short? Present19440701 { get; set; }
 
-    public short? Deported19440630 { get; set; }
+    public short? Deported19440701 { get; set; }
 
-    public float? Present19440630Perc { get; set; }
+    public float? Present19440701Perc { get; set; }
 
-    public short? Present19440930 { get; set; }
+    public short? Present19441001 { get; set; }
 
-    public short? Deported19440930 { get; set; }
+    public short? Deported19441001 { get; set; }
 
-    public float? Present19440930Perc { get; set; }
+    public float? Present19441001Perc { get; set; }
 
-    public short? Present19441231 { get; set; }
+    public short? Present19450101 { get; set; }
 
-    public short? Deported19441231 { get; set; }
+    public short? Deported19450101 { get; set; }
 
-    public float? Present19441231Perc { get; set; }
+    public float? Present19450101Perc { get; set; }
 
-    public short? Present19450331 { get; set; }
+    public short? Present19450401 { get; set; }
 
-    public short? Deported19450331 { get; set; }
+    public short? Deported19450401 { get; set; }
 
-    public float? Present19450331Perc { get; set; }
+    public float? Present19450401Perc { get; set; }
 
     public short? Present19450508 { get; set; }
 
