@@ -118,7 +118,7 @@ else
             // jenže v ní je sloupec id, který není primárním klíčem
             // databázi spravuje Aneta Plzáková, nikoli já - takže to prozatím necháme takto
             foreach (var incident in Incidents)
-                incident.Documents = context.PragueIncidentsDocuments.Where(a => a.IncidentId == incident.Id).ToList();
+                incident.Documents = context.PragueIncidentsXDocuments.Where(a => a.IncidentId == incident.Id).ToList();
         }
 
         if (Places.Any(a => a.PlaceType == PlaceType.Interest.ToString()))

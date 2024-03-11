@@ -48,7 +48,7 @@ public partial class MapObjectForLeafletModel
         }
     }
 
-    public MapObjectForLeafletModel(List<MapStatistics> statistics, IStringLocalizer<CommonResources> cl, bool isMobileView)
+    public MapObjectForLeafletModel(List<MapStatistic> statistics, IStringLocalizer<CommonResources> cl)
     {
         if (statistics == null || statistics.Count == 0)
             return;
@@ -110,7 +110,7 @@ public partial class MapObjectForLeafletModel
     public decimal? Citizens { get; set; }
 
     public decimal? CitizensTotal { get; set; }
-    public int? Id { get; set; }
+    public long? Id { get; set; }
 
     public string? Guid { get; set; }
 

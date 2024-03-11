@@ -68,15 +68,21 @@
         "quickAccess": true,
         "backgroundColor": "#C5222C",
         "fontColor": "Light"
+      },
+      {
+        "clickable": false,
+        "name": "statistics",
+        "placeType": "statistics",
+        "order": 10,
+        "type": "objects",
+        "maxZoom": 16,
+        "minZoom": 13,
+        "backgroundColor": "#d5d2b8",
+        "fontColor": "Dark"
       }
+
     ],
     "timeline": [
-      //{
-      //  "name": "1941_Q4",
-      //  "title": "1. 10. 1941",
-      //  "from": "1939-03-15",
-      //  "to": "1941-12-31"
-      //},
       {
         "name": "1942_Q1",
         "title": "1. 1. 1942",
@@ -165,20 +171,19 @@
         "name": "all",
         "title": "All",
         "from": null,
-        "to": null,
-        "additionalLayers": [
-          {
-            "clickable": false,
-            "name": "statistics",
-            "placeType": "statistics",
-            "order": 10,
-            "type": "objects",
-            "maxZoom": 16,
-            "minZoom": 13,
-            "backgroundColor": "#d5d2b8",
-            "fontColor": "Dark"
-          }
-        ]
+        "to": null
+        //"additionalLayers": [
+        //  {
+        //    "clickable": false,
+        //    "name": "statistics",
+        //    "placeType": "statistics",
+        //    "order": 10,
+        //    "type": "objects",
+        //    "maxZoom": 16,
+        //    "minZoom": 13,
+        //    "backgroundColor": "#d5d2b8",
+        //    "fontColor": "Dark"
+        //  }]
       }
     ]
   }

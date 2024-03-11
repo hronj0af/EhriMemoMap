@@ -64,7 +64,7 @@ namespace EhriMemoMap.Services
                 // v případě, že je zadán parametr customCoordinates, tedy když se hledají objekty na mapě v místě, kam uživatel klikl,
                 // pak k tomu přidám i vrstvu s typem "polygons", protože ty nemají datum a zobrazují se na mapě vždy
                 else if (timelimePoint != null && customCoordinates == null)
-                    query = query.Where(a => (a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To));
+                    query = query.Where(a => a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To);
 
                 else if (timelimePoint != null && customCoordinates == null)
                     query = query.Where(a => (a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To) || (a.PlaceType == "Inaccessible"));
@@ -102,29 +102,43 @@ namespace EhriMemoMap.Services
 
         public List<MapObjectForLeafletModel> GetDistrictStatistics()
         {
+            // pokud neni zadna vrstva s statistikami vybrana, vratim prazdny seznam
             var layer = _mapState.GetNotBaseLayers().FirstOrDefault(a => a.Selected && a.PlaceType == PlaceType.Statistics);
             
+            // pokud neni zadna vrstva s statistikami vybrana, vratim prazdny seznam
             if (layer == null) 
-                return new List<MapObjectForLeafletModel>();
+                return [];
 
+            // pokud je zoom mensi nez minimalni zoom vrstvy, zobrazim statistiky pro celou Prahu
             if (_mapState.MapZoom < layer.MinZoom && _mapState.MapZoom >= 0)
-                return _context.MapStatistics.Where(a => a.Type.Contains("total")).GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl, _mapState.IsMobileView)).ToList();
+            {
+                    return _context.MapStatistics.
+                        Where(a => a.Type.Contains("total") && a.DateFrom == _mapState.GetTimelinePoint()).
+                        GroupBy(a => a.QuarterCs).
+                        Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
+            }
 
+            // pokud je zoom vetsi nez maximalni zoom vrstvy, zobrazim statistiky pro jednotlive casti Prahy
             if (_mapState.MapZoom >= layer.MinZoom && _mapState.MapZoom <= layer.MaxZoom)
-                return _context.MapStatistics.Where(a => !a.Type.Contains("total")).GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl, _mapState.IsMobileView)).ToList();
+            {
+                    return _context.MapStatistics.
+                        Where(a => !a.Type.Contains("total") && a.DateFrom == _mapState.GetTimelinePoint()).
+                        GroupBy(a => a.QuarterCs).
+                        Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
+            }
 
-            return new List<MapObjectForLeafletModel>();
+            return [];
         }
 
         public Polygon GetBBox(Coordinate southWestPoint, Coordinate northEastPoint)
         {
-            Coordinate[] imageOutlineCoordinates = new Coordinate[]
+            var imageOutlineCoordinates = new Coordinate[]
             {
-                new Coordinate(southWestPoint.X, northEastPoint.Y),
-                new Coordinate(northEastPoint.X, northEastPoint.Y),
-                new Coordinate(northEastPoint.X, southWestPoint.Y),
-                new Coordinate(southWestPoint.X, southWestPoint.Y),
-                new Coordinate(southWestPoint.X, northEastPoint.Y),
+                new(southWestPoint.X, northEastPoint.Y),
+                new(northEastPoint.X, northEastPoint.Y),
+                new(northEastPoint.X, southWestPoint.Y),
+                new(southWestPoint.X, southWestPoint.Y),
+                new(southWestPoint.X, northEastPoint.Y),
             };
             var geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
             var bbox = geometryFactory.CreatePolygon(imageOutlineCoordinates);
