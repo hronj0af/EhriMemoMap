@@ -22,6 +22,7 @@ var mapAPI;
     let polygonColor = "#C5222C";
     let polygonColorSelected = "#000";
     function initMap(jsonMapSettings) {
+        history.replaceState({}, '', "praha");
         const mapSettings = JSON.parse(jsonMapSettings);
         fitMapToWindow(null);
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
@@ -110,7 +111,7 @@ var mapAPI;
     function setUrlParam(paramName, paramValue) {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set(paramName, paramValue.toString());
-        history.pushState({ pageID: '100' }, 'Mapa', "praha?" + urlParams);
+        history.replaceState({}, 'Mapa', "praha?" + urlParams);
     }
     mapAPI.setUrlParam = setUrlParam;
     function getUrlParam(paramName) {

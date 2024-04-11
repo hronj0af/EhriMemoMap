@@ -78,11 +78,9 @@ else if (isMobileView == true)
     {
         this.firstRender = firstRender;
 
-        if (City == null)
-            Navigation.NavigateTo("/praha");
-
         if (firstRender && !MapState.MapStateWasInit)
         {
+
             // musím do javascriptu šoupnout odkaz na instanci téhle třídy Map,
             // abych pak mohl z javascriptu volat metodu RefreshObjectsOnMap a ShowPlaceInfo
             var dotNetReference = DotNetObjectReference.Create(this);

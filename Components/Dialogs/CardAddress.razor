@@ -3,7 +3,7 @@
 
 @if (House != null && House.Address != null)
 {
-    <h3 class="rz-mb-8">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.AddressEn : House.Address.AddressCs)</h3>
+    <h3 class="rz-my-8">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.AddressEn : House.Address.AddressCs)</h3>
     <CardHouse House="House"></CardHouse>
 
 
