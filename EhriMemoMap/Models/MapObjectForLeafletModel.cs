@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using NodaTime;
 using EhriMemoMap.Resources;
 using Microsoft.Extensions.Localization;
+using EhriMemoMap.Shared;
 
 namespace EhriMemoMap.Models;
 
@@ -26,13 +27,13 @@ public partial class MapObjectForLeafletModel
         MapPoint = mapObject.MapPoint;
         MapPolygon = mapObject.MapPolygon;
 
-        if (PlaceType == Models.PlaceType.Incident.ToString())
+        if (PlaceType == Shared.PlaceType.Incident.ToString())
             HtmlIcon = "<img src='images/incident-map.png' />";
 
-        else if (PlaceType == Models.PlaceType.Interest.ToString())
+        else if (PlaceType == Shared.PlaceType.Interest.ToString())
             HtmlIcon = "<img src='images/interest-map.png' />";
 
-        else if (PlaceType == Models.PlaceType.Address.ToString())
+        else if (PlaceType == Shared.PlaceType.Address.ToString())
         {
             var percents = (decimal)Citizens / CitizensTotal;
             string iconFile = percents switch
@@ -53,7 +54,7 @@ public partial class MapObjectForLeafletModel
         if (statistics == null || statistics.Count == 0)
             return;
 
-        PlaceType = Models.PlaceType.Statistics.ToString();
+        PlaceType = Shared.PlaceType.Statistics.ToString();
         Id = statistics.FirstOrDefault()?.Id;
         Guid = PlaceType + "_" + statistics.FirstOrDefault()?.Id + "_";
         Clickable = false;

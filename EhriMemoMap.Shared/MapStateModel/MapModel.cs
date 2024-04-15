@@ -1,9 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Radzen;
-using System.Globalization;
-
-namespace EhriMemoMap.Models
+﻿
+namespace EhriMemoMap.Shared
 {
     /// <summary>
     /// Informace o mapě
@@ -24,6 +20,7 @@ namespace EhriMemoMap.Models
         public int MaxZoom { get; set; }
         public double Lat { get; set; }
         public double Lng { get; set; }
+        public string? WmsProxyUrl { get; set; }
     }
 
 }

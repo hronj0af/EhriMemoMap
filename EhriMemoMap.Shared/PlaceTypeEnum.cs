@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-
-namespace EhriMemoMap.Models
+﻿namespace EhriMemoMap.Shared
 {
     public enum PlaceType
     {

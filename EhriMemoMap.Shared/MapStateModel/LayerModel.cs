@@ -1,9 +1,6 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Radzen;
-using System.Globalization;
+﻿using System.Globalization;
 
-namespace EhriMemoMap.Models
+namespace EhriMemoMap.Shared
 {
     /// <summary>
     /// Informace o vrstvě na mapě

@@ -1,9 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
-using Radzen;
-using System.Globalization;
-
-namespace EhriMemoMap.Models
+﻿
+namespace EhriMemoMap.Shared
 {
     /// <summary>
     /// Informace o kolekci; kolekce = soubor vrstev; v aplikace je jedna vrstva jedním bodem na časové ose

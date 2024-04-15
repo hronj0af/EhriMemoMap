@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -33,6 +32,8 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
+    <PackageReference Include="NetTopologySuite.IO.GeoJSON4STJ" Version="4.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Npgsql" Version="8.0.2" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
@@ -49,6 +50,11 @@
 
   <ItemGroup>
     <None Include="wwwroot\site.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EhriMemoMap.Data\EhriMemoMap.Data.csproj" />
+    <ProjectReference Include="..\EhriMemoMap.Shared\EhriMemoMap.Shared.csproj" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties tsconfig_1json__JsonSchema="http://json.schemastore.org/tsconfig" /></VisualStudio></ProjectExtensions>

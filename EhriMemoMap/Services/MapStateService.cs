@@ -1,11 +1,10 @@
 ﻿using EhriMemoMap.Models;
+using EhriMemoMap.Shared;
 using Microsoft.JSInterop;
 using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Radzen;
-using System.Net.NetworkInformation;
-using System.Reflection.Metadata.Ecma335;
 
 namespace EhriMemoMap.Services
 {

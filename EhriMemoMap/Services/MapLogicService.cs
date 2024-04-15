@@ -7,6 +7,8 @@ using Radzen;
 using Microsoft.JSInterop;
 using Microsoft.Extensions.Localization;
 using EhriMemoMap.Resources;
+using NetTopologySuite.IO;
+using EhriMemoMap.Shared;
 
 namespace EhriMemoMap.Services
 {
@@ -16,17 +18,20 @@ namespace EhriMemoMap.Services
     public class MapLogicService
     {
         private readonly MapStateService _mapState;
-        private readonly MemogisContext _context;
         private readonly IJSRuntime _js;
         private readonly IStringLocalizer<CommonResources> _cl;
+        private readonly HttpClient _client;
+        private readonly string _apiUrl;
 
-
-        public MapLogicService(MapStateService mapState, MemogisContext context, IJSRuntime js, IStringLocalizer<CommonResources> cl)
+        public MapLogicService(MapStateService mapState, IJSRuntime js, IStringLocalizer<CommonResources> cl, IHttpClientFactory clientFactory, IConfiguration configuration)
         {
             _mapState = mapState;
-            _context = context;
             _js = js;
             _cl = cl;
+            _client = clientFactory.CreateClient();
+            _apiUrl = configuration.GetSection("App")["ApiUrl"] ?? "";
+
+
         }
 
         public async Task RefreshObjectsOnMap(bool withPolygons)
@@ -35,41 +40,24 @@ namespace EhriMemoMap.Services
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-            var objects = GetMapObjects(withPolygons);
-            var statistics = GetDistrictStatistics();
+            var objects = await GetMapObjects(withPolygons);
+            var statistics = await GetDistrictStatistics();
             objects.AddRange(statistics);
 
             var result = JsonConvert.SerializeObject(objects, serializerSettings);
             await _js.InvokeVoidAsync("mapAPI.refreshObjectsOnMap", result);
         }
 
-        public List<MapObjectForLeafletModel> GetMapObjects(bool withPolygons, Coordinate[]? customCoordinates = null)
+        public async Task<List<MapObjectForLeafletModel>> GetMapObjects(bool withPolygons, Coordinate[]? customCoordinates = null)
         {
             if (_mapState == null || _mapState.Map == null)
                 return new List<MapObjectForLeafletModel>();
 
-            // nejdriv si pripravim mapove objekty pro dalsi dotazy
-            var query = _context.MapObjects.AsQueryable();
+            var parameters = new MapObjectParameters();
 
             // vyfiltruju objekty podle toho, na jakem bode casove ose lezi
             if (_mapState.Map.Timeline != null && _mapState.Map.Timeline.Any(a => a.Selected))
-            {
-                var timelimePoint = _mapState.Map.Timeline.FirstOrDefault(a => a.Selected);
-
-                // bude vyberu vsechny objekty, ktere nemaji prirazeno zadne datum
-                if (timelimePoint != null && timelimePoint.From == null && timelimePoint.To == null)
-                    query = query.Where(a => a.DateFrom == null && a.DateTo == null);
-
-                // anebo vyberu objekty, ktere lezi v casovem intervalu daneho bodu casove osy
-                // v případě, že je zadán parametr customCoordinates, tedy když se hledají objekty na mapě v místě, kam uživatel klikl,
-                // pak k tomu přidám i vrstvu s typem "polygons", protože ty nemají datum a zobrazují se na mapě vždy
-                else if (timelimePoint != null && customCoordinates == null)
-                    query = query.Where(a => a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To);
-
-                else if (timelimePoint != null && customCoordinates == null)
-                    query = query.Where(a => (a.DateFrom >= timelimePoint.From && a.DateTo <= timelimePoint.To) || (a.PlaceType == "Inaccessible"));
-
-            }
+                parameters.SelectedTimeLinePoint = _mapState.Map.Timeline.FirstOrDefault(a => a.Selected);
 
             // vyber objektu podle toho, do jake nalezi vrstvy
             var selectedLayerNames = new List<string?>();
@@ -80,69 +68,55 @@ namespace EhriMemoMap.Services
                     continue;
                 selectedLayerNames.Add(layer.PlaceType?.ToString());
             }
+            parameters.SelectedLayerNames = selectedLayerNames;
+            parameters.CustomCoordinates = customCoordinates?.Select(a=> new PointModel { X = a.X, Y = a.Y }).ToArray();
+            parameters.MapSouthWestPoint = new PointModel { X = _mapState.MapSouthWestPoint.X, Y = _mapState.MapSouthWestPoint.Y };
+            parameters.MapNorthEastPoint = new PointModel { X = _mapState.MapNorthEastPoint.X, Y = _mapState.MapNorthEastPoint.Y };
 
-            query = query.Where(a => a.PlaceType != null && selectedLayerNames.Contains(a.PlaceType));
+            var objects = await GetResultFromApi<List<MapObject>>("getmapobjects", parameters);
 
-            // a nakonec vyberu ty objekty, ktere jsou viditelne na zobrazenem vyrezu na mape
-            if (customCoordinates != null && customCoordinates.Length == 2)
-            {
-                var bbox = GetBBox(customCoordinates[0], customCoordinates[1]);
-                query = query.Where(a => (a.GeographyMapPoint != null && bbox.Intersects(a.GeographyMapPoint)) || (a.GeographyMapPolygon != null && bbox.Intersects(a.GeographyMapPolygon)));
-            }
-            else if (_mapState.MapSouthWestPoint != null && _mapState.MapNorthEastPoint != null)
-            {
-                var bbox = GetBBox(_mapState.MapSouthWestPoint, _mapState.MapNorthEastPoint);
-                query = query.Where(a => !string.IsNullOrEmpty(a.MapPolygon) || (a.GeographyMapPoint != null && a.GeographyMapPoint.Intersects(bbox)));
-            }
-
-            var result = query.Select(a => new MapObjectForLeafletModel(a)).ToList();
-
-            return result;
+            return objects.Select(a => new MapObjectForLeafletModel(a)).ToList();
         }
 
-        public List<MapObjectForLeafletModel> GetDistrictStatistics()
+        public async Task<List<MapObjectForLeafletModel>> GetDistrictStatistics()
         {
             // pokud neni zadna vrstva s statistikami vybrana, vratim prazdny seznam
             var layer = _mapState.GetNotBaseLayers().FirstOrDefault(a => a.Selected && a.PlaceType == PlaceType.Statistics);
-            
+
             // pokud neni zadna vrstva s statistikami vybrana, vratim prazdny seznam
-            if (layer == null) 
+            if (layer == null)
                 return [];
 
-            // pokud je zoom mensi nez minimalni zoom vrstvy, zobrazim statistiky pro celou Prahu
-            if (_mapState.MapZoom < layer.MinZoom && _mapState.MapZoom >= 0)
-            {
-                    return _context.MapStatistics.
-                        Where(a => a.Type.Contains("total") && a.DateFrom == _mapState.GetTimelinePoint()).
-                        GroupBy(a => a.QuarterCs).
-                        Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
-            }
+            var statistics = new List<MapStatistic>();
+            var parameters = new DistrictStatisticsParameters { Total = true, TimeLinePoint = _mapState.GetTimelinePoint() };
 
             // pokud je zoom vetsi nez maximalni zoom vrstvy, zobrazim statistiky pro jednotlive casti Prahy
             if (_mapState.MapZoom >= layer.MinZoom && _mapState.MapZoom <= layer.MaxZoom)
-            {
-                    return _context.MapStatistics.
-                        Where(a => !a.Type.Contains("total") && a.DateFrom == _mapState.GetTimelinePoint()).
-                        GroupBy(a => a.QuarterCs).
-                        Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
-            }
+                parameters.Total = false;
 
-            return [];
+
+            statistics = await GetResultFromApi<List<MapStatistic>>("getdistrictstatistics", parameters);
+            
+            return statistics.GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
         }
 
-        public Polygon GetBBox(Coordinate southWestPoint, Coordinate northEastPoint)
+        public async Task<WelcomeDialogStatistics> GetWelcomeDialogStatistics()
         {
-            var imageOutlineCoordinates = new Coordinate[]
-            {
-                new(southWestPoint.X, northEastPoint.Y),
-                new(northEastPoint.X, northEastPoint.Y),
-                new(northEastPoint.X, southWestPoint.Y),
-                new(southWestPoint.X, southWestPoint.Y),
-                new(southWestPoint.X, northEastPoint.Y),
-            };
-            var geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
-            var bbox = geometryFactory.CreatePolygon(imageOutlineCoordinates);
-            return bbox;
+            var statistics = await GetResultFromApi<WelcomeDialogStatistics>("getwelcomedialogstatistics", null);
+            return statistics;
+        }
+
+        private async Task<T> GetResultFromApi<T>(string apiMethod, object? parameters)
+        {
+            var apiResult = await _client.PostAsJsonAsync(_apiUrl + apiMethod, parameters);
+            var jsonString = await apiResult.Content.ReadAsStringAsync();
+
+            using var stringReader = new StringReader(jsonString);
+            using var jsonReader = new JsonTextReader(stringReader);
+
+            var serializer = GeoJsonSerializer.Create();
+            var result = serializer.Deserialize<T>(jsonReader);
+            return result;
 
         }
     }

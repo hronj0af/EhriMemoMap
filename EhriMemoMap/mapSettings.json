@@ -6,7 +6,8 @@
       "lat": 50.07905886,
       "lng": 14.43715096,
       "minZoom": 11,
-      "maxZoom": 18
+      "maxZoom": 18,
+      "wmsProxyUrl": "https://localhost:7294/wmsProxy"
     },
     "layers": [
       {

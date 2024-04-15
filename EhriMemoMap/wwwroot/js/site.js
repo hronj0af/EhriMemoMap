@@ -1,5 +1,6 @@
 var mapAPI;
 (function (mapAPI) {
+    let wmsProxyUrl = "";
     let map = null;
     let lat = 0;
     let lng = 0;
@@ -24,6 +25,7 @@ var mapAPI;
     function initMap(jsonMapSettings) {
         history.replaceState({}, '', "praha");
         const mapSettings = JSON.parse(jsonMapSettings);
+        wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
         fitMapToWindow(null);
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
         addressIcon = new L.DivIcon();
@@ -138,7 +140,7 @@ var mapAPI;
             });
         }
         else if (mapSettingsObject.type == 'WMS') {
-            return new L.TileLayer.WMS("WMSProxy/Get", {
+            return new L.TileLayer.WMS(wmsProxyUrl, {
                 tileSize: 512,
                 layers: mapSettingsObject.layersParameter,
                 className: "customWmsLayer"

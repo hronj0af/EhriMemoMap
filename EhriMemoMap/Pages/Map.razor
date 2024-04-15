@@ -14,7 +14,6 @@
 @inject MapStateService MapState
 @inject MapLogicService MapLogic
 @inject IHttpContextAccessor httpContextAccesor
-@inject EhriMemoMap.Data.MemogisContext context
 @inject NavigationManager Navigation
 
 <div id="map" style="cursor:default;">
@@ -167,7 +166,7 @@ else if (isMobileView == true)
     [JSInvokable("ShowPlaceInfo")]
     public async Task ShowPlaceInfo(int zoom, Coordinate[] coordinates)
     {
-        var placesOnMap = MapLogic.GetMapObjects(true, coordinates);
+        var placesOnMap = await MapLogic.GetMapObjects(true, coordinates);
         if (placesOnMap.Count == 0)
             return;
 

@@ -5,6 +5,14 @@ VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EhriMemoMap", "EhriMemoMap\EhriMemoMap.csproj", "{F421D249-0523-4A86-87FB-3EAA46AA7753}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EhriMemoMap.Client", "EhriMemoMap.Client\EhriMemoMap.Client.csproj", "{EAAAC5DA-FAA0-4715-BC35-B3872F81DB23}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EhriMemoMap.API", "EhriMemoMap.API\EhriMemoMap.API.csproj", "{8C7D9EB0-1BE0-4366-91B7-306CA9CD4E3B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EhriMemoMap.Data", "EhriMemoMap.Data\EhriMemoMap.Data.csproj", "{0E6A2CBD-7FE5-4661-B193-78A1B58FFC30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EhriMemoMap.Shared", "EhriMemoMap.Shared\EhriMemoMap.Shared.csproj", "{9BFE05A1-884F-44EB-8499-06E0A3F48368}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +23,22 @@ Global
 		{F421D249-0523-4A86-87FB-3EAA46AA7753}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F421D249-0523-4A86-87FB-3EAA46AA7753}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F421D249-0523-4A86-87FB-3EAA46AA7753}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAAAC5DA-FAA0-4715-BC35-B3872F81DB23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAAAC5DA-FAA0-4715-BC35-B3872F81DB23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAAAC5DA-FAA0-4715-BC35-B3872F81DB23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAAAC5DA-FAA0-4715-BC35-B3872F81DB23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C7D9EB0-1BE0-4366-91B7-306CA9CD4E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C7D9EB0-1BE0-4366-91B7-306CA9CD4E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C7D9EB0-1BE0-4366-91B7-306CA9CD4E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C7D9EB0-1BE0-4366-91B7-306CA9CD4E3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E6A2CBD-7FE5-4661-B193-78A1B58FFC30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E6A2CBD-7FE5-4661-B193-78A1B58FFC30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E6A2CBD-7FE5-4661-B193-78A1B58FFC30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E6A2CBD-7FE5-4661-B193-78A1B58FFC30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BFE05A1-884F-44EB-8499-06E0A3F48368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BFE05A1-884F-44EB-8499-06E0A3F48368}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BFE05A1-884F-44EB-8499-06E0A3F48368}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BFE05A1-884F-44EB-8499-06E0A3F48368}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

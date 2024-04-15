@@ -8,6 +8,7 @@ namespace mapAPI {
     /// VARIABLES
     //////////////////////////
 
+    let wmsProxyUrl: string = "";
     let map: L.Map = null;
     let lat: number = 0;
     let lng: number = 0;
@@ -39,6 +40,7 @@ namespace mapAPI {
         history.replaceState({}, '', "praha");
 
         const mapSettings = JSON.parse(jsonMapSettings) as MapSettingsForLeafletModel;
+        wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
 
         fitMapToWindow(null);
 
@@ -196,7 +198,7 @@ namespace mapAPI {
             });
         }
         else if (mapSettingsObject.type == 'WMS') {
-            return new L.TileLayer.WMS("WMSProxy/Get", {
+            return new L.TileLayer.WMS(wmsProxyUrl, {
                 tileSize: 512,
                 //map: mapSettingsObject.mapParameter,
                 layers: mapSettingsObject.layersParameter,
@@ -578,6 +580,7 @@ interface InitialVariables {
     lng: number | null;
     minZoom: number | null;
     maxZoom: number | null;
+    wmsProxyUrl: string | null;
 }
 
 interface LayerForLeafletModel {
