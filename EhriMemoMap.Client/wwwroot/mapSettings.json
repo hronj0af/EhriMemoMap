@@ -1,0 +1,191 @@
+﻿{
+  "map": {
+    "initialVariables": {
+      "zoom": 12,
+      "zoomMobile": 11,
+      "lat": 50.07905886,
+      "lng": 14.43715096,
+      "minZoom": 11,
+      "maxZoom": 18,
+      "wmsProxyUrl": "https://localhost:7294/wmsProxy"
+    },
+    "layers": [
+      {
+        "name": "OSM",
+        "url": "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+        "attribution": "MÚA AVČR, ITI &copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
+        "attributionUrl": "https://ehri.cz/memogis_cs.html#howto_credit",
+        "type": "base",
+        "zIndex": "50",
+        "selected": true
+      },
+      {
+        "name": "MGS-prague_historical_map_1938-v2",
+        "url": "https://geodata.ehri-project-test.eu/geoserver/ehri/wms?",
+        "mapParameter": "/webdata/HGIS_cze/memogis_prague_CZE_pol.qgz",
+        "layersParameter": "MGS-prague_historical_map_1938-v2",
+        "type": "wms",
+        "selected": true,
+        "opacities": "255",
+        "zIndex": "100",
+        "order": 100,
+        "backgroundColor": "#D5D2B8",
+        "fontColor": "Dark"
+      },
+      {
+        "name": "inaccessible",
+        "placeType": "inaccessible",
+        "order": 10,
+        "type": "polygons",
+        "backgroundColor": "#e3a1a2",
+        "fontColor": "Dark"
+      },
+      {
+        "name": "address",
+        "placeType": "address",
+        "order": 1,
+        "type": "objects",
+        "minZoom": 17,
+        "quickAccess": true,
+        "backgroundColor": "#FFD93D",
+        "fontColor": "Dark"
+      },
+      {
+        "name": "interest",
+        "placeType": "interest",
+        "order": 2,
+        "type": "objects",
+        "minZoom": 17,
+        "quickAccess": true,
+        "backgroundColor": "#7E469B",
+        "fontColor": "Light"
+      },
+      {
+        "name": "incident",
+        "placeType": "incident",
+        "order": 3,
+        "type": "objects",
+        "minZoom": 17,
+        "quickAccess": true,
+        "backgroundColor": "#C5222C",
+        "fontColor": "Light"
+      },
+      {
+        "clickable": false,
+        "name": "statistics",
+        "placeType": "statistics",
+        "order": 10,
+        "type": "objects",
+        "maxZoom": 16,
+        "minZoom": 13,
+        "backgroundColor": "#d5d2b8",
+        "fontColor": "Dark"
+      }
+
+    ],
+    "timeline": [
+      {
+        "name": "1942_Q1",
+        "title": "1. 1. 1942",
+        "from": "1942-01-01",
+        "to": "1942-03-31"
+      },
+      {
+        "name": "1942_Q2",
+        "title": "1. 4. 1942",
+        "from": "1942-04-01",
+        "to": "1942-06-30"
+      },
+      {
+        "name": "1942_Q3",
+        "title": "1. 7. 1942",
+        "from": "1942-07-01",
+        "to": "1942-09-30"
+      },
+      {
+        "name": "1942_Q4",
+        "title": "1. 10. 1942",
+        "from": "1942-10-01",
+        "to": "1942-12-31"
+      },
+      {
+        "name": "1943_Q1",
+        "title": "1. 1. 1943",
+        "from": "1943-01-01",
+        "to": "1943-03-31"
+      },
+      {
+        "name": "1943_Q2",
+        "title": "1. 4. 1943",
+        "from": "1943-04-01",
+        "to": "1943-06-30"
+      },
+      {
+        "name": "1943_Q3",
+        "title": "1. 7. 1943",
+        "from": "1943-07-01",
+        "to": "1943-09-30"
+      },
+      {
+        "name": "1943_Q4",
+        "title": "1. 10. 1943",
+        "from": "1943-10-01",
+        "to": "1943-12-31"
+      },
+      {
+        "name": "1944_Q1",
+        "title": "1. 1. 1944",
+        "from": "1944-01-01",
+        "to": "1944-03-31"
+      },
+      {
+        "name": "1944_Q2",
+        "title": "1. 4. 1944",
+        "from": "1944-04-01",
+        "to": "1944-06-30"
+      },
+      {
+        "name": "1944_Q3",
+        "title": "1. 7. 1944",
+        "from": "1944-07-01",
+        "to": "1944-09-30"
+      },
+      {
+        "name": "1944_Q4",
+        "title": "1. 10. 1944",
+        "from": "1944-10-01",
+        "to": "1944-12-31"
+      },
+      {
+        "name": "1945_Q1",
+        "title": "1. 1. 1945",
+        "from": "1945-01-01",
+        "to": "1945-03-31"
+      },
+      {
+        "name": "1945_Q2",
+        "title": "1. 4. 1945",
+        "from": "1945-04-01",
+        "to": "1945-05-08"
+      },
+      {
+        "name": "all",
+        "title": "All",
+        "from": null,
+        "to": null
+        //"additionalLayers": [
+        //  {
+        //    "clickable": false,
+        //    "name": "statistics",
+        //    "placeType": "statistics",
+        //    "order": 10,
+        //    "type": "objects",
+        //    "maxZoom": 16,
+        //    "minZoom": 13,
+        //    "backgroundColor": "#d5d2b8",
+        //    "fontColor": "Dark"
+        //  }]
+      }
+    ]
+  }
+}

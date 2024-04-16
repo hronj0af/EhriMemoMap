@@ -1,0 +1,54 @@
+﻿@using EhriMemoMap.Data;
+@using EhriMemoMap.Helpers;
+@using System.Xml;
+@using System.Xml.Linq;
+@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+
+<RadzenRow class="rz-mb-4">
+    <RadzenCard Style="width:100%">
+
+        <h3>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</h3>
+        <h5>@Place.DateIso?.ToString("d. M. yyyy")</h5>
+        <ul class="no-bullets rz-mt-4">
+            <li>@cl["place"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.PlaceEn : Place.PlaceCs)</li>
+            @if (!string.IsNullOrEmpty(Place.DescriptionCs))
+            {
+                <li>@cl["description"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn : Place.DescriptionCs)</li>
+            }
+            <li>@cl["type"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.Type1En : Place.Type1Cs)</li>
+            @if (!string.IsNullOrEmpty(Place.Spec1Cs))
+            {
+                <li>@cl["specification"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.Spec1En : Place.Spec1Cs)</li>
+            }
+        </ul>
+
+        @if (Place.Documents != null && Place.Documents.Count > 0)
+        {
+            <RadzenRow class="rz-mt-2 rz-mb-4">
+                @foreach (var doc in Place.Documents)
+                {
+                    <RadzenColumn Size="MapState.IsMobileView ? 3 : 2">
+                        <a href="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.DocumentCs : doc.DocumentEn)" target="_blank" style="text-decoration:none;color:black">
+                            <RadzenCard class="document-card">
+                                <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
+                                    <div style="position:relative;width:100%">
+                                        <RadzenImage class="document-photo" Path="@doc.Img" />
+                                        <RadzenImage class="document-forward-icon" Path="/images/forward.svg"></RadzenImage>
+                                    </div>
+                                </RadzenStack>
+                            </RadzenCard>
+                        </a>
+                    </RadzenColumn>
+                }
+
+            </RadzenRow>
+        }
+
+    </RadzenCard>
+</RadzenRow>
+
+@code {
+    [Parameter]
+    public PragueIncidentsTimeline Place { get; set; }
+}

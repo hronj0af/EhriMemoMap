@@ -1,0 +1,87 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+
+<RadzenRow Gap="1rem" JustifyContent=JustifyContent.Left>
+    <RadzenColumn Size="12">
+        <RadzenCard Style="background-color: var(--Beige);padding:1rem;color:var(--Grey)">
+            <RadzenRow AlignItems="AlignItems.Start" JustifyContent="JustifyContent.SpaceBetween" style="cursor:pointer;" onclick="@(() => ToggleStatistics())">
+                <RadzenColumn Size="11" Style="font-size:14px">
+                    @if (House.Address.Murdered != null)
+                    {
+                        <span class="rz-mr-2">@cl["murdered"]: @House.Address.Murdered</span>
+                    }
+                    @if (House.Address.Survived != null)
+                    {
+                        <span class="rz-mr-2">@cl["survived"]: @House.Address.Survived</span>
+                    }
+                    @if (House.Address.FateUnknown != null)
+                    {
+                        <span class="rz-mr-2">@cl["fateUnknown"]: @House.Address.FateUnknown</span>
+                    }
+                </RadzenColumn>
+                <RadzenColumn Size="1">
+                    @if (!StatisticsIsOpen)
+                    {
+                        <RadzenImage Style="height:17px;cursor:pointer" Path="images/arrow-right.png" title="@(cl["showStatistics"] + "...")" ></RadzenImage>
+
+                    }
+                    else
+                    {
+                        <RadzenImage Style="width:17px;cursor:pointer"  Path="images/arrow-down.png" title="@(cl["hideStatistics"] + "...")" ></RadzenImage>
+                    }
+
+                </RadzenColumn>
+            </RadzenRow>
+
+
+            @if (StatisticsIsOpen)
+            {
+                @if (House.Statistics != null && House.Statistics.Count > 0)
+                {
+                    <table class="rz-grid-table rz-grid-table-fixed" style="width:100%">
+                        <tr>
+                            <th style="@(MapState.IsMobileView ? "width:30%" : "width:50%")"></th>
+                            @if (House.Statistics.Any(a => a.NumberPresent != null))
+                            {
+                                <th style="text-align:left;font-family:'Barlow';font-size:14px">@cl["present"]</th>
+
+                            }
+                            @if (House.Statistics.Any(a => a.NumberAbsent != null))
+                            {
+                                <th style="text-align:left;font-family:'Barlow';font-size:14px">@cl["absent"]</th>
+                            }
+                        </tr>
+
+                        @foreach (var statistic in House.Statistics.Where(a => MapState.GetTimelinePoint() != null ? (a.Date == new DateTime(1941, 10, 01) || a.Date == MapState.GetTimelinePoint()) : 1 == 1))
+                        {
+                            <tr>
+                                <td>@statistic.Date.ToString("d. M. yyyy")</td>
+                                @if (House.Statistics.Any(a => a.NumberPresent != null))
+                                {
+                                    <td>@statistic.NumberPresent</td>
+                                }
+                                @if (House.Statistics.Any(a => a.NumberAbsent != null))
+                                {
+                                    <td>@statistic.NumberAbsent</td>
+                                }
+                            </tr>
+                        }
+                    </table>
+                }
+            }
+        </RadzenCard>
+    </RadzenColumn>
+</RadzenRow>
+
+@code {
+    [Parameter]
+    public AddressWithVictimsWrappwer? House { get; set; }
+
+    public bool StatisticsIsOpen { get; set; } = false;
+
+    public void ToggleStatistics()
+    {
+        StatisticsIsOpen = !StatisticsIsOpen;
+        StateHasChanged();
+    }
+}

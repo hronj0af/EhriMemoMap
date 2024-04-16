@@ -4,15 +4,22 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EhriMemoMap.Client</title>
+    <title>MemoMap</title>
     <base href="/" />
-    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/app.css" />
+    <link href="css/leaflet.css" rel="stylesheet" />
+    <script src="js/leaflet-src.js"></script>
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Barlow:400,700|Noto%20Serif:400" rel="stylesheet" />
+    <script src="js/site.js?v=20240411-1"></script>
+    <!--<link href="EhriMemoMap.styles.css" rel="stylesheet" />-->
     <link rel="icon" type="image/png" href="favicon.png" />
-    <link href="EhriMemoMap.Client.styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="radzen-custom/css/material-base.css">
+
+
 </head>
 
-<body>
+<body id="body">
     <div id="app">
         <svg class="loading-progress">
             <circle r="40%" cx="50%" cy="50%" />
@@ -26,6 +33,7 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
     <script src="_framework/blazor.webassembly.js"></script>
 </body>
 

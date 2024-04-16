@@ -75,7 +75,41 @@ namespace EhriMemoMap.Services
             };
         }
 
-        public Polygon GetBBox(PointModel southWestPoint, PointModel northEastPoint)
+        public PlacesResult GetPlaces(PlacesParameters parameters) 
+        {
+            var result = new PlacesResult();
+            if (parameters.IncidentsIds != null)
+            {
+                result.Incidents = _context.PragueIncidentsTimelines.Where(p => parameters.IncidentsIds.Contains(p.Id)).ToList();
+
+                // protože v databázi neexistuje vazba mezi incidentem a dokumentem, musíme si ji vytvořit ručně
+                // tabulka prague_incident_x_documents obsahuje sloupec incident_id, 
+                // který je vazbou na tabulku prague_incidents_timelines, 
+                // jenže v ní je sloupec id, který není primárním klíčem
+                // databázi spravuje Aneta Plzáková, nikoli já - takže to prozatím necháme takto
+                foreach (var incident in result.Incidents)
+                    incident.Documents = _context.PragueIncidentsXDocuments.Where(a => a.IncidentId == incident.Id).ToList();
+            }
+
+            if (parameters.PlacesOfInterestIds != null)
+                result.PlacesOfInterest = _context.PraguePlacesOfInterestTimelines.Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).ToList();
+
+            if (parameters.InaccessiblePlacesIds != null)
+                result.InaccessiblePlaces = _context.PraguePlacesOfInterestTimelines.Where(p => parameters.InaccessiblePlacesIds.Contains(p.Id)).ToList();
+
+            if (parameters.AddressesIds != null)
+                result.Addresses = _context.PragueAddressesStatsTimelines.Where(p => parameters.AddressesIds.Contains(p.Id)).
+                    Select(a => new AddressWithVictimsWrappwer
+                    {
+                        Address = a,
+                        Victims = _context.PragueVictimsTimelines.Where(b => b.PlaceId == a.Id).OrderBy(a => a.Label).ToList()
+                    }).
+                    ToList();
+
+            return result;
+        }
+
+        private Polygon GetBBox(PointModel southWestPoint, PointModel northEastPoint)
         {
             var imageOutlineCoordinates = new Coordinate[]
             {

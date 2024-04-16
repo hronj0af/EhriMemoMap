@@ -1,0 +1,62 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+
+@if (House != null && House.Address != null)
+{
+    <h3 class="rz-my-8">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.AddressEn : House.Address.AddressCs)</h3>
+    <CardHouse House="House"></CardHouse>
+
+
+    @if ((House.Address.FateUnknown > 0 || House.Address.Survived > 0) && (House.Victims == null || House.Victims.Count == 0))
+    {
+        <p>
+            <b>@cl["survivorsNotDisplayed"]</b>
+        </p>
+    }
+
+    <RadzenRow class="rz-mt-8" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
+
+
+        @if (House.Victims != null && House.Victims.Count > 0)
+        {
+            if (MapState?.GetTimelinePoint() != null)
+            {
+                if (House.Victims.Any(a => a.TransportDate > MapState?.GetTimelinePoint()))
+                {
+                    <RadzenColumn Size="12">
+                        <h4>@cl["present"] (@MapState?.GetTimelinePoint()?.ToString("d. M. yyyy"))</h4>
+                    </RadzenColumn>
+                    foreach (var victim in House.Victims.Where(a => a.TransportDate > MapState?.GetTimelinePoint()))
+                    {
+                        <CardVictim Victim="@victim" />
+                    }
+                }
+
+                if (House.Victims.Any(a => a.TransportDate <= MapState?.GetTimelinePoint()))
+                {
+                    <RadzenColumn Size="12">
+                        <h4>@cl["absent"] (@MapState?.GetTimelinePoint()?.ToString("d. M. yyyy"))</h4>
+                    </RadzenColumn>
+                    foreach (var victim in House.Victims.Where(a => a.TransportDate <= MapState?.GetTimelinePoint()))
+                    {
+                        <CardVictim Victim="@victim" />
+                    }
+                }
+            }
+            else
+            {
+                foreach (var victim in House.Victims)
+                {
+                    <CardVictim Victim="@victim" />
+                }
+            }
+        }
+    </RadzenRow>
+
+}
+
+@code {
+    [Parameter]
+    public AddressWithVictimsWrappwer? House { get; set; }
+
+}

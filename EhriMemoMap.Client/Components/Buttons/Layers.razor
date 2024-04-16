@@ -1,0 +1,92 @@
+﻿@using EhriMemoMap.Helpers;
+@inject IJSRuntime JS
+@inject IHttpClientFactory clientFactory
+@inject DialogService DialogService
+@inject MapStateService MapState
+@inject MapLogicService MapLogic
+
+@inject IStringLocalizer<CommonResources> cl
+
+@if (!MobileVersion)
+{
+
+    <div class="icon @(MapState.DialogType == DialogTypeEnum.Layers ? "icon-selected" : "")" title="@(cl["layers"] + "...")" onclick="@(() => ShowLayersList())">
+        <svg width="47" height="50" viewBox="0 0 47 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g id="Group 57">
+                <path id="Rectangle 23" d="M0 4.50427C0 2.29513 1.79086 0.504272 4 0.504272H47.1795V49.2564H4C1.79086 49.2564 0 47.4655 0 45.2564V4.50427Z" fill="#46463D" class="background"/>
+                <g id="layers">
+                    <mask id="mask0_1806_1108" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="6" y="8" width="35" height="35">
+                        <rect id="Bounding box" x="6.29059" y="8.87607" width="33.812" height="33.812" fill="#D9D9D9" />
+                    </mask>
+                    <g mask="url(#mask0_1806_1108)">
+                        <g id="layers_2">
+                            <path d="M23.1966 38.532L10.5171 28.6701L12.8417 26.9091L23.1966 34.9394L33.5515 26.9091L35.8761 28.6701L23.1966 38.532ZM23.1966 31.4174L10.5171 21.5555L23.1966 11.6937L35.8761 21.5555L23.1966 31.4174ZM23.1966 27.8248L31.2974 21.5555L23.1966 15.2862L15.0958 21.5555L23.1966 27.8248Z" fill="white" class="foreground"/>
+                            <path d="M23.1966 38.532L10.5171 28.6701L12.8417 26.9091L23.1966 34.9394L33.5515 26.9091L35.8761 28.6701L23.1966 38.532ZM23.1966 31.4174L10.5171 21.5555L23.1966 11.6937L35.8761 21.5555L23.1966 31.4174ZM23.1966 27.8248L31.2974 21.5555L23.1966 15.2862L15.0958 21.5555L23.1966 27.8248Z" fill="#D5D2B8" fill-opacity="0.2" />
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </svg>
+
+    </div>
+}
+else
+{
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" class="@((MapState.DialogType == DialogTypeEnum.Layers ? "mobile-menu-icon-selected" : "mobile-menu-icon") + " " + (Border ? "mobile-menu-icon-border" : ""))" title="@(cl["layers"] + "...")" onclick="@(() => ShowLayersList())">
+        <svg width="26" height="28" viewBox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.1966 27.532L0.51709 17.6701L2.84166 15.9091L13.1966 23.9394L23.5515 15.9091L25.8761 17.6701L13.1966 27.532ZM13.1966 20.4174L0.51709 10.5555L13.1966 0.69372L25.8761 10.5555L13.1966 20.4174ZM13.1966 16.8248L21.2974 10.5555L13.1966 4.28624L5.09579 10.5555L13.1966 16.8248Z" fill="white" class="foreground"/>
+            <path d="M13.1966 27.532L0.51709 17.6701L2.84166 15.9091L13.1966 23.9394L23.5515 15.9091L25.8761 17.6701L13.1966 27.532ZM13.1966 20.4174L0.51709 10.5555L13.1966 0.69372L25.8761 10.5555L13.1966 20.4174ZM13.1966 16.8248L21.2974 10.5555L13.1966 4.28624L5.09579 10.5555L13.1966 16.8248Z" fill="#D5D2B8" fill-opacity="0.2" />
+        </svg>
+    </RadzenStack>
+
+}
+
+@code {
+    [Parameter]
+    public bool MobileVersion { get; set; } = false;
+
+    [Parameter]
+    public bool Border { get; set; } = false;
+
+    private int width;
+
+    IEnumerable<LayerModel>? layers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        width = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
+        MapState.OnChange += OnMyChangeHandler;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= OnMyChangeHandler;
+    }
+
+
+    private async void OnMyChangeHandler()
+    {
+        await InvokeAsync(() =>
+        {
+            layers = MapState.GetNotBaseLayers().ToList();
+            StateHasChanged();
+        });
+    }
+
+    private async Task ShowLayersList()
+    {
+        if (MapState.DialogType == DialogTypeEnum.Layers)
+        {
+            MapState.SetDialogType(DialogTypeEnum.None);
+            DialogService.CloseSide();
+            await JS.InvokeVoidAsync("mapAPI.fitMapToWindow");
+            await JS.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
+
+        }
+        else
+        {
+            MapState.SetDialogType(DialogTypeEnum.Layers);
+            await DialogService.OpenSideAsync<LayersList>(cl["layerInfo"], options: await MapState.GetDialogOptions());
+        }
+    }
+}

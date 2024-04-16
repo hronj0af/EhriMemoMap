@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="english" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="czech" xml:space="preserve">
+    <value>Czech</value>
+  </data>
+  <data name="languageSwitcher" xml:space="preserve">
+    <value>Language switcher</value>
+  </data>
+  <data name="timeline" xml:space="preserve">
+    <value>Timeline</value>
+  </data>
+  <data name="mapTitle" xml:space="preserve">
+    <value>To view information about a specific location, click on the map...</value>
+  </data>
+  <data name="noPlaceInfo" xml:space="preserve">
+    <value>No information has been found for the location...</value>
+  </data>
+  <data name="layers" xml:space="preserve">
+    <value>All layers</value>
+  </data>
+  <data name="placeInfo" xml:space="preserve">
+    <value>Information about the place</value>
+  </data>
+  <data name="moreInfo" xml:space="preserve">
+    <value>More info</value>
+  </data>
+  <data name="helpContent" xml:space="preserve">
+    <value>&lt;div&gt;&lt;p&gt;&lt;h4&gt;&lt;strong&gt;About MemoMap Prague&lt;/strong&gt;&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;The MemoMap historical geographical information system displays data on more than 30,000 Holocaust victims, 1,700 cases of violations of anti-Jewish laws and regulations, and 200 points of interest onto an interactive map of Prague. MemoMap is designed as a mobile web application that allows users to conduct research not only from their homes or school computers, but also from their mobile phones while walking in the city.&lt;br&gt;The data on Holocaust victims comes from the Database of the Holocaust Victims maintained by the Terezín Initiative Institute. Thanks to its extensive digital archive, which contains digitized copies of selected documents from the Prague Police Directorate’s files and much more, it was possible to process data on more than 1,700 cases of violations of anti-Jewish laws and regulations and make it available on MemoMap. The app also includes points of interest, i.e. places connected to the everyday lives of Prague’s Jewish residents that were later directly related to their persecution. &lt;a href="https://ehri.cz/memogis_en.html#data" target="_blank"&gt;(...more)&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;h4&gt;Working with MemoMap&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Viewing the layers of the map:&lt;/strong&gt;&lt;br&gt;The individual data types are split into layers that the user can freely switch between while using the app. The option to select what layer to be displayed can be found in the main menu in the upper right corner of the screen.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Zooming in and out on the map:&lt;/strong&gt;&lt;br&gt;The zoom in and zoom out buttons are located in the bottom right corner of the screen. They are only displayed while you are using the app on the computer. If you are working on your mobile device, you can zoom in and out using touch gestures.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Location service:&lt;/strong&gt;&lt;br&gt;You can turn the position determination service on and off using the button on the bottom right corner of the screen. Activating the button allows you to see where you are on the map. The positioning button has three modes that can be accessed by pressing them on and off. The user can continue to browse the map as needed if it’s switched on and centered on the user’s location.&lt;/p&gt;&lt;p&gt;&lt;h4&gt;Acknowledgments&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;The project “Integration and Segregation in the City Space: The History of the Holocaust in Prague Through a Mobile Web Application (identifier TL01000366) was supported by the Technology Agency of the Czech Republic as part of the public ÉTA 1 program.&lt;br&gt;The MemoMap application was created by the Masaryk Institute and Archives of the Czech Academy of Sciences in cooperation with the Terezín Initiative Institute and the Multicultural Center in Prague.&lt;/p&gt;&lt;p&gt;&lt;h4&gt;Have you found an error?&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;If you’ve encountered a technical problem or error in the data displayed, please use the &lt;a href="https://docs.google.com/forms/d/15jprT8Sbc-Llt1CfAPrIzU4S8YIDjREixRADGzbA62k" target="_blank"&gt;report form&lt;/a&gt; and let us know.&lt;/p&gt;&lt;/div&gt;</value>
+  </data>
+  <data name="layerInfo" xml:space="preserve">
+    <value>Information about map layer</value>
+  </data>
+  <data name="help" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="zoomIn" xml:space="preserve">
+    <value>Zoom in</value>
+  </data>
+  <data name="zoomOut" xml:space="preserve">
+    <value>Zoom out</value>
+  </data>
+  <data name="myLocationOn" xml:space="preserve">
+    <value>Turn on location tracking</value>
+  </data>
+  <data name="featureType_Incident" xml:space="preserve">
+    <value>Incidents</value>
+  </data>
+  <data name="featureType_Interest" xml:space="preserve">
+    <value>Points of Interest</value>
+  </data>
+  <data name="featureType_Inaccessible" xml:space="preserve">
+    <value>Forbidden Places</value>
+  </data>
+  <data name="featureType_Obeti_holokaustu_z_Prahy" xml:space="preserve">
+    <value>Victims</value>
+  </data>
+  <data name="featureType_Address" xml:space="preserve">
+    <value>Jewish Homes</value>
+  </data>
+  <data name="title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="place" xml:space="preserve">
+    <value>Place</value>
+  </data>
+  <data name="description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="specification" xml:space="preserve">
+    <value>Specification</value>
+  </data>
+  <data name="documents" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="murdered" xml:space="preserve">
+    <value>Murdered</value>
+  </data>
+  <data name="survived" xml:space="preserve">
+    <value>Survived</value>
+  </data>
+  <data name="fateUnknown" xml:space="preserve">
+    <value>Fate unknown</value>
+  </data>
+  <data name="present" xml:space="preserve">
+    <value>Present</value>
+  </data>
+  <data name="deported" xml:space="preserve">
+    <value>Deported</value>
+  </data>
+  <data name="presentAt" xml:space="preserve">
+    <value>Present at </value>
+  </data>
+  <data name="absentAt" xml:space="preserve">
+    <value>Absent at </value>
+  </data>
+  <data name="numberOfInhabitants" xml:space="preserve">
+    <value>Number of inhabitants</value>
+  </data>
+  <data name="absent" xml:space="preserve">
+    <value>Absent</value>
+  </data>
+  <data name="prague" xml:space="preserve">
+    <value>Prague</value>
+  </data>
+  <data name="survivorsNotDisplayed" xml:space="preserve">
+    <value>Survivors and people of unknown fate aren't displayed below.</value>
+  </data>
+  <data name="myLocationOff" xml:space="preserve">
+    <value>Turn off location tracking</value>
+  </data>
+  <data name="layer_interest_title" xml:space="preserve">
+    <value>Points of Interest in the City of Prague</value>
+  </data>
+  <data name="layer_interest_abstract" xml:space="preserve">
+    <value>Points of interest include places of persecution, Jewish buildings, warehouses full of confiscated property, or places that Jews were forbidden to enter.</value>
+  </data>
+  <data name="layer_incident_title" xml:space="preserve">
+    <value>Incidents Within the City of Prague</value>
+  </data>
+  <data name="layer_incident_abstract" xml:space="preserve">
+    <value>Incidents that took place within the city limits of Prague during which Jewish residents were arrested or investigated for violating anti-Jewish ordinances. This data was extracted from the digitized documents of the Prague Police as part of the MemoMap Prague project. It includes information about non-compliance with restrictions of free movement, identification papers lacking the letter \"J\" (Jude), etc.</value>
+  </data>
+  <data name="layer_inaccessible_abstract" xml:space="preserve">
+    <value>Places that Jews were forbidden to enter. Based on the historical map from year 1938. Current shape of the place can differ.</value>
+  </data>
+  <data name="layer_inaccessible_title" xml:space="preserve">
+    <value>Forbidden Places Within the City of Prague</value>
+  </data>
+  <data name="layer_victim_title" xml:space="preserve">
+    <value>Holocaust victims</value>
+  </data>
+  <data name="layer_victim_abstract" xml:space="preserve">
+    <value>Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz.</value>
+  </data>
+  <data name="layer_address_title" xml:space="preserve">
+    <value>Jewish Homes in Prague During the Occupation</value>
+  </data>
+  <data name="layer_address_abstract" xml:space="preserve">
+    <value>The home addresses of Prague's Jewish residents during the Shoah from the victims' database. The data mostly comes from the registration of Jews in the Protectorate, which began in the fall of 1941 by order of the Central Office for Jewish Emigration. You will be able to view the number of people who lived in a particular building, find out what their fates were, and the numbers of those present on various historical dates. Some buildings were difficult to identify and in those cases multiple addresses (for example, on the same street) are grouped under the same coordinates. We are continually working on refining the map. We have kept the street names used during the occupation (roughly 1941-1942).</value>
+  </data>
+  <data name="layer_statistics_title" xml:space="preserve">
+    <value>Districts Statistic</value>
+  </data>
+  <data name="layer_statistics_abstract" xml:space="preserve">
+    <value>Statistic information on number of Jewish residents, incidents and points of interest according to specific Prague's districts. Zoom in to display details.</value>
+  </data>
+  <data name="layer_MGS-prague_historical_map_1938-v2_title" xml:space="preserve">
+    <value>Historical Map of Prague (1938)</value>
+  </data>
+  <data name="layer_MGS-prague_historical_map_1938-v2_abstract" xml:space="preserve">
+    <value>Orientační plán hlavního města Prahy s okolím (1938) [Orientation plan of the capital city of Prague with its surroundings (1938)].Digitized by by the Municipal Library in Prague, georeferenced by the Masaryk Institute and archives of the Czech Academy of Sciences. Also available from WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
+  </data>
+  <data name="hideStatistics" xml:space="preserve">
+    <value>Hide statistics</value>
+  </data>
+  <data name="showStatistics" xml:space="preserve">
+    <value>Show statistics</value>
+  </data>
+  <data name="countInaccessiblePlaces" xml:space="preserve">
+    <value>Forbidden places</value>
+  </data>
+  <data name="countPointsOfInterest" xml:space="preserve">
+    <value>Points of interest</value>
+  </data>
+  <data name="countJews" xml:space="preserve">
+    <value>Jewish residents</value>
+  </data>
+  <data name="countIncidents" xml:space="preserve">
+    <value>Incidents</value>
+  </data>
+  <data name="zoomMapForMoreInfo" xml:space="preserve">
+    <value>Zoom in on the map for more information.</value>
+  </data>
+  <data name="showMyLocation" xml:space="preserve">
+    <value>Show my location on map</value>
+  </data>
+  <data name="layer_interest_title_short" xml:space="preserve">
+    <value>Points of Interest</value>
+  </data>
+  <data name="layer_incident_title_short" xml:space="preserve">
+    <value>Incidents</value>
+  </data>
+  <data name="layer_address_title_short" xml:space="preserve">
+    <value>Homes</value>
+  </data>
+  <data name="welcomeText" xml:space="preserve">
+    <value>The MemoMap historical geographical information system displays data on more than 30,000 Holocaust victims, 1,700 cases of violations of anti-Jewish laws and regulations, and 200 points of interest onto an interactive map of European cities. </value>
+  </data>
+  <data name="goToMap" xml:space="preserve">
+    <value>Go to map</value>
+  </data>
+  <data name="useNavigation" xml:space="preserve">
+    <value>Use navigation to adjust map...</value>
+  </data>
+  <data name="layerHelp" xml:space="preserve">
+    <value>You can filter the results according to selected layers...</value>
+  </data>
+  <data name="resultsFor" xml:space="preserve">
+    <value>Results for</value>
+  </data>
+  <data name="all" xml:space="preserve">
+    <value>All</value>
+  </data>
+</root>
