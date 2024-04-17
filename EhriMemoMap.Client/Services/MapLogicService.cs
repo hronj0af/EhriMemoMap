@@ -10,6 +10,7 @@ using EhriMemoMap.Resources;
 using NetTopologySuite.IO;
 using EhriMemoMap.Shared;
 using System.Net.Http.Json;
+using System.Numerics;
 
 namespace EhriMemoMap.Services
 {
@@ -74,7 +75,7 @@ namespace EhriMemoMap.Services
             parameters.MapSouthWestPoint = new PointModel { X = _mapState.MapSouthWestPoint.X, Y = _mapState.MapSouthWestPoint.Y };
             parameters.MapNorthEastPoint = new PointModel { X = _mapState.MapNorthEastPoint.X, Y = _mapState.MapNorthEastPoint.Y };
 
-            var objects = await GetResultFromApi<List<MapObject>>("getmapobjects", parameters);
+            var objects = await GetResultFromApiPost<List<MapObject>>("getmapobjects", parameters);
 
             return objects.Select(a => new MapObjectForLeafletModel(a)).ToList();
         }
@@ -99,33 +100,46 @@ namespace EhriMemoMap.Services
                 parameters.Total = false;
 
 
-            statistics = await GetResultFromApi<List<MapStatistic>>("getdistrictstatistics", parameters);
+            statistics = await GetResultFromApiGet<List<MapStatistic>>("getdistrictstatistics", $"total={parameters.Total}{(parameters.TimeLinePoint != null ? "&timeLinePoint=" + parameters.TimeLinePoint?.ToString("yyyy-MM-dd") : "")}");
             
             return statistics.GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
         }
 
         public async Task<WelcomeDialogStatistics> GetWelcomeDialogStatistics()
         {
-            var statistics = await GetResultFromApi<WelcomeDialogStatistics>("getwelcomedialogstatistics", null);
+            var statistics = await GetResultFromApiPost<WelcomeDialogStatistics>("getwelcomedialogstatistics", null);
             return statistics;
         }
 
         public async Task<PlacesResult> GetPlaces(PlacesParameters parameters)
         {
-            var result = await GetResultFromApi<PlacesResult>("getplaces", parameters);
+            var result = await GetResultFromApiPost<PlacesResult>("getplaces", parameters);
             return result;
         }
 
         public async Task<List<Place>> GetSolrPlaces(SolrQueryParameters parameters)
         {
-            var result = await GetResultFromApi<List<Place>>("getsolrplaces", parameters);
+            var result = await GetResultFromApiPost<List<Place>>("getsolrplaces", parameters);
             return result;
         }
 
-        private async Task<T> GetResultFromApi<T>(string apiMethod, object? parameters)
+        private async Task<T> GetResultFromApiPost<T>(string apiMethod, object? parameters)
         {
             var apiResult = await _client.PostAsJsonAsync(_apiUrl + apiMethod, parameters);
             var jsonString = await apiResult.Content.ReadAsStringAsync();
+
+            using var stringReader = new StringReader(jsonString);
+            using var jsonReader = new JsonTextReader(stringReader);
+
+            var serializer = GeoJsonSerializer.Create();
+            var result = serializer.Deserialize<T>(jsonReader);
+            return result;
+
+        }
+
+        private async Task<T> GetResultFromApiGet<T>(string apiMethod, string parameters)
+        {
+            var jsonString = await _client.GetStringAsync(_apiUrl + apiMethod + "?" + parameters);
 
             using var stringReader = new StringReader(jsonString);
             using var jsonReader = new JsonTextReader(stringReader);

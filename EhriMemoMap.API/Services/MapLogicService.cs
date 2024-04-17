@@ -59,8 +59,9 @@ namespace EhriMemoMap.Services
 
         public List<MapStatistic> GetDistrictStatistics(DistrictStatisticsParameters parameters)
         {
-            return _context.MapStatistics.
-                Where(a => parameters.Total ? a.Type.Contains("total") : !a.Type.Contains("total") && a.DateFrom == parameters.TimeLinePoint).ToList();
+            var result = _context.MapStatistics.
+                Where(a => (parameters.Total ? a.Type.Contains("total") : !a.Type.Contains("total")) && a.DateFrom == parameters.TimeLinePoint).ToList();
+            return result;
         }
 
         public WelcomeDialogStatistics GetWelcomeDialogStatistics()

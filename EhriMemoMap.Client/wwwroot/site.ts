@@ -36,7 +36,7 @@ namespace mapAPI {
 
     // připraví mapu do úvodního stavu
     export function initMap(jsonMapSettings: string): void {
-        history.replaceState({}, '', "praha");
+        //history.replaceState({}, '', "praha");
 
         const mapSettings = JSON.parse(jsonMapSettings) as MapSettingsForLeafletModel;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
@@ -164,7 +164,8 @@ namespace mapAPI {
     export function setUrlParam(paramName: string, paramValue: string | number) {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set(paramName, paramValue.toString());
-        history.replaceState({ }, 'Mapa', "praha?" + urlParams);
+        //history.replaceState({ }, 'Mapa', "praha?" + urlParams);
+        history.replaceState({}, 'Mapa', "?" + urlParams);
     }
 
     // získá parametr z url
@@ -542,6 +543,15 @@ namespace mapAPI {
 
         }
     }
+
+    export function getBlazorCulture() : string {
+        return window.localStorage['BlazorCulture'];
+    };
+
+    export function setBlazorCulture(value): void {
+        window.localStorage['BlazorCulture'] = value;
+    }
+
 }
 
 window.addEventListener("resize", mapAPI.onResizeWindow);

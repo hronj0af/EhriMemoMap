@@ -23,7 +23,6 @@ var mapAPI;
     let polygonColor = "#C5222C";
     let polygonColorSelected = "#000";
     function initMap(jsonMapSettings) {
-        history.replaceState({}, '', "praha");
         const mapSettings = JSON.parse(jsonMapSettings);
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
         fitMapToWindow(null);
@@ -113,7 +112,7 @@ var mapAPI;
     function setUrlParam(paramName, paramValue) {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set(paramName, paramValue.toString());
-        history.replaceState({}, 'Mapa', "praha?" + urlParams);
+        history.replaceState({}, 'Mapa', "?" + urlParams);
     }
     mapAPI.setUrlParam = setUrlParam;
     function getUrlParam(paramName) {
@@ -430,6 +429,15 @@ var mapAPI;
         }
     }
     mapAPI.fullscreenDialog = fullscreenDialog;
+    function getBlazorCulture() {
+        return window.localStorage['BlazorCulture'];
+    }
+    mapAPI.getBlazorCulture = getBlazorCulture;
+    ;
+    function setBlazorCulture(value) {
+        window.localStorage['BlazorCulture'] = value;
+    }
+    mapAPI.setBlazorCulture = setBlazorCulture;
 })(mapAPI || (mapAPI = {}));
 window.addEventListener("resize", mapAPI.onResizeWindow);
 //# sourceMappingURL=site.js.map

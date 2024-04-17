@@ -76,20 +76,36 @@ else
         Culture = Culture.ToString() == "cs-CZ" ? new CultureInfo("en-US") : new CultureInfo("cs-CZ");
     }
 
+
     private CultureInfo Culture
     {
         get => CultureInfo.CurrentCulture;
         set
         {
-            if (CultureInfo.CurrentCulture.ToString() != value.ToString())
+            if (CultureInfo.CurrentCulture != value)
             {
-                var cultureEscaped = Uri.EscapeDataString(value.Name);
-                var uriEscaped = Uri.EscapeDataString(currentUri);
+                var js = (IJSInProcessRuntime)JS;
+                js.InvokeVoid("mapAPI.setBlazorCulture", value.Name);
 
-                Navigation.NavigateTo(
-                    $"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}",
-                    forceLoad: true);
+                Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
             }
         }
     }
+
+    // private CultureInfo Culture
+    // {
+    //     get => CultureInfo.CurrentCulture;
+    //     set
+    //     {
+    //         if (CultureInfo.CurrentCulture.ToString() != value.ToString())
+    //         {
+    //             var cultureEscaped = Uri.EscapeDataString(value.Name);
+    //             var uriEscaped = Uri.EscapeDataString(currentUri);
+
+    //             Navigation.NavigateTo(
+    //                 $"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}",
+    //                 forceLoad: true);
+    //         }
+    //     }
+    // }
 }
