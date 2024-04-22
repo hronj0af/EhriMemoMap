@@ -6,7 +6,7 @@
 @inject DialogService DialogService
 <DialogButtons />
 
-<div class="rz-p-6">
+<div class="rz-px-6 rz-pt-12" >
     <h1 class="rz-pb-4" style="color:var(--Wine-Red)">@cl["search"]</h1>
     <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End">
         <RadzenTextBox Change="LoadData" @bind-Value=@MapState.SearchedPlaceString Style="width:100%;box-sizing: border-box;">

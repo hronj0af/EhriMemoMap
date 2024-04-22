@@ -11,7 +11,7 @@
 {
     @if (Places.GroupBy(a => a.PlaceType).Count() == 1)
     {
-        <div style="padding: 0 2.5rem 0 2.5rem">
+        <div style="padding: 1.5rem 2.5rem 0 2.5rem">
             <h2 class="rz-mb-12" style="color:var(--Wine-Red);">@cl["featureType_" + Places.FirstOrDefault()?.PlaceType]</h2>
 
 

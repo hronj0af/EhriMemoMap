@@ -2,7 +2,11 @@
 @inject IJSRuntime JS
 @inject MapStateService MapState
 
-<RadzenRow JustifyContent="JustifyContent.End">
+@{
+    var buttonStyle = "position:fixed;background-color:var(--Beige-LIGHT);width:" + (MapState.IsMobileView ? "100%" : MapState.WidthOfDialog);
+}
+
+<RadzenRow JustifyContent="JustifyContent.End" Style="@buttonStyle">
     <RadzenButton Click=OnClose Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" />
 </RadzenRow>
 
