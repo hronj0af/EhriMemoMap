@@ -1,0 +1,66 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapLogicService MapLogic;
+
+@if (statistics == null)
+{
+    <RadzenProgressBarCircular Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+}
+else
+{
+    <table style="padding-bottom:15px">
+        <tr>
+            <td class='cell firstCell'>
+                <img src='images/home-welcome.svg' width=28 />
+            </td>
+            <td class='cell secondCell'>
+                @cl["countJews"]
+            </td>
+            <td class='cell thirdCell'>
+                @statistics.Victims
+            </td>
+        </tr>
+        <tr>
+            <td class='cell firstCell'>
+                <img src='images/incident-welcome.svg' width=28 />
+            </td>
+            <td class='cell secondCell'>
+                @cl["countIncidents"]
+            </td>
+            <td class='cell thirdCell'>
+                @statistics.Incidents
+            </td>
+        </tr>
+        <tr>
+            <td class='cell firstCell'>
+                <img src='images/interest-welcome.svg' width=28 />
+            </td>
+            <td class='cell secondCell'>
+                @cl["countPointsOfInterest"]
+            </td>
+            <td class='cell thirdCell'>
+                @statistics.Interests
+            </td>
+        </tr>
+        <tr>
+            <td class='cell firstCell'>
+                <img src='images/inaccessible-welcome.svg' width=28 />
+            </td>
+            <td class='cell secondCell'>
+                @cl["countInaccessiblePlaces"]
+            </td>
+            <td class='cell thirdCell'>
+                @statistics.Inaccessibles
+            </td>
+        </tr>
+    </table>
+}
+
+@code {
+
+    WelcomeDialogStatistics? statistics;
+
+    protected override async Task OnInitializedAsync()
+    {
+        statistics = await MapLogic.GetWelcomeDialogStatistics();
+    }
+}

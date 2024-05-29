@@ -53,7 +53,6 @@ else if (isMobileView == true)
 }
 
 
-
 @code {
     bool? isMobileView = null;
     bool firstRender = true;
@@ -160,7 +159,7 @@ else if (isMobileView == true)
     [JSInvokable("ShowPlaceInfo")]
     public async Task ShowPlaceInfo(int zoom, Coordinate[] coordinates)
     {
-        var placesOnMap = await MapLogic.GetMapObjects(true, coordinates);
+        var placesOnMap = await MapLogic.GetMapObjects(true, false, coordinates);
         if (placesOnMap.Count == 0)
             return;
 

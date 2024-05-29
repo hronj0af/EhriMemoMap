@@ -7,7 +7,7 @@ html, body {
     font-weight: 400;
     margin: 0px;
     color: var(--Grey);
-    background-color: var(--Grey);
+    background-color: #000;/*var(--Grey);*/
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -488,4 +488,25 @@ path.leaflet-interactive:focus {
 div.leaflet-overlay-pane svg > g path.statistics-polygon {
     filter: url(#inset-shadow);
     fill: #03465b;
+}
+
+.spinner {
+    border: 10px solid silver;
+    border-top: 10px solid #337AB7;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 700ms linear infinite;
+    left: 45%;
+    position: absolute;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    100% {
+        transform: rotate(360deg)
+    }
 }

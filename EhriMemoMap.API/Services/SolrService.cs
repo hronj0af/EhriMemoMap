@@ -23,6 +23,9 @@ namespace EhriMemoMap.API.Services
             if (string.IsNullOrEmpty(query))
                 return "*";
 
+            if (query.Contains('*'))
+                return query;
+
             // jestlize je query adresa, tak se query obalí do uvozovek
             var splitQuery = query.Split(" ");
             if (splitQuery.Length > 1 && Regex.IsMatch(splitQuery[^1], @"^[0-9]+") )

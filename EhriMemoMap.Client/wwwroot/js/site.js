@@ -279,7 +279,7 @@ var mapAPI;
         const guidArray = JSON.parse(guidArrayJson);
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
         objectsGroup.eachLayer(function (item) {
-            if (item.options.guid !== undefined && guidArray.includes(item.options.guid) && !item._icon.className.includes('map-point-selected')) {
+            if (item.options.guid !== undefined && guidArray.indexOf(item.options.guid) > -1 && !item._icon.className.includes('map-point-selected')) {
                 item._icon.className = item._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
                 item._icon.style.zIndex = '200';
             }

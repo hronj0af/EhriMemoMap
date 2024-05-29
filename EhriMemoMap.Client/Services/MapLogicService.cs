@@ -42,7 +42,7 @@ namespace EhriMemoMap.Services
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-            var objects = await GetMapObjects(withPolygons);
+            var objects = await GetMapObjects(withPolygons, true);
             var statistics = await GetDistrictStatistics();
             objects.AddRange(statistics);
 
@@ -50,10 +50,10 @@ namespace EhriMemoMap.Services
             await _js.InvokeVoidAsync("mapAPI.refreshObjectsOnMap", result);
         }
 
-        public async Task<List<MapObjectForLeafletModel>> GetMapObjects(bool withPolygons, Coordinate[]? customCoordinates = null)
+        public async Task<List<MapObjectForLeafletModel>> GetMapObjects(bool withPolygons, bool aggregate, Coordinate[]? customCoordinates = null)
         {
             if (_mapState == null || _mapState.Map == null)
-                return new List<MapObjectForLeafletModel>();
+                return [];
 
             var parameters = new MapObjectParameters();
 
@@ -77,7 +77,54 @@ namespace EhriMemoMap.Services
 
             var objects = await GetResultFromApiPost<List<MapObject>>("getmapobjects", parameters);
 
+            if (aggregate)
+                objects = AggregateSameAddresses(objects);
+
             return objects.Select(a => new MapObjectForLeafletModel(a)).ToList();
+        }
+
+        /// <summary>
+        /// Slouci objekty se stejnou adresou do jednoho objektu 
+        /// (používá se v případě, že některé adresy mají stejné souřadnice, 
+        /// protože se tyto souřadnice zřejmě nepodařilo dohledat)
+        /// </summary>
+        /// <param name="objects"></param>
+        /// <returns></returns>
+        public List<MapObject> AggregateSameAddresses(List<MapObject>? objects)
+        {
+            var result = new List<MapObject>();
+            
+            if (objects == null)
+                return result;
+            
+            var objectGroups = objects.GroupBy(a => a.PlaceType);
+
+            foreach (var objectGroup in objectGroups)
+            {
+                var grouppedAddresses = objectGroup.GroupBy(a => new { a.GeographyMapPoint?.Coordinate.X, a.GeographyMapPoint?.Coordinate.Y });
+                foreach (var grouppedAddress in grouppedAddresses)
+                {
+                    if (grouppedAddress.FirstOrDefault() == null)
+                        continue;
+
+                    if (grouppedAddress.Count() == 1)
+                    {
+                        result.Add(grouppedAddress.First());
+                        continue;
+                    }
+
+                    var grouppedObject = grouppedAddress.First();
+                    grouppedObject.Citizens = grouppedAddress.Sum(a => a.Citizens);
+                    grouppedObject.CitizensTotal = grouppedAddress.Sum(a => a.CitizensTotal);
+                    grouppedObject.LabelCs = grouppedAddress.Select(a => a.LabelCs).Aggregate((x, y) => x + " <br/> " + y);
+                    grouppedObject.LabelEn = grouppedAddress.Select(a => a.LabelEn).Aggregate((x, y) => x + " <br/> " + y);
+
+                    result.Add(grouppedObject);
+
+                }
+            }
+
+            return result;
         }
 
         public async Task<List<MapObjectForLeafletModel>> GetDistrictStatistics()

@@ -148,7 +148,43 @@
     <value>More info</value>
   </data>
   <data name="helpContent" xml:space="preserve">
-    <value>&lt;div&gt;&lt;p&gt;&lt;h4&gt;&lt;strong&gt;About MemoMap Prague&lt;/strong&gt;&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;The MemoMap historical geographical information system displays data on more than 30,000 Holocaust victims, 1,700 cases of violations of anti-Jewish laws and regulations, and 200 points of interest onto an interactive map of Prague. MemoMap is designed as a mobile web application that allows users to conduct research not only from their homes or school computers, but also from their mobile phones while walking in the city.&lt;br&gt;The data on Holocaust victims comes from the Database of the Holocaust Victims maintained by the Terezín Initiative Institute. Thanks to its extensive digital archive, which contains digitized copies of selected documents from the Prague Police Directorate’s files and much more, it was possible to process data on more than 1,700 cases of violations of anti-Jewish laws and regulations and make it available on MemoMap. The app also includes points of interest, i.e. places connected to the everyday lives of Prague’s Jewish residents that were later directly related to their persecution. &lt;a href="https://ehri.cz/memogis_en.html#data" target="_blank"&gt;(...more)&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;h4&gt;Working with MemoMap&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Viewing the layers of the map:&lt;/strong&gt;&lt;br&gt;The individual data types are split into layers that the user can freely switch between while using the app. The option to select what layer to be displayed can be found in the main menu in the upper right corner of the screen.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Zooming in and out on the map:&lt;/strong&gt;&lt;br&gt;The zoom in and zoom out buttons are located in the bottom right corner of the screen. They are only displayed while you are using the app on the computer. If you are working on your mobile device, you can zoom in and out using touch gestures.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Location service:&lt;/strong&gt;&lt;br&gt;You can turn the position determination service on and off using the button on the bottom right corner of the screen. Activating the button allows you to see where you are on the map. The positioning button has three modes that can be accessed by pressing them on and off. The user can continue to browse the map as needed if it’s switched on and centered on the user’s location.&lt;/p&gt;&lt;p&gt;&lt;h4&gt;Acknowledgments&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;The project “Integration and Segregation in the City Space: The History of the Holocaust in Prague Through a Mobile Web Application (identifier TL01000366) was supported by the Technology Agency of the Czech Republic as part of the public ÉTA 1 program.&lt;br&gt;The MemoMap application was created by the Masaryk Institute and Archives of the Czech Academy of Sciences in cooperation with the Terezín Initiative Institute and the Multicultural Center in Prague.&lt;/p&gt;&lt;p&gt;&lt;h4&gt;Have you found an error?&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;If you’ve encountered a technical problem or error in the data displayed, please use the &lt;a href="https://docs.google.com/forms/d/15jprT8Sbc-Llt1CfAPrIzU4S8YIDjREixRADGzbA62k" target="_blank"&gt;report form&lt;/a&gt; and let us know.&lt;/p&gt;&lt;/div&gt;</value>
+    <value>&lt;div&gt;
+  &lt;p&gt;
+  &lt;h4&gt;
+    &lt;strong&gt;About MemoMap Prague&lt;/strong&gt;
+  &lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;The MemoMap historical geographical information system displays data on more than 30,000 Holocaust victims, 1,700 cases of violations of anti-Jewish laws and regulations, and 200 points of interest onto an interactive map of Prague. MemoMap is designed as a mobile web application that allows users to conduct research not only from their homes or school computers, but also from their mobile phones while walking in the city. &lt;br&gt;The data on Holocaust victims comes from the Database of the Holocaust Victims maintained by the Terezín Initiative Institute. Thanks to its extensive digital archive, which contains digitized copies of selected documents from the Prague Police Directorate’s files and much more, it was possible to process data on more than 1,700 cases of violations of anti-Jewish laws and regulations and make it available on MemoMap. The app also includes points of interest, i.e. places connected to the everyday lives of Prague’s Jewish residents that were later directly related to their persecution. &lt;a href="https://ehri.cz/memogis_en.html#data" target="_blank"&gt;(...more)&lt;/a&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Working with MemoMap&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;strong&gt;Viewing the layers of the map&lt;/strong&gt;&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/layers-small.svg' /&gt;
+    &lt;br&gt;The individual data types are split into layers that the user can freely switch between while using the app. The option to select what layer to be displayed can be found in the main menu in the upper right corner of the screen.
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;strong&gt;Zooming in and out on the map&lt;/strong&gt;
+     &amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/zoom-in-small.svg' /&gt;
+     &lt;img src='/images/zoom-out-small.svg' /&gt;
+    &lt;br&gt;The zoom in and zoom out buttons are located in the bottom right corner of the screen (or top-left corner in mobile view). They are only displayed while you are using the app on the computer. If you are working on your mobile device, you can zoom in and out using touch gestures.
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;strong&gt;Location service&lt;/strong&gt;&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/location-small.svg' /&gt;
+    &lt;br&gt;You can turn the position determination service on and off using the button on the bottom left corner of the screen (or top-left corner in mobile view). Activating the button allows you to see where you are on the map. 
+  &lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Acknowledgments&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;The project “Integration and Segregation in the City Space: The History of the Holocaust in Prague Through a Mobile Web Application (identifier TL01000366) was supported by the Technology Agency of the Czech Republic as part of the public ÉTA 1 program. The MemoMap application was created by the Masaryk Institute and Archives of the Czech Academy of Sciences in cooperation with the Terezín Initiative Institute and the Multicultural Center in Prague. &lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Have you found an error?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;If you’ve encountered a technical problem or error in the data displayed, please use the &lt;a href="https://docs.google.com/forms/d/15jprT8Sbc-Llt1CfAPrIzU4S8YIDjREixRADGzbA62k" target="_blank"&gt;report form&lt;/a&gt; and let us know. &lt;/p&gt;
+&lt;/div&gt;</value>
   </data>
   <data name="layerInfo" xml:space="preserve">
     <value>Information about map layer</value>
@@ -313,7 +349,15 @@
     <value>Homes</value>
   </data>
   <data name="welcomeText" xml:space="preserve">
-    <value>The MemoMap historical geographical information system displays data on more than 30,000 Holocaust victims, 1,700 cases of violations of anti-Jewish laws and regulations, and 200 points of interest onto an interactive map of European cities. </value>
+    <value>&lt;p&gt;The MemoMap historical geographical information system displays data on more than 30,000 Holocaust victims, 1,700 cases of violations of anti-Jewish laws and regulations, and 200 points of interest onto an interactive map of European cities.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Jewish residents&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Places where, according to the victims' database, Jewish inhabitants lived at the time of the Holocaust.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Incidents&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Incidents in the city area in which Jewish residents were arrested or investigated for violating anti-Jewish laws and regulations.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Points of Interest&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Sites of persecution, Jewish buildings and warehouses of confiscated property.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Forbidden places&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Places inaccessible to Jews. Zobrazení je založeno na historické mapě z roku 1938, současné prostory se mohou lišit velikostí i tvarem.&lt;/p&gt;</value>
   </data>
   <data name="goToMap" xml:space="preserve">
     <value>Go to map</value>
@@ -329,5 +373,8 @@
   </data>
   <data name="all" xml:space="preserve">
     <value>All</value>
+  </data>
+  <data name="helpSearch" xml:space="preserve">
+    <value>Full-text search allows you to search for victims' residences, incidents and points of interest. Simply enter, for example, the name of the person or place you are looking for.</value>
   </data>
 </root>

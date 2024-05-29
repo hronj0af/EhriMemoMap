@@ -104,7 +104,7 @@ namespace mapAPI {
     export function fitMapToWindow(mobileDialogHeightPercents): void {
         const mobileDialogHeight = mobileDialogHeightPercents != null ? window.innerHeight * (mobileDialogHeightPercents / 100) : 0;
         const mapElement = document.getElementById("map");
-        const pageElement = document.getElementsByClassName("page");
+        const pageElement = document.getElementsByClassName("page") as HTMLCollectionOf<HTMLElement>;
 
         if (mapElement == null || !mapElement)
             return;
@@ -357,7 +357,7 @@ namespace mapAPI {
     }
 
     export function unselectAllSelectedPoints(): void {
-        var selectedPoints = document.getElementsByClassName('map-point-selected');
+        var selectedPoints = document.getElementsByClassName('map-point-selected') as HTMLCollectionOf<HTMLElement>;
 
         Array.from(selectedPoints).forEach(function (item) {
             item.className = item.className.replace('map-point-selected', 'map-point');
@@ -369,8 +369,8 @@ namespace mapAPI {
     export function selectPointOnMap(guidArrayJson: string): void {
         const guidArray = JSON.parse(guidArrayJson) as string[];
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
-        objectsGroup.eachLayer(function (item) {
-            if (item.options.guid !== undefined && guidArray.includes(item.options.guid) && !item._icon.className.includes('map-point-selected')) {
+        objectsGroup.eachLayer(function (item: any) {
+            if (item.options.guid !== undefined && guidArray.indexOf(item.options.guid) > -1 && !item._icon.className.includes('map-point-selected')) {
                 item._icon.className = item._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
                 item._icon.style.zIndex = '200';
 

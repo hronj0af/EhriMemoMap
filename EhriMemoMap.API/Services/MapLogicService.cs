@@ -50,11 +50,13 @@ namespace EhriMemoMap.Services
             }
             else if (parameters.MapSouthWestPoint != null && parameters.MapNorthEastPoint != null)
             {
-                var bbox = GetBBox(parameters.MapSouthWestPoint, parameters.MapNorthEastPoint);
+                var bbox = GetBBox(parameters.MapNorthEastPoint, parameters.MapSouthWestPoint);
                 query = query.Where(a => !string.IsNullOrEmpty(a.MapPolygon) || (a.GeographyMapPoint != null && a.GeographyMapPoint.Intersects(bbox)));
             }
 
-            return query.ToList();
+            var result = query.ToList();
+
+            return result;
         }
 
         public List<MapStatistic> GetDistrictStatistics(DistrictStatisticsParameters parameters)

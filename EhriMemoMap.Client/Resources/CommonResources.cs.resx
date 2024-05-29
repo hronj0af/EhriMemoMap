@@ -148,7 +148,47 @@
     <value>Více informací</value>
   </data>
   <data name="helpContent" xml:space="preserve">
-    <value>&lt;div&gt;&lt;p&gt;&lt;h4&gt;&lt;strong&gt;O aplikaci MemoMap&lt;/strong&gt;&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;Historický geografický informační systém MemoMap promítá na mapu Prahy data o více než 30 000 obětech holokaustu, místech pronásledování a interakci se zužujícím se veřejným prostorem i jeho ostatními obyvateli. MemoMap je vytvořen jako mobilní webová aplikace, která uživatelům umožňuje téma zkoumat nejen z domácího či školního počítače, ale také přímo v prostoru města prostřednictvím mobilních zařízení.&lt;/p&gt;&lt;p&gt;&lt;h4&gt;Jaká data MemoMap obsahuje?&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;Aplikace zobrazuje data více než 30 000 obětí holokaustu, 1 700 případů porušování protižidovských předpisů a nařízení a 200 bodů zájmu.&lt;br&gt;Data týkající se obětí holokaustu pocházejí z Databáze obětí spravované Institutem Terezínské iniciativy. Díky jeho rozsáhlému digitálnímu archivu, který obsahuje mimo jiné digitalizáty vybraných dokumentů z fondu Policejního ředitelství Praha, se dále podařilo zpracovat a v rámci MemoMap zpřístupnit údaje o více než 1 700 konkrétních případech porušování protižidovských předpisů a nařízení. MemoMap je dále obohacen o tzv. body zájmu, tj. místa související s každodenním životem židovských obyvatel Prahy a později také místa přímo související s jejich perzekucí.&lt;a href="https://ehri.cz/memogis_cs.html#data" target="_blank"&gt;(...více)&lt;/a&gt;&lt;/p&gt;&lt;p&gt;&lt;h4&gt;Práce s aplikací MemoMap&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Zobrazení vrstev mapy:&lt;/strong&gt;&lt;br&gt;Jednotlivé typy dat jsou soustředěny do tzv. vrstev, mezi nimiž může uživatel aplikace libovolně přepínat. Možnost zvolit zobrazené vrstvy se nachází v hlavním menu v pravém horním rohu obrazovky.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Přiblížení a oddálení mapy:&lt;/strong&gt;&lt;br&gt;Tlačítka přiblížení a oddálení mapy se nachází v pravém dolním rohu obrazovky. Přítomna jsou pouze při studiu aplikace na počítači – při práci s mobilními zařízeními je přiblížení a oddálení obrazovky ovládáno gesty.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Služba určování polohy:&lt;/strong&gt;&lt;br&gt;Zapnutí a vypnutí služby určování polohy je ovládáno pomocí tlačítka v pravém dolním rohu obrazovky. Aktivování tlačítka umožní na mapě zobrazit, kde se aktuálně nacházíte. Tlačítko určování polohy má tři režimy, které se přepínají jeho stisknutím: vypnuto, zapnuto – uživatel může dále libovolně procházet mapu, zapnuto a zacentrováno na polohu uživatele.&lt;/p&gt;&lt;p&gt;&lt;h4&gt;Kredit&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;Projekt Integrace a segregace v prostoru města: dějiny holokaustu v Praze prostřednictvím mobilní webové aplikace (idenifikátor TL01000366) byl podpořen Technologickou agenturou České republiky v rámci veřejné soutěže ÉTA 1.&lt;br&gt;Aplikaci MemoMap vytvořil Masarykův ústav a archiv AV ČR ve spolupráci s Institutem Terezínské iniciativy a Multikulturním centrem Praha.&lt;/p&gt;&lt;p&gt;&lt;h4&gt;Našli jste chybu?&lt;/h4&gt;&lt;/p&gt;&lt;p&gt;Pokud jste při práci s aplikací narazili na technický problém či chybu v zobrazovaných datech, využijte prosím &lt;a href="https://docs.google.com/forms/d/15jprT8Sbc-Llt1CfAPrIzU4S8YIDjREixRADGzbA62k" target="_blank"&gt;formulář pro hlášení chyb&lt;/a&gt;.&lt;/p&gt;&lt;/div&gt;</value>
+    <value>&lt;div&gt;
+  &lt;p&gt;
+  &lt;h4&gt;
+    &lt;strong&gt;O aplikaci MemoMap&lt;/strong&gt;
+  &lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Historický geografický informační systém MemoMap promítá na mapu Prahy data o více než 30 000 obětech holokaustu, místech pronásledování a interakci se zužujícím se veřejným prostorem i jeho ostatními obyvateli. MemoMap je vytvořen jako mobilní webová aplikace, která uživatelům umožňuje téma zkoumat nejen z domácího či školního počítače, ale také přímo v prostoru města prostřednictvím mobilních zařízení.&lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Jaká data MemoMap obsahuje?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+  Aplikace zobrazuje data více než 30 000 obětí holokaustu, 1 700 případů porušování protižidovských předpisů a nařízení a 200 bodů zájmu. &lt;br&gt;Data týkající se obětí holokaustu pocházejí z Databáze obětí spravované Institutem Terezínské iniciativy. Díky jeho rozsáhlému digitálnímu archivu, který obsahuje mimo jiné digitalizáty vybraných dokumentů z fondu Policejního ředitelství Praha, se dále podařilo zpracovat a v rámci MemoMap zpřístupnit údaje o více než 1 700 konkrétních případech porušování protižidovských předpisů a nařízení. MemoMap je dále obohacen o tzv. body zájmu, tj. místa související s každodenním životem židovských obyvatel Prahy a později také místa přímo související s jejich perzekucí.&lt;/a&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Práce s aplikací MemoMap&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;strong&gt;Zobrazení vrstev mapy&lt;/strong&gt;&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/layers-small.svg' /&gt;
+    &lt;br&gt;Jednotlivé typy dat jsou soustředěny do tzv. vrstev, mezi nimiž může uživatel aplikace libovolně přepínat. Možnost zvolit zobrazené vrstvy se nachází v hlavním menu v pravém horním rohu obrazovky.
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;strong&gt;Přiblížení a oddálení mapy&lt;/strong&gt;&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/zoom-in-small.svg' /&gt;
+     &lt;img src='/images/zoom-out-small.svg' /&gt;
+    &lt;br&gt;Tlačítka přiblížení a oddálení mapy se nachází v levém dolním rohu obrazovky (resp. v levém horním rohu při mobilním zobrazení). Přítomna jsou pouze při studiu aplikace na počítači – při práci s mobilními zařízeními je přiblížení a oddálení obrazovky ovládáno gesty.
+  &lt;/p&gt;
+  &lt;p&gt;
+    &lt;strong&gt;Služba určování polohy&lt;/strong&gt;&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/location-small.svg' /&gt;
+    &lt;br&gt;Zapnutí a vypnutí služby určování polohy je ovládáno pomocí tlačítka v levém dolním rohu obrazovky (resp. v levém horním rohu při mobilním zobrazení). Aktivování tlačítka umožní na mapě zobrazit, kde se aktuálně nacházíte. 
+  &lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Kredit&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Projekt Integrace a segregace v prostoru města: dějiny holokaustu v Praze prostřednictvím mobilní webové aplikace (idenifikátor TL01000366) byl podpořen Technologickou agenturou České republiky v rámci veřejné soutěže ÉTA 1. Aplikaci MemoMap vytvořil Masarykův ústav a archiv AV ČR ve spolupráci s Institutem Terezínské iniciativy a Multikulturním centrem Praha. &lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Našli jste chybu?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Pokud jste při práci s aplikací narazili na technický problém či chybu v zobrazovaných datech, využijte prosím &lt;a href="https://docs.google.com/forms/d/15jprT8Sbc-Llt1CfAPrIzU4S8YIDjREixRADGzbA62k" target="_blank"&gt;formulář pro hlášení chyb&lt;/a&gt;. &lt;/p&gt;
+&lt;/div&gt;</value>
   </data>
   <data name="layerInfo" xml:space="preserve">
     <value>Podrobnosti o mapové vrstvě</value>
@@ -313,7 +353,15 @@
     <value>Bydliště</value>
   </data>
   <data name="welcomeText" xml:space="preserve">
-    <value>Historicko-geografický informační systém MemoMap zobrazuje na interaktivní mapě evropských měst údaje o více než 30 000 obětech holocaustu, 1 700 případech porušení protižidovských zákonů a předpisů a 200 zajímavých místech. Historicko-geografický informační systém MemoMap zobrazuje údaje o více než 30 000 obětech holocaustu, 1 700 případech porušení protižidovských zákonů a předpisů a 200 bodech zájmu na interaktivní mapě evropských měst. </value>
+    <value>&lt;p&gt;Historicko-geografický informační systém MemoMap zobrazuje na interaktivní mapě evropských měst údaje o více než 30 000 obětech holocaustu, 1 700 případech porušení protižidovských zákonů a předpisů a 200 zajímavých místech.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Židovštví obyvatelé&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Místa, kde podle databáze obětí, bydleli v době Holokaustu židovští obyvatelé.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Incidenty&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Incidenty v prostoru města, při nichž byli židovští obyvatelé zatčeni či vyšetřováni pro porušení protižidovských zákonů a nařízení.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Body zájmu&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Místa pronásledování, židovské objekty a sklady zabaveného majetku.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Zakázaná místa&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Místa nepřístupná Židům. Zobrazení je založeno na historické mapě z roku 1938, současné prostory se mohou lišit velikostí i tvarem.&lt;/p&gt;</value>
   </data>
   <data name="goToMap" xml:space="preserve">
     <value>Přejít na mapu</value>
@@ -329,5 +377,8 @@
   </data>
   <data name="all" xml:space="preserve">
     <value>Všechno</value>
+  </data>
+  <data name="helpSearch" xml:space="preserve">
+    <value>Fulltextové vyhledávání umožňuje vyhledávat bydliště obětí, incidenty a body zájmu. Stačí zadat např. jméno hledané osoby či místa.</value>
   </data>
 </root>
