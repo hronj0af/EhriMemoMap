@@ -18,14 +18,16 @@ var mapAPI;
     let actualLocation = null;
     let dialogWidth = null;
     let dialogHeight = null;
+    let mobileDialogHeight = null;
     let isFullscreen = null;
     let polygonStrokeColor = "#222";
     let polygonColor = "#C5222C";
     let polygonColorSelected = "#000";
     function initMap(jsonMapSettings) {
         const mapSettings = JSON.parse(jsonMapSettings);
+        mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
-        fitMapToWindow(null);
+        fitMapToWindow();
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
         addressIcon = new L.DivIcon();
         interestIcon = new L.DivIcon({ className: 'leaflet-interest-icon' });
@@ -66,22 +68,26 @@ var mapAPI;
     }
     mapAPI.initMap = initMap;
     function onResizeWindow() {
-        fitMapToWindow(null);
+        fitMapToWindow();
         blazorMapObject.invokeMethodAsync("SetMobileView", isMobileView());
     }
     mapAPI.onResizeWindow = onResizeWindow;
-    function fitMapToWindow(mobileDialogHeightPercents) {
-        const mobileDialogHeight = mobileDialogHeightPercents != null ? window.innerHeight * (mobileDialogHeightPercents / 100) : 0;
+    function fitMapToWindow(heightOfDialog = null) {
+        const pageHeight = window.innerHeight;
+        const tempHeight = heightOfDialog != null && isMobileView()
+            ? pageHeight * (heightOfDialog / 100)
+            : pageHeight - document.getElementById("controlButtonsWrapper").offsetTop;
         const mapElement = document.getElementById("map");
         const pageElement = document.getElementsByClassName("page");
         if (mapElement == null || !mapElement)
             return;
-        const pageHeight = window.innerHeight;
-        const mapHeight = !mapAPI.isMobileView() ? pageHeight : pageHeight - 44 - 44 - mobileDialogHeight;
+        const mapHeight = !mapAPI.isMobileView()
+            ? pageHeight
+            : pageHeight - 44 - tempHeight;
         mapElement.style.height = mapHeight + "px";
         if (mapAPI.isMobileView())
             mapElement.style.marginTop = "44px";
-        pageElement[0].style.height = pageHeight + "px";
+        pageElement[0].style.height = !isMobileView() ? pageHeight + "px" : (pageHeight - 44) + "px";
         if (map != null)
             map.invalidateSize();
     }

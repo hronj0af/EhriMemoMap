@@ -48,7 +48,7 @@
                 }
             </h2>
             <div style="@(!openedTypes.Any(a=>a == placeGroup.Key) ? "display:none" : "")">
-                @foreach (var place in placeGroup)
+                @foreach (var place in placeGroup.OrderBy(a=>a.LabelCs))
                 {
                     <RadzenRow class="rz-pt-4" RowGap="0" onclick="@(() => ShowPlace(place))" style="cursor:pointer">
                         <RadzenColumn Size="1">
@@ -99,8 +99,8 @@
             var zoom = 15;
             if (place.MapObject == null || !place.MapObject.Contains("Polygon"))
                 zoom = 18;
-            await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, zoom);
             await JS.InvokeVoidAsync("mapAPI.addObjectFromJsonString", place.MapLocation);
+            await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, zoom);
         }
         else
             await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");

@@ -25,6 +25,7 @@ namespace mapAPI {
     let actualLocation: GeolocationPosition = null;
     let dialogWidth: string = null;
     let dialogHeight: string = null;
+    let mobileDialogHeight: number = null;
     let isFullscreen: boolean = null;
     let polygonStrokeColor: string = "#222";
     let polygonColor: string = "#C5222C";
@@ -39,9 +40,10 @@ namespace mapAPI {
         //history.replaceState({}, '', "praha");
 
         const mapSettings = JSON.parse(jsonMapSettings) as MapSettingsForLeafletModel;
+        mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
 
-        fitMapToWindow(null);
+        fitMapToWindow();
 
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
         addressIcon = new L.DivIcon();
@@ -95,27 +97,33 @@ namespace mapAPI {
     }
 
     export function onResizeWindow(): void {
-        fitMapToWindow(null);
+        fitMapToWindow();
         blazorMapObject.invokeMethodAsync("SetMobileView", isMobileView());
 
     }
 
     // nastaví mapu, aby lícovala s oknem
-    export function fitMapToWindow(mobileDialogHeightPercents): void {
-        const mobileDialogHeight = mobileDialogHeightPercents != null ? window.innerHeight * (mobileDialogHeightPercents / 100) : 0;
+    export function fitMapToWindow(heightOfDialog = null): void {
+        const pageHeight = window.innerHeight;
+
+        const tempHeight = heightOfDialog != null && isMobileView() 
+            ? pageHeight * (heightOfDialog / 100)
+            : pageHeight - document.getElementById("controlButtonsWrapper").offsetTop;
+
         const mapElement = document.getElementById("map");
         const pageElement = document.getElementsByClassName("page") as HTMLCollectionOf<HTMLElement>;
 
         if (mapElement == null || !mapElement)
             return;
 
-        const pageHeight = window.innerHeight;
-        const mapHeight = !mapAPI.isMobileView() ? pageHeight : pageHeight - 44 - 44 - mobileDialogHeight; // 44 je horní a dolní panel
+        const mapHeight = !mapAPI.isMobileView()
+            ? pageHeight
+            : pageHeight - 44 - tempHeight // 44 je horní panel
         mapElement.style.height = mapHeight + "px";
 
         if (mapAPI.isMobileView())
             mapElement.style.marginTop = "44px";
-        pageElement[0].style.height = pageHeight + "px";
+        pageElement[0].style.height = !isMobileView() ? pageHeight + "px" : (pageHeight - 44) + "px";
 
         if (map != null)
             map.invalidateSize();
@@ -590,6 +598,7 @@ interface InitialVariables {
     minZoom: number | null;
     maxZoom: number | null;
     wmsProxyUrl: string | null;
+    heightOfDialog: number | null;
 }
 
 interface LayerForLeafletModel {

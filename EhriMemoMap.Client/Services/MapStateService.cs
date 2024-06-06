@@ -29,7 +29,7 @@ namespace EhriMemoMap.Services
         }
 
         public string WidthOfDialog = "33%";
-        public int HeightOfDialog = 70;
+        public int HeightOfDialog = 50;
         
         public int WindowHeight = 0;
         public int WindowWidth = 0;
@@ -64,7 +64,8 @@ namespace EhriMemoMap.Services
         public void SetDialogType(DialogTypeEnum value)
         {
             DialogType = value;
-            _js.InvokeVoidAsync("mapAPI.fitMapToWindow", HeightOfDialog);
+            int? height = value == DialogTypeEnum.Welcome || value == DialogTypeEnum.None ? 0 : HeightOfDialog;
+            _js.InvokeVoidAsync("mapAPI.fitMapToWindow", height);
             NotifyStateChanged();
         }
 
@@ -154,7 +155,7 @@ namespace EhriMemoMap.Services
             if (settings == null)
                 return;
             Map = settings.Map;
-
+            Map.InitialVariables.HeightOfDialog = HeightOfDialog;
             
             if (!string.IsNullOrEmpty(layers))
                 InitInfoAboutLayersSelection(layers.Split(','));

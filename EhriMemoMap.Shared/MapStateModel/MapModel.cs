@@ -21,6 +21,7 @@ namespace EhriMemoMap.Shared
         public double Lat { get; set; }
         public double Lng { get; set; }
         public string? WmsProxyUrl { get; set; }
+        public int HeightOfDialog { get; set; }
     }
 
 }

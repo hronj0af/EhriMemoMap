@@ -70,14 +70,15 @@ else
         {
             MapState.SetDialogType(DialogTypeEnum.None);
             DialogService.CloseSide();
-            await JS.InvokeVoidAsync("mapAPI.fitMapToWindow");
             await JS.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
+            await JS.InvokeVoidAsync("mapAPI.fitMapToWindow");
 
         }
         else
         {
             MapState.SetDialogType(DialogTypeEnum.Search);
             await DialogService.OpenSideAsync<SearchDialog>(cl["search"], options: await MapState.GetDialogOptions());
+            await JS.InvokeVoidAsync("mapAPI.fitMapToWindow", MapState.IsMobileView ? MapState.HeightOfDialog : null);
         }
         MapState.NotifyStateChanged();
     }

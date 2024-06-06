@@ -3,7 +3,7 @@
 @inject MapStateService MapState
 
 @{
-    var buttonStyle = "position:fixed;background-color:var(--Beige-LIGHT);width:" + (MapState.IsMobileView ? "100%" : MapState.WidthOfDialog);
+    var buttonStyle = "z-index:2000;position:fixed;background-color:var(--Beige-LIGHT);width:" + (MapState.IsMobileView ? "100%" : MapState.WidthOfDialog);
 }
 
 <RadzenRow JustifyContent="JustifyContent.End" Style="@buttonStyle">
