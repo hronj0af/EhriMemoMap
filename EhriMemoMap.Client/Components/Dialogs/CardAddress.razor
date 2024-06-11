@@ -1,7 +1,7 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
 @inject MapStateService MapState
 
-@if (House != null && House.Address != null)
+@if (House != null && House.Address != null && (!string.IsNullOrEmpty(FilteredName) ? House.Victims.Any(a => a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower())) : true))
 {
     <h3 class="rz-my-8">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.AddressEn : House.Address.AddressCs)</h3>
     <CardHouse House="House"></CardHouse>
@@ -17,11 +17,11 @@
     <RadzenRow class="rz-mt-8" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
 
 
-        @if (House.Victims != null && House.Victims.Count > 0)
+        @if (House.Victims != null && House.Victims.Count > 0 && (!string.IsNullOrEmpty(FilteredName) ? House.Victims.Any(a => a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower())) : true))
         {
             if (MapState?.GetTimelinePoint() != null)
             {
-                if (House.Victims.Any(a => a.TransportDate > MapState?.GetTimelinePoint()))
+                if (House.Victims.Any(a => a.TransportDate > MapState?.GetTimelinePoint()) && (!string.IsNullOrEmpty(FilteredName) ? House.Victims.Any(a => a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower())) : true))
                 {
                     <RadzenColumn Size="12">
                         <h4>@cl["present"] (@MapState?.GetTimelinePoint()?.ToString("d. M. yyyy"))</h4>
@@ -32,7 +32,7 @@
                     }
                 }
 
-                if (House.Victims.Any(a => a.TransportDate <= MapState?.GetTimelinePoint()))
+                if (House.Victims.Any(a => a.TransportDate <= MapState?.GetTimelinePoint()) && (!string.IsNullOrEmpty(FilteredName) ? House.Victims.Any(a => a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower())) : true))
                 {
                     <RadzenColumn Size="12">
                         <h4>@cl["absent"] (@MapState?.GetTimelinePoint()?.ToString("d. M. yyyy"))</h4>
@@ -45,7 +45,7 @@
             }
             else
             {
-                foreach (var victim in House.Victims)
+                foreach (var victim in House.Victims.Where(a => (!string.IsNullOrEmpty(FilteredName) ? a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower()) : true)))
                 {
                     <CardVictim Victim="@victim" />
                 }
@@ -58,5 +58,8 @@
 @code {
     [Parameter]
     public AddressWithVictimsWrappwer? House { get; set; }
+
+    [Parameter]
+    public string? FilteredName { get; set; }
 
 }

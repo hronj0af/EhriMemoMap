@@ -23,19 +23,12 @@ namespace EhriMemoMap.API.Services
             if (string.IsNullOrEmpty(query))
                 return "*";
 
-            if (query.Contains('*'))
-                return query;
-
-            // jestlize je query adresa, tak se query obalí do uvozovek
-            var splitQuery = query.Split(" ");
-            if (splitQuery.Length > 1 && Regex.IsMatch(splitQuery[^1], @"^[0-9]+") )
-                return "\"" + query + "\"";
-
-            if (splitQuery.Length == 2)
-                return $"(\"{query}\" OR \"{splitQuery[1]} {splitQuery[0]} \")";
-
-            return query;
-
+            return query.
+                Split(" ").
+                Select(a => a == "náměstí" || a == "nám." 
+                                ? "(náměstí OR nám.)" 
+                                : a).
+                Aggregate((x, y) => x + " AND " + y);
         }
 
         public async Task<List<Place>> SolrExecuteDocument(SolrQueryParameters queryParameters)
@@ -51,7 +44,7 @@ namespace EhriMemoMap.API.Services
 
                 new KeyValuePair<string, string>("fl", "label_cs, label_en, place_cs, place_en, map_location, map_object, type, place_date"),
                 new KeyValuePair<string, string>("q", GetNormalizedQuery(queryParameters.Query)),
-                new KeyValuePair<string, string>("qf", "label_cs label_en place_cs place_en"),
+                new KeyValuePair<string, string>("qf", "all"),
                 new KeyValuePair<string, string>("wt", "json"),
                 new KeyValuePair<string, string>("stopwords", "true"),
                 new KeyValuePair<string, string>("rows", !string.IsNullOrEmpty(queryParameters.Query) && queryParameters.Query.Length > 3 ? "1000" : "0")

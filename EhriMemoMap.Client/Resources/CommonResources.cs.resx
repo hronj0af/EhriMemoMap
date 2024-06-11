@@ -381,4 +381,7 @@
   <data name="helpSearch" xml:space="preserve">
     <value>Fulltextové vyhledávání umožňuje vyhledávat bydliště obětí, incidenty a body zájmu. Stačí zadat např. jméno hledané osoby či místa.</value>
   </data>
+  <data name="filterNames" xml:space="preserve">
+    <value>Najít osobu podle jména...</value>
+  </data>
 </root>

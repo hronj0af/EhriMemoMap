@@ -8,85 +8,107 @@
 <DialogButtons />
 
 <div class="rz-pt-12">
-@if (PlacesToShow != null)
-{
-    @if (Places.GroupBy(a => a.PlaceType).Count() == 1)
+    @if (PlacesToShow != null)
     {
-        <div style="padding: 0 2.5rem 0 2.5rem">
-            <h2 class="rz-mb-12" style="color:var(--Wine-Red);">@cl["featureType_" + Places.FirstOrDefault()?.PlaceType]</h2>
+        @if (Places.GroupBy(a => a.PlaceType).Count() == 1)
+        {
+            <div style="padding: 0 2.5rem 0 2.5rem">
+                <h2 class="rz-mb-12" style="color:var(--Wine-Red);">@cl["featureType_" + Places.FirstOrDefault()?.PlaceType]</h2>
 
 
 
-            @foreach (var place in PlacesToShow.Incidents ?? new List<PragueIncidentsTimeline>())
-            {
-                <CardIncident Place="place" />
-            }
-
-            @foreach (var place in PlacesToShow.PlacesOfInterest ?? new List<PraguePlacesOfInterestTimeline>())
-            {
-                <CardInterest Place="place" />
-            }
-
-            @foreach (var place in PlacesToShow.InaccessiblePlaces ?? new List<PraguePlacesOfInterestTimeline>())
-            {
-                <CardInterest Place="place" />
-            }
-
-            @foreach (var place in PlacesToShow.Addresses ?? new List<AddressWithVictimsWrappwer>())
-            {
-                <CardAddress House="place" />
-            }
-        </div>
-    }
-    else
-    {
-        <RadzenTabs RenderMode="TabRenderMode.Client">
-            <Tabs>
-                @foreach (var placeType in Places.Where(a => !string.IsNullOrEmpty(a.PlaceType)).GroupBy(a => a.PlaceType).Select(a => Enum.Parse<PlaceType>(a.Key)))
+                @foreach (var place in PlacesToShow.Incidents ?? new List<PragueIncidentsTimeline>())
                 {
-                    <RadzenTabsItem Text="@(cl["featureType_" + placeType.ToString()])">
-                        <div style="padding:1.5rem">
-                            @if (placeType == PlaceType.Incident)
-                            {
-                                foreach (var place in PlacesToShow.Incidents ?? new List<PragueIncidentsTimeline>())
-                                {
-                                    <CardIncident Place="place" />
-                                }
-                            }
-
-                            @if (placeType == PlaceType.Interest)
-                            {
-                                foreach (var place in PlacesToShow.PlacesOfInterest ?? new List<PraguePlacesOfInterestTimeline>())
-                                {
-                                    <CardInterest Place="place" />
-                                }
-                            }
-
-                            @if (placeType == PlaceType.Inaccessible)
-                            {
-                                foreach (var place in PlacesToShow.InaccessiblePlaces ?? new List<PraguePlacesOfInterestTimeline>())
-                                {
-                                    <CardInterest Place="place" />
-                                }
-                            }
-
-                            @if (placeType == PlaceType.Address)
-                            {
-                                foreach (var place in PlacesToShow.Addresses ?? new List<AddressWithVictimsWrappwer>())
-                                {
-                                    <CardAddress House="place" />
-                                }
-                            }
-                        </div>
-                    </RadzenTabsItem>
+                    <CardIncident Place="place" />
                 }
-            </Tabs>
 
-        </RadzenTabs>
+                @foreach (var place in PlacesToShow.PlacesOfInterest ?? new List<PraguePlacesOfInterestTimeline>())
+                {
+                    <CardInterest Place="place" />
+                }
+
+                @foreach (var place in PlacesToShow.InaccessiblePlaces ?? new List<PraguePlacesOfInterestTimeline>())
+                {
+                    <CardInterest Place="place" />
+                }
+
+                @if (PlacesToShow.Addresses != null)
+                {
+                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End">
+                        <RadzenTextBox Placeholder="@cl["filterNames"]" @bind-Value=@filteredName>
+                        </RadzenTextBox>
+                        <RadzenButton ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Click="(() => StateHasChanged())">
+                            @cl["search"]
+                        </RadzenButton>
+                    </RadzenStack>
+
+                }
+                @foreach (var place in PlacesToShow.Addresses ?? new List<AddressWithVictimsWrappwer>())
+                {
+                    <CardAddress House="place" FilteredName="@filteredName" />
+                }
+            </div>
+        }
+        else
+        {
+            <RadzenTabs RenderMode="TabRenderMode.Client">
+                <Tabs>
+                    @foreach (var placeType in Places.Where(a => !string.IsNullOrEmpty(a.PlaceType)).GroupBy(a => a.PlaceType).Select(a => Enum.Parse<PlaceType>(a.Key)))
+                    {
+                        <RadzenTabsItem Text="@(cl["featureType_" + placeType.ToString()])">
+                            <div style="padding:1.5rem">
+                                @if (placeType == PlaceType.Incident)
+                                {
+                                    foreach (var place in PlacesToShow.Incidents ?? new List<PragueIncidentsTimeline>())
+                                    {
+                                        <CardIncident Place="place" />
+                                    }
+                                }
+
+                                @if (placeType == PlaceType.Interest)
+                                {
+                                    foreach (var place in PlacesToShow.PlacesOfInterest ?? new List<PraguePlacesOfInterestTimeline>())
+                                    {
+                                        <CardInterest Place="place" />
+                                    }
+                                }
+
+                                @if (placeType == PlaceType.Inaccessible)
+                                {
+                                    foreach (var place in PlacesToShow.InaccessiblePlaces ?? new List<PraguePlacesOfInterestTimeline>())
+                                    {
+                                        <CardInterest Place="place" />
+                                    }
+                                }
+
+                                @if (placeType == PlaceType.Address)
+                                {
+                                    @if (PlacesToShow.Addresses != null)
+                                    {
+                                        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End">
+                                            <RadzenTextBox Placeholder="@cl["filterNames"]" @bind-Value=@filteredName>
+                                            </RadzenTextBox>
+                                            <RadzenButton ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Click="(() => StateHasChanged())">
+                                                @cl["search"]
+                                            </RadzenButton>
+                                        </RadzenStack>
+
+                                    }
+                                    foreach (var place in PlacesToShow.Addresses ?? new List<AddressWithVictimsWrappwer>())
+                                    {
+                                        <CardAddress House="place" FilteredName="@filteredName" />
+                                    }
+                                }
+                            </div>
+                        </RadzenTabsItem>
+                    }
+                </Tabs>
+
+            </RadzenTabs>
+
+        }
 
     }
-
-}
 </div>
 
 
@@ -95,10 +117,16 @@
     public List<MapObjectForLeafletModel>? Places { get; set; }
 
     private PlacesResult? PlacesToShow { get; set; }
+    private string? filteredName { get; set; }
 
     protected override void OnInitialized()
     {
         MapState.OnChange += StateHasChanged;
+    }
+
+    protected void ChangedFilteredName()
+    {
+        StateHasChanged();
     }
 
     protected override async Task OnParametersSetAsync()

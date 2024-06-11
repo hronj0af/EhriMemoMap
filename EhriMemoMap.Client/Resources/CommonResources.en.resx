@@ -377,4 +377,7 @@
   <data name="helpSearch" xml:space="preserve">
     <value>Full-text search allows you to search for victims' residences, incidents and points of interest. Simply enter, for example, the name of the person or place you are looking for.</value>
   </data>
+  <data name="filterNames" xml:space="preserve">
+    <value>Find a person by name...</value>
+  </data>
 </root>
