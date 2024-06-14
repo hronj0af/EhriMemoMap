@@ -380,4 +380,10 @@
   <data name="filterNames" xml:space="preserve">
     <value>Find a person by name...</value>
   </data>
+  <data name="addressOccupation" xml:space="preserve">
+    <value>German address from the time of the occupation</value>
+  </data>
+  <data name="addressCurrent" xml:space="preserve">
+    <value>current address</value>
+  </data>
 </root>

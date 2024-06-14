@@ -23,6 +23,14 @@ public partial class PragueAddressesStatsTimeline
     [Column("address_de")]
     public string? AddressDe { get; set; }
 
+    [Column("address_current_cs")]
+    public string? AddressCurrentCs { get; set; }
+
+    [Column("address_current_en")]
+    public string? AddressCurrentEn { get; set; }
+
+    [Column("address_current_de")]
+    public string? AddressCurrentDe { get; set; }
     [Column("count")]
     public short? Count { get; set; }
 

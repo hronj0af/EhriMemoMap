@@ -3,7 +3,10 @@
 
 @if (House != null && House.Address != null && (!string.IsNullOrEmpty(FilteredName) ? House.Victims.Any(a => a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower())) : true))
 {
-    <h3 class="rz-my-8">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.AddressEn : House.Address.AddressCs)</h3>
+    <h3 class="rz-mt-8">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.AddressEn : House.Address.AddressCs)</h3>
+    <hr/>
+    <h4 class="rz-mb-2">@House.Address.AddressDe <RadzenText TextStyle="TextStyle.Caption">(@cl["addressOccupation"])</RadzenText></h4>
+    <h4 class="rz-mb-8">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.AddressCurrentEn : House.Address.AddressCurrentCs) <RadzenText TextStyle="TextStyle.Caption">(@cl["addressCurrent"])</RadzenText></h4>
     <CardHouse House="House"></CardHouse>
 
 

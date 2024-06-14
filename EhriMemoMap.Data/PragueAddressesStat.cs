@@ -24,6 +24,15 @@ public partial class PragueAddressesStat
     [Column("address_de")]
     public string? AddressDe { get; set; }
 
+    [Column("address_current_cs")]
+    public string? AddressCurrentCs { get; set; }
+
+    [Column("address_current_en")]
+    public string? AddressCurrentEn { get; set; }
+
+    [Column("address_current_de")]
+    public string? AddressCurrentDe { get; set; }
+
     [Column("count")]
     [Precision(5, 0)]
     public decimal? Count { get; set; }

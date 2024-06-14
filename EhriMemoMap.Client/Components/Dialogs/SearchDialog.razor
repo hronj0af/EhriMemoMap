@@ -6,7 +6,7 @@
 @inject DialogService DialogService
 <DialogButtons />
 
-<div class="rz-px-6 rz-pt-12" >
+<div class="rz-px-6 rz-pt-12">
     <h1 class="rz-pb-4" style="color:var(--Wine-Red)">
         @cl["search"]
         &nbsp;&nbsp;<span title="@cl["helpSearch"]">
@@ -34,7 +34,7 @@
             @cl["resultsFor"]: "@(MapState.SearchedPlaceString)"
         </div>
 
-        @foreach (var placeGroup in MapState.SearchedPlaces.GroupBy(a=>a.Type).OrderBy(a=>a.Key))
+        @foreach (var placeGroup in MapState.SearchedPlaces.GroupBy(a => a.Type).OrderBy(a => a.Key))
         {
             <h2 class="rz-py-5" style="cursor:pointer;color:var(--Wine-Red)" onclick="@(() => TogglePlaceType(placeGroup.Key))">
                 @cl["featureType_" + placeGroup.Key]
@@ -48,7 +48,7 @@
                 }
             </h2>
             <div style="@(!openedTypes.Any(a=>a == placeGroup.Key) ? "display:none" : "")">
-                @foreach (var place in placeGroup.OrderBy(a=>a.LabelCs))
+                @foreach (var place in placeGroup.OrderBy(a => a.LabelCs))
                 {
                     <RadzenRow class="rz-pt-4" RowGap="0" onclick="@(() => ShowPlace(place))" style="cursor:pointer">
                         <RadzenColumn Size="1">
@@ -69,16 +69,26 @@
                             {
                                 <h5>@place.Date?.ToString("d. M. yyyy")</h5>
                             }
-                            @if (place.PlaceCs != null)
+                            @if (CultureInfo.CurrentCulture.ToString() == "cs-CZ" && !string.IsNullOrEmpty(place.PlaceCs))
                             {
                                 <span style="font-size:14px">@place.PlaceCs</span>
+                            }
+                            else if (!string.IsNullOrEmpty(place.PlaceEn))
+                            {
+                                <span style="font-size:14px">@place.PlaceEn</span>
+                            }
+                            @if (!string.IsNullOrEmpty(place.PlaceDe))
+                            {
+                                <text>
+                                    / <span style="font-size:14px">@place.PlaceDe</span>
+                                </text>
                             }
                         </RadzenColumn>
 
                     </RadzenRow>
 
                 }
-                </div>
+            </div>
         }
 
     }

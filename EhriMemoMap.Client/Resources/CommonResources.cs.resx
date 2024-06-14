@@ -384,4 +384,10 @@
   <data name="filterNames" xml:space="preserve">
     <value>Najít osobu podle jména...</value>
   </data>
+  <data name="addressOccupation" xml:space="preserve">
+    <value>německá adresa z doby okupace</value>
+  </data>
+  <data name="addressCurrent" xml:space="preserve">
+    <value>současná adresa</value>
+  </data>
 </root>
