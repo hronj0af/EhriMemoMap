@@ -37,9 +37,7 @@
                     <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End">
                         <RadzenTextBox Placeholder="@cl["filterNames"]" @bind-Value=@filteredName>
                         </RadzenTextBox>
-                        <RadzenButton ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Click="(() => StateHasChanged())">
-                            @cl["search"]
-                        </RadzenButton>
+                        <img src="images/search-only-dark.svg" onclik="(() => StateHasChanged())" style="cursor:pointer" class="rz-pb-2" />
                     </RadzenStack>
 
                 }
@@ -88,9 +86,7 @@
                                         <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End">
                                             <RadzenTextBox Placeholder="@cl["filterNames"]" @bind-Value=@filteredName>
                                             </RadzenTextBox>
-                                            <RadzenButton ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Click="(() => StateHasChanged())">
-                                                @cl["search"]
-                                            </RadzenButton>
+                                            <img src="images/search-only-dark.svg" onclik="(() => StateHasChanged())" style="cursor:pointer" class="rz-pb-2" />
                                         </RadzenStack>
 
                                     }

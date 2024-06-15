@@ -34,6 +34,8 @@ namespace EhriMemoMap.Services
         public int WindowHeight = 0;
         public int WindowWidth = 0;
 
+        public bool IsDialogFullScreen = false;
+
         public string SearchedPlaceString = "";
         public IEnumerable<Place> SearchedPlaces;
 

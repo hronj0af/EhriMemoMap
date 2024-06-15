@@ -7,6 +7,10 @@
 }
 
 <RadzenRow JustifyContent="JustifyContent.End" Style="@buttonStyle">
+    @if (MapState.IsMobileView && MapState.DialogType != DialogTypeEnum.Help)
+    {
+        <RadzenButton Click=OnFullscreen Icon="fullscreen" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" />
+    }
     <RadzenButton Click=OnClose Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" />
 </RadzenRow>
 
@@ -14,11 +18,20 @@
 
     private async Task OnClose()
     {
+        MapState.IsDialogFullScreen = false;
         await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
         DialogService.CloseSide();
         MapState.SetDialogType(DialogTypeEnum.None);
         await JS.InvokeVoidAsync("mapAPI.fitMapToWindow");
         await JS.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
+
         
+    }
+
+    private async Task OnFullscreen()
+    {
+        MapState.IsDialogFullScreen = !MapState.IsDialogFullScreen;
+        await JS.InvokeVoidAsync("mapAPI.setDialogFullScreen", MapState.IsDialogFullScreen);
+        MapState.NotifyStateChanged();
     }
 }

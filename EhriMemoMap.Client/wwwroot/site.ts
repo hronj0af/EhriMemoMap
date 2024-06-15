@@ -535,7 +535,7 @@ namespace mapAPI {
     //////////////////////////
 
 
-    export function fullscreenDialog(value): void {
+    export function setDialogFullScreen(value): void {
         if (value) {
             if (!isFullscreen) {
                 dialogWidth = document.querySelector("aside").style.width;
@@ -544,10 +544,12 @@ namespace mapAPI {
             isFullscreen = true;
             document.querySelector("aside").style.width = "100%";
             document.querySelector("aside").style.height = "100%";
+            fitMapToWindow(window.innerHeight - 44);
         } else if (!value && isFullscreen && dialogHeight != null && dialogWidth != null) {
             isFullscreen = false;
             document.querySelector("aside").style.width = dialogWidth;
             document.querySelector("aside").style.height = dialogHeight;
+            fitMapToWindow(dialogHeight);
 
         }
     }

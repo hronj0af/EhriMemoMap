@@ -418,7 +418,7 @@ var mapAPI;
         });
     }
     mapAPI.removeBluepoint = removeBluepoint;
-    function fullscreenDialog(value) {
+    function setDialogFullScreen(value) {
         if (value) {
             if (!isFullscreen) {
                 dialogWidth = document.querySelector("aside").style.width;
@@ -427,14 +427,16 @@ var mapAPI;
             isFullscreen = true;
             document.querySelector("aside").style.width = "100%";
             document.querySelector("aside").style.height = "100%";
+            fitMapToWindow(window.innerHeight - 44);
         }
         else if (!value && isFullscreen && dialogHeight != null && dialogWidth != null) {
             isFullscreen = false;
             document.querySelector("aside").style.width = dialogWidth;
             document.querySelector("aside").style.height = dialogHeight;
+            fitMapToWindow(dialogHeight);
         }
     }
-    mapAPI.fullscreenDialog = fullscreenDialog;
+    mapAPI.setDialogFullScreen = setDialogFullScreen;
     function getBlazorCulture() {
         return window.localStorage['BlazorCulture'];
     }
