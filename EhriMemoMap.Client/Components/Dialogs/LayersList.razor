@@ -16,6 +16,27 @@
 
         <h1 style="color:var(--Wine-Red)">@cl["layers"]</h1>
         <p>@cl["layerHelp"]</p>
+
+        @if (MapState.AppState == AppStateEnum.Development)
+        {
+            <RadzenButton ButtonStyle="ButtonStyle.Secondary" Click="@(() => MapState.ShowLayersForce = !MapState.ShowLayersForce)" Style="margin-bottom:10px;">
+                @if (MapState.ShowLayersForce)
+                {
+                    <text>
+                        Skrýt vrstvy bez ohledu na zoom mapy
+                    </text>
+
+                }
+                else
+                {
+                    <text>
+                        Zobrazit vrstvy bez ohledu na zoom mapy
+                    </text>
+
+                }
+            </RadzenButton>
+        }
+
         @foreach (var item in layers.OrderBy(a => a.Order))
         {
             var iconFilter = item.FontColor == FontColor.Dark ? "filter: brightness(30%);height:24px;width:auto;" : "height:24px;width:auto;";

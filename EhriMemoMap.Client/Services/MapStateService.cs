@@ -19,13 +19,15 @@ namespace EhriMemoMap.Services
         private readonly IJSRuntime _js;
         private readonly HttpClient _client;
         private string _appUrl;
+        public AppStateEnum AppState;
+
 
         public MapStateService(IJSRuntime js, HttpClient client, IConfiguration configuration)
         {
             _js = js;
             _client = client;
             _appUrl = configuration?.GetSection("App")["AppURL"] ?? "";
-
+            AppState = configuration?.GetSection("App")["AppState"] == "Development" ? AppStateEnum.Development : AppStateEnum.Production;
         }
 
         public string WidthOfDialog = "33%";
@@ -37,7 +39,7 @@ namespace EhriMemoMap.Services
         public bool IsDialogFullScreen = false;
 
         public string SearchedPlaceString = "";
-        public IEnumerable<Place> SearchedPlaces;
+        public IEnumerable<Place>? SearchedPlaces;
 
         public bool MapStateWasInit = false;
 
@@ -62,6 +64,21 @@ namespace EhriMemoMap.Services
             }
         }
 
+        private bool showLayersForce;
+        /// <summary>
+        /// Mají se zobrazit vrstvy bez ohledu na aktuální zoom mapy?
+        /// </summary>
+        public bool ShowLayersForce
+        {
+            get { return showLayersForce; }
+            set
+            {
+                showLayersForce = value;
+                _js.InvokeVoidAsync("mapAPI.callBlazor_RefreshObjectsOnMap");
+                NotifyStateChanged();
+            }
+        }
+
         public DialogTypeEnum DialogType = DialogTypeEnum.None;
         public void SetDialogType(DialogTypeEnum value)
         {
@@ -76,7 +93,7 @@ namespace EhriMemoMap.Services
         /// <summary>
         /// Aktuálně nastavený zoom mapy
         /// </summary>
-        public int MapZoom;
+        public float MapZoom;
 
         /// <summary>
         /// Koordináty levého horního rohu zobrazené mapy

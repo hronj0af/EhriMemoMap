@@ -141,7 +141,7 @@ else if (isMobileView == true)
     /// </summary>
     /// <returns></returns>
     [JSInvokable("RefreshObjectsOnMap")]
-    public async Task RefreshObjectsOnMap(bool withPolygons, int zoom, Coordinate[] mapBounds)
+    public async Task RefreshObjectsOnMap(bool withPolygons, float zoom, Coordinate[] mapBounds)
     {
         MapState.MapZoom = zoom;
         MapState.SetBBox(mapBounds);

@@ -110,11 +110,11 @@
     {
         if (place != null)
         {
-            var zoom = 15;
-            if (place.MapObject == null || !place.MapObject.Contains("Polygon"))
-                zoom = 18;
+            // var zoom = 15;
+            // if (place.MapObject == null || !place.MapObject.Contains("Polygon"))
+            //     zoom = 18;
             await JS.InvokeVoidAsync("mapAPI.addObjectFromJsonString", place.MapLocation);
-            await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, zoom);
+            await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, MapState.MapZoom);
         }
         else
             await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
