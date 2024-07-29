@@ -45,7 +45,7 @@
         "placeType": "address",
         "order": 1,
         "type": "objects",
-        "minZoom": 17,
+        "minZoom": 16,
         "quickAccess": true,
         "backgroundColor": "#FFD93D",
         "fontColor": "Dark"
@@ -55,7 +55,7 @@
         "placeType": "interest",
         "order": 2,
         "type": "objects",
-        "minZoom": 17,
+        "minZoom": 16,
         "quickAccess": true,
         "backgroundColor": "#7E469B",
         "fontColor": "Light"
@@ -65,7 +65,7 @@
         "placeType": "incident",
         "order": 3,
         "type": "objects",
-        "minZoom": 17,
+        "minZoom": 16,
         "quickAccess": true,
         "backgroundColor": "#C5222C",
         "fontColor": "Light"

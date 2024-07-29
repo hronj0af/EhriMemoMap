@@ -40,8 +40,7 @@ var mapAPI;
             zoomControl: false,
             maxZoom: mapSettings.initialVariables.maxZoom,
             minZoom: mapSettings.initialVariables.minZoom,
-            zoomSnap: 0.25,
-            wheelPxPerZoomLevel: 200
+            zoomSnap: mapAPI.isMobileView() ? 0.1 : 1
         });
         map.attributionControl.setPosition('bottomleft');
         L.control.scale().setPosition(mapAPI.isMobileView() ? 'topright' : 'bottomleft').addTo(map);
