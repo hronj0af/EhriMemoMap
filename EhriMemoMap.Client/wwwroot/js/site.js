@@ -81,7 +81,9 @@ var mapAPI;
         const pageHeight = window.innerHeight;
         const tempHeight = heightOfDialog != null && isMobileView()
             ? pageHeight * (heightOfDialog / 100)
-            : pageHeight - document.getElementById("controlButtonsWrapper").offsetTop;
+            : pageHeight - (document.getElementById("controlButtonsWrapper") != null
+                ? document.getElementById("controlButtonsWrapper").offsetTop
+                : 0);
         const mapElement = document.getElementById("map");
         const pageElement = document.getElementsByClassName("page");
         if (mapElement == null || !mapElement)

@@ -114,7 +114,7 @@ else if (isMobileView == true)
             await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet());
 
             // tady se zase zjistí, jak je velká oblast, která se zobrazuje na mapě
-            MapState.MapZoom = await JS.InvokeAsync<int>("mapAPI.getZoom");
+            MapState.MapZoom = await JS.InvokeAsync<float>("mapAPI.getZoom");
             MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
 
             // a posledně zmiňované informace se pak použijí pro zobrazení špendlíků a polygonů na mapě
@@ -160,7 +160,7 @@ else if (isMobileView == true)
     }
 
     [JSInvokable("ShowPlaceInfo")]
-    public async Task ShowPlaceInfo(int zoom, Coordinate[] coordinates)
+    public async Task ShowPlaceInfo(float zoom, Coordinate[] coordinates)
     {
         var placesOnMap = await MapLogic.GetMapObjects(true, false, coordinates);
         if (placesOnMap.Count == 0)

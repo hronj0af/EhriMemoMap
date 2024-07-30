@@ -114,7 +114,9 @@ namespace mapAPI {
 
         const tempHeight = heightOfDialog != null && isMobileView() 
             ? pageHeight * (heightOfDialog / 100)
-            : pageHeight - document.getElementById("controlButtonsWrapper").offsetTop;
+            : pageHeight - (document.getElementById("controlButtonsWrapper") != null
+                ? document.getElementById("controlButtonsWrapper").offsetTop
+                : 0);
 
         const mapElement = document.getElementById("map");
         const pageElement = document.getElementsByClassName("page") as HTMLCollectionOf<HTMLElement>;
