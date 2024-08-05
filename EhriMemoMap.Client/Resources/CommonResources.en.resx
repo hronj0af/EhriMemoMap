@@ -393,4 +393,19 @@
   <data name="help_inaccessible" xml:space="preserve">
     <value>Places that were inaccessible to Jews during the Holocaust.</value>
   </data>
+  <data name="featureType_Memory" xml:space="preserve">
+    <value>Places of memory</value>
+  </data>
+  <data name="layer_memory_title" xml:space="preserve">
+    <value>Places of memory</value>
+  </data>
+  <data name="layer_memory_abstract" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="layer_memory_title_short" xml:space="preserve">
+    <value>Places of memory</value>
+  </data>
+  <data name="help_memory" xml:space="preserve">
+    <value>??? Stolpersteine...</value>
+  </data>
 </root>

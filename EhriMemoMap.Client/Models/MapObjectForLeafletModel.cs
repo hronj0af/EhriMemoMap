@@ -33,6 +33,9 @@ public partial class MapObjectForLeafletModel
         else if (PlaceType == Shared.PlaceType.Interest.ToString())
             HtmlIcon = "<img src='images/interest-map.png' />";
 
+        else if (PlaceType == Shared.PlaceType.Memory.ToString())
+            HtmlIcon = "<img src='images/memory-map.png' />";
+
         else if (PlaceType == Shared.PlaceType.Address.ToString())
         {
             var percents = (decimal)Citizens / CitizensTotal;
@@ -71,35 +74,35 @@ public partial class MapObjectForLeafletModel
         Label = @$"<h2 class='rz-mb-2'>{(CultureInfo.CurrentCulture.Name == "en-US" ? statistics.FirstOrDefault().QuarterEn : statistics.FirstOrDefault().QuarterCs)}</h3>
 
             <table class='statistics-table'>
-                    <td class='statistics-table-firstcell'>
-                        {victims}
-                    </td>
                     <td class='statistics-table-secondcell'>
                         <span >{cl["countJews"]}</span>
                     </td>
+                    <td class='statistics-table-firstcell'>
+                        {victims}
+                    </td>
                 </tr>
                 <tr>
-                    <td class='statistics-table-firstcell'>
-                        {incidents}
-                    </td>
                     <td class='statistics-table-secondcell'>
                         <span >{cl["countIncidents"]}</span>
                     </td>
+                    <td class='statistics-table-firstcell'>
+                        {incidents}
+                    </td>
                 </tr>
                 <tr>
-                    <td class='statistics-table-firstcell'>
-                        {interests}
-                    </td>
                     <td class='statistics-table-secondcell'>
                         <span >{cl["countPointsOfInterest"]}</span>
                     </td>
+                    <td class='statistics-table-firstcell'>
+                        {interests}
+                    </td>
                 </tr>
                 <tr>
-                    <td class='statistics-table-firstcell'>
-                        {inaccessibles}
-                    </td>
                     <td class='statistics-table-secondcell'>
                         <span>{cl["countInaccessiblePlaces"]}</span>
+                    </td>
+                    <td class='statistics-table-firstcell'>
+                        {inaccessibles}
                     </td>
                 </tr>
             </table>";

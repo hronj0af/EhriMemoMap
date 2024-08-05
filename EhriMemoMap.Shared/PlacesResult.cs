@@ -8,5 +8,6 @@ namespace EhriMemoMap.Shared
         public List<PraguePlacesOfInterestTimeline>? PlacesOfInterest { get; set; }
         public List<PraguePlacesOfInterestTimeline>? InaccessiblePlaces { get; set; }
         public List<AddressWithVictimsWrappwer>? Addresses { get; set; }
+        public List<PraguePlacesOfMemory>? PlacesOfMemory { get; set; }
     }
 }

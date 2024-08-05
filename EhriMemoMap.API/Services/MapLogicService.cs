@@ -100,6 +100,9 @@ namespace EhriMemoMap.Services
             if (parameters.InaccessiblePlacesIds != null)
                 result.InaccessiblePlaces = _context.PraguePlacesOfInterestTimelines.Where(p => parameters.InaccessiblePlacesIds.Contains(p.Id)).ToList();
 
+            if (parameters.PlacesOfMemoryIds != null)
+                result.PlacesOfMemory = _context.PraguePlacesOfMemories.Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).ToList();
+
             if (parameters.AddressesIds != null)
                 result.Addresses = _context.PragueAddressesStatsTimelines.Where(p => parameters.AddressesIds.Contains(p.Id)).
                     Select(a => new AddressWithVictimsWrappwer

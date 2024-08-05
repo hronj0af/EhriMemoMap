@@ -325,16 +325,16 @@
     <value>Skrýt statistiku</value>
   </data>
   <data name="countPointsOfInterest" xml:space="preserve">
-    <value>Bodů zájmu</value>
+    <value>Body zájmu</value>
   </data>
   <data name="countJews" xml:space="preserve">
-    <value>Židovských obyvatel</value>
+    <value>Židovští obyvatelé</value>
   </data>
   <data name="countInaccessiblePlaces" xml:space="preserve">
-    <value>Zakázaných míst</value>
+    <value>Zakázaná místa</value>
   </data>
   <data name="countIncidents" xml:space="preserve">
-    <value>Incidentů</value>
+    <value>Incidenty</value>
   </data>
   <data name="zoomMapForMoreInfo" xml:space="preserve">
     <value>Pro více informací mapu přibližte.</value>
@@ -392,5 +392,20 @@
   </data>
   <data name="help_inaccessible" xml:space="preserve">
     <value>Místa, která byla Židům v době holokaustu nepřístupná.</value>
+  </data>
+  <data name="featureType_Memory" xml:space="preserve">
+    <value>Místa paměti</value>
+  </data>
+  <data name="layer_memory_title" xml:space="preserve">
+    <value>Místa paměti</value>
+  </data>
+  <data name="layer_memory_abstract" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="layer_memory_title_short" xml:space="preserve">
+    <value>Místa paměti</value>
+  </data>
+  <data name="help_memory" xml:space="preserve">
+    <value>??? Stolpersteiny...</value>
   </data>
 </root>

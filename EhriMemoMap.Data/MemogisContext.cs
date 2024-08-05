@@ -37,7 +37,7 @@ public partial class MemogisContext : DbContext
 
     public virtual DbSet<PragueQuartersStatsTimeline> PragueQuartersStatsTimelines { get; set; }
 
-    public virtual DbSet<PragueStolpersteine> PragueStolpersteines { get; set; }
+    public virtual DbSet<PraguePlacesOfMemory> PraguePlacesOfMemories { get; set; }
 
     public virtual DbSet<PragueVictim> PragueVictims { get; set; }
 
@@ -116,9 +116,9 @@ public partial class MemogisContext : DbContext
             entity.Property(e => e.Id).ValueGeneratedNever();
         });
 
-        modelBuilder.Entity<PragueStolpersteine>(entity =>
+        modelBuilder.Entity<PraguePlacesOfMemory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("prague_stolpersteine_pkey");
+            entity.HasKey(e => e.Id).HasName("prague_places_of_memory_pkey");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
         });

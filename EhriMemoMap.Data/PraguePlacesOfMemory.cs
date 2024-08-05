@@ -7,12 +7,15 @@ using NetTopologySuite.Geometries;
 
 namespace EhriMemoMap.Data;
 
-[Table("prague_stolpersteine")]
-public partial class PragueStolpersteine
+[Table("prague_places_of_memory")]
+public partial class PraguePlacesOfMemory
 {
     [Key]
     [Column("id")]
     public int Id { get; set; }
+
+    [Column("type")]
+    public string? Type { get; set; }
 
     [Column("label")]
     public string? Label { get; set; }
@@ -23,17 +26,17 @@ public partial class PragueStolpersteine
     [Column("address_en")]
     public string? AddressEn { get; set; }
 
-    [Column("link_stolp_cs")]
-    public string? LinkStolpCs { get; set; }
+    [Column("link_stolpersteine_cs")]
+    public string? LinkStolpersteinCs { get; set; }
 
-    [Column("link_stolp_en")]
-    public string? LinkStolpEn { get; set; }
+    [Column("link_stolpersteine_en")]
+    public string? LinkStolpersteinEn { get; set; }
 
-    [Column("link_holo_cs")]
-    public string? LinkHoloCs { get; set; }
+    [Column("link_holocaust_cs")]
+    public string? LinkHolocaustCs { get; set; }
 
-    [Column("link_holo_en")]
-    public string? LinkHoloEn { get; set; }
+    [Column("link_holocaust_en")]
+    public string? LinkHolocaustEn { get; set; }
 
     [Column("geography", TypeName = "geography")]
     public Geometry? Geography { get; set; }

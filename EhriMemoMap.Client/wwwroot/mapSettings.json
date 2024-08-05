@@ -61,9 +61,19 @@
         "fontColor": "Light"
       },
       {
+        "name": "memory",
+        "placeType": "memory",
+        "order": 3,
+        "type": "objects",
+        "minZoom": 16,
+        "quickAccess": true,
+        "backgroundColor": "#468a9b",
+        "fontColor": "Light"
+      },
+      {
         "name": "incident",
         "placeType": "incident",
-        "order": 3,
+        "order": 4,
         "type": "objects",
         "minZoom": 16,
         "quickAccess": true,

@@ -1,0 +1,33 @@
+﻿@using EhriMemoMap.Data;
+@using EhriMemoMap.Helpers;
+@using System.Xml;
+@using System.Xml.Linq;
+@inject IStringLocalizer<CommonResources> cl
+
+<RadzenRow class="rz-mb-4">
+    <RadzenCard Style="width:100%">
+
+        <h3>@Place.Label</h3>
+        <h5>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h5>
+        <ul class="no-bullets">
+            <li>
+                <a href="@Place.LinkStolpersteinCs" target="_blank">
+                    www.stolperstein.cz
+                    @* <RadzenImage class="document-forward-icon" Path="/images/forward.svg"></RadzenImage> *@
+                </a>
+            </li>
+            <li>
+                <a href="@Place.LinkHolocaustCs" target="_blank">
+                    www.holocaust.cz
+                    @* <RadzenImage class="document-forward-icon" Path="/images/forward.svg"></RadzenImage> *@
+                </a>
+            </li>
+        </ul>
+
+    </RadzenCard>
+</RadzenRow>
+
+@code {
+    [Parameter]
+    public PraguePlacesOfMemory Place { get; set; }
+}

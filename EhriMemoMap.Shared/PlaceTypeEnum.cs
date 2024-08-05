@@ -10,6 +10,8 @@
         
         Incident,
 
-        Statistics
+        Statistics,
+
+        Memory,
     }
 }
