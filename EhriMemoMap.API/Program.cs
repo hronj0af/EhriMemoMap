@@ -18,19 +18,22 @@ builder.Services.AddScoped<SolrService>();
 builder.Services.AddHttpClient();
 
 // info about "Safe storage of app secrets in development in ASP.NET Core": https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows#secret-manager
-var connectionString = builder.Configuration["MemoMap:ConnectionString"];
+//var connectionString = builder.Configuration["MemoMap:ConnectionString"];
+// [Environment]::SetEnvironmentVariable("MemoMap:ConnectionString", "your_connection_string", "Machine")
+var connectionString = Environment.GetEnvironmentVariable("MemoMap:ConnectionString", EnvironmentVariableTarget.Machine);
 builder.Services.AddDbContext<MemogisContext>(options => options.UseNpgsql(connectionString));
 
 var cors = "_myAllowSpecificOrigins";
 
-builder.Services.AddCors(policy =>
+builder.Services.AddCors(options =>
 {
-    policy.AddPolicy(cors, a => a//.SetIsOriginAllowed(origin => true)
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+    options.AddPolicy(cors, builder =>
+    {
+        builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+    });
 });
-
 
 var app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -39,11 +42,11 @@ app.UseCors(cors);
 
 var proxyClient = new HttpClient();
 
-app.MapGet("/", () => "Hello World!");
+app.MapGet("/", () => "Hello World...");
 
 app.MapGet("/getdistrictstatistics", (bool total, DateTime? timeLinePoint, MapLogicService service, HttpContext context) =>
 {
-    context.Response.Headers.Append("Cache-Control", "public,max-age=1000000");
+    context.Response.Headers.Append("Cache-Control", "no-cache");
     var parameters = new DistrictStatisticsParameters
     {
         Total = total,

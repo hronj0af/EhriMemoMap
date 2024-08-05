@@ -408,4 +408,7 @@
   <data name="help_memory" xml:space="preserve">
     <value>??? Stolpersteine...</value>
   </data>
+  <data name="forDetailsZoom" xml:space="preserve">
+    <value>For details zoom in the map...</value>
+  </data>
 </root>

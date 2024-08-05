@@ -408,4 +408,7 @@
   <data name="help_memory" xml:space="preserve">
     <value>??? Stolpersteiny...</value>
   </data>
+  <data name="forDetailsZoom" xml:space="preserve">
+    <value>Detaily zobrazíte přiblížením mapy...</value>
+  </data>
 </root>

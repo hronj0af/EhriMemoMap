@@ -74,35 +74,40 @@ public partial class MapObjectForLeafletModel
         Label = @$"<h2 class='rz-mb-2'>{(CultureInfo.CurrentCulture.Name == "en-US" ? statistics.FirstOrDefault().QuarterEn : statistics.FirstOrDefault().QuarterCs)}</h3>
 
             <table class='statistics-table'>
-                    <td class='statistics-table-secondcell'>
+                    <td class='statistics-table-firstcell'>
                         <span >{cl["countJews"]}</span>
                     </td>
-                    <td class='statistics-table-firstcell'>
+                    <td class='statistics-table-secondcell'>
                         {victims}
                     </td>
                 </tr>
                 <tr>
-                    <td class='statistics-table-secondcell'>
+                    <td class='statistics-table-firstcell'>
                         <span >{cl["countIncidents"]}</span>
                     </td>
-                    <td class='statistics-table-firstcell'>
+                    <td class='statistics-table-secondcell'>
                         {incidents}
                     </td>
                 </tr>
                 <tr>
-                    <td class='statistics-table-secondcell'>
+                    <td class='statistics-table-firstcell'>
                         <span >{cl["countPointsOfInterest"]}</span>
                     </td>
-                    <td class='statistics-table-firstcell'>
+                    <td class='statistics-table-secondcell'>
                         {interests}
                     </td>
                 </tr>
                 <tr>
-                    <td class='statistics-table-secondcell'>
+                    <td class='statistics-table-firstcell'>
                         <span>{cl["countInaccessiblePlaces"]}</span>
                     </td>
-                    <td class='statistics-table-firstcell'>
+                    <td class='statistics-table-secondcell'>
                         {inaccessibles}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan=2>
+                        {cl["forDetailsZoom"]}
                     </td>
                 </tr>
             </table>";

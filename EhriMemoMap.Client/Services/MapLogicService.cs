@@ -11,6 +11,7 @@ using NetTopologySuite.IO;
 using EhriMemoMap.Shared;
 using System.Net.Http.Json;
 using System.Numerics;
+using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
 namespace EhriMemoMap.Services
 {
