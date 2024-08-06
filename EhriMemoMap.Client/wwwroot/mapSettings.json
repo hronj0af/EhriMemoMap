@@ -5,6 +5,14 @@
       "zoomMobile": 11,
       "lat": 50.07905886,
       "lng": 14.43715096,
+      "minBounds": {
+        "X": 49.763,
+        "Y": 13.842
+      },
+      "maxBounds": {
+        "X": 50.408,
+        "Y": 15.012
+      },
       "minZoom": 11,
       "maxZoom": 18,
       "wmsProxyUrl": "https://localhost:7294/wmsProxy"

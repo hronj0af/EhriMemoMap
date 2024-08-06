@@ -17,11 +17,12 @@ builder.Services.AddScoped<MapLogicService>();
 builder.Services.AddScoped<SolrService>();
 builder.Services.AddHttpClient();
 
-// info about "Safe storage of app secrets in development in ASP.NET Core": https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=windows#secret-manager
-//var connectionString = builder.Configuration["MemoMap:ConnectionString"];
-// [Environment]::SetEnvironmentVariable("MemoMap:ConnectionString", "your_connection_string", "Machine")
-var connectionString = Environment.GetEnvironmentVariable("MemoMap:ConnectionString", EnvironmentVariableTarget.Machine);
-builder.Services.AddDbContext<MemogisContext>(options => options.UseNpgsql(connectionString));
+// you must set the MEMOMAP_DB environment variable to the connection string
+// in windows you can do this by running the following command in a command prompt: 
+// setx MEMOMAP_DB "Host=[host];Port=[port];Database=[db_name];User ID=[user_id];Password=[password]"
+// in linux you can do this by setting variable in service file 
+// Environment=MEMOMAP_DB='Host=[host];Port=[port];Database=[db_name];User ID=[user_id];Password=[password]'
+builder.Services.AddDbContext<MemogisContext>(options => options.UseNpgsql(builder.Configuration["MEMOMAP_DB"]));
 
 var cors = "_myAllowSpecificOrigins";
 

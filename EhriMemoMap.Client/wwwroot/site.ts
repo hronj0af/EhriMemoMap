@@ -55,11 +55,16 @@ namespace mapAPI {
             iconAnchor: [10, 10], // point of the icon which will correspond to marker's location
         });
 
+
         map = new L.Map('map',
             {
                 zoomControl: false,
                 maxZoom: mapSettings.initialVariables.maxZoom,
                 minZoom: mapSettings.initialVariables.minZoom,
+                maxBounds: [
+                    [mapSettings.initialVariables.minBounds.x, mapSettings.initialVariables.minBounds.y],
+                    [mapSettings.initialVariables.maxBounds.x, mapSettings.initialVariables.maxBounds.y]
+                ],
                 zoomSnap: mapAPI.isMobileView() ? 0.1 : 1
             });
         map.attributionControl.setPosition('bottomleft');
@@ -605,6 +610,8 @@ interface InitialVariables {
     zoomMobile: number | null;
     lat: number | null;
     lng: number | null;
+    minBounds: any | null;
+    maxBounds: any | null;
     minZoom: number | null;
     maxZoom: number | null;
     wmsProxyUrl: string | null;
