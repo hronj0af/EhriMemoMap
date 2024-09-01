@@ -59,46 +59,47 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -112,10 +113,12 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0,
+      Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0,
+      Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="search" xml:space="preserve">
     <value>Hledání</value>
@@ -159,9 +162,9 @@
   &lt;h4&gt;Co MemoMap obsahuje?&lt;/h4&gt;
   &lt;/p&gt;
   &lt;p&gt;
-  Aplikace zobrazuje informace o více než 40 000 obětech holokaustu, o 1 700 případech porušování protižidovských předpisů a nařízení, o 120 zajímavých místech souvisejících s jejich každodenním životem a perzekucí a také o 110 místech, která byla židovským obyvatelům Prahy v době války nepřístupná.
+  Aplikace zobrazuje informace o více než 40 000 obětech holokaustu, o 1 700 případech porušování protižidovských předpisů a nařízení, o 120 zajímavých místech souvisejících s jejich každodenním životem a pronásledováním a také o 110 místech, která byla židovským obyvatelům Prahy v době války nepřístupná.
   &lt;/p&gt;
-  &lt;p&gt;Data o obětech holokaustu pocházejí z databáze, kterou spravuje Institut Terezínské iniciativy. Aplikace díky tomu zpřístupňuje nejen fotografie obětí, ale také skeny policejních záznamů, které se týkají porušování protižidovských předpisů a nařízení (tyto skeny pocházejí z fondu Policejního ředitelství Praha).
+  &lt;p&gt;Data o obětech holokaustu pocházejí z databáze, kterou spravuje Institut Terezínské iniciativy. Aplikace díky tomu zpřístupňuje nejen fotografie obětí, ale také skeny policejních záznamů, které se týkají porušování protižidovských předpisů a nařízení (tyto skeny pocházejí z fondu Policejního ředitelství Praha v Národním archivu).
   &lt;/p&gt;
   &lt;p&gt;
   &lt;h4&gt;Jak se aplikace ovládá?&lt;/h4&gt;
@@ -179,15 +182,22 @@
     Svoji polohu na mapě najdete pomocí tlačítka&amp;nbsp;&amp;nbsp;
      &lt;img src='/images/location-small.svg' /&gt;
   &lt;/p&gt;
-  &lt;p&gt;
-  &lt;h4&gt;Kredit&lt;/h4&gt;
-  &lt;/p&gt;
-  &lt;p&gt;Aplikace MemoMap vznikla v rámci projektu Integrace a segregace v prostoru města: dějiny holokaustu v Praze prostřednictvím mobilní webové aplikace (idenifikátor TL01000366). Projekt podpořila Technologická agentura České republiky v rámci veřejné soutěže ÉTA 1. MemoMap vytvořil Masarykův ústav a archiv AV ČR ve spolupráci s Institutem Terezínské iniciativy a Multikulturním centrem Praha.&lt;/p&gt;
+
   &lt;p&gt;
   &lt;h4&gt;Našli jste chybu?&lt;/h4&gt;
   &lt;/p&gt;
   &lt;p&gt;Pokud jste narazili na technický problém či na chybu v datech, dejte nám prosím vědět pomocí tohoto &lt;a href="https://docs.google.com/forms/d/15jprT8Sbc-Llt1CfAPrIzU4S8YIDjREixRADGzbA62k" target="_blank"&gt;formuláře&lt;/a&gt;.&lt;/p&gt;
-&lt;/div&gt;</value>
+
+&lt;p&gt;
+  &lt;h4&gt;Kredit&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Aplikace MemoMap původně vznikla v rámci projektu Integrace a segregace v prostoru města: dějiny holokaustu v Praze prostřednictvím mobilní webové aplikace (idenifikátor TL01000366). Projekt podpořila Technologická agentura České republiky v rámci veřejné soutěže ÉTA 1. MemoMap vytvořil Masarykův ústav a archiv AV ČR ve spolupráci s Institutem Terezínské iniciativy a Multikulturním centrem Praha.&lt;/p&gt;
+&lt;p&gt;
+  Aplikace je dlouhodobě rozvíjena a provozována v rámci českého uzlu Evropské infrastruktury pro výzkum holokaustu. Ten je součástí infrastruktury LINDAT/CLARIAH-CZ, která je podporována Ministerstvem školství, mládeže a tělovýchovy České republiky v rámci programu "velkých infrastruktur".
+  &lt;/p&gt;
+  &lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;
+  &lt;/div&gt;
+</value>
   </data>
   <data name="layerInfo" xml:space="preserve">
     <value>Podrobnosti o mapové vrstvě</value>
@@ -283,16 +293,16 @@
     <value>Body zájmu zahrnující místa pronásledování, židovské objekty a sklady zabaveného majetku.</value>
   </data>
   <data name="layer_incident_title" xml:space="preserve">
-    <value>Incidenty v prostoru města Prahy</value>
+    <value>Incidenty v prostoru města</value>
   </data>
   <data name="layer_incident_abstract" xml:space="preserve">
     <value>Incidenty v prostoru města Prahy, při nichž byli židovští obyvatelé zatčeni či vyšetřováni pro porušení protižidovských nařízení. Údaje byly v rámci projektu MemoMap Praha vyexcerpovány z digitalizovaných dokumentů pražské policie. Jde například o informace o nedodržování prostorových zákazů, o občanských průkazech neoznačených písmenem \"J\" (Jude), apod.</value>
   </data>
   <data name="layer_address_title" xml:space="preserve">
-    <value>Bydliště Židů v Praze v době okupace</value>
+    <value>Bydliště Židů v době okupace</value>
   </data>
   <data name="layer_address_abstract" xml:space="preserve">
-    <value>Adresy, na nichž podle databáze obětí, bydleli v době šoa židovští obyvatelé Prahy. Údaje většinou pocházejí z registrace Židů v Protektorátu, která byla na základě nařízení Ústředny pro židovské vystěhovalectví zahájena na podzim 1941. Vrstva zahrnuje údaje o počtu obyvatel jednotlivých domů, statistiku jejich osudů a počet přítomných k různým historickým datům. V některých případech, kdy bylo obtížné jednotlivé domy identifikovat, je pod stejnými koordináty seskupeno více adres (například v jedné ulici). Na zpřesnění umístění na mapě průběžně pracujeme. Použity jsou názvy ulic z doby okupace (cca 1941-1942).</value>
+    <value>Adresy, na nichž podle databáze obětí, bydleli v době šoa židovští obyvatelé Prahy. Údaje většinou pocházejí z registrace Židů v protektorátu, která byla na základě nařízení Ústředny pro židovské vystěhovalectví zahájena na podzim 1941. Nemusí proto odpovídat bydlišti židovských rodin před začátkem pronásledování. Vrstva zahrnuje údaje o počtu obyvatel jednotlivých domů, statistiku jejich osudů a počet přítomných k různým historickým datům. V některých případech, kdy bylo obtížné jednotlivé domy identifikovat, je pod stejnými koordináty seskupeno více adres (například v jedné ulici). Na zpřesnění umístění na mapě průběžně pracujeme. Použity jsou názvy ulic z doby okupace (cca 1941-1942).</value>
   </data>
   <data name="layer_victim_title" xml:space="preserve">
     <value>Oběti holokaustu</value>
@@ -301,7 +311,7 @@
     <value>Databáze židovských obyvatel Prahy, kteří zahynuli v důsledku nacistického pronásledování. Záznamy jsou navázané na jejich pražské adresy. Detaily jsou přístupné skrze odkazy na portál holocaust.cz.</value>
   </data>
   <data name="layer_inaccessible_title" xml:space="preserve">
-    <value>Zakázaná místa v prostoru města Prahy</value>
+    <value>Zakázaná místa v prostoru města</value>
   </data>
   <data name="layer_inaccessible_abstract" xml:space="preserve">
     <value>Místa, která byla Židům v době války nepřístupná. Jejich zobrazení vychází z historické mapy z roku 1938. Současné prostory se mohou lišit velikostí i tvarem. </value>
@@ -310,13 +320,13 @@
     <value>Statistika čtvrtí</value>
   </data>
   <data name="layer_statistics_abstract" xml:space="preserve">
-    <value>Obrysy historické Prahy a pražských čtvrtí z roku 1930 – obojí propojené se statistikou. Mapa vychází z výstupu projektu NAKI „Zpřístupnění historických prostorových a statistických dat v prostředí GIS“ (číslo projektu DF12P01OVV033) a dále jej upravuje.</value>
+    <value>Obrysy historické Prahy a pražských čtvrtí z roku 1930 doplněné o údaje o počtu záznamů přístupných v aplikaci. Mapa vychází z výstupu projektu NAKI „Zpřístupnění historických prostorových a statistických dat v prostředí GIS“ (číslo projektu DF12P01OVV033) a dále jej upravuje.</value>
   </data>
   <data name="layer_MGS-prague_historical_map_1938-v2_title" xml:space="preserve">
     <value>Historická mapa Prahy (1938)</value>
   </data>
   <data name="layer_MGS-prague_historical_map_1938-v2_abstract" xml:space="preserve">
-    <value>Orientační plán hlavního města Prahy s okolím (1938). Do digitální podoby zpracovala Městská knihovna v Praze, georeferencování provedl Masarykův ústav a archiv Akademie věd České republiky. Dostupný také z WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
+    <value>Orientační plán hlavního města Prahy s okolím (1938). Do digitální podoby zpracovala Městská knihovna v Praze, georeferencování provedl Masarykův ústav a Archiv Akademie věd České republiky. Dostupný také z WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
   </data>
   <data name="showStatistics" xml:space="preserve">
     <value>Zobrazit statistiku</value>
@@ -352,7 +362,7 @@
     <value>Bydliště</value>
   </data>
   <data name="welcomeText" xml:space="preserve">
-    <value>&lt;p&gt;Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, zajímavá místa spojená s židovskou historií i perzekucí a místa, kam Židé v době války nesměli. Díky časové ose je vidět, jak lidé postupně mizeli ze svých domovů. Aplikace je přizpůsobena pro mobilní zařízení, můžete se s ní proto vydat přímo do města.&lt;/p&gt;</value>
+    <value>&lt;p&gt;Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli. Díky časové ose je vidět, jak lidé postupně mizeli ze svých domovů. Aplikace je přizpůsobena pro mobilní zařízení, můžete se s ní proto vydat přímo do města.&lt;/p&gt;</value>
   </data>
   <data name="goToMap" xml:space="preserve">
     <value>Přejít na mapu</value>
@@ -370,10 +380,10 @@
     <value>Všechno</value>
   </data>
   <data name="help_search" xml:space="preserve">
-    <value>Hledání jmen obětí, adres, incidentů, bodů zájmu či zakázaných míst. </value>
+    <value>Hledání jmen obětí, adres, incidentů, bodů zájmu, zakázaných míst či míst paměti. </value>
   </data>
   <data name="filterNames" xml:space="preserve">
-    <value>Najít osobu podle jména...</value>
+    <value>Filtrovat podle jména...</value>
   </data>
   <data name="addressOccupation" xml:space="preserve">
     <value>německá adresa z doby okupace</value>
@@ -388,7 +398,7 @@
     <value>Jednotlivé případy porušování protižidovských předpisů a nařízení.  </value>
   </data>
   <data name="help_interest" xml:space="preserve">
-    <value>Místa související s každodenním životem židovských obyvatel Prahy, ale i s jejich perzekucí.</value>
+    <value>Místa související s každodenním životem židovských obyvatel Prahy, ale i s jejich pronásledováním.</value>
   </data>
   <data name="help_inaccessible" xml:space="preserve">
     <value>Místa, která byla Židům v době holokaustu nepřístupná.</value>
@@ -400,13 +410,13 @@
     <value>Místa paměti</value>
   </data>
   <data name="layer_memory_abstract" xml:space="preserve">
-    <value>???</value>
+    <value>Místa a objekty připomínající pronásledování a oběti holokaustu. V současnosti vrstva obsahuje údaje o Stolpersteinech položených do dlažby. Data jsou převzata z projektu Veřejně prospěšného spolku na podporu osob dotčených holocaustem, http://stolpersteinecz.cz/.</value>
   </data>
   <data name="layer_memory_title_short" xml:space="preserve">
     <value>Místa paměti</value>
   </data>
   <data name="help_memory" xml:space="preserve">
-    <value>??? Stolpersteiny...</value>
+    <value>Místa a objekty připomínající oběti holokaustu.</value>
   </data>
   <data name="forDetailsZoom" xml:space="preserve">
     <value>Detaily zobrazíte přiblížením mapy...</value>
