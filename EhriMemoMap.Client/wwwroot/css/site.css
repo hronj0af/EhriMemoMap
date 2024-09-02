@@ -463,7 +463,7 @@ path.leaflet-interactive:focus {
 
 .victim-card {
     background-color: var(--Beige);
-    height: 250px;
+    /*height: 250px;*/
 }
 
 
