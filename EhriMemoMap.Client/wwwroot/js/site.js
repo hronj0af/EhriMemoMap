@@ -78,11 +78,13 @@ var mapAPI;
     mapAPI.initMap = initMap;
     function onResizeWindow() {
         fitMapToWindow();
+        resizePhotoHeight();
         blazorMapObject.invokeMethodAsync("SetMobileView", isMobileView());
     }
     mapAPI.onResizeWindow = onResizeWindow;
-    function fitMapToWindow(heightOfDialog = null) {
+    function fitMapToWindow(heightOfDialog = null, mapWidth = null) {
         const pageHeight = window.innerHeight;
+        const pageWidth = window.innerWidth;
         const tempHeight = heightOfDialog != null && isMobileView()
             ? pageHeight * (heightOfDialog / 100)
             : pageHeight - (document.getElementById("controlButtonsWrapper") != null
@@ -92,6 +94,7 @@ var mapAPI;
         const pageElement = document.getElementsByClassName("page");
         if (mapElement == null || !mapElement)
             return;
+        mapElement.style.width = mapWidth == null ? "100%" : mapWidth + "px";
         const mapHeight = !mapAPI.isMobileView()
             ? pageHeight
             : pageHeight - 44 - tempHeight;
@@ -457,6 +460,17 @@ var mapAPI;
         window.localStorage['BlazorCulture'] = value;
     }
     mapAPI.setBlazorCulture = setBlazorCulture;
+    function resizePhotoHeight() {
+        const ratio = 0.875;
+        if (document.getElementsByClassName("victim-photo") == null || document.getElementsByClassName("victim-photo").length == 0)
+            return;
+        const photoWidth = document.getElementsByClassName("victim-photo")[0].clientWidth;
+        const photoHeight = photoWidth / ratio;
+        document.querySelectorAll(".victim-photo").forEach(function (item) {
+            item.style.height = photoHeight + "px";
+        });
+    }
+    mapAPI.resizePhotoHeight = resizePhotoHeight;
 })(mapAPI || (mapAPI = {}));
 window.addEventListener("resize", mapAPI.onResizeWindow);
 //# sourceMappingURL=site.js.map

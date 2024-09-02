@@ -172,12 +172,12 @@ else if (isMobileView == true)
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-        
+
         var mapLocationJson = JsonConvert.SerializeObject(new { type = "Point", coordinates = new double[] { coordinates[0].X, coordinates[1].Y } }, serializerSettings);
-        
+
         MapState.SetDialogType(DialogTypeEnum.Place);
-        DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, await MapState.GetDialogOptions());
-        
+        await DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, await MapState.GetDialogOptions());
+
         if (MapState.IsMobileView)
             await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), zoom);
 

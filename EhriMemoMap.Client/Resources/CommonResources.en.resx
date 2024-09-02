@@ -414,4 +414,7 @@
   <data name="memoryType_stolperstein" xml:space="preserve">
     <value>Stolpersteins</value>
   </data>
+  <data name="countPlacesOfMemory" xml:space="preserve">
+    <value>Places of memory</value>
+  </data>
 </root>

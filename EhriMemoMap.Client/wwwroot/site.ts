@@ -109,13 +109,15 @@ namespace mapAPI {
 
     export function onResizeWindow(): void {
         fitMapToWindow();
+        resizePhotoHeight();
         blazorMapObject.invokeMethodAsync("SetMobileView", isMobileView());
 
     }
 
     // nastaví mapu, aby lícovala s oknem
-    export function fitMapToWindow(heightOfDialog = null): void {
+    export function fitMapToWindow(heightOfDialog = null, mapWidth = null): void {
         const pageHeight = window.innerHeight;
+        const pageWidth = window.innerWidth;
 
         const tempHeight = heightOfDialog != null && isMobileView() 
             ? pageHeight * (heightOfDialog / 100)
@@ -128,6 +130,8 @@ namespace mapAPI {
 
         if (mapElement == null || !mapElement)
             return;
+
+        mapElement.style.width = mapWidth == null ? "100%" : mapWidth + "px";
 
         const mapHeight = !mapAPI.isMobileView()
             ? pageHeight
@@ -573,6 +577,22 @@ namespace mapAPI {
 
     export function setBlazorCulture(value): void {
         window.localStorage['BlazorCulture'] = value;
+    }
+
+    export function resizePhotoHeight(): void {
+        const ratio = 0.875;
+
+        if (document.getElementsByClassName("victim-photo") == null || document.getElementsByClassName("victim-photo").length == 0)
+            return;
+
+        const photoWidth = document.getElementsByClassName("victim-photo")[0].clientWidth;
+        const photoHeight = photoWidth / ratio;
+
+        document.querySelectorAll<HTMLElement>(".victim-photo").forEach(function (item) {
+            item.style.height = photoHeight + "px";
+        });
+
+
     }
 
 }

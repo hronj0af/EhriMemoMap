@@ -5,6 +5,7 @@
 @inject IStringLocalizer<CommonResources> cl
 @inject MapStateService MapState
 @inject MapLogicService MapLogic
+@inject IJSRuntime JS
 <DialogButtons />
 
 <div class="rz-pt-12">
@@ -58,6 +59,11 @@
     protected void ChangedFilteredName()
     {
         StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JS.InvokeVoidAsync("mapAPI.resizePhotoHeight");
     }
 
     protected override async Task OnParametersSetAsync()

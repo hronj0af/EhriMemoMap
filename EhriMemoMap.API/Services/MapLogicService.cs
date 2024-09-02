@@ -74,7 +74,7 @@ namespace EhriMemoMap.Services
                 Victims = statistics.FirstOrDefault(a => a.Type.Contains("victims"))?.Count,
                 Incidents = statistics.FirstOrDefault(a => a.Type.Contains("incidents"))?.Count,
                 Interests = statistics.FirstOrDefault(a => a.Type.Contains("pois_points"))?.Count,
-                Inaccessibles = statistics.FirstOrDefault(a => a.Type.Contains("pois_polygons"))?.Count
+                Inaccessibles = statistics.FirstOrDefault(a => a.Type.Contains("pois_polygons"))?.Count,
                 PlacesOfMemory = _context.PraguePlacesOfMemories.Count()
             };
         }
