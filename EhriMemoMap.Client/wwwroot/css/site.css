@@ -493,6 +493,11 @@ path.leaflet-interactive:focus {
     opacity: 1;
 }
 
+	.map-point img[src*="memory"] {
+	    height: 30px;
+	    width: 30px;
+	}
+
 .map-point-selected img {
     height: 40px;
     width: 40px;

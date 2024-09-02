@@ -1,0 +1,89 @@
+﻿@using EhriMemoMap.Data;
+@using EhriMemoMap.Helpers;
+@using System.Xml;
+@using System.Xml.Linq;
+@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+@inject MapLogicService MapLogic
+
+@if (PlacesToShow != null)
+{
+    @if (PlaceType == PlaceType.Incident)
+    {
+        foreach (var place in PlacesToShow.Incidents ?? new List<PragueIncidentsTimeline>())
+        {
+            <CardIncident Place="place" />
+        }
+    }
+
+    @if (PlaceType == PlaceType.Interest)
+    {
+        foreach (var place in PlacesToShow.PlacesOfInterest ?? new List<PraguePlacesOfInterestTimeline>())
+        {
+            <CardInterest Place="place" />
+        }
+    }
+
+    @if (PlaceType == PlaceType.Inaccessible)
+    {
+        foreach (var place in PlacesToShow.InaccessiblePlaces ?? new List<PraguePlacesOfInterestTimeline>())
+        {
+            <CardInterest Place="place" />
+        }
+    }
+
+    @if (PlaceType == PlaceType.Address)
+    {
+        @if (PlacesToShow.Addresses != null)
+        {
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End">
+                <RadzenTextBox Placeholder="@cl["filterNames"]" @bind-Value=@FilteredName>
+                </RadzenTextBox>
+                <img src="images/search-only-dark.svg" onclik="(() => StateHasChanged())" style="cursor:pointer" class="rz-pb-2" />
+            </RadzenStack>
+
+        }
+        foreach (var place in PlacesToShow.Addresses ?? new List<AddressWithVictimsWrappwer>())
+        {
+            <CardAddress House="place" FilteredName="@FilteredName" />
+        }
+    }
+    @if (PlaceType == PlaceType.Memory)
+    {
+        foreach (var memoryType in PlacesToShow.PlacesOfMemory?.GroupBy(a => a.Type).Select(a => a.Key) ?? new List<string>())
+        {
+            <RadzenRow class="rz-mb-4">
+    <RadzenCard Style="width:100%">
+
+            <h2>@cl["memoryType_" + memoryType]</h2>
+                </RadzenCard>
+            </RadzenRow>
+
+            foreach (var place in PlacesToShow.PlacesOfMemory?.Where(a => a.Type == memoryType) ?? new List<PraguePlacesOfMemory>())
+            {
+                <CardMemory Place="place" />
+            }
+        }
+    }
+}
+
+@code {
+
+
+    [Parameter]
+    public PlacesResult? PlacesToShow { get; set; }
+
+    [Parameter]
+    public PlaceType PlaceType { get; set; }
+
+    [Parameter]
+    public string? FilteredName { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        MapState.OnChange += StateHasChanged;
+    }
+
+}
+

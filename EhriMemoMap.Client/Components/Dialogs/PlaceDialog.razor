@@ -14,42 +14,10 @@
         {
             <div style="padding: 0 2.5rem 0 2.5rem">
                 <h2 class="rz-mb-12" style="color:var(--Wine-Red);">@cl["featureType_" + Places.FirstOrDefault()?.PlaceType]</h2>
-
-
-
-                @foreach (var place in PlacesToShow.Incidents ?? new List<PragueIncidentsTimeline>())
-                {
-                    <CardIncident Place="place" />
+                @{
+                    var placeType = Enum.Parse<PlaceType>(Places.FirstOrDefault().PlaceType);
                 }
-
-                @foreach (var place in PlacesToShow.PlacesOfInterest ?? new List<PraguePlacesOfInterestTimeline>())
-                {
-                    <CardInterest Place="place" />
-                }
-
-                @foreach (var place in PlacesToShow.InaccessiblePlaces ?? new List<PraguePlacesOfInterestTimeline>())
-                {
-                    <CardInterest Place="place" />
-                }
-
-                @if (PlacesToShow.Addresses != null)
-                {
-                    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End">
-                        <RadzenTextBox Placeholder="@cl["filterNames"]" @bind-Value=@filteredName>
-                        </RadzenTextBox>
-                        <img src="images/search-only-dark.svg" onclik="(() => StateHasChanged())" style="cursor:pointer" class="rz-pb-2" />
-                    </RadzenStack>
-
-                }
-                @foreach (var place in PlacesToShow.Addresses ?? new List<AddressWithVictimsWrappwer>())
-                {
-                    <CardAddress House="place" FilteredName="@filteredName" />
-                }
-
-                @foreach (var place in PlacesToShow.PlacesOfMemory ?? new List<PraguePlacesOfMemory>())
-                {
-                    <CardMemory Place="place" />
-                }
+                <PlaceDialogInner PlaceType="@placeType" PlacesToShow="PlacesToShow" FilteredName="@filteredName" />
             </div>
         }
         else
@@ -61,58 +29,11 @@
                         {
                             <RadzenTabsItem Text="@(cl["featureType_" + placeType.ToString()])">
                                 <div style="padding:1.5rem">
-                                    @if (placeType == PlaceType.Incident)
-                                    {
-                                        foreach (var place in PlacesToShow.Incidents ?? new List<PragueIncidentsTimeline>())
-                                        {
-                                            <CardIncident Place="place" />
-                                        }
-                                    }
-
-                                    @if (placeType == PlaceType.Interest)
-                                    {
-                                        foreach (var place in PlacesToShow.PlacesOfInterest ?? new List<PraguePlacesOfInterestTimeline>())
-                                        {
-                                            <CardInterest Place="place" />
-                                        }
-                                    }
-
-                                    @if (placeType == PlaceType.Inaccessible)
-                                    {
-                                        foreach (var place in PlacesToShow.InaccessiblePlaces ?? new List<PraguePlacesOfInterestTimeline>())
-                                        {
-                                            <CardInterest Place="place" />
-                                        }
-                                    }
-
-                                    @if (placeType == PlaceType.Address)
-                                    {
-                                        @if (PlacesToShow.Addresses != null)
-                                        {
-                                            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End">
-                                                <RadzenTextBox Placeholder="@cl["filterNames"]" @bind-Value=@filteredName>
-                                                </RadzenTextBox>
-                                                <img src="images/search-only-dark.svg" onclik="(() => StateHasChanged())" style="cursor:pointer" class="rz-pb-2" />
-                                            </RadzenStack>
-
-                                        }
-                                        foreach (var place in PlacesToShow.Addresses ?? new List<AddressWithVictimsWrappwer>())
-                                        {
-                                            <CardAddress House="place" FilteredName="@filteredName" />
-                                        }
-                                    }
-                                    @if (placeType == PlaceType.Memory)
-                                    {
-                                        foreach (var place in PlacesToShow.PlacesOfMemory ?? new List<PraguePlacesOfMemory>())
-                                        {
-                                            <CardMemory Place="place" />
-                                        }
-                                    }
+                                    <PlaceDialogInner PlaceType="@placeType" PlacesToShow="PlacesToShow" FilteredName="@filteredName" />
                                 </div>
                             </RadzenTabsItem>
                         }
                     </Tabs>
-
                 </RadzenTabs>
             </div>
 

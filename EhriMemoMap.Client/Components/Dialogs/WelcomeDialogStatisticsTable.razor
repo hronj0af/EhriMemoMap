@@ -68,6 +68,21 @@ else
                 @statistics.Inaccessibles
             </td>
         </tr>
+        <tr>
+            <td class='cell firstCell'>
+                <img src='images/memory-welcome.svg' width=28 />
+            </td>
+            <td class='cell secondCell'>
+                @cl["countPlacesOfMemory"]
+                @*                <span class="tooltip">
+                    <img src='/images/help-small.svg' class="icon-help" />
+                     <span class="tooltiptext tooltiptext-top">@cl["help_inaccessible"]</span>
+            </span>*@
+            </td>
+            <td class='cell thirdCell'>
+                @statistics.PlacesOfMemory
+            </td>
+        </tr>
     </table>
 }
 
