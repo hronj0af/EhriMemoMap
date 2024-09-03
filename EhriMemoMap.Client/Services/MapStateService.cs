@@ -28,9 +28,11 @@ namespace EhriMemoMap.Services
             _client = client;
             _appUrl = configuration?.GetSection("App")["AppURL"] ?? "";
             AppState = configuration?.GetSection("App")["AppState"] == "Development" ? AppStateEnum.Development : AppStateEnum.Production;
+            WidthOfDialogPercent = Math.Round(100 * WidthOfDialogRatio) + "%";
         }
 
-        public string WidthOfDialog = "33%";
+        public decimal WidthOfDialogRatio = 1 / (decimal)3;
+        public string WidthOfDialogPercent;
         public int HeightOfDialog = 50;
         
         public int WindowHeight = 0;
@@ -118,17 +120,17 @@ namespace EhriMemoMap.Services
         /// </summary>
         /// <param name="order"></param>
         /// <returns></returns>
-        public async Task<string> GetStyleOfMapComponent(VerticalPositionEnum verticalPosition, HorizontalPositionEnum horizontalPosition, int horizontalMargin = 0, int verticalMargin = 0)
-        {
-            var y = verticalMargin > 0 ? verticalMargin : topOfElement;
-            var x = DialogType != DialogTypeEnum.None && !IsMobileView && horizontalPosition == HorizontalPositionEnum.Right
-                    ? WidthOfDialog 
-                    : $"{horizontalMargin}px";
+        //public string GetStyleOfMapComponent(VerticalPositionEnum verticalPosition, HorizontalPositionEnum horizontalPosition, int horizontalMargin = 0, int verticalMargin = 0)
+        //{
+        //    var y = verticalMargin > 0 ? verticalMargin : topOfElement;
+        //    var x = DialogType != DialogTypeEnum.None && !IsMobileView && horizontalPosition == HorizontalPositionEnum.Right
+        //            ? WidthOfDialogPercent
+        //            : $"{horizontalMargin}px";
 
-            var buttonStyle = $"cursor:pointer;position:absolute;{verticalPosition.ToString().ToLower()}:{y}px;{horizontalPosition.ToString().ToLower()}:{x};z-index:6000";
+        //    var buttonStyle = $"cursor:pointer;position:absolute;{verticalPosition.ToString().ToLower()}:{y}px;{horizontalPosition.ToString().ToLower()}:{x};z-index:6000";
 
-            return buttonStyle;
-        }
+        //    return buttonStyle;
+        //}
 
         /// <summary>
         /// Seznam podkladových map
@@ -175,7 +177,8 @@ namespace EhriMemoMap.Services
                 return;
             Map = settings.Map;
             Map.InitialVariables.HeightOfDialog = HeightOfDialog;
-            
+            Map.InitialVariables.WidthOfDialogRatio = WidthOfDialogRatio;
+
             if (!string.IsNullOrEmpty(layers))
                 InitInfoAboutLayersSelection(layers.Split(','));
             else
@@ -310,7 +313,7 @@ namespace EhriMemoMap.Services
                 CssClass = IsMobileView ? "" : "side-dialog",
                 Style = IsMobileView ? (DialogType == DialogTypeEnum.Help || DialogType == DialogTypeEnum.Welcome ? "z-index:50000" : "z-index:10000") : "",
                 Height = IsMobileView ? (DialogType == DialogTypeEnum.Help || DialogType == DialogTypeEnum.Welcome ? WindowHeight + "px" : HeightOfDialog + "%") : "",
-                Width = !IsMobileView ? WidthOfDialog : ""
+                Width = !IsMobileView ? WidthOfDialogPercent : ""
             };
 
         }

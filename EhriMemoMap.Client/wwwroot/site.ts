@@ -23,6 +23,7 @@ namespace mapAPI {
     let _isMobileView: boolean = null;
     let applicationIsTrackingLocation: boolean = null;
     let actualLocation: GeolocationPosition = null;
+    let dialogWidthRatio: number = 1;
     let dialogWidth: string = null;
     let dialogHeight: string = null;
     let mobileDialogHeight: number = null;
@@ -41,6 +42,7 @@ namespace mapAPI {
 
         const mapSettings = JSON.parse(jsonMapSettings) as MapSettingsForLeafletModel;
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
+        dialogWidthRatio = mapSettings.initialVariables.widthOfDialogRatio;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
 
         fitMapToWindow();
@@ -259,14 +261,21 @@ namespace mapAPI {
         else {
             event.target._icon.className = event.target._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
             event.target._icon.style.zIndex = '200';
-
-        //    const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
-        //    new L.Marker(event.target._latlng).addTo(objectsGroup);
         }
+
+        // jestliže uživatel klikl na dialogovou oblast, tak se mapa posune
+        if (userClickedOnDialogRegion())
+            map.flyTo([lat, lng]);
 
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
         blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox);
+    }
+
+    export function userClickedOnDialogRegion(): boolean {
+        if (coorx > window.innerWidth - window.innerWidth * dialogWidthRatio)
+            return true;
+        return false;
     }
 
     //////////////////////////
@@ -636,6 +645,7 @@ interface InitialVariables {
     maxZoom: number | null;
     wmsProxyUrl: string | null;
     heightOfDialog: number | null;
+    widthOfDialogRatio: number | null;
 }
 
 interface LayerForLeafletModel {

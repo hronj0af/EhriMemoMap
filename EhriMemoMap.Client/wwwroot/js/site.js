@@ -16,6 +16,7 @@ var mapAPI;
     let _isMobileView = null;
     let applicationIsTrackingLocation = null;
     let actualLocation = null;
+    let dialogWidthRatio = 1;
     let dialogWidth = null;
     let dialogHeight = null;
     let mobileDialogHeight = null;
@@ -26,6 +27,7 @@ var mapAPI;
     function initMap(jsonMapSettings) {
         const mapSettings = JSON.parse(jsonMapSettings);
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
+        dialogWidthRatio = mapSettings.initialVariables.widthOfDialogRatio;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
         fitMapToWindow();
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
@@ -187,11 +189,19 @@ var mapAPI;
             event.target._icon.className = event.target._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
             event.target._icon.style.zIndex = '200';
         }
+        if (userClickedOnDialogRegion())
+            map.flyTo([lat, lng]);
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
         blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox);
     }
     mapAPI.callBlazor_ShowPlaceInfo = callBlazor_ShowPlaceInfo;
+    function userClickedOnDialogRegion() {
+        if (coorx > window.innerWidth - window.innerWidth * dialogWidthRatio)
+            return true;
+        return false;
+    }
+    mapAPI.userClickedOnDialogRegion = userClickedOnDialogRegion;
     function refreshObjectsOnMap(objectJson) {
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
         const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
