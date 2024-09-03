@@ -149,21 +149,20 @@
   </data>
   <data name="helpContent" xml:space="preserve">
     <value>&lt;div&gt;
- &lt;p&gt;
- &lt;h4&gt;
- What is MemoMap?
- &lt;/h4&gt;
- &lt;/p&gt;
- &lt;p&gt;Interactive map of Prague from the time of the protectorate. The map shows the addresses of Holocaust victims, places related to their persecution, but also places where Jews were not allowed. Thanks to the timeline, you can see how people gradually disappeared from their homes. The application is adapted for mobile devices, so you can go directly to the city with it.&lt;/p&gt;
- &lt;p&gt;
- &lt;h4&gt;What does MemoMap contain?&lt;/h4&gt;
- &lt;/p&gt;
- &lt;p&gt;
- The application displays information about more than 40,000 victims of the Holocaust, about 1,700 cases of violations of anti-Jewish regulations and orders, about 120 interesting places related to their daily life and persecution, as well as about 110 places that were inaccessible to Jewish residents of Prague during the war.
- &lt;/p&gt;
- &lt;p&gt;Data on Holocaust victims comes from the database managed by the Terezín Initiative Institute. Thanks to this, the application makes available not only photos of the victims, but also scans of police records that relate to violations of anti-Jewish regulations and regulations (these scans come from the fund of the Prague Police Directorate).
- &lt;/p&gt;
- &lt;p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;
+    What is MemoMap?
+  &lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Interactive map of Prague from the Protectorate era. The map shows the addresses of Holocaust victims, places related to their persecution, but also places where Jews were not allowed. Thanks to the timeline, you can see how people gradually disappeared from their homes. The app is adapted for mobile devices, so you can take it directly to the city.&lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;What does MemoMap contain?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+  The app displays information about more than 40,000 victims of the Holocaust, about 1,700 cases of violations of anti-Jewish regulations and ordinances, about 120 places of interest related to their daily lives and persecution, and about 110 places that were inaccessible to Jewish residents of Prague during the war.
+  &lt;/p&gt;
+  &lt;p&gt;The data on the victims of the Holocaust come from a database maintained by the Terezín Initiative Institute. The application makes available not only photographs of the victims, but also scans of police records relating to violations of anti-Jewish regulations and orders (these scans come from the Prague Police Directorate's collection at the National Archives).
+  &lt;/p&gt; &lt;p&gt;
  &lt;h4&gt;How is the application controlled?&lt;/h4&gt;
  &lt;/p&gt;
  &lt;p&gt;
@@ -182,8 +181,9 @@
  &lt;p&gt;
  &lt;h4&gt;Credit&lt;/h4&gt;
  &lt;/p&gt;
- &lt;p&gt;The MemoMap application was created as part of the project Integration and Segregation in the City Space: History of the Holocaust in Prague through a mobile web application (identifier TL01000366). The project was supported by the Technological Agency of the Czech Republic as part of the ÉTA 1 public competition. MemoMap was created by the Masaryk Institute and the Archive of the Academy of Sciences of the Czech Republic in cooperation with the Terezín Initiative Institute and the Multicultural Center Prague.&lt;/p&gt;
- &lt;p&gt;
+ &lt;p&gt;The MemoMap application was originally developed as part of the project Integration and Segregation in the City Space: the History of the Holocaust in Prague through a mobile web application (identifier TL01000366). The project was supported by the Technology Agency of the Czech Republic as part of the public competition ÉTA 1. MemoMap was created by the Masaryk Institute and Archives of the CAS in cooperation with the Terezín Initiative Institute and the Multicultural Centre Prague.&lt;/p&gt;
+&lt;p&gt; The application has long been developed and operated within the Czech node of the European Holocaust Research Infrastructure. It is part of the LINDAT/CLARIAH-CZ infrastructure, which is supported by the Ministry of Education, Youth and Sports of the Czech Republic under the "large infrastructures" programme.&lt;/p&gt; 
+&lt;p&gt;
  &lt;h4&gt;Did you find an error?&lt;/h4&gt;
  &lt;/p&gt;
  &lt;p&gt;If you encounter a technical problem or data error, please let us know using this &lt;a href="https://docs.google.com/forms/d/15jprT8Sbc-Llt1CfAPrIzU4S8YIDjREixRADGzbA62k" target="_blank"&gt; forms&lt;/a&gt;.&lt;/p&gt;
@@ -304,13 +304,13 @@
     <value>Jewish Homes in Prague During the Occupation</value>
   </data>
   <data name="layer_address_abstract" xml:space="preserve">
-    <value>The home addresses of Prague's Jewish residents during the Shoah from the victims' database. The data mostly comes from the registration of Jews in the Protectorate, which began in the fall of 1941 by order of the Central Office for Jewish Emigration. You will be able to view the number of people who lived in a particular building, find out what their fates were, and the numbers of those present on various historical dates. Some buildings were difficult to identify and in those cases multiple addresses (for example, on the same street) are grouped under the same coordinates. We are continually working on refining the map. We have kept the street names used during the occupation (roughly 1941-1942).</value>
+    <value>Addresses where Jewish residents of Prague lived during the Shoah, according to the victims' database. The data mostly come from the registration of Jews in the Protectorate, which was initiated in autumn 1941 by order of the Central Office for Jewish Emigration. Therefore, they may not correspond to the residence of Jewish families before the persecution began. The layer includes data on the number of occupants of each house, statistics on their fate and the number present on various historical dates. In some cases, where individual houses were difficult to identify, multiple addresses are grouped under the same coordinates (for example, on the same street). We are continuously working on refining the map location. Street names from the time of occupation (ca. 1941-1942) are used.</value>
   </data>
   <data name="layer_statistics_title" xml:space="preserve">
     <value>Districts Statistic</value>
   </data>
   <data name="layer_statistics_abstract" xml:space="preserve">
-    <value>Outlines of historical Prague and Prague districts from 1930 - both linked with statistics. The map is based on the output of the NAKI project "Making Historical Spatial and Statistical Data Available in a GIS Environment" (project number DF12P01OVV033) and further modified.</value>
+    <value>Outlines of historical Prague and Prague districts from 1930 supplemented with data on the number of records accessible in the application. The map is based on the output of the NAKI project "Making Historical Spatial and Statistical Data Available in a GIS Environment" (project number DF12P01OVV033) and further modified.</value>
   </data>
   <data name="layer_MGS-prague_historical_map_1938-v2_title" xml:space="preserve">
     <value>Historical Map of Prague (1938)</value>
@@ -352,7 +352,7 @@
     <value>Homes</value>
   </data>
   <data name="welcomeText" xml:space="preserve">
-    <value>&lt;p&gt;The interactive map of Prague from the Protectorate period shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish regulations, interesting places connected with Jewish history and persecution, and places where Jews were not allowed during the war. The timeline shows how people gradually disappeared from their homes. The app is adapted for mobile devices, so you can take it directly to the city.&lt;/p&gt;</value>
+    <value>&lt;p&gt;An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war. The timeline shows how people gradually disappeared from their homes. The app is adapted for mobile devices, so you can take it directly to the city.&lt;/p&gt;</value>
   </data>
   <data name="goToMap" xml:space="preserve">
     <value>Go to map</value>
@@ -370,10 +370,10 @@
     <value>All</value>
   </data>
   <data name="help_search" xml:space="preserve">
-    <value>Search for victims' names, addresses, incidents, points of interest or restricted areas. </value>
+    <value>Search for victims' names, addresses, incidents, points of interest, restricted areas or memory locations.</value>
   </data>
   <data name="filterNames" xml:space="preserve">
-    <value>Find a person by name...</value>
+    <value>Filter by name...</value>
   </data>
   <data name="addressOccupation" xml:space="preserve">
     <value>German address from the time of the occupation</value>
@@ -400,13 +400,13 @@
     <value>Places of memory</value>
   </data>
   <data name="layer_memory_abstract" xml:space="preserve">
-    <value>???</value>
+    <value>Sites and objects commemorating the persecution and victims of the Holocaust. Currently the layer contains data on Stolperstein laid in the pavement. The data is taken from the project of the Public Benefit Society for the Support of Persons Affected by the Holocaust, https://stolpersteinecz.cz/.</value>
   </data>
   <data name="layer_memory_title_short" xml:space="preserve">
     <value>Places of memory</value>
   </data>
   <data name="help_memory" xml:space="preserve">
-    <value>??? Stolpersteine...</value>
+    <value>Sites and objects commemorating the victims of the Holocaust.</value>
   </data>
   <data name="forDetailsZoom" xml:space="preserve">
     <value>For details zoom in the map...</value>

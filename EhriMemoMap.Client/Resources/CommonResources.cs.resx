@@ -298,7 +298,7 @@
     <value>Bydliště Židů v době okupace</value>
   </data>
   <data name="layer_address_abstract" xml:space="preserve">
-    <value>Adresy, na nichž podle databáze obětí, bydleli v době šoa židovští obyvatelé Prahy. Údaje většinou pocházejí z registrace Židů v protektorátu, která byla na základě nařízení Ústředny pro židovské vystěhovalectví zahájena na podzim 1941. Nemusí proto odpovídat bydlišti židovských rodin před začátkem pronásledování. Vrstva zahrnuje údaje o počtu obyvatel jednotlivých domů, statistiku jejich osudů a počet přítomných k různým historickým datům. V některých případech, kdy bylo obtížné jednotlivé domy identifikovat, je pod stejnými koordináty seskupeno více adres (například v jedné ulici). Na zpřesnění umístění na mapě průběžně pracujeme. Použity jsou názvy ulic z doby okupace (cca 1941-1942).</value>
+    <value>Adresy, na nichž podle databáze obětí bydleli v době šoa židovští obyvatelé Prahy. Údaje většinou pocházejí z registrace Židů v protektorátu, která byla na základě nařízení Ústředny pro židovské vystěhovalectví zahájena na podzim 1941. Nemusí proto odpovídat bydlišti židovských rodin před začátkem pronásledování. Vrstva zahrnuje údaje o počtu obyvatel jednotlivých domů, statistiku jejich osudů a počet přítomných k různým historickým datům. V některých případech, kdy bylo obtížné jednotlivé domy identifikovat, je pod stejnými koordináty seskupeno více adres (například v jedné ulici). Na zpřesnění umístění na mapě průběžně pracujeme. Použity jsou názvy ulic z doby okupace (cca 1941-1942).</value>
   </data>
   <data name="layer_victim_title" xml:space="preserve">
     <value>Oběti holokaustu</value>
