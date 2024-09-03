@@ -189,19 +189,21 @@ var mapAPI;
             event.target._icon.className = event.target._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
             event.target._icon.style.zIndex = '200';
         }
-        if (userClickedOnDialogRegion())
+        if (shouldBeMapCenteredAfterClick())
             map.flyTo([lat, lng]);
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
         blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox);
     }
     mapAPI.callBlazor_ShowPlaceInfo = callBlazor_ShowPlaceInfo;
-    function userClickedOnDialogRegion() {
+    function shouldBeMapCenteredAfterClick() {
+        if (isMobileView())
+            return true;
         if (coorx > window.innerWidth - window.innerWidth * dialogWidthRatio)
             return true;
         return false;
     }
-    mapAPI.userClickedOnDialogRegion = userClickedOnDialogRegion;
+    mapAPI.shouldBeMapCenteredAfterClick = shouldBeMapCenteredAfterClick;
     function refreshObjectsOnMap(objectJson) {
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
         const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");

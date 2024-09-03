@@ -263,8 +263,8 @@ namespace mapAPI {
             event.target._icon.style.zIndex = '200';
         }
 
-        // jestliže uživatel klikl na dialogovou oblast, tak se mapa posune
-        if (userClickedOnDialogRegion())
+        // má se mapa posunout na střed?
+        if (shouldBeMapCenteredAfterClick())
             map.flyTo([lat, lng]);
 
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
@@ -272,7 +272,14 @@ namespace mapAPI {
         blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox);
     }
 
-    export function userClickedOnDialogRegion(): boolean {
+    // má se mapa posunout na střed?
+    export function shouldBeMapCenteredAfterClick(): boolean {
+
+        // pokud je mobilní zobrazení, tak se mapa posunout má
+        if (isMobileView())
+            return true;
+
+        // pokud je bod v oblasti, kde vyskočí dialogové okno, tak se mapa posunout má
         if (coorx > window.innerWidth - window.innerWidth * dialogWidthRatio)
             return true;
         return false;
