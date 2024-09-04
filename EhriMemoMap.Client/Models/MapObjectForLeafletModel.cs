@@ -66,11 +66,11 @@ public partial class MapObjectForLeafletModel
         CustomTooltipClass = "statistics-tooltip";
         CustomPolygonClass = "statistics-polygon";
 
-        var victims = statistics.FirstOrDefault(a => a.Type.Contains("victims"))?.Count;
-        var incidents = statistics.FirstOrDefault(a => a.Type.Contains("incidents"))?.Count;
-        var interests = statistics.FirstOrDefault(a => a.Type.Contains("pois_points"))?.Count;
-        var inaccessibles = statistics.FirstOrDefault(a => a.Type.Contains("pois_polygons"))?.Count;
-        var placesOfMemory = statistics.FirstOrDefault(a => a.Type.Contains("places_of_memory"))?.Count;
+        var victims = statistics.FirstOrDefault(a => a.Type.Contains("victims"))?.Count ?? 0;
+        var incidents = statistics.FirstOrDefault(a => a.Type.Contains("incidents"))?.Count ?? 0;
+        var interests = statistics.FirstOrDefault(a => a.Type.Contains("pois_points"))?.Count ?? 0;
+        var inaccessibles = statistics.FirstOrDefault(a => a.Type.Contains("pois_polygons"))?.Count ?? 0;
+        var placesOfMemory = statistics.FirstOrDefault(a => a.Type.Contains("places_of_memory"))?.Count ?? 0;
 
         Label = @$"<h2 class='rz-mb-2'>{(CultureInfo.CurrentCulture.Name == "en-US" ? statistics.FirstOrDefault().QuarterEn : statistics.FirstOrDefault().QuarterCs)}</h3>
 
