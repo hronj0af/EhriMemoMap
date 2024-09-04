@@ -277,32 +277,20 @@ path.leaflet-interactive:focus {
     }
 }
 
-.hide {
-    display: none;
+
+.layerInfoInner{
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 200ms;
 }
 
-.layerInfo:hover .hide {
-    display: block;
-    opacity: 1;
-    animation: fadeIn 0.2s;
-}
-
-.layerInfo:hover {
-    height: 200px;
-    transition: height 0.2s;
-}
-
-@media only screen and (max-width: 600px) {
-    .layerInfo:hover {
-        height: 300px;
-        transition: height 0.2s;
+    .layerInfoInner > div {
+        overflow: hidden;
     }
-}
 
-
-.layerInfo {
-    height: 25px;
-    transition: height 0.2s;
+.layerInfo:hover .layerInfoInner {
+    grid-template-rows: 1fr;
+    margin-top: 8px;
 }
 
 /* TOOLTIP */
