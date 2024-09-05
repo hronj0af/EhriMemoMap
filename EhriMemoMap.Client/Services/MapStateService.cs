@@ -317,5 +317,22 @@ namespace EhriMemoMap.Services
             };
 
         }
+        /// <summary>
+        /// Má se mapa posunout na střed, když uživatel klikne na nějaké místo na mapu?
+        /// </summary>
+        /// <param name="mousePointClickX"></param>
+        /// <returns></returns>
+        public bool ShouldBeMapCenteredAfterClick(double mousePointClickX) {
+
+        // pokud je mobilní zobrazení, tak se mapa posunout má
+        if (IsMobileView)
+            return true;
+
+        // pokud je bod v oblasti, kde vyskočí dialogové okno, tak se mapa posunout má
+        if ((int)mousePointClickX > WindowWidth - WindowWidth * WidthOfDialogRatio)
+            return true;
+        return false;
     }
+
+}
 }

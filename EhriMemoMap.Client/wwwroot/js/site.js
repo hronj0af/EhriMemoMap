@@ -189,21 +189,11 @@ var mapAPI;
             event.target._icon.className = event.target._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
             event.target._icon.style.zIndex = '200';
         }
-        if (shouldBeMapCenteredAfterClick())
-            map.flyTo([lat, lng]);
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
-        blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox);
+        blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox, coorx);
     }
     mapAPI.callBlazor_ShowPlaceInfo = callBlazor_ShowPlaceInfo;
-    function shouldBeMapCenteredAfterClick() {
-        if (isMobileView())
-            return true;
-        if (coorx > window.innerWidth - window.innerWidth * dialogWidthRatio)
-            return true;
-        return false;
-    }
-    mapAPI.shouldBeMapCenteredAfterClick = shouldBeMapCenteredAfterClick;
     function refreshObjectsOnMap(objectJson) {
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
         const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
@@ -403,7 +393,7 @@ var mapAPI;
     mapAPI.turnOnLocationTracking = turnOnLocationTracking;
     function goToLocation(pointString, zoom) {
         const point = JSON.parse(pointString).coordinates;
-        map.setView([point[1], point[0]], zoom);
+        map.flyTo([point[1], point[0]], zoom);
     }
     mapAPI.goToLocation = goToLocation;
     function goToMyLocation() {
