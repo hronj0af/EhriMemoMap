@@ -23,7 +23,6 @@ namespace mapAPI {
     let _isMobileView: boolean = null;
     let applicationIsTrackingLocation: boolean = null;
     let actualLocation: GeolocationPosition = null;
-    let dialogWidthRatio: number = 1;
     let dialogWidth: string = null;
     let dialogHeight: string = null;
     let mobileDialogHeight: number = null;
@@ -42,7 +41,6 @@ namespace mapAPI {
 
         const mapSettings = JSON.parse(jsonMapSettings) as MapSettingsForLeafletModel;
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
-        dialogWidthRatio = mapSettings.initialVariables.widthOfDialogRatio;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
 
         fitMapToWindow();
@@ -635,7 +633,6 @@ interface InitialVariables {
     maxZoom: number | null;
     wmsProxyUrl: string | null;
     heightOfDialog: number | null;
-    widthOfDialogRatio: number | null;
 }
 
 interface LayerForLeafletModel {

@@ -177,7 +177,6 @@ namespace EhriMemoMap.Services
                 return;
             Map = settings.Map;
             Map.InitialVariables.HeightOfDialog = HeightOfDialog;
-            Map.InitialVariables.WidthOfDialogRatio = WidthOfDialogRatio;
 
             if (!string.IsNullOrEmpty(layers))
                 InitInfoAboutLayersSelection(layers.Split(','));

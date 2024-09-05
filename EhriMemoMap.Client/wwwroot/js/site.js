@@ -16,7 +16,6 @@ var mapAPI;
     let _isMobileView = null;
     let applicationIsTrackingLocation = null;
     let actualLocation = null;
-    let dialogWidthRatio = 1;
     let dialogWidth = null;
     let dialogHeight = null;
     let mobileDialogHeight = null;
@@ -27,7 +26,6 @@ var mapAPI;
     function initMap(jsonMapSettings) {
         const mapSettings = JSON.parse(jsonMapSettings);
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
-        dialogWidthRatio = mapSettings.initialVariables.widthOfDialogRatio;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
         fitMapToWindow();
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
