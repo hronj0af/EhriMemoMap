@@ -2,9 +2,9 @@ using EhriMemoMap.Client;
 using Radzen;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using EhriMemoMap.Services;
 using Microsoft.JSInterop;
 using System.Globalization;
+using EhriMemoMap.Client.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 

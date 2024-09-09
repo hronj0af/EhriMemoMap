@@ -5,10 +5,8 @@ using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Radzen;
-using System.Net.Http.Json;
-using static System.Net.WebRequestMethods;
 
-namespace EhriMemoMap.Services
+namespace EhriMemoMap.Client.Services
 {
 
     /// <summary>
@@ -34,7 +32,7 @@ namespace EhriMemoMap.Services
         public decimal WidthOfDialogRatio = 1 / (decimal)3;
         public string WidthOfDialogPercent;
         public int HeightOfDialog = 50;
-        
+
         public int WindowHeight = 0;
         public int WindowWidth = 0;
 
@@ -116,23 +114,6 @@ namespace EhriMemoMap.Services
         }
 
         /// <summary>
-        /// Vrátí informace o stylu mapových čudlíků a boxíků, aby se to zobrazovalo na správném místě a bylo to vidět
-        /// </summary>
-        /// <param name="order"></param>
-        /// <returns></returns>
-        //public string GetStyleOfMapComponent(VerticalPositionEnum verticalPosition, HorizontalPositionEnum horizontalPosition, int horizontalMargin = 0, int verticalMargin = 0)
-        //{
-        //    var y = verticalMargin > 0 ? verticalMargin : topOfElement;
-        //    var x = DialogType != DialogTypeEnum.None && !IsMobileView && horizontalPosition == HorizontalPositionEnum.Right
-        //            ? WidthOfDialogPercent
-        //            : $"{horizontalMargin}px";
-
-        //    var buttonStyle = $"cursor:pointer;position:absolute;{verticalPosition.ToString().ToLower()}:{y}px;{horizontalPosition.ToString().ToLower()}:{x};z-index:6000";
-
-        //    return buttonStyle;
-        //}
-
-        /// <summary>
         /// Seznam podkladových map
         /// </summary>
         public MapModel Map { get; set; }
@@ -171,7 +152,7 @@ namespace EhriMemoMap.Services
         /// </summary>
         public async Task Init(string? layers = null, string? timelinePoint = null)
         {
-            var json = await _client.GetStringAsync(_appUrl + "mapsettings.json"); 
+            var json = await _client.GetStringAsync(_appUrl + "mapsettings.json");
             var settings = JsonConvert.DeserializeObject<MapStateService>(json);
             if (settings == null)
                 return;
@@ -204,7 +185,7 @@ namespace EhriMemoMap.Services
                     layer.Selected = false;
             });
 
-            foreach (var layer in Map.Timeline?.Where(a=>a.AdditionalLayers != null).SelectMany(a=>a.AdditionalLayers))
+            foreach (var layer in Map.Timeline?.Where(a => a.AdditionalLayers != null).SelectMany(a => a.AdditionalLayers))
             {
                 if (layers == null || layers.Contains(layer.Name))
                     layer.Selected = true;
@@ -220,10 +201,10 @@ namespace EhriMemoMap.Services
         {
             if (Map.Timeline == null)
                 return;
-            
+
             Map.Timeline?.ForEach(point =>
             {
-                if ((string.IsNullOrEmpty(timelinePoint) && point.From == null) || point.Name == timelinePoint)
+                if (string.IsNullOrEmpty(timelinePoint) && point.From == null || point.Name == timelinePoint)
                     point.Selected = true;
                 else
                     point.Selected = false;
@@ -267,7 +248,7 @@ namespace EhriMemoMap.Services
         {
             if (Map.Timeline == null)
                 return;
-            Map.Timeline.ForEach(a => a.Selected = point.Name == a.Name ? point.Selected : false);
+            Map.Timeline.ForEach(a => a.Selected = point.Name == a.Name && point.Selected);
             point.Selected = !point.Selected;
         }
 
@@ -310,8 +291,8 @@ namespace EhriMemoMap.Services
                 Position = IsMobileView ? DialogPosition.Bottom : DialogPosition.Right,
                 ShowMask = false,
                 CssClass = IsMobileView ? "" : "side-dialog",
-                Style = IsMobileView ? (DialogType == DialogTypeEnum.Help || DialogType == DialogTypeEnum.Welcome ? "z-index:50000" : "z-index:10000") : "",
-                Height = IsMobileView ? (DialogType == DialogTypeEnum.Help || DialogType == DialogTypeEnum.Welcome ? WindowHeight + "px" : HeightOfDialog + "%") : "",
+                Style = IsMobileView ? DialogType == DialogTypeEnum.Help || DialogType == DialogTypeEnum.Welcome ? "z-index:50000" : "z-index:10000" : "",
+                Height = IsMobileView ? DialogType == DialogTypeEnum.Help || DialogType == DialogTypeEnum.Welcome ? WindowHeight + "px" : HeightOfDialog + "%" : "",
                 Width = !IsMobileView ? WidthOfDialogPercent : ""
             };
 
@@ -321,17 +302,18 @@ namespace EhriMemoMap.Services
         /// </summary>
         /// <param name="mousePointClickX"></param>
         /// <returns></returns>
-        public bool ShouldBeMapCenteredAfterClick(double mousePointClickX) {
+        public bool ShouldBeMapCenteredAfterClick(double mousePointClickX)
+        {
 
-        // pokud je mobilní zobrazení, tak se mapa posunout má
-        if (IsMobileView)
-            return true;
+            // pokud je mobilní zobrazení, tak se mapa posunout má
+            if (IsMobileView)
+                return true;
 
-        // pokud je bod v oblasti, kde vyskočí dialogové okno, tak se mapa posunout má
-        if ((int)mousePointClickX > WindowWidth - WindowWidth * WidthOfDialogRatio)
-            return true;
-        return false;
+            // pokud je bod v oblasti, kde vyskočí dialogové okno, tak se mapa posunout má
+            if ((int)mousePointClickX > WindowWidth - WindowWidth * WidthOfDialogRatio)
+                return true;
+            return false;
+        }
+
     }
-
-}
 }

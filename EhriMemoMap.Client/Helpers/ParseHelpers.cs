@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace EhriMemoMap.Helpers
+﻿namespace EhriMemoMap.Client.Helpers
 {
     public static class ParseHelpers
     {
