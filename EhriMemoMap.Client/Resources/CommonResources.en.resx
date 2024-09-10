@@ -154,16 +154,16 @@
     What is MemoMap?
   &lt;/h4&gt;
   &lt;/p&gt;
-  &lt;p&gt;Interactive map of Prague from the Protectorate era. The map shows the addresses of Holocaust victims, places related to their persecution, but also places where Jews were not allowed. Thanks to the timeline, you can see how people gradually disappeared from their homes. The app is adapted for mobile devices, so you can take it directly to the city.&lt;/p&gt;
+  &lt;p&gt;Interactive map of Prague from the period of the Protectorate Bohemia and Moravia. The map shows the addresses where Prague Jews lived during Nazi occupation, places related to their persecution as well as places where Jews were not allowed. Thanks to the timeline, you can see how people gradually disappeared from their homes as they were deported to ghettos and concentration camps. The app is adapted for mobile devices and you can use it while walking in the city.&lt;/p&gt;
   &lt;p&gt;
   &lt;h4&gt;What does MemoMap contain?&lt;/h4&gt;
   &lt;/p&gt;
   &lt;p&gt;
-  The app displays information about more than 40,000 victims of the Holocaust, about 1,700 cases of violations of anti-Jewish regulations and ordinances, about 120 places of interest related to their daily lives and persecution, and about 110 places that were inaccessible to Jewish residents of Prague during the war.
+  The app displays information about more than 40,000 victims of the Holocaust, about 1,700 cases of violations of anti-Jewish regulations and ordinances, about 120 places of interest related to their daily lives and persecution, about 110 places that were inaccessible to Jewish residents of Prague during the war and a growing number of places of memory.
   &lt;/p&gt;
   &lt;p&gt;The data on the victims of the Holocaust come from a database maintained by the Terezín Initiative Institute. The application makes available not only photographs of the victims, but also scans of police records relating to violations of anti-Jewish regulations and orders (these scans come from the Prague Police Directorate's collection at the National Archives).
   &lt;/p&gt; &lt;p&gt;
- &lt;h4&gt;How is the application controlled?&lt;/h4&gt;
+ &lt;h4&gt;How to use the application?&lt;/h4&gt;
  &lt;/p&gt;
  &lt;p&gt;
  Individual data types are divided into so-called layers, between which you can switch. The layer control is located under the icon&amp;nbsp;&amp;nbsp;
@@ -178,15 +178,21 @@
  Your location on the map can be found using the button&amp;nbsp;&amp;nbsp;
  &lt;img src='/images/location-small.svg' /&gt;
  &lt;/p&gt;
- &lt;p&gt;
- &lt;h4&gt;Credit&lt;/h4&gt;
- &lt;/p&gt;
- &lt;p&gt;The MemoMap application was originally developed as part of the project Integration and Segregation in the City Space: the History of the Holocaust in Prague through a mobile web application (identifier TL01000366). The project was supported by the Technology Agency of the Czech Republic as part of the public competition ÉTA 1. MemoMap was created by the Masaryk Institute and Archives of the CAS in cooperation with the Terezín Initiative Institute and the Multicultural Centre Prague.&lt;/p&gt;
-&lt;p&gt; The application has long been developed and operated within the Czech node of the European Holocaust Research Infrastructure. It is part of the LINDAT/CLARIAH-CZ infrastructure, which is supported by the Ministry of Education, Youth and Sports of the Czech Republic under the "large infrastructures" programme.&lt;/p&gt; 
+
 &lt;p&gt;
  &lt;h4&gt;Did you find an error?&lt;/h4&gt;
  &lt;/p&gt;
  &lt;p&gt;If you encounter a technical problem or data error, please let us know using this &lt;a href="https://docs.google.com/forms/d/15jprT8Sbc-Llt1CfAPrIzU4S8YIDjREixRADGzbA62k" target="_blank"&gt; forms&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;
+ &lt;h4&gt;Credit&lt;/h4&gt;
+ &lt;/p&gt;
+ &lt;p&gt;The MemoMap application was originally developed as part of the project Integration and Segregation in the City Space: the History of the Holocaust in Prague through a mobile web application (identifier TL01000366). The project was supported by the Technology Agency of the Czech Republic as part of the public competition ÉTA 1. MemoMap was created by the Masaryk Institute and Archives of the Czech Academy of Sciences in cooperation with the Terezín Initiative Institute and the Multicultural Centre Prague.&lt;/p&gt;
+&lt;p&gt; The application is maintained and further developed by the Czech node of the European Holocaust Research Infrastructure. It is part of the LINDAT/CLARIAH-CZ infrastructure, which is supported by the Ministry of Education, Youth and Sports of the Czech Republic under the programm of large research infrastructures.&lt;/p&gt; 
+&lt;p&gt; It has been supported by the Czech Foundation for Holocast Victims and through the Strategy 21 program "City as a laboratory of change" financed by the Czech Academy of Sciences.&lt;/p&gt;
+
+  &lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;
+
 &lt;/div&gt;</value>
   </data>
   <data name="layerInfo" xml:space="preserve">
