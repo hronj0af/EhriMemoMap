@@ -2,8 +2,6 @@
 @page "/{City}"
 
 @using NetTopologySuite.Geometries;
-@using EhriMemoMap.Helpers
-
 @inject IJSRuntime JS
 @inject DialogService DialogService
 @inject IStringLocalizer<CommonResources> cl
@@ -160,7 +158,7 @@ else if (isMobileView == true)
     }
 
     [JSInvokable("ShowPlaceInfo")]
-    public async Task ShowPlaceInfo(float zoom, Coordinate[] coordinates)
+    public async Task ShowPlaceInfo(float zoom, Coordinate[] coordinates, double mouseClickPointX)
     {
         var placesOnMap = await MapLogic.GetMapObjects(true, false, coordinates);
         if (placesOnMap.Count == 0)
@@ -176,9 +174,9 @@ else if (isMobileView == true)
         var mapLocationJson = JsonConvert.SerializeObject(new { type = "Point", coordinates = new double[] { coordinates[0].X, coordinates[1].Y } }, serializerSettings);
 
         MapState.SetDialogType(DialogTypeEnum.Place);
-        await DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, await MapState.GetDialogOptions());
+        DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, await MapState.GetDialogOptions());
 
-        if (MapState.IsMobileView)
+        if (MapState.ShouldBeMapCenteredAfterClick(mouseClickPointX))
             await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), zoom);
 
 

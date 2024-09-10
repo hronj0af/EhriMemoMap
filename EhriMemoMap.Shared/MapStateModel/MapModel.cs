@@ -24,7 +24,6 @@ namespace EhriMemoMap.Shared
         public PointModel? MaxBounds { get; set; }
         public string? WmsProxyUrl { get; set; }
         public int HeightOfDialog { get; set; }
-        public decimal WidthOfDialogRatio { get; set; }
 
     }
 

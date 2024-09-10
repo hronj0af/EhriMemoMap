@@ -23,7 +23,6 @@ namespace mapAPI {
     let _isMobileView: boolean = null;
     let applicationIsTrackingLocation: boolean = null;
     let actualLocation: GeolocationPosition = null;
-    let dialogWidthRatio: number = 1;
     let dialogWidth: string = null;
     let dialogHeight: string = null;
     let mobileDialogHeight: number = null;
@@ -42,7 +41,6 @@ namespace mapAPI {
 
         const mapSettings = JSON.parse(jsonMapSettings) as MapSettingsForLeafletModel;
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
-        dialogWidthRatio = mapSettings.initialVariables.widthOfDialogRatio;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
 
         fitMapToWindow();
@@ -263,26 +261,9 @@ namespace mapAPI {
             event.target._icon.style.zIndex = '200';
         }
 
-        // má se mapa posunout na střed?
-        if (shouldBeMapCenteredAfterClick())
-            map.flyTo([lat, lng]);
-
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
-        blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox);
-    }
-
-    // má se mapa posunout na střed?
-    export function shouldBeMapCenteredAfterClick(): boolean {
-
-        // pokud je mobilní zobrazení, tak se mapa posunout má
-        if (isMobileView())
-            return true;
-
-        // pokud je bod v oblasti, kde vyskočí dialogové okno, tak se mapa posunout má
-        if (coorx > window.innerWidth - window.innerWidth * dialogWidthRatio)
-            return true;
-        return false;
+        blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox, coorx);
     }
 
     //////////////////////////
@@ -520,7 +501,7 @@ namespace mapAPI {
 
     export function goToLocation(pointString, zoom: number): void {
         const point = (JSON.parse(pointString) as PointModel).coordinates;
-        map.setView([point[1], point[0]], zoom);
+        map.flyTo([point[1], point[0]], zoom);
     }
 
     export function goToMyLocation(): void {
@@ -652,7 +633,6 @@ interface InitialVariables {
     maxZoom: number | null;
     wmsProxyUrl: string | null;
     heightOfDialog: number | null;
-    widthOfDialogRatio: number | null;
 }
 
 interface LayerForLeafletModel {
