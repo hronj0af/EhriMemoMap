@@ -66,7 +66,7 @@ namespace EhriMemoMap.Services
             return result;
         }
 
-        public WelcomeDialogStatistics GetWelcomeDialogStatistics()
+        public WelcomeDialogStatistics GetWelcomeDialogStatistics(string city)
         {
             var statistics = _context.MapStatistics.Where(a => a.Type.Contains("total") && a.DateFrom == null && a.DateTo == null).ToList();
             return new WelcomeDialogStatistics

@@ -1,6 +1,7 @@
 ﻿{
   "map": {
     "initialVariables": {
+      "city": "prague",
       "zoom": 12,
       "zoomMobile": 11,
       "lat": 50.07905886,

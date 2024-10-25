@@ -125,7 +125,7 @@
         MapState.SearchedPlaces = null;
         await InvokeAsync(StateHasChanged);
         showLoading = true;
-        MapState.SearchedPlaces = await MapLogic.GetSolrPlaces(new SolrQueryParameters { Query = MapState.SearchedPlaceString });
+        MapState.SearchedPlaces = await MapLogic.GetSolrPlaces(new SolrQueryParameters { Query = MapState.SearchedPlaceString, City = MapState.Map.InitialVariables?.City });
         showLoading = false;
 
         openedTypes = new List<string>();

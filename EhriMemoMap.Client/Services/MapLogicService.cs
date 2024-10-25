@@ -10,6 +10,8 @@ using EhriMemoMap.Resources;
 using NetTopologySuite.IO;
 using EhriMemoMap.Shared;
 using System.Net.Http.Json;
+using System.Runtime.InteropServices;
+using System.Text;
 
 namespace EhriMemoMap.Client.Services
 {
@@ -73,6 +75,7 @@ namespace EhriMemoMap.Client.Services
             parameters.CustomCoordinates = customCoordinates?.Select(a=> new PointModel { X = a.X, Y = a.Y }).ToArray();
             parameters.MapSouthWestPoint = new PointModel { X = _mapState.MapSouthWestPoint.X, Y = _mapState.MapSouthWestPoint.Y };
             parameters.MapNorthEastPoint = new PointModel { X = _mapState.MapNorthEastPoint.X, Y = _mapState.MapNorthEastPoint.Y };
+            parameters.City = _mapState.Map.InitialVariables?.City;
 
             var objects = await GetResultFromApiPost<List<MapObject>>("getmapobjects", parameters);
 
@@ -145,15 +148,16 @@ namespace EhriMemoMap.Client.Services
             if (_mapState.MapZoom >= layer.MinZoom && _mapState.MapZoom <= layer.MaxZoom)
                 parameters.Total = false;
 
+            parameters.City = _mapState.Map.InitialVariables?.City;
 
-            statistics = await GetResultFromApiGet<List<MapStatistic>>("getdistrictstatistics", $"total={parameters.Total}{(parameters.TimeLinePoint != null ? "&timeLinePoint=" + parameters.TimeLinePoint?.ToString("yyyy-MM-dd") : "")}");
+            statistics = await GetResultFromApiGet<List<MapStatistic>>("getdistrictstatistics", $"city={parameters.City}&total={parameters.Total}{(parameters.TimeLinePoint != null ? "&timeLinePoint=" + parameters.TimeLinePoint?.ToString("yyyy-MM-dd") : "")}");
             
             return statistics.GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
         }
 
         public async Task<WelcomeDialogStatistics> GetWelcomeDialogStatistics()
         {
-            var statistics = await GetResultFromApiPost<WelcomeDialogStatistics>("getwelcomedialogstatistics", null);
+            var statistics = await GetResultFromApiGet<WelcomeDialogStatistics>("getwelcomedialogstatistics","city=" + _mapState.Map.InitialVariables?.City);
             return statistics;
         }
 
@@ -171,7 +175,10 @@ namespace EhriMemoMap.Client.Services
 
         private async Task<T> GetResultFromApiPost<T>(string apiMethod, object? parameters)
         {
-            var apiResult = await _client.PostAsJsonAsync(_apiUrl + apiMethod, parameters);
+            var json = JsonConvert.SerializeObject(parameters);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var apiResult = await _client.PostAsync(_apiUrl + apiMethod, content);
             var jsonString = await apiResult.Content.ReadAsStringAsync();
 
             using var stringReader = new StringReader(jsonString);

@@ -45,11 +45,12 @@ var proxyClient = new HttpClient();
 
 app.MapGet("/", () => "Hello World...");
 
-app.MapGet("/getdistrictstatistics", (bool total, DateTime? timeLinePoint, MapLogicService service, HttpContext context) =>
+app.MapGet("/getdistrictstatistics", (bool total, DateTime? timeLinePoint, string city, MapLogicService service, HttpContext context) =>
 {
     context.Response.Headers.Append("Cache-Control", "no-cache");
     var parameters = new DistrictStatisticsParameters
     {
+        City = city,
         Total = total,
         TimeLinePoint = timeLinePoint
     };
@@ -58,7 +59,7 @@ app.MapGet("/getdistrictstatistics", (bool total, DateTime? timeLinePoint, MapLo
 
 app.MapPost("/getmapobjects", (MapObjectParameters parameters, MapLogicService service) => service.GetMapObjects(parameters));
 
-app.MapPost("/getwelcomedialogstatistics", (MapLogicService service) => service.GetWelcomeDialogStatistics());
+app.MapGet("/getwelcomedialogstatistics", (string city, MapLogicService service) => service.GetWelcomeDialogStatistics(city));
 
 app.MapPost("/getplaces", (PlacesParameters parameters, MapLogicService service) => service.GetPlaces(parameters));
 
