@@ -22,6 +22,7 @@ builder.Services.AddHttpClient();
 // setx MEMOMAP_DB "Host=[host];Port=[port];Database=[db_name];User ID=[user_id];Password=[password]"
 // in linux you can do this by setting variable in service file 
 // Environment=MEMOMAP_DB='Host=[host];Port=[port];Database=[db_name];User ID=[user_id];Password=[password]'
+var db = builder.Configuration["MEMOMAP_DB"];
 builder.Services.AddDbContext<MemogisContext>(options => options.UseNpgsql(builder.Configuration["MEMOMAP_DB"]));
 
 var cors = "_myAllowSpecificOrigins";

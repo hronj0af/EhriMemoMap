@@ -7,6 +7,7 @@ namespace EhriMemoMap.Data;
 
 public partial class MapObject
 {
+    public string? City { get; set; }
     public string? PlaceType { get; set; }
 
     public decimal? Citizens { get; set; }

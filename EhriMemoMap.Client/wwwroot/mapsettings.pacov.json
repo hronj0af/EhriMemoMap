@@ -1,0 +1,44 @@
+﻿{
+  "map": {
+    "initialVariables": {
+      "city": "pacov",
+      "zoom": 12,
+      "zoomMobile": 11,
+      "lat": 49.4776639,
+      "lng": 14.9925593,
+      "minBounds": {
+        "X": 49.47,
+        "Y": 14.5
+      },
+      "maxBounds": {
+        "X": 50.0,
+        "Y": 15.5
+      },
+      "minZoom": 11,
+      "maxZoom": 18,
+      "wmsProxyUrl": "https://localhost:7294/wmsProxy"
+    },
+    "layers": [
+      {
+        "name": "OSM",
+        "url": "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+        "attribution": "MÚA AVČR, ITI &copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
+        "attributionUrl": "https://ehri.cz/memogis_cs.html#howto_credit",
+        "type": "base",
+        "zIndex": "50",
+        "selected": true
+      },
+      {
+        "name": "interest",
+        "placeType": "interest",
+        "order": 2,
+        "type": "objects",
+        "minZoom": 16,
+        "quickAccess": true,
+        "backgroundColor": "#7E469B",
+        "fontColor": "Light"
+      }
+
+    ]
+  }
+}

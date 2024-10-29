@@ -150,9 +150,12 @@ namespace EhriMemoMap.Client.Services
         /// <summary>
         /// Initializace tohoto objektu na základě mapsettings.json, případně podle parametrů v url
         /// </summary>
-        public async Task Init(string? layers = null, string? timelinePoint = null)
+        public async Task Init(string? city, string? layers = null, string? timelinePoint = null)
         {
-            var json = await _client.GetStringAsync(_appUrl + "mapsettings.json");
+            if (string.IsNullOrEmpty(city))
+                city = "prague";
+
+            var json = await _client.GetStringAsync(_appUrl + $"mapsettings.{city}.json");
             var settings = JsonConvert.DeserializeObject<MapStateService>(json);
             if (settings == null)
                 return;

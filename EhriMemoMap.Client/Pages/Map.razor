@@ -92,7 +92,7 @@ else if (isMobileView == true)
 
             // inicializace hlavního objektu mapy
             // pokud jsou v url parametry layers a timeline, tak se použijí, jinak se použijí defaultní hodnoty
-            await MapState.Init(layers, timelinePointName);
+            await MapState.Init(City, layers, timelinePointName);
 
             string? bounds = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "bounds");
 
