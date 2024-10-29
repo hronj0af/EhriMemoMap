@@ -73,12 +73,6 @@ public partial class MemogisContext : DbContext
 
     public virtual DbSet<PragueVictimsTimeline> PragueVictimsTimelines { get; set; }
 
-//    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-//        => optionsBuilder.UseNpgsql("Host=192.168.100.20;Port=5432;Database=memogis;User ID=aplzakova;Password=krt36Lek", x => x
-//                .UseNodaTime()
-//                .UseNetTopologySuite());
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("postgis");
