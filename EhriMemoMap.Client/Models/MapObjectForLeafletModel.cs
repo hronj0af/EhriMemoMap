@@ -38,17 +38,22 @@ public partial class MapObjectForLeafletModel
 
         else if (PlaceType == Shared.PlaceType.Address.ToString())
         {
-            var percents = (decimal)Citizens / CitizensTotal;
-            string iconFile = percents switch
+            if (Citizens == null)
+                HtmlIcon = $"<div style='position:relative'><img src='images/addresses/victims_100.png' /></div>";
+            else
             {
-                1 => "victims_100",
-                < 1 and >= 0.5M => "victims_051",
-                < 0.5M and > 0 => "victims_001",
-                0 => "victims_000",
-                _ => "victims_100"
-            };
+                var percents = (decimal)Citizens / CitizensTotal;
+                string iconFile = percents switch
+                {
+                    1 => "victims_100",
+                    < 1 and >= 0.5M => "victims_051",
+                    < 0.5M and > 0 => "victims_001",
+                    0 => "victims_000",
+                    _ => "victims_100"
+                };
 
-            HtmlIcon = $"<div style='position:relative'><img src='images/addresses/{iconFile}_{Citizens}.png' /></div>";
+                HtmlIcon = $"<div style='position:relative'><img src='images/addresses/{iconFile}_{Citizens}.png' /></div>";
+            }
         }
     }
 

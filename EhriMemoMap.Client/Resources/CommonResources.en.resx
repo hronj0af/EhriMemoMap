@@ -147,7 +147,7 @@
   <data name="moreInfo" xml:space="preserve">
     <value>More info</value>
   </data>
-  <data name="helpContent" xml:space="preserve">
+  <data name="helpContent_prague" xml:space="preserve">
     <value>&lt;div&gt;
   &lt;p&gt;
   &lt;h4&gt;
@@ -282,46 +282,46 @@
   <data name="myLocationOff" xml:space="preserve">
     <value>Turn off location tracking</value>
   </data>
-  <data name="layer_interest_title" xml:space="preserve">
+  <data name="layer_interest_title_prague" xml:space="preserve">
     <value>Points of Interest in the City of Prague</value>
   </data>
-  <data name="layer_interest_abstract" xml:space="preserve">
+  <data name="layer_interest_abstract_prague" xml:space="preserve">
     <value>Points of interest include places of persecution, Jewish buildings, warehouses full of confiscated property, or places that Jews were forbidden to enter.</value>
   </data>
-  <data name="layer_incident_title" xml:space="preserve">
+  <data name="layer_incident_title_prague" xml:space="preserve">
     <value>Incidents Within the City of Prague</value>
   </data>
-  <data name="layer_incident_abstract" xml:space="preserve">
+  <data name="layer_incident_abstract_prague" xml:space="preserve">
     <value>Incidents that took place within the city limits of Prague during which Jewish residents were arrested or investigated for violating anti-Jewish ordinances. This data was extracted from the digitized documents of the Prague Police as part of the MemoMap Prague project. It includes information about non-compliance with restrictions of free movement, identification papers lacking the letter \"J\" (Jude), etc.</value>
   </data>
-  <data name="layer_inaccessible_abstract" xml:space="preserve">
+  <data name="layer_inaccessible_abstract_prague" xml:space="preserve">
     <value>Places that were forbidden to Jews during the war. Their depiction is based on a historical map from 1938. The current spaces may vary in size and shape. </value>
   </data>
-  <data name="layer_inaccessible_title" xml:space="preserve">
+  <data name="layer_inaccessible_title_prague" xml:space="preserve">
     <value>Forbidden Places Within the City of Prague</value>
   </data>
-  <data name="layer_victim_title" xml:space="preserve">
+  <data name="layer_victim_title_prague" xml:space="preserve">
     <value>Holocaust victims</value>
   </data>
-  <data name="layer_victim_abstract" xml:space="preserve">
+  <data name="layer_victim_abstract_prague" xml:space="preserve">
     <value>Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz.</value>
   </data>
-  <data name="layer_address_title" xml:space="preserve">
+  <data name="layer_address_title_prague" xml:space="preserve">
     <value>Jewish Homes in Prague During the Occupation</value>
   </data>
-  <data name="layer_address_abstract" xml:space="preserve">
+  <data name="layer_address_abstract_prague" xml:space="preserve">
     <value>Addresses where Jewish residents of Prague lived during the Shoah, according to the victims' database. The data mostly come from the registration of Jews in the Protectorate, which was initiated in autumn 1941 by order of the Central Office for Jewish Emigration. Therefore, they may not correspond to the residence of Jewish families before the persecution began. The layer includes data on the number of occupants of each house, statistics on their fate and the number present on various historical dates. In some cases, where individual houses were difficult to identify, multiple addresses are grouped under the same coordinates (for example, on the same street). We are continuously working on refining the map location. Street names from the time of occupation (ca. 1941-1942) are used.</value>
   </data>
-  <data name="layer_statistics_title" xml:space="preserve">
+  <data name="layer_statistics_title_prague" xml:space="preserve">
     <value>Districts Statistic</value>
   </data>
-  <data name="layer_statistics_abstract" xml:space="preserve">
+  <data name="layer_statistics_abstract_prague" xml:space="preserve">
     <value>Outlines of historical Prague and Prague districts from 1930 supplemented with data on the number of records accessible in the application. The map is based on the output of the NAKI project "Making Historical Spatial and Statistical Data Available in a GIS Environment" (project number DF12P01OVV033) and further modified.</value>
   </data>
-  <data name="layer_MGS-prague_historical_map_1938-v2_title" xml:space="preserve">
+  <data name="layer_MGS-prague_historical_map_1938-v2_title_prague" xml:space="preserve">
     <value>Historical Map of Prague (1938)</value>
   </data>
-  <data name="layer_MGS-prague_historical_map_1938-v2_abstract" xml:space="preserve">
+  <data name="layer_MGS-prague_historical_map_1938-v2_abstract_prague" xml:space="preserve">
     <value>Orientační plán hlavního města Prahy s okolím (1938) [Orientation plan of the capital city of Prague with its surroundings (1938)].Digitized by by the Municipal Library in Prague, georeferenced by the Masaryk Institute and archives of the Czech Academy of Sciences. Also available from WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
   </data>
   <data name="hideStatistics" xml:space="preserve">
@@ -357,7 +357,7 @@
   <data name="layer_address_title_short" xml:space="preserve">
     <value>Homes</value>
   </data>
-  <data name="welcomeText" xml:space="preserve">
+  <data name="welcomeText_prague" xml:space="preserve">
     <value>&lt;p&gt;An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war. The timeline shows how people gradually disappeared from their homes. The app is adapted for mobile devices, so you can take it directly to the city.&lt;/p&gt;</value>
   </data>
   <data name="goToMap" xml:space="preserve">
@@ -387,25 +387,25 @@
   <data name="addressCurrent" xml:space="preserve">
     <value>current address</value>
   </data>
-  <data name="help_victims" xml:space="preserve">
+  <data name="help_victims_prague" xml:space="preserve">
     <value>Places where Jewish residents lived during the Holocaust, according to the victims' database.</value>
   </data>
-  <data name="help_incident" xml:space="preserve">
+  <data name="help_incident_prague" xml:space="preserve">
     <value>Individual incidents of violations of anti-Jewish rules and regulations.  </value>
   </data>
-  <data name="help_interest" xml:space="preserve">
+  <data name="help_interest_prague" xml:space="preserve">
     <value>Places related to the daily life of Jewish residents of Prague, but also places associated with their persecution.</value>
   </data>
-  <data name="help_inaccessible" xml:space="preserve">
+  <data name="help_inaccessible_prague" xml:space="preserve">
     <value>Places that were inaccessible to Jews during the Holocaust.</value>
   </data>
   <data name="featureType_Memory" xml:space="preserve">
     <value>Places of memory</value>
   </data>
-  <data name="layer_memory_title" xml:space="preserve">
+  <data name="layer_memory_title_prague" xml:space="preserve">
     <value>Places of memory</value>
   </data>
-  <data name="layer_memory_abstract" xml:space="preserve">
+  <data name="layer_memory_abstract_prague" xml:space="preserve">
     <value>Sites and objects commemorating the persecution and victims of the Holocaust. Currently the layer contains data on Stolperstein laid in the pavement. The data is taken from the project of the Public Benefit Society for the Support of Persons Affected by the Holocaust, https://stolpersteinecz.cz/.</value>
   </data>
   <data name="layer_memory_title_short" xml:space="preserve">
@@ -428,5 +428,29 @@
   </data>
   <data name="city_pacov" xml:space="preserve">
     <value>Pacov</value>
+  </data>
+  <data name="helpContent_pacov" xml:space="preserve">
+    <value>help</value>
+  </data>
+  <data name="welcomeText_pacov" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="layer_interest_title_pacov" xml:space="preserve">
+    <value>??? interest</value>
+  </data>
+  <data name="layer_interest_abstract_pacov" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="layer_address_title_pacov" xml:space="preserve">
+    <value>??? address</value>
+  </data>
+  <data name="layer_address_abstract_pacov" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="help_victims_pacov" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="help_interest_pacov" xml:space="preserve">
+    <value>???</value>
   </data>
 </root>

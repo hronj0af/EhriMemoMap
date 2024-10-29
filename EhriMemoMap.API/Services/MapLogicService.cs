@@ -149,13 +149,23 @@ namespace EhriMemoMap.Services
                 result.PlacesOfMemory = _context.PraguePlacesOfMemories.Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).ToList();
 
             if (parameters.AddressesIds != null)
-                result.Addresses = _context.PragueAddressesStatsTimelines.Where(p => parameters.AddressesIds.Contains(p.Id)).
-                    Select(a => new AddressWithVictimsWrappwer
-                    {
-                        Address = a,
-                        Victims = _context.PragueVictimsTimelines.Where(b => b.PlaceId == a.Id).OrderBy(a => a.Label).ToList()
-                    }).
-                    ToList();
+            {
+                if (parameters.City == "prague")
+                {
+                    result.Addresses = _context.PragueAddressesStatsTimelines.Where(p => parameters.AddressesIds.Contains(p.Id)).
+                        Select(a => new AddressWithVictimsWrappwer
+                        {
+                            Address = a,
+                            Victims = _context.PragueVictimsTimelines.Where(b => b.PlaceId == a.Id).OrderBy(a => a.Label).ToList()
+                        }).
+                        ToList();
+                }
+                else if (parameters.City == "pacov")
+                {
+                    /// TODO ///
+                }
+
+            }
 
             return result;
         }

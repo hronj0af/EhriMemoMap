@@ -49,7 +49,7 @@
                     <RadzenColumn Size="11" >
                         <RadzenStack JustifyContent="JustifyContent.SpaceBetween" Orientation="Orientation.Horizontal" >
                             <div style="font-size: 14px; font-family: 'Barlow'; font-weight:700;">
-                                @cl["layer_" + item.Name + "_title"]
+                                @cl["layer_" + item.Name + "_title_" + MapState?.Map?.InitialVariables?.City]
                             </div>
                             <RadzenImage onerror="this.onerror=null; this.remove();" Style="@iconFilter" Path="@("images/" + item.Name + ".svg")"></RadzenImage>
                         </RadzenStack>
@@ -58,7 +58,7 @@
                 <RadzenRow JustifyContent="JustifyContent.Start" RowGap="0">
                     <RadzenColumn Size="11" Offset="1">
                         <div class="layerInfoInner">
-                            <div style="font-size:12px;font-family: 'Noto Serif'">@cl["layer_" + item.Name + "_abstract"]</div>
+                            <div style="font-size:12px;font-family: 'Noto Serif'">@cl["layer_" + item.Name + "_abstract_" + MapState?.Map?.InitialVariables?.City]</div>
                         </div>
                     </RadzenColumn>
                 </RadzenRow>

@@ -38,6 +38,16 @@
         "quickAccess": true,
         "backgroundColor": "#7E469B",
         "fontColor": "Light"
+      },
+      {
+        "name": "address",
+        "placeType": "address",
+        "order": 1,
+        "type": "objects",
+        "minZoom": 16,
+        "quickAccess": true,
+        "backgroundColor": "#FFD93D",
+        "fontColor": "Dark"
       }
 
     ]

@@ -1,5 +1,6 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
 @inject MapLogicService MapLogic;
+@inject MapStateService MapState;
 
 @if (statistics == null)
 {
@@ -18,7 +19,7 @@ else
                     @cl["countJews"]
                     <span class="tooltip">
                         <img src='/images/help-small.svg' class="icon-help" />
-                        <span class="tooltiptext tooltiptext-top">@cl["help_victims"]</span>
+                        <span class="tooltiptext tooltiptext-top">@cl["help_victims_" + MapState?.Map?.InitialVariables?.City]</span>
                     </span>
                 </td>
                 <td class='cell thirdCell'>
@@ -37,7 +38,7 @@ else
                     @cl["countIncidents"]
                     <span class="tooltip">
                         <img src='/images/help-small.svg' class="icon-help" />
-                        <span class="tooltiptext tooltiptext-top">@cl["help_incident"]</span>
+                        <span class="tooltiptext tooltiptext-top">@cl["help_incident_" + MapState?.Map?.InitialVariables?.City]</span>
                     </span>
                 </td>
                 <td class='cell thirdCell'>
@@ -56,7 +57,7 @@ else
                     @cl["countPointsOfInterest"]
                     <span class="tooltip">
                         <img src='/images/help-small.svg' class="icon-help" />
-                        <span class="tooltiptext tooltiptext-top">@cl["help_interest"]</span>
+                        <span class="tooltiptext tooltiptext-top">@cl["help_interest_" + MapState?.Map?.InitialVariables?.City]</span>
                     </span>
                 </td>
                 <td class='cell thirdCell'>
@@ -76,7 +77,7 @@ else
                     @cl["countInaccessiblePlaces"]
                     <span class="tooltip">
                         <img src='/images/help-small.svg' class="icon-help" />
-                        <span class="tooltiptext tooltiptext-top">@cl["help_inaccessible"]</span>
+                        <span class="tooltiptext tooltiptext-top">@cl["help_inaccessible_" + MapState?.Map?.InitialVariables?.City]</span>
                     </span>
                 </td>
                 <td class='cell thirdCell'>
@@ -96,7 +97,7 @@ else
                     @cl["countPlacesOfMemory"]
                     <span class="tooltip">
                         <img src='/images/help-small.svg' class="icon-help" />
-                        <span class="tooltiptext tooltiptext-top">@cl["help_memory"]</span>
+                        <span class="tooltiptext tooltiptext-top">@cl["help_memory_" + MapState?.Map?.InitialVariables?.City]</span>
                     </span>
                 </td>
                 <td class='cell thirdCell'>

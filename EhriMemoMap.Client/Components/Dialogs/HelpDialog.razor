@@ -1,4 +1,6 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+
 <DialogButtons />
 
-<div style="padding:1.5rem 1.5rem 0 1.5rem;">@((MarkupString)(cl["helpContent"].ToString()))</div>
+<div style="padding:1.5rem 1.5rem 0 1.5rem;">@((MarkupString)(cl["helpContent_" + MapState?.Map?.InitialVariables?.City].ToString()))</div>

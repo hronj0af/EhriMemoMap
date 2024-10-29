@@ -6,7 +6,7 @@
 
 @if (!MobileVersion)
 {
-    <div class="icon @(MapState.DialogType == DialogTypeEnum.Search ? "icon-selected" : "")" title="@(cl["layers"] + "...")" onclick="@(() => ShowSearch())">
+    <div class="icon @(MapState.DialogType == DialogTypeEnum.Search ? "icon-selected" : "")" title="@(cl["search"] + "...")" onclick="@(() => ShowSearch())">
         <svg width="47" height="50" viewBox="0 0 47 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="Group 55">
                 <path id="Rectangle 23" d="M0 4.75213C0 2.54299 1.79086 0.752136 4 0.752136H47.1795V49.5043H4C1.79086 49.5043 0 47.7134 0 45.5043V4.75213Z" fill="#46463D" class="background" />
