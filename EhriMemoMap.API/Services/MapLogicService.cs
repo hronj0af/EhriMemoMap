@@ -1,21 +1,17 @@
 ﻿using EhriMemoMap.Data;
 using EhriMemoMap.Shared;
+using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
+using System.Runtime.InteropServices;
 
 namespace EhriMemoMap.Services
 {
     /// <summary>
     /// Logika nad mapou
     /// </summary>
-    public class MapLogicService
+    public class MapLogicService(MemogisContext context)
     {
-        private readonly MemogisContext _context;
-
-
-        public MapLogicService(MemogisContext context)
-        {
-            _context = context;
-        }
+        private readonly MemogisContext _context = context;
 
         public List<MapObject> GetMapObjects(MapObjectParameters parameters)
         {
@@ -79,7 +75,7 @@ namespace EhriMemoMap.Services
             };
         }
 
-        public PlacesResult GetPlaces(PlacesParameters parameters) 
+        public PlacesResult GetPlaces(PlacesParameters parameters)
         {
             var result = new PlacesResult();
             if (parameters.IncidentsIds != null)
@@ -96,10 +92,58 @@ namespace EhriMemoMap.Services
             }
 
             if (parameters.PlacesOfInterestIds != null)
-                result.PlacesOfInterest = _context.PraguePlacesOfInterestTimelines.Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).ToList();
+            {
+                if (parameters.City == "prague")
+                    result.PlacesOfInterest = _context.PraguePlacesOfInterestTimelines.
+                        Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
+                        Select(a => new PlaceInterest
+                        {
+                            AddressCs = a.AddressCs,
+                            AddressEn = a.AddressEn,
+                            LabelCs = a.LabelCs,
+                            LabelEn = a.LabelEn,
+                            DescriptionCs = a.DescriptionCs,
+                            DescriptionEn = a.DescriptionEn,
+                        }).
+                        ToList();
+                else if (parameters.City == "pacov")
+                {
+                    result.PlacesOfInterest = _context.PacovPois.Include(a => a.Place).
+                        AsNoTracking().
+                        Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
+                        Select(a => new PlaceInterest
+                        {
+                            AddressCs = a.Place.StreetCs,
+                            AddressEn = a.Place.StreetEn,
+                            LabelCs = a.LabelCs,
+                            LabelEn = a.LabelEn,
+                            DescriptionCs = a.DescriptionCs,
+                            DescriptionEn = a.DescriptionEn,
+                        }).
+                        ToList();
+                }
+
+            }
 
             if (parameters.InaccessiblePlacesIds != null)
-                result.InaccessiblePlaces = _context.PraguePlacesOfInterestTimelines.Where(p => parameters.InaccessiblePlacesIds.Contains(p.Id)).ToList();
+            {
+                if (parameters.City == "prague")
+                    result.InaccessiblePlaces = _context.PraguePlacesOfInterestTimelines.
+                    Where(p => parameters.InaccessiblePlacesIds.Contains(p.Id)).
+                    Select(a => new PlaceInterest
+                    {
+                        AddressCs = a.AddressCs,
+                        AddressEn = a.AddressEn,
+                        LabelCs = a.LabelCs,
+                        LabelEn = a.LabelEn,
+                        DescriptionCs = a.DescriptionCs,
+                        DescriptionEn = a.DescriptionEn,
+                    }).
+                    ToList();
+                else if (parameters.City == "pacov")
+                { }
+
+            }
 
             if (parameters.PlacesOfMemoryIds != null)
                 result.PlacesOfMemory = _context.PraguePlacesOfMemories.Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).ToList();

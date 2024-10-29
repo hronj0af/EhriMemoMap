@@ -17,7 +17,7 @@
 
     @if (PlaceType == PlaceType.Interest)
     {
-        foreach (var place in PlacesToShow.PlacesOfInterest ?? new List<PraguePlacesOfInterestTimeline>())
+        foreach (var place in PlacesToShow.PlacesOfInterest ?? new List<PlaceInterest>())
         {
             <CardInterest Place="place" />
         }
@@ -25,7 +25,7 @@
 
     @if (PlaceType == PlaceType.Inaccessible)
     {
-        foreach (var place in PlacesToShow.InaccessiblePlaces ?? new List<PraguePlacesOfInterestTimeline>())
+        foreach (var place in PlacesToShow.InaccessiblePlaces ?? new List<PlaceInterest>())
         {
             <CardInterest Place="place" />
         }

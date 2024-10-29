@@ -287,7 +287,7 @@ namespace mapAPI {
                     newObject.addTo(polygonsGroup);
                 else
                     newObject.addTo(objectsGroup);
-            } else {
+            } else if (objects[i].mapPoint != null) {
                 const markerObject = JSON.parse(objects[i].mapPoint) as PointModel;
                 newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon);
                 newObject.options.guid = objects[i].guid;
