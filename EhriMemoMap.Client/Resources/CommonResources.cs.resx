@@ -424,4 +424,10 @@
   <data name="countPlacesOfMemory" xml:space="preserve">
     <value>Místa paměti</value>
   </data>
+  <data name="city_prague" xml:space="preserve">
+    <value>Praha</value>
+  </data>
+  <data name="city_pacov" xml:space="preserve">
+    <value>Pacov</value>
+  </data>
 </root>

@@ -68,7 +68,7 @@ namespace EhriMemoMap.Services
 
         public WelcomeDialogStatistics GetWelcomeDialogStatistics(string city)
         {
-            var statistics = _context.MapStatistics.Where(a => a.Type.Contains("total") && a.DateFrom == null && a.DateTo == null).ToList();
+            var statistics = _context.MapStatistics.Where(a => a.City == city && a.Type.Contains("total") && a.DateFrom == null && a.DateTo == null).ToList();
             return new WelcomeDialogStatistics
             {
                 Victims = statistics.FirstOrDefault(a => a.Type.Contains("victims"))?.Count,

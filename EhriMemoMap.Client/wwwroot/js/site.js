@@ -132,7 +132,7 @@ var mapAPI;
     function setUrlParam(paramName, paramValue) {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set(paramName, paramValue.toString());
-        history.replaceState({}, 'Mapa', "?" + urlParams);
+        history.replaceState({}, 'Mapa', window.location.pathname + "?" + urlParams);
     }
     mapAPI.setUrlParam = setUrlParam;
     function getUrlParam(paramName) {

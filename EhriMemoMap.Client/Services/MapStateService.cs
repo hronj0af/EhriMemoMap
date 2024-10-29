@@ -152,9 +152,6 @@ namespace EhriMemoMap.Client.Services
         /// </summary>
         public async Task Init(string? city, string? layers = null, string? timelinePoint = null)
         {
-            if (string.IsNullOrEmpty(city))
-                city = "prague";
-
             var json = await _client.GetStringAsync(_appUrl + $"mapsettings.{city}.json");
             var settings = JsonConvert.DeserializeObject<MapStateService>(json);
             if (settings == null)
@@ -179,22 +176,23 @@ namespace EhriMemoMap.Client.Services
         /// </summary>
         private void InitInfoAboutLayersSelection(string[]? layers = null)
         {
+            if (Map.Layers != null)
+                Map.Layers?.ForEach(layer =>
+                {
+                    if (layer.Type == LayerType.Base || layers == null || layers.Contains(layer.Name))
+                        layer.Selected = true;
+                    else
+                        layer.Selected = false;
+                });
 
-            Map.Layers?.ForEach(layer =>
-            {
-                if (layer.Type == LayerType.Base || layers == null || layers.Contains(layer.Name))
-                    layer.Selected = true;
-                else
-                    layer.Selected = false;
-            });
-
-            foreach (var layer in Map.Timeline?.Where(a => a.AdditionalLayers != null).SelectMany(a => a.AdditionalLayers))
-            {
-                if (layers == null || layers.Contains(layer.Name))
-                    layer.Selected = true;
-                else
-                    layer.Selected = false;
-            }
+            if (Map.Timeline != null)
+                foreach (var layer in Map.Timeline?.Where(a => a.AdditionalLayers != null).SelectMany(a => a.AdditionalLayers))
+                {
+                    if (layers == null || layers.Contains(layer.Name))
+                        layer.Selected = true;
+                    else
+                        layer.Selected = false;
+                }
         }
 
         /// <summary>

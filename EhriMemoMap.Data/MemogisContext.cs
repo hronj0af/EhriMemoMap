@@ -15,6 +15,11 @@ public partial class MemogisContext : DbContext
     {
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseNpgsql(x => x
+                .UseNodaTime()
+                .UseNetTopologySuite());
+
     public virtual DbSet<MapObject> MapObjects { get; set; }
 
     public virtual DbSet<MapStatistic> MapStatistics { get; set; }
@@ -119,6 +124,8 @@ public partial class MemogisContext : DbContext
             entity.Property(e => e.QuarterCs).HasColumnName("quarter_cs");
             entity.Property(e => e.QuarterEn).HasColumnName("quarter_en");
             entity.Property(e => e.Type).HasColumnName("type");
+            entity.Property(e => e.City).HasColumnName("city");
+
         });
 
         modelBuilder.Entity<PacovDocument>(entity =>

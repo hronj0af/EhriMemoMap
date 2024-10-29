@@ -190,7 +190,7 @@ namespace mapAPI {
         const urlParams = new URLSearchParams(window.location.search);
         urlParams.set(paramName, paramValue.toString());
         //history.replaceState({ }, 'Mapa', "praha?" + urlParams);
-        history.replaceState({}, 'Mapa', "?" + urlParams);
+        history.replaceState({}, 'Mapa', window.location.pathname + "?" + urlParams);
     }
 
     // získá parametr z url
