@@ -1,16 +1,28 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
 @inject MapStateService MapState
 
-@if (House != null && House.Address != null && (!string.IsNullOrEmpty(FilteredName) ? House.Victims.Any(a => a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower())) : true))
+@if (House != null)
 {
-    <h3 class="rz-mt-8 rz-mb-4">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.AddressEn : House.Address.AddressCs)</h3>
-    <hr/>
-    <h4 class="rz-mb-2 rz-mt-4">@House.Address.AddressDe <RadzenText TextStyle="TextStyle.Caption">(@cl["addressOccupation"])</RadzenText></h4>
-    <h4 class="rz-mb-8">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.AddressCurrentEn : House.Address.AddressCurrentCs) <RadzenText TextStyle="TextStyle.Caption">(@cl["addressCurrent"])</RadzenText></h4>
-    <CardHouse House="House"></CardHouse>
+    if (House.Address != null && (!string.IsNullOrEmpty(FilteredName) ? House.Victims?.Any(a => a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower())) ?? false : true))
+    {
+        <h3 class="rz-mt-8 rz-mb-4">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.En : House.Address.Cs)</h3>
+        <hr />
+        @if (!string.IsNullOrEmpty(House.Address.De))
+        {
+            <h4 class="rz-mb-2 rz-mt-4">@House.Address.De <RadzenText TextStyle="TextStyle.Caption">(@cl["addressOccupation"])</RadzenText></h4>
+        }
+        @if (!string.IsNullOrEmpty(House.Address.CurrentCs))
+        {
+            <h4 class="rz-mb-8">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.CurrentEn : House.Address.CurrentCs) <RadzenText TextStyle="TextStyle.Caption">(@cl["addressCurrent"])</RadzenText></h4>
+        }
+    }
 
+    if (House.PragueAddress != null)
+    {
+        <CardPragueHouse House="House"></CardPragueHouse>
+    }
 
-    @if ((House.Address.FateUnknown > 0 || House.Address.Survived > 0) && (House.Victims == null || House.Victims.Count == 0))
+    if (House.PragueAddress != null && (House.PragueAddress.FateUnknown > 0 || House.PragueAddress.Survived > 0) && (House.Victims == null || House.Victims.Count == 0))
     {
         <p>
             <b>@cl["survivorsNotDisplayed"]</b>
@@ -31,7 +43,7 @@
                     </RadzenColumn>
                     foreach (var victim in House.Victims.Where(a => a.TransportDate > MapState?.GetTimelinePoint()))
                     {
-                        <CardVictim Victim="@victim" />
+                        <CardVictimShortInfo Victim="@victim" />
                     }
                 }
 
@@ -42,7 +54,7 @@
                     </RadzenColumn>
                     foreach (var victim in House.Victims.Where(a => a.TransportDate <= MapState?.GetTimelinePoint()))
                     {
-                        <CardVictim Victim="@victim" />
+                        <CardVictimShortInfo Victim="@victim" />
                     }
                 }
             }
@@ -50,7 +62,7 @@
             {
                 foreach (var victim in House.Victims.Where(a => (!string.IsNullOrEmpty(FilteredName) ? a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower()) : true)))
                 {
-                    <CardVictim Victim="@victim" />
+                    <CardVictimShortInfo Victim="@victim" />
                 }
             }
         }
@@ -60,7 +72,7 @@
 
 @code {
     [Parameter]
-    public AddressWithVictimsWrappwer? House { get; set; }
+    public AddressWithVictims? House { get; set; }
 
     [Parameter]
     public string? FilteredName { get; set; }

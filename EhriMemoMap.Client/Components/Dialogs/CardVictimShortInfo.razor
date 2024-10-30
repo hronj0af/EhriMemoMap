@@ -1,0 +1,37 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+
+@if (Victim != null)
+{
+    <RadzenColumn Size="MapState.IsMobileView ? 6 : 4">
+        @if (!string.IsNullOrEmpty(Victim.DetailsCs))
+        {
+            <a href="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? Victim.DetailsCs : Victim.DetailsEn)" target="_blank" style="text-decoration:none;color:black">
+                <RadzenCard class="victim-card rz-mb-4">
+                    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
+
+                        <RadzenImage class="victim-photo" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
+                        <div class="victim-label"><small>@((MarkupString)Victim.GetLabelForPicture())</small></div>
+                    </RadzenStack>
+                </RadzenCard>
+            </a>
+        }
+        else
+        {
+            <RadzenCard class="victim-card rz-mb-4">
+                <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
+                    <RadzenImage class="victim-photo" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
+                    <div class="victim-label"><small>@((MarkupString)Victim.GetLabelForPicture())</small></div>
+                </RadzenStack>
+            </RadzenCard>
+
+        }
+
+    </RadzenColumn>
+}
+
+@code {
+    [Parameter]
+    public VictimShortInfo? Victim { get; set; }
+
+}

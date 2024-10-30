@@ -38,16 +38,16 @@ namespace EhriMemoMap.API.Services
 
             var parameters = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("defType", "edismax"),
-                new KeyValuePair<string, string>("indent", "true" ),
-                new KeyValuePair<string, string>("q.op", "OR" ),
-
-                new KeyValuePair<string, string>("fl", "label_cs, label_en, place_cs, place_en, place_de, place_current_cs, place_current_en, place_current_de, map_location, map_object, type, place_date"),
-                new KeyValuePair<string, string>("q", GetNormalizedQuery(queryParameters.Query)),
-                new KeyValuePair<string, string>("qf", "all"),
-                new KeyValuePair<string, string>("wt", "json"),
-                new KeyValuePair<string, string>("stopwords", "true"),
-                new KeyValuePair<string, string>("rows", !string.IsNullOrEmpty(queryParameters.Query) && queryParameters.Query.Length > 3 ? "1000" : "0")
+                new("defType", "edismax"),
+                new("indent", "true" ),
+                new("q.op", "OR" ),
+                new("fq", @$"city:""{queryParameters.City}"""),
+                new("fl", "label_cs, label_en, place_cs, place_en, place_de, place_current_cs, place_current_en, place_current_de, map_location, map_object, type, place_date"),
+                new("q", GetNormalizedQuery(queryParameters.Query)),
+                new("qf", "all"),
+                new("wt", "json"),
+                new("stopwords", "true"),
+                new("rows", !string.IsNullOrEmpty(queryParameters.Query) && queryParameters.Query.Length > 3 ? "1000" : "0")
             };
 
             var url = _solrUrl + "select?" + parameters.Select(a => a.Key + "=" + a.Value).Aggregate((x, y) => x + "&" + y);

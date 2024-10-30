@@ -9,7 +9,7 @@
 {
     @if (PlaceType == PlaceType.Incident)
     {
-        foreach (var place in PlacesToShow.Incidents ?? new List<PragueIncidentsTimeline>())
+        foreach (var place in PlacesToShow.Incidents ?? [])
         {
             <CardIncident Place="place" />
         }
@@ -17,7 +17,7 @@
 
     @if (PlaceType == PlaceType.Interest)
     {
-        foreach (var place in PlacesToShow.PlacesOfInterest ?? new List<PlaceInterest>())
+        foreach (var place in PlacesToShow.PlacesOfInterest ?? [])
         {
             <CardInterest Place="place" />
         }
@@ -25,7 +25,7 @@
 
     @if (PlaceType == PlaceType.Inaccessible)
     {
-        foreach (var place in PlacesToShow.InaccessiblePlaces ?? new List<PlaceInterest>())
+        foreach (var place in PlacesToShow.InaccessiblePlaces ?? [])
         {
             <CardInterest Place="place" />
         }
@@ -42,23 +42,22 @@
             </RadzenStack>
 
         }
-        foreach (var place in PlacesToShow.Addresses ?? new List<AddressWithVictimsWrappwer>())
+        foreach (var place in PlacesToShow.Addresses ?? [])
         {
             <CardAddress House="place" FilteredName="@FilteredName" />
         }
     }
     @if (PlaceType == PlaceType.Memory)
     {
-        foreach (var memoryType in PlacesToShow.PlacesOfMemory?.GroupBy(a => a.Type).Select(a => a.Key) ?? new List<string>())
+        foreach (var memoryType in PlacesToShow.PlacesOfMemory?.GroupBy(a => a.Type).Select(a => a.Key) ?? [])
         {
             <RadzenRow class="rz-mb-4">
-    <RadzenCard Style="width:100%">
-
-            <h2>@cl["memoryType_" + memoryType]</h2>
+                <RadzenCard Style="width:100%">
+                    <h2>@cl["memoryType_" + memoryType]</h2>
                 </RadzenCard>
             </RadzenRow>
 
-            foreach (var place in PlacesToShow.PlacesOfMemory?.Where(a => a.Type == memoryType) ?? new List<PraguePlacesOfMemory>())
+            foreach (var place in PlacesToShow.PlacesOfMemory?.Where(a => a.Type == memoryType) ?? [])
             {
                 <CardMemory Place="place" />
             }

@@ -26,7 +26,5 @@ public partial class PragueVictimsTimeline
 
     public string? Photo { get; set; }
 
-    public string? GetLabelForPicture()
-    => Label?.Insert(0, "<b>").Replace(" (*", "</b><br/>*").Replace(")", "");
 
 }
