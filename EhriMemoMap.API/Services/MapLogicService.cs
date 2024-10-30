@@ -142,8 +142,8 @@ public class MapLogicService(MemogisContext context)
                 Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
                 Select(a => new PlaceInterest
                 {
-                    AddressCs = a.Place.StreetCs,
-                    AddressEn = a.Place.StreetEn,
+                    AddressCs = a.Place.LabelCs,
+                    AddressEn = a.Place.LabelEn,
                     LabelCs = a.LabelCs,
                     LabelEn = a.LabelEn,
                     DescriptionCs = a.DescriptionCs,
@@ -229,6 +229,7 @@ public class MapLogicService(MemogisContext context)
                     },
                     Victims = a.PacovEntitiesXPlaces.Where(a => a.RelationshipType == 26).Select(b => b.Entity).Distinct().Select(b => new VictimShortInfo
                     {
+                        Id = b?.Id ?? 0,
                         LongInfo = true,
                         Photo = b?.PacovEntitiesXMedia?.Select(c => c.Media)?.FirstOrDefault()?.OmekaUrl,
                         Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : "")
@@ -254,5 +255,33 @@ public class MapLogicService(MemogisContext context)
         var bbox = geometryFactory.CreatePolygon(imageOutlineCoordinates);
         return bbox;
 
+    }
+
+    public VictimLongInfo? GetVictimLongInfo(string city, long id)
+    {
+        if (city == "prague")
+            return null;
+
+        var result = _context.PacovEntities.
+            Include(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Media).
+            Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Place).
+            Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+            Where(a => a.Id == id).
+            AsEnumerable().
+            Select(b => new VictimLongInfo
+            {
+                Id = b.Id,
+                Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
+                Photo = b?.PacovEntitiesXMedia.Select(a => a.Media).FirstOrDefault()?.OmekaUrl,
+                Places = b?.PacovEntitiesXPlaces.Select(a => new AddressInfo
+                {
+                    Cs = a.Place.LabelCs,
+                    En = a.Place.LabelEn,
+                    TypeCs = a.RelationshipTypeNavigation.LabelCs,
+                    TypeEn = a.RelationshipTypeNavigation.LabelEn
+                }).ToArray()
+            }).
+            FirstOrDefault();
+        return result;
     }
 }

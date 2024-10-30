@@ -18,7 +18,7 @@
         }
         else
         {
-            <RadzenCard class="victim-card rz-mb-4">
+            <RadzenCard class="victim-card rz-mb-4" @onclick="OnVictimClick" Style="cursor:pointer">
                 <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
                     <RadzenImage class="victim-photo" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
                     <div class="victim-label"><small>@((MarkupString)Victim.GetLabelForPicture())</small></div>
@@ -34,4 +34,11 @@
     [Parameter]
     public VictimShortInfo? Victim { get; set; }
 
+    public async Task OnVictimClick()
+    {
+        if (Victim == null || (!Victim?.LongInfo ?? false))
+            return;
+
+        await MapState.ShowVictimInfo(Victim?.Id);
+    }
 }

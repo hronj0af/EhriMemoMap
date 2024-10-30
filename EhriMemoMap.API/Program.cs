@@ -62,6 +62,8 @@ app.MapPost("/getmapobjects", (MapObjectParameters parameters, MapLogicService s
 
 app.MapGet("/getwelcomedialogstatistics", (string city, MapLogicService service) => service.GetWelcomeDialogStatistics(city));
 
+app.MapGet("/getvictimlonginfo", (string city, long id, MapLogicService service) => service.GetVictimLongInfo(city, id));
+
 app.MapPost("/getplaces", (PlacesParameters parameters, MapLogicService service) => service.GetPlaces(parameters));
 
 app.MapPost("/getsolrplaces", (SolrQueryParameters parameters, SolrService service) => service.SolrExecuteDocument(parameters));

@@ -1,23 +1,47 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
 @inject MapStateService MapState
+@inject MapLogicService MapLogic
 
-@if (Victim != null)
-{
-    <RadzenColumn Size="MapState.IsMobileView ? 6 : 4">
-        <a href="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? Victim.DetailsCs : Victim.DetailsEn)" target="_blank" style="text-decoration:none;color:black">
+<DialogButtons />
+
+
+<div style="padding:2.5rem 1.5rem 0 1.5rem;">
+    @if (Victim != null)
+    {
+        <RadzenColumn Size="MapState.IsMobileView ? 6 : 4">
             <RadzenCard class="victim-card rz-mb-4">
                 <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
+                    <h4>@Victim.Label</h4>
 
-                    <RadzenImage class="victim-photo" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
-                    <div class="victim-label"><small>@((MarkupString)Victim.GetLabelForPicture())</small></div>
+                    <ul>
+                    @foreach (var place in Victim.Places ?? [])
+                    {
+                        <li>
+                            @place.Cs | @place.TypeCs
+                        </li>
+                    }
+                    </ul>
+
+                    @*             <RadzenImage class="victim-photo" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
+                <div class="victim-label"><small>@((MarkupString)Victim.GetLabelForPicture())</small></div>
+                *@
                 </RadzenStack>
             </RadzenCard>
-        </a>
-    </RadzenColumn>
-}
+        </RadzenColumn>
+    }
+</div>
 
 @code {
     [Parameter]
-    public VictimLongInfo? Victim { get; set; }
+    public long? Id { get; set; }
 
+    private VictimLongInfo? Victim { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id == null)
+            return;
+
+        Victim = await MapLogic.GetVictimLongInfo(Id);
+    }
 }

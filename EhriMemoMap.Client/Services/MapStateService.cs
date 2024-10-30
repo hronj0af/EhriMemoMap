@@ -1,10 +1,12 @@
-﻿using EhriMemoMap.Models;
+﻿using EhriMemoMap.Client.Components.Dialogs;
+using EhriMemoMap.Models;
 using EhriMemoMap.Shared;
 using Microsoft.JSInterop;
 using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Radzen;
+using System.Net.NetworkInformation;
 
 namespace EhriMemoMap.Client.Services
 {
@@ -18,15 +20,17 @@ namespace EhriMemoMap.Client.Services
         private readonly HttpClient _client;
         private string _appUrl;
         public AppStateEnum AppState;
+        private DialogService _dialogService;
 
 
-        public MapStateService(IJSRuntime js, HttpClient client, IConfiguration configuration)
+        public MapStateService(IJSRuntime js, HttpClient client, IConfiguration configuration, DialogService dialogService)
         {
             _js = js;
             _client = client;
             _appUrl = configuration?.GetSection("App")["AppURL"] ?? "";
             AppState = configuration?.GetSection("App")["AppState"] == "Development" ? AppStateEnum.Development : AppStateEnum.Production;
             WidthOfDialogPercent = Math.Round(100 * WidthOfDialogRatio) + "%";
+            _dialogService = dialogService;
         }
 
         public decimal WidthOfDialogRatio = 1 / (decimal)3;
@@ -314,6 +318,15 @@ namespace EhriMemoMap.Client.Services
             if ((int)mousePointClickX > WindowWidth - WindowWidth * WidthOfDialogRatio)
                 return true;
             return false;
+        }
+
+        public async Task ShowVictimInfo(long? id)
+        {
+            if (id == null)
+                return;
+            SetDialogType(DialogTypeEnum.Victim);
+            await _dialogService.OpenSideAsync<CardVictimLongInfo>(null, new Dictionary<string, object> { { "Id", id } }, await GetDialogOptions());
+
         }
 
     }

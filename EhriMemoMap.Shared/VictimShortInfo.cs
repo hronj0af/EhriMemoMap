@@ -2,6 +2,7 @@
 {
     public class VictimShortInfo
     {
+        public long Id { get; set; }
         public string? Label { get; set; }
         public string? DetailsCs { get; set; }
         public string? DetailsEn { get; set; }
