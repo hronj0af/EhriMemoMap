@@ -7,11 +7,11 @@ public partial class PacovDocumentsXMedium
 {
     public long Id { get; set; }
 
-    public long DocumentsId { get; set; }
+    public long DocumentId { get; set; }
 
-    public long MediaId { get; set; }
+    public long MediumId { get; set; }
 
-    public virtual PacovDocument Documents { get; set; } = null!;
+    public virtual PacovDocument Document { get; set; } = null!;
 
-    public virtual PacovMedium Media { get; set; } = null!;
+    public virtual PacovMedium Medium { get; set; } = null!;
 }

@@ -4,12 +4,11 @@
 @if (Victim != null)
 {
     <RadzenColumn Size="MapState.IsMobileView ? 6 : 4">
-        @if (!string.IsNullOrEmpty(Victim.DetailsCs))
+        @if (!Victim.LongInfo)
         {
             <a href="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? Victim.DetailsCs : Victim.DetailsEn)" target="_blank" style="text-decoration:none;color:black">
                 <RadzenCard class="victim-card rz-mb-4">
                     <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
-
                         <RadzenImage class="victim-photo" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
                         <div class="victim-label"><small>@((MarkupString)Victim.GetLabelForPicture())</small></div>
                     </RadzenStack>
@@ -22,6 +21,14 @@
                 <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
                     <RadzenImage class="victim-photo" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
                     <div class="victim-label"><small>@((MarkupString)Victim.GetLabelForPicture())</small></div>
+                    @if (Victim.IsAddressPeriod())
+                    {
+                        <div class="victim-label"><small>@cl["onAddress"]: @((MarkupString)Victim.GetAddressPeriod())</small></div>
+                    }
+                    @if (!string.IsNullOrEmpty(Victim.RelationshipToPersonCs))
+                    {
+                        <div class="victim-label"><small>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? Victim.RelationshipToPersonCs : Victim.RelationshipToPersonEn)</small></div>
+                    }
                 </RadzenStack>
             </RadzenCard>
 
@@ -32,7 +39,7 @@
 
 @code {
     [Parameter]
-    public VictimShortInfo? Victim { get; set; }
+    public VictimShortInfoModel? Victim { get; set; }
 
     public async Task OnVictimClick()
     {

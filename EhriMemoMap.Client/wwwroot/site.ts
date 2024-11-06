@@ -588,9 +588,8 @@ namespace mapAPI {
         document.querySelectorAll<HTMLElement>(".victim-photo").forEach(function (item) {
             item.style.height = photoHeight + "px";
         });
-
-
     }
+
 
 }
 

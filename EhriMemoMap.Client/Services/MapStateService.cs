@@ -1,4 +1,5 @@
-﻿using EhriMemoMap.Client.Components.Dialogs;
+﻿using EhriMemoMap.Client.Components.Cards;
+using EhriMemoMap.Client.Components.Dialogs;
 using EhriMemoMap.Models;
 using EhriMemoMap.Shared;
 using Microsoft.JSInterop;
@@ -325,7 +326,7 @@ namespace EhriMemoMap.Client.Services
             if (id == null)
                 return;
             SetDialogType(DialogTypeEnum.Victim);
-            await _dialogService.OpenSideAsync<CardVictimLongInfo>(null, new Dictionary<string, object> { { "Id", id } }, await GetDialogOptions());
+            await _dialogService.OpenSideAsync<CardVictim>(null, new Dictionary<string, object> { { "Id", id } }, await GetDialogOptions());
 
         }
 

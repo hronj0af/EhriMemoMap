@@ -7,11 +7,11 @@ public partial class PacovDocumentsXEntity
 {
     public long Id { get; set; }
 
-    public long DocumentsId { get; set; }
+    public long DocumentId { get; set; }
 
-    public long EntitiesId { get; set; }
+    public long EntityId { get; set; }
 
-    public virtual PacovDocument Documents { get; set; } = null!;
+    public virtual PacovDocument Document { get; set; } = null!;
 
-    public virtual PacovEntity Entities { get; set; } = null!;
+    public virtual PacovEntity Entity { get; set; } = null!;
 }

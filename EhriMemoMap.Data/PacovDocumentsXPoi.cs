@@ -7,11 +7,11 @@ public partial class PacovDocumentsXPoi
 {
     public long Id { get; set; }
 
-    public long DocumentsId { get; set; }
+    public long DocumentId { get; set; }
 
-    public long PoisId { get; set; }
+    public long PoiId { get; set; }
 
-    public virtual PacovDocument Documents { get; set; } = null!;
+    public virtual PacovDocument Document { get; set; } = null!;
 
-    public virtual PacovPoi Pois { get; set; } = null!;
+    public virtual PacovPoi Poi { get; set; } = null!;
 }

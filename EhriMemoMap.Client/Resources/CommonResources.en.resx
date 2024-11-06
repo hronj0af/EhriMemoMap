@@ -453,4 +453,16 @@
   <data name="help_interest_pacov" xml:space="preserve">
     <value>???</value>
   </data>
+  <data name="onAddress" xml:space="preserve">
+    <value>on address</value>
+  </data>
+  <data name="relatedDocuments" xml:space="preserve">
+    <value>Related documents</value>
+  </data>
+  <data name="relatedPersons" xml:space="preserve">
+    <value>Related people</value>
+  </data>
+  <data name="relatedAddresses" xml:space="preserve">
+    <value>Known addresses</value>
+  </data>
 </root>

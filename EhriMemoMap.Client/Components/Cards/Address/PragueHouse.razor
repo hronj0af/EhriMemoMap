@@ -74,7 +74,16 @@
             </RadzenCard>
         </RadzenColumn>
     </RadzenRow>
+
+    @if (House.PragueAddress != null && (House.PragueAddress.FateUnknown > 0 || House.PragueAddress.Survived > 0) && (House.Victims == null || House.Victims.Count == 0))
+    {
+        <p>
+            <b>@cl["survivorsNotDisplayed"]</b>
+        </p>
+    }
 }
+
+
 
 @code {
     [Parameter]

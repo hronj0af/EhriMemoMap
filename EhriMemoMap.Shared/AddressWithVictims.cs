@@ -6,7 +6,7 @@ namespace EhriMemoMap.Shared
     {
         public AddressInfo? Address { get; set; }
         public PragueAddressesStatsTimeline? PragueAddress { get; set; }
-        public List<VictimShortInfo>? Victims { get; set; }
+        public List<VictimShortInfoModel>? Victims { get; set; }
 
         private List<AddressStatistics>? statistics;
         public List<AddressStatistics>? Statistics

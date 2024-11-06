@@ -180,18 +180,18 @@ public partial class MemogisContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
-            entity.Property(e => e.DocumentsId).HasColumnName("documents_id");
-            entity.Property(e => e.EntitiesId).HasColumnName("entities_id");
+            entity.Property(e => e.DocumentId).HasColumnName("document_id");
+            entity.Property(e => e.EntityId).HasColumnName("entity_id");
 
-            entity.HasOne(d => d.Documents).WithMany(p => p.PacovDocumentsXEntities)
-                .HasForeignKey(d => d.DocumentsId)
+            entity.HasOne(d => d.Document).WithMany(p => p.PacovDocumentsXEntities)
+                .HasForeignKey(d => d.DocumentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("documents_id_fkey");
+                .HasConstraintName("document_id_fkey");
 
-            entity.HasOne(d => d.Entities).WithMany(p => p.PacovDocumentsXEntities)
-                .HasForeignKey(d => d.EntitiesId)
+            entity.HasOne(d => d.Entity).WithMany(p => p.PacovDocumentsXEntities)
+                .HasForeignKey(d => d.EntityId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("entities_id_fkey");
+                .HasConstraintName("entity_id_fkey");
         });
 
         modelBuilder.Entity<PacovDocumentsXMedium>(entity =>
@@ -203,16 +203,16 @@ public partial class MemogisContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
-            entity.Property(e => e.DocumentsId).HasColumnName("documents_id");
-            entity.Property(e => e.MediaId).HasColumnName("media_id");
+            entity.Property(e => e.DocumentId).HasColumnName("document_id");
+            entity.Property(e => e.MediumId).HasColumnName("media_id");
 
-            entity.HasOne(d => d.Documents).WithMany(p => p.PacovDocumentsXMedia)
-                .HasForeignKey(d => d.DocumentsId)
+            entity.HasOne(d => d.Document).WithMany(p => p.PacovDocumentsXMedia)
+                .HasForeignKey(d => d.DocumentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("documents_id_fkey");
+                .HasConstraintName("document_id_fkey");
 
-            entity.HasOne(d => d.Media).WithMany(p => p.PacovDocumentsXMedia)
-                .HasForeignKey(d => d.MediaId)
+            entity.HasOne(d => d.Medium).WithMany(p => p.PacovDocumentsXMedia)
+                .HasForeignKey(d => d.MediumId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("media_id_fkey");
         });
@@ -226,18 +226,18 @@ public partial class MemogisContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
-            entity.Property(e => e.DocumentsId).HasColumnName("documents_id");
-            entity.Property(e => e.PoisId).HasColumnName("pois_id");
+            entity.Property(e => e.DocumentId).HasColumnName("document_id");
+            entity.Property(e => e.PoiId).HasColumnName("poi_id");
 
-            entity.HasOne(d => d.Documents).WithMany(p => p.PacovDocumentsXPois)
-                .HasForeignKey(d => d.DocumentsId)
+            entity.HasOne(d => d.Document).WithMany(p => p.PacovDocumentsXPois)
+                .HasForeignKey(d => d.DocumentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("documents_id_fkey");
+                .HasConstraintName("document_id_fkey");
 
-            entity.HasOne(d => d.Pois).WithMany(p => p.PacovDocumentsXPois)
-                .HasForeignKey(d => d.PoisId)
+            entity.HasOne(d => d.Poi).WithMany(p => p.PacovDocumentsXPois)
+                .HasForeignKey(d => d.PoiId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("pois_id_fkey");
+                .HasConstraintName("poi_id_fkey");
         });
 
         modelBuilder.Entity<PacovEntitiesXEntity>(entity =>
@@ -278,16 +278,16 @@ public partial class MemogisContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
-            entity.Property(e => e.EntitiesId).HasColumnName("entities_id");
-            entity.Property(e => e.MediaId).HasColumnName("media_id");
+            entity.Property(e => e.EntityId).HasColumnName("entity_id");
+            entity.Property(e => e.MediumId).HasColumnName("media_id");
 
-            entity.HasOne(d => d.Entities).WithMany(p => p.PacovEntitiesXMedia)
-                .HasForeignKey(d => d.EntitiesId)
+            entity.HasOne(d => d.Entity).WithMany(p => p.PacovEntitiesXMedia)
+                .HasForeignKey(d => d.EntityId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("entities_id_fkey");
+                .HasConstraintName("entity_id_fkey");
 
-            entity.HasOne(d => d.Media).WithMany(p => p.PacovEntitiesXMedia)
-                .HasForeignKey(d => d.MediaId)
+            entity.HasOne(d => d.Medium).WithMany(p => p.PacovEntitiesXMedia)
+                .HasForeignKey(d => d.MediumId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("madia_id_fkey");
         });

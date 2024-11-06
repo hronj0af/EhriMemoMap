@@ -1,0 +1,33 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+
+@if (House != null)
+{
+    if (House.Address != null && (!string.IsNullOrEmpty(FilteredName) ? House.Victims?.Any(a => a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower())) ?? false : true))
+    {
+        <h3 class="rz-mt-8 rz-mb-4">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.En : House.Address.Cs)</h3>
+        <hr />
+        @if (!string.IsNullOrEmpty(House.Address.De))
+        {
+            <h4 class="rz-mb-2 rz-mt-4">@House.Address.De <RadzenText TextStyle="TextStyle.Caption">(@cl["addressOccupation"])</RadzenText></h4>
+        }
+        @if (!string.IsNullOrEmpty(House.Address.CurrentCs))
+        {
+            <h4 class="rz-mb-8">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.CurrentEn : House.Address.CurrentCs) <RadzenText TextStyle="TextStyle.Caption">(@cl["addressCurrent"])</RadzenText></h4>
+        }
+    }
+
+    <PragueHouse House="@House"></PragueHouse>
+
+    <VictimList Victims="@House.Victims" FilteredName="@FilteredName" />
+
+}
+
+@code {
+    [Parameter]
+    public AddressWithVictims? House { get; set; }
+
+    [Parameter]
+    public string? FilteredName { get; set; }
+
+}

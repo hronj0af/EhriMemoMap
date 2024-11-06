@@ -203,11 +203,11 @@ namespace EhriMemoMap.Client.Services
 
         }
 
-        public async Task<VictimLongInfo?> GetVictimLongInfo(long? id)
+        public async Task<VictimLongInfoModel?> GetVictimLongInfo(long? id)
         {
             if (id == null)
                 return null;
-            var result = await GetResultFromApiGet<VictimLongInfo>("getvictimlonginfo", "city=" + _mapState.Map.InitialVariables?.City + "&id=" + id);
+            var result = await GetResultFromApiGet<VictimLongInfoModel>("getvictimlonginfo", "city=" + _mapState.Map.InitialVariables?.City + "&id=" + id);
             return result;
         }
     }

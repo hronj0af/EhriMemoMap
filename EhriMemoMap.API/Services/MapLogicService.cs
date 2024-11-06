@@ -198,7 +198,7 @@ public class MapLogicService(MemogisContext context)
                     },
                     PragueAddress = a,
                     Victims = _context.PragueVictimsTimelines.Where(b => b.PlaceId == a.Id).OrderBy(a => a.Label).
-                        Select(a => new VictimShortInfo
+                        Select(a => new VictimShortInfoModel
                         {
                             DetailsCs = a.DetailsCs,
                             DetailsEn = a.DetailsEn,
@@ -214,10 +214,8 @@ public class MapLogicService(MemogisContext context)
         else if (parameters.City == "pacov")
         {
             return _context.PacovPlaces.
-                Include(a => a.PacovEntitiesXPlaces).
-                ThenInclude(a => a.Entity).
-                ThenInclude(a => a.PacovEntitiesXMedia).
-                ThenInclude(a => a.Media).
+                Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
+                Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
                 Where(p => parameters.AddressesIds.Contains(p.Id)).
                 AsEnumerable().
                 Select(a => new AddressWithVictims
@@ -227,12 +225,16 @@ public class MapLogicService(MemogisContext context)
                         Cs = a.LabelCs,
                         En = a.LabelEn,
                     },
-                    Victims = a.PacovEntitiesXPlaces.Where(a => a.RelationshipType == 26).Select(b => b.Entity).Distinct().Select(b => new VictimShortInfo
+                    Victims = a.PacovEntitiesXPlaces.Select(b => new VictimShortInfoModel
                     {
-                        Id = b?.Id ?? 0,
+                        Id = b?.Entity.Id ?? 0,
                         LongInfo = true,
-                        Photo = b?.PacovEntitiesXMedia?.Select(c => c.Media)?.FirstOrDefault()?.OmekaUrl,
-                        Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : "")
+                        Photo = b?.Entity.PacovEntitiesXMedia?.Select(c => c.Medium)?.FirstOrDefault()?.OmekaUrl,
+                        Label = b?.Entity.Surname + ", " + b?.Entity.Firstname + (b?.Entity.Birthdate != null ? " (*" + b?.Entity.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
+                        RelationshipToAddressTypeCs = b?.RelationshipTypeNavigation.LabelCs,
+                        RelationshipToAddressTypeEn = b?.RelationshipTypeNavigation.LabelEn,
+                        RelationshipToAddressDateFrom = b?.DateFrom,
+                        RelationshipToAddressDateTo = b?.DateTo
                     }).ToList()
                 }).
                 ToList();
@@ -257,28 +259,56 @@ public class MapLogicService(MemogisContext context)
 
     }
 
-    public VictimLongInfo? GetVictimLongInfo(string city, long id)
+    public VictimLongInfoModel? GetVictimLongInfo(string city, long id)
     {
         if (city == "prague")
             return null;
 
         var result = _context.PacovEntities.
-            Include(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Media).
+            Include(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
             Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Place).
             Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+            Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
+            Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a=>a.RelationshipTypeNavigation).
+            Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a=>a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
+            Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.CreationPlaceNavigation).
             Where(a => a.Id == id).
             AsEnumerable().
-            Select(b => new VictimLongInfo
+            Select(b => new VictimLongInfoModel
             {
                 Id = b.Id,
                 Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
-                Photo = b?.PacovEntitiesXMedia.Select(a => a.Media).FirstOrDefault()?.OmekaUrl,
+                Photo = b?.PacovEntitiesXMedia.Select(a => a.Medium).FirstOrDefault()?.OmekaUrl,
                 Places = b?.PacovEntitiesXPlaces.Select(a => new AddressInfo
                 {
                     Cs = a.Place.LabelCs,
                     En = a.Place.LabelEn,
                     TypeCs = a.RelationshipTypeNavigation.LabelCs,
                     TypeEn = a.RelationshipTypeNavigation.LabelEn
+                }).ToArray(),
+                Documents = b?.PacovDocumentsXEntities.Select(c => c.Document).Select(c => new Document
+                {
+                    CreationDateCs = c.CreationDateCs,
+                    CreationDateEn = c.CreationDateEn,
+                    DescriptionCs = c.DescriptionCs,
+                    DescriptionEn = c.DescriptionEn,
+                    LabelCs = c.LabelCs,
+                    LabelEn = c.LabelEn,
+                    CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
+                    CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
+                    Id = c.Id,
+                    Owner = c.Owner,
+                    Type = c.Type,
+                    Url = c?.PacovDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? []
+                }).ToArray(),
+                RelatedPersons = b?.PacovEntitiesXEntityEntity2s.Select(a => new VictimShortInfoModel
+                {
+                    Id = a.Entity1.Id,
+                    Label = a.Entity1.Surname + ", " + a.Entity1.Firstname + (a.Entity1.Birthdate != null ? " (*" + a.Entity1.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
+                    Photo = a.Entity1.PacovEntitiesXMedia.Select(c => c.Medium).FirstOrDefault()?.OmekaUrl,
+                    RelationshipToPersonCs = a.RelationshipTypeNavigation.LabelCs,
+                    RelationshipToPersonEn = a.RelationshipTypeNavigation.LabelEn,
+                    LongInfo = true
                 }).ToArray()
             }).
             FirstOrDefault();
