@@ -122,7 +122,7 @@ namespace EhriMemoMap.Client.Services
         /// Seznam podkladových map
         /// </summary>
         public MapModel Map { get; set; }
-
+        
         public string GetMapInfoForLeaflet()
         {
             var serializerSettings = new JsonSerializerSettings
@@ -138,14 +138,15 @@ namespace EhriMemoMap.Client.Services
                 Url = a.Url,
                 Type = a.Type?.ToString(),
                 MapParameter = a.MapParameter,
-                LayersParameter = a.LayersParameter
+                LayersParameter = a.LayersParameter,
+                CssClass = a.CssClass ?? "",
             }).
-            Union(new List<LayerForLeafletModel>
-            {
+            Union(
+            [
                 new() { Name = LayerType.Objects.ToString(), Type = LayerType.Objects.ToString(), Selected = true },
                 new() { Name = LayerType.Polygons.ToString(), Type = LayerType.Polygons.ToString(), Selected = true },
                 new() { Name = "AdditionalObjects", Type = LayerType.Polygons.ToString(), Selected = true, ZIndex = 9999 }
-            }).
+            ]).
             ToList();
 
             return JsonConvert.SerializeObject(new { initialVariables = Map.InitialVariables, layers = result }, serializerSettings);

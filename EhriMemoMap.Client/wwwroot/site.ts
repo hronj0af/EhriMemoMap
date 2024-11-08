@@ -223,7 +223,7 @@ namespace mapAPI {
             });
         }
         else if (mapSettingsObject.type == 'WMS') {
-            return new L.TileLayer.WMS(wmsProxyUrl, {
+            return new L.TileLayer.WMS(mapSettingsObject.url, {
                 tileSize: 512,
                 //map: mapSettingsObject.mapParameter,
                 layers: mapSettingsObject.layersParameter,

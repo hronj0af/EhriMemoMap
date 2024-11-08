@@ -124,8 +124,12 @@ path.leaflet-interactive:focus {
     text-shadow: -1px 1px 2px #fff, 1px 1px 2px #fff, 1px -1px 0 #fff, -1px -1px 0 #fff;
 }
 
-.customWmsLayer {
+.customWmsLayerPrague {
     filter: grayscale(40%) brightness(1.2);
+}
+
+.customWmsLayerPacov {
+    /*filter: grayscale(40%) brightness(1);*/
 }
 
 .center {

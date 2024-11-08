@@ -15,8 +15,7 @@
         "Y": 15.012
       },
       "minZoom": 11,
-      "maxZoom": 18,
-      "wmsProxyUrl": "https://localhost:7294/wmsProxy"
+      "maxZoom": 18
     },
     "layers": [
       {
@@ -30,7 +29,7 @@
       },
       {
         "name": "MGS-prague_historical_map_1938-v2",
-        "url": "https://geodata.ehri-project-test.eu/geoserver/ehri/wms?",
+        "url": "https://localhost:7294/wmsProxy?",
         "mapParameter": "/webdata/HGIS_cze/memogis_prague_CZE_pol.qgz",
         "layersParameter": "MGS-prague_historical_map_1938-v2",
         "type": "wms",
@@ -39,7 +38,8 @@
         "zIndex": "100",
         "order": 100,
         "backgroundColor": "#D5D2B8",
-        "fontColor": "Dark"
+        "fontColor": "Dark",
+        "cssClass": "customWmsLayerPrague"
       },
       {
         "name": "inaccessible",

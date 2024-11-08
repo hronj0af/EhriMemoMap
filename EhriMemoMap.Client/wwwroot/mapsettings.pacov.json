@@ -16,8 +16,7 @@
 
       },
       "minZoom": 14,
-      "maxZoom": 18,
-      "wmsProxyUrl": "https://localhost:7294/wmsProxy"
+      "maxZoom": 18
     },
     "layers": [
       {
@@ -31,7 +30,7 @@
       },
       {
         "name": "MGS-pacov_historical_map_1942-cze-v1",
-        "url": "(https://geodata.ehri-project.eu/geoserver/wms?",
+        "url": "https://localhost:7294/wmsProxy?",
         "mapParameter": "",
         "layersParameter": "MGS-pacov_historical_map_1942-cze-v1",
         "type": "wms",
@@ -40,7 +39,9 @@
         "zIndex": "100",
         "order": 100,
         "backgroundColor": "#D5D2B8",
-        "fontColor": "Dark"
+        "fontColor": "Dark",
+        "cssClass": "customWmsLayerPacov"
+
       },
       {
         "name": "interest",

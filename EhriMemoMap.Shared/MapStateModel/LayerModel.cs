@@ -14,6 +14,7 @@ namespace EhriMemoMap.Shared
         public string? Attribution { get; set; }
         public string? Opacities { get; set; }
         public string? ZIndex { get; set; }
+        public string? CssClass { get;set; }
         public string? MapParameter { get; set; }
         public string? LayersParameter { get; set; }
         public bool Selected { get; set; }
