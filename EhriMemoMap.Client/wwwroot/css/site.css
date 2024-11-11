@@ -458,6 +458,10 @@ path.leaflet-interactive:focus {
     /*height: 250px;*/
 }
 
+.victim-card-small {
+    background-color: var(--Beige);
+    height: 220px;
+}
 
 /* DOCUMENTS */
 

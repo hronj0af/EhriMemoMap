@@ -11,9 +11,17 @@ function initGallery() {
 
     gallery = new Viewer(galleryElement, {
         transition: false,
+        toolbar: false,
         title: [1, function(image, imageData) {
             return image.alt.replace("image ", "");
         }]
         
     });
+}
+
+function showImage(imageNumber) {
+    if (gallery == undefined)
+        return;
+    console.log(imageNumber);
+    gallery.view(imageNumber);
 }

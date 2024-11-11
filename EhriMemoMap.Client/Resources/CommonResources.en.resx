@@ -459,10 +459,19 @@
   <data name="relatedDocuments" xml:space="preserve">
     <value>Related documents</value>
   </data>
-  <data name="relatedPersons" xml:space="preserve">
-    <value>Related people</value>
+  <data name="relatedOtherRelatives" xml:space="preserve">
+    <value>Other relatives</value>
   </data>
   <data name="relatedAddresses" xml:space="preserve">
     <value>Known addresses</value>
+  </data>
+  <data name="fate" xml:space="preserve">
+    <value>Fate</value>
+  </data>
+  <data name="relatedClosestFamily" xml:space="preserve">
+    <value>Closest family</value>
+  </data>
+  <data name="deportation" xml:space="preserve">
+    <value>Deportation</value>
   </data>
 </root>

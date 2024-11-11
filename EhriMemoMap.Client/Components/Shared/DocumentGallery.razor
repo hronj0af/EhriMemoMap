@@ -1,0 +1,59 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+@inject MapLogicService MapLogic
+@inject IJSRuntime JSRuntime
+
+@if (Documents != null && Documents.Count() > 0)
+{
+    <br />
+    <h4>@cl["relatedDocuments"]</h4>
+    <hr />
+    <RadzenRow class="rz-mt-2 rz-mb-4">
+        @{
+            documentIndex = 0;
+        }
+        @foreach (var doc in Documents)
+        {
+            int actIndex = documentIndex;
+            <RadzenColumn Size="MapState.IsMobileView ? 3 : 2">
+                <RadzenCard class="document-card" title="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.LabelCs : doc.LabelEn)">
+                    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
+                        <div style="position:relative;width:100%">
+                            <RadzenImage class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@doc.Url?.FirstOrDefault()" onclick="@(() => ShowImage(actIndex))" />
+                        </div>
+                    </RadzenStack>
+                </RadzenCard>
+            </RadzenColumn>
+            documentIndex += (doc.Url?.Count() ?? 0);
+        }
+    </RadzenRow>
+
+    <div id="documents" style="display:none;">
+        @foreach (var doc in Documents)
+        {
+            foreach (var url in doc.Url ?? [])
+            {
+                <img alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" src="@url" />
+            }
+        }
+    </div>
+
+
+}
+
+@code {
+    [Parameter]
+    public Document[]? Documents { get; set; }
+
+    private int documentIndex;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JSRuntime.InvokeVoidAsync("initGallery");
+    }
+
+    private async Task ShowImage(int imageNumber)
+    {
+        await JSRuntime.InvokeVoidAsync("showImage", imageNumber);
+    }
+}

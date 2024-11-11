@@ -8,63 +8,123 @@
 <div style="padding:2.5rem 2.5rem 0 2.5rem;">
     @if (Victim != null)
     {
-        <RadzenCard class="victim-card rz-mb-4">
-            <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
-                <h4>@Victim.Label</h4>
+        <h3>@Victim.Label</h3>
 
-                @if (Victim.RelatedPersons != null && Victim.RelatedPersons.Count() > 0)
-                {
-                    <h5>@cl["relatedPersons"]</h5>
-                    <RadzenRow class="rz-mt-8" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
-                        @foreach (var relatedPerson in Victim.RelatedPersons ?? [])
-                        {
-                            <VictimShortInfo Victim="@relatedPerson" />
-                        }
-                    </RadzenRow>
-                    <hr />
-                }
-            </RadzenStack>
-        </RadzenCard>
-        @if (Victim.Documents != null && Victim.Documents.Count() > 0)
+
+        @if (Victim.Places != null)
         {
-            <h5>@cl["relatedDocuments"]</h5>
-            <div id="documents">
-                <RadzenRow class="rz-mt-2 rz-mb-4">
-                    @foreach (var doc in Victim.Documents)
-                    {
-                        foreach (var url in doc.Url ?? [])
-                        {
-                            <RadzenColumn Size="MapState.IsMobileView ? 3 : 2">
-                                <RadzenCard class="document-card" title="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.LabelCs : doc.LabelEn)">
-                                    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
-                                        <div style="position:relative;width:100%">
-                                            <RadzenImage class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@url" />
-                                        </div>
-                                    </RadzenStack>
-                                </RadzenCard>
-                            </RadzenColumn>
-                        }
-                    }
-                </RadzenRow>
-            </div>
-
             <hr />
-
-
-        }
-
-        @if (Victim.Places != null && Victim.Places.Count() > 0)
-        {
-            <h5>@cl["relatedAddresses"]</h5>
             <ul>
-                @foreach (var place in Victim.Places ?? [])
+                @* místo narození, bydliště k 13. květnu 1939, poslední bydliště před deportací *@
+                @foreach (var place in Victim.Places.Where(a => new long?[] { 22, 24, 26 }.Contains(a.Type)) ?? [])
                 {
                     <li>
-                        @place.Cs | @place.TypeCs
+                        @(CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs):
+                        @(CultureInfo.CurrentCulture.Name == "en-US" ? place.En : place.Cs)
                     </li>
                 }
+
+                @* deportace *@
+                @if (Victim.Transports != null && Victim.Transports.Count() > 0)
+                {
+                    <li>
+                        @cl["deportation"]:
+                        <ul>
+                            @foreach (var transport in Victim.Transports)
+                            {
+                                <li>
+                                    @transport.Code
+                                    (@transport.Date?.ToString("d. M. yyyy"),
+                                    @(CultureInfo.CurrentCulture.Name == "en-US" ? transport.FromEn : transport.FromCs)
+                                    →
+                                    @(CultureInfo.CurrentCulture.Name == "en-US" ? transport.ToEn : transport.ToCs))
+                                </li>
+                            }
+                        </ul>
+                    </li>
+
+                }
+                @* místo věznění *@
+                @if (Victim.Places.Any(a => a.Type == 28))
+                {
+                    <li>
+                        @(CultureInfo.CurrentCulture.Name == "en-US"
+                            ? Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeEn
+                            : Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeCs):
+
+                        @(CultureInfo.CurrentCulture.Name == "en-US"
+                            ? Victim.Places.Where(a => a.Type == 28).Select(a => a.En).Aggregate((x, y) => x + ", " + y)
+                            : Victim.Places.Where(a => a.Type == 28).Select(a => a.Cs).Aggregate((x, y) => x + ", " + y))
+                    </li>
+                }
+
+                @* osud úmrtí *@
+                <li>
+                    @cl["fate"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Victim.FateEn : Victim.FateCs)
+                    @Victim.DeathDate?.ToString("d. M. yyyy")
+                    @if (Victim.Places.Any(a => a.Type == 23))
+                    {
+                        @(CultureInfo.CurrentCulture.Name == "en-US"
+                            ? Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeEn
+                            : Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeCs)
+                    }
+                </li>
             </ul>
         }
+
+        @if (Victim.RelatedPersons != null && Victim.RelatedPersons.Count() > 0)
+        {
+            // „Nejbližší rodina“, omezeno na vztahy „manžel“ (id 5), „manželka“ (id 6), „otec“ (id 9), „matka“ (id 7), „syn“ (id 13), „dcera (id 3)“, „bratr“ (id 2), „sestra (id 10)“.
+            if (Victim.RelatedPersons.Any(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
+            {
+                <br />
+                <h4>@cl["relatedClosestFamily"]</h4>
+                <hr />
+                <RadzenRow class="rz-mt-8" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
+                    @foreach (var relatedPerson in Victim.RelatedPersons.Where(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
+                    {
+                        <VictimShortInfo Victim="@relatedPerson" Small="true" Relative="true" />
+                    }
+                </RadzenRow>
+
+            }
+
+
+            // ostatní příbuzní
+            if (Victim.RelatedPersons.Any(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
+            {
+                <br />
+                <div style="cursor:pointer;" onclick="@(() => ToggleRelatives())">
+                    <h4>
+                        @cl["relatedOtherRelatives"]
+                        &nbsp;&nbsp;
+                        @if (!RelativesOpen)
+                        {
+                            <RadzenImage Style="height:17px;cursor:pointer" Path="images/arrow-right.png" title="@(cl["showOtherRelatives"] + "...")"></RadzenImage>
+                        }
+                        else
+                        {
+                            <RadzenImage Style="width:17px;cursor:pointer" Path="images/arrow-down.png" title="@(cl["hideOtherRelatives"] + "...")"></RadzenImage>
+                        }
+                    </h4>
+                </div>
+
+                <hr />
+
+                @if (RelativesOpen)
+                {
+                    <RadzenRow class="rz-mt-8" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
+                        @foreach (var relatedPerson in Victim.RelatedPersons.Where(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
+                        {
+                            <VictimShortInfo Victim="@relatedPerson" Small="true" Relative="true"/>
+                        }
+                    </RadzenRow>
+                }
+            }
+        }
+
+        <DocumentGallery Documents="Victim.Documents" />
+
     }
 </div>
 
@@ -74,6 +134,8 @@
 
     private VictimLongInfoModel? Victim { get; set; }
 
+    private bool RelativesOpen = false;
+
     protected override async Task OnParametersSetAsync()
     {
         if (Id == null)
@@ -82,12 +144,10 @@
         Victim = await MapLogic.GetVictimLongInfo(Id);
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    private void ToggleRelatives()
     {
-        if (!firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("initGallery");
-        }
+        RelativesOpen = !RelativesOpen;
+        StateHasChanged();
     }
 
     // public async Task OnAddressClick(long id)

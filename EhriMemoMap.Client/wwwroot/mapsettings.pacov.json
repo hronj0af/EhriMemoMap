@@ -2,10 +2,10 @@
   "map": {
     "initialVariables": {
       "city": "pacov",
-      "zoom": 16,
-      "zoomMobile": 11,
-      "lat": 49.471,
-      "lng": 15.003,
+      "zoom": 17,
+      "zoomMobile": 16,
+      "lat": 49.47155434802282,
+      "lng": 15.00363349914551,
       "minBounds": {
         "X": 49,
         "Y": 14

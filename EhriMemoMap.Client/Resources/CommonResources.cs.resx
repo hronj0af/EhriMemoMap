@@ -460,10 +460,19 @@
   <data name="relatedDocuments" xml:space="preserve">
     <value>Související dokumenty</value>
   </data>
-  <data name="relatedPersons" xml:space="preserve">
-    <value>Příbuzní a blízcí</value>
+  <data name="relatedOtherRelatives" xml:space="preserve">
+    <value>Ostatní příbuzí</value>
   </data>
   <data name="relatedAddresses" xml:space="preserve">
     <value>Známé adresy</value>
+  </data>
+  <data name="fate" xml:space="preserve">
+    <value>Osud</value>
+  </data>
+  <data name="relatedClosestFamily" xml:space="preserve">
+    <value>Nejbližší rodina</value>
+  </data>
+  <data name="deportation" xml:space="preserve">
+    <value>Deportace</value>
   </data>
 </root>

@@ -137,8 +137,11 @@ public class MapLogicService(MemogisContext context)
                 ToList();
 
         else if (parameters.City == "pacov")
-            return _context.PacovPois.Include(a => a.Place).
+            return _context.PacovPois.
+                Include(a => a.Place).
+                Include(a => a.PacovDocumentsXPois).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
                 AsNoTracking().
+                AsEnumerable().
                 Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
                 Select(a => new PlaceInterest
                 {
@@ -148,6 +151,21 @@ public class MapLogicService(MemogisContext context)
                     LabelEn = a.LabelEn,
                     DescriptionCs = a.DescriptionCs,
                     DescriptionEn = a.DescriptionEn,
+                    Documents = a.PacovDocumentsXPois.Select(b => b.Document).Select(c => new Document
+                    {
+                        CreationDateCs = c.CreationDateCs,
+                        CreationDateEn = c.CreationDateEn,
+                        DescriptionCs = c.DescriptionCs,
+                        DescriptionEn = c.DescriptionEn,
+                        LabelCs = c.LabelCs,
+                        LabelEn = c.LabelEn,
+                        CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
+                        CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
+                        Id = c.Id,
+                        Owner = c.Owner,
+                        Type = c.Type,
+                        Url = c?.PacovDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? []
+                    }).ToArray()
                 }).
                 ToList();
         return null;
@@ -265,24 +283,32 @@ public class MapLogicService(MemogisContext context)
             return null;
 
         var result = _context.PacovEntities.
+            Include(a => a.FateNavigation).
+            Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a=>a.PlaceFromNavigation).
+            Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceToNavigation).
             Include(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
             Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Place).
             Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
             Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
-            Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a=>a.RelationshipTypeNavigation).
-            Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a=>a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
+            Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.RelationshipTypeNavigation).
+            Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
             Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.CreationPlaceNavigation).
             Where(a => a.Id == id).
             AsEnumerable().
             Select(b => new VictimLongInfoModel
             {
                 Id = b.Id,
+                BirthDate = b.Birthdate,
+                DeathDate = b.Deathdate,
                 Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
+                FateCs = b?.Sex == 3 ? b?.FateNavigation?.LabelCs?.Replace("/", "") : b?.FateNavigation?.LabelCs?.Replace("/a", ""),
+                FateEn = b?.FateNavigation?.LabelEn,
                 Photo = b?.PacovEntitiesXMedia.Select(a => a.Medium).FirstOrDefault()?.OmekaUrl,
                 Places = b?.PacovEntitiesXPlaces.Select(a => new AddressInfo
                 {
                     Cs = a.Place.LabelCs,
-                    En = a.Place.LabelEn,
+                    En = a.Place.LabelEn ?? a.Place.LabelCs,
+                    Type = a.RelationshipType,
                     TypeCs = a.RelationshipTypeNavigation.LabelCs,
                     TypeEn = a.RelationshipTypeNavigation.LabelEn
                 }).ToArray(),
@@ -304,12 +330,23 @@ public class MapLogicService(MemogisContext context)
                 RelatedPersons = b?.PacovEntitiesXEntityEntity2s.Select(a => new VictimShortInfoModel
                 {
                     Id = a.Entity1.Id,
-                    Label = a.Entity1.Surname + ", " + a.Entity1.Firstname + (a.Entity1.Birthdate != null ? " (*" + a.Entity1.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
+                    Name = a.Entity1.Surname + ", " + a.Entity1.Firstname,
+                    Birthdate = a.Entity1.Birthdate?.ToString("d.M.yyyy"),
                     Photo = a.Entity1.PacovEntitiesXMedia.Select(c => c.Medium).FirstOrDefault()?.OmekaUrl,
                     RelationshipToPersonCs = a.RelationshipTypeNavigation.LabelCs,
                     RelationshipToPersonEn = a.RelationshipTypeNavigation.LabelEn,
+                    RelationshipToPersonType = a.RelationshipType,
                     LongInfo = true
-                }).ToArray()
+                }).ToArray(),
+                Transports = b?.PacovEntitiesXTransports.Select(a => new Transport
+                {
+                    Date = a.Transport.Date,
+                    FromCs = a.Transport?.PlaceFromNavigation?.LabelCs,
+                    FromEn = a.Transport?.PlaceFromNavigation?.LabelEn,
+                    ToCs = a.Transport?.PlaceToNavigation?.LabelCs,
+                    ToEn = a.Transport?.PlaceToNavigation?.LabelEn,
+                    Code = a.Transport?.TransportCode,
+                }).ToArray(),
             }).
             FirstOrDefault();
         return result;

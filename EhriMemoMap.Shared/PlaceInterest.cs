@@ -9,6 +9,7 @@
         public string? AddressEn { get; set; }
         public string? DescriptionCs { get; set; }
         public string? DescriptionEn { get; set; }
+        public Document[]? Documents { get; set; }
 
     }
 }
