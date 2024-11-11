@@ -33,21 +33,87 @@
         }
         else
         {
-            foreach (var victimGroup in Victims.
-            Where(a => (!string.IsNullOrEmpty(FilteredName) ? a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower()) : true)).
-            GroupBy(a => a.RelationshipToAddressTypeCs))
+            @if (Victims.Any(a => a.RelationshipToAddressType != null))
             {
-                if (victimGroup.Key != null)
+                <RadzenColumn Size="12">
+                    <h4>
+                        @cl["allResidents"]
+                        <span class="tooltip">
+                            <img src='/images/help-small.svg' class="icon-help" />
+                            <span class="tooltiptext tooltiptext-top">@cl["allResidents_help"]</span>
+                        </span>
+                    </h4>
+                </RadzenColumn>
+            }
+            foreach (var victim in Victims.Where(a => (!string.IsNullOrEmpty(FilteredName) ? a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower()) : true)).Distinct(new VictimComparer()))
+            {
+                <VictimShortInfo Victim="@victim" Relative="false" Small="false" />
+            }
+
+            @if (Victims.Any(a => a.RelationshipToAddressType == 24))
+            {
+                <RadzenColumn Size="12">
+
+                    <br />
+                    <div style="cursor:pointer;" onclick="@(() => ToggleResidents1939Open())">
+                        <h4>
+                            @cl["residents_1939-05-13"]
+                            &nbsp;&nbsp;
+                            @if (!Residents1939Open)
+                            {
+                                <RadzenImage Style="height:17px;cursor:pointer" Path="images/arrow-right.png" title="@(cl["show"] + "...")"></RadzenImage>
+                            }
+                            else
+                            {
+                                <RadzenImage Style="width:17px;cursor:pointer" Path="images/arrow-down.png" title="@(cl["hide"] + "...")"></RadzenImage>
+                            }
+                        </h4>
+                    </div>
+
+                    <hr />
+                </RadzenColumn>
+
+                @if (Residents1939Open)
                 {
-                    <RadzenColumn Size="12">
-                        <h4>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? victimGroup?.FirstOrDefault()?.RelationshipToAddressTypeCs : victimGroup?.FirstOrDefault()?.RelationshipToAddressTypeEn)</h4>
-                    </RadzenColumn>
-                }
-                foreach (var victim in victimGroup.OrderBy(a => a.Label))
-                {
-                    <VictimShortInfo Victim="@victim" />
+                    @foreach (var victim in Victims.Where(a => a.RelationshipToAddressType == 24) ?? [])
+                    {
+                        <VictimShortInfo Victim="@victim" Relative="false" Small="false" />
+                    }
                 }
             }
+
+            @if (Victims.Any(a => a.RelationshipToAddressType == 26))
+            {
+                <RadzenColumn Size="12">
+                    <br />
+                    <div style="cursor:pointer;" onclick="@(() => ToggleResidents1942Open())">
+                        <h4>
+                            @cl["residents_1942-11-13"]
+                            &nbsp;&nbsp;
+                            @if (!Residents1942Open)
+                            {
+                                <RadzenImage Style="height:17px;cursor:pointer" Path="images/arrow-right.png" title="@(cl["show"] + "...")"></RadzenImage>
+                            }
+                            else
+                            {
+                                <RadzenImage Style="width:17px;cursor:pointer" Path="images/arrow-down.png" title="@(cl["hide"] + "...")"></RadzenImage>
+                            }
+                        </h4>
+                    </div>
+
+                    <hr />
+                </RadzenColumn>
+
+                @if (Residents1942Open)
+                {
+                    @foreach (var victim in Victims.Where(a => a.RelationshipToAddressType == 26) ?? [])
+                    {
+                        <VictimShortInfo Victim="@victim" Relative="false" Small="false" />
+                    }
+                }
+            }
+
+
         }
     }
 </RadzenRow>
@@ -59,5 +125,19 @@
 
     [Parameter]
     public string? FilteredName { get; set; }
+
+    private bool Residents1939Open { get; set; } = false;
+
+    private bool Residents1942Open { get; set; } = false;
+
+    private void ToggleResidents1939Open()
+    {
+        Residents1939Open = !Residents1939Open;
+    }
+
+    private void ToggleResidents1942Open()
+    {
+        Residents1942Open = !Residents1942Open;
+    }
 
 }

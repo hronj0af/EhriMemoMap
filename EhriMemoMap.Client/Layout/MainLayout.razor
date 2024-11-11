@@ -1,8 +1,9 @@
 ﻿@inherits LayoutComponentBase
 
 @inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
 
-<PageTitle>MemoMap @cl["prague"]</PageTitle>
+<PageTitle>MemoMap @cl[MapState?.Map?.InitialVariables?.City ?? ""]</PageTitle>
 
 <div class="page">
     <main>
@@ -11,3 +12,15 @@
 </div>
 
 <RadzenDialog />
+@code {
+
+    protected override void OnInitialized()
+    {
+        MapState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= StateHasChanged;
+    }
+}

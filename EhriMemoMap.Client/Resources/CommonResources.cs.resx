@@ -475,4 +475,31 @@
   <data name="deportation" xml:space="preserve">
     <value>Deportace</value>
   </data>
+  <data name="allResidents" xml:space="preserve">
+    <value>Všichni obyvatelé</value>
+  </data>
+  <data name="allResidents_help" xml:space="preserve">
+    <value>Všichni, kdo bydleli na dané adrese bez ohledu na období.</value>
+  </data>
+  <data name="residents_1939-05-13" xml:space="preserve">
+    <value>Obyvatelé k 13. květnu 1939</value>
+  </data>
+  <data name="residents_1942-11-13" xml:space="preserve">
+    <value>Obyvatelé k 13. listopadu 1942</value>
+  </data>
+  <data name="residents_1942-11-13_help" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="residents_1939-05-13_help" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="show" xml:space="preserve">
+    <value>Zobrazit</value>
+  </data>
+  <data name="hide" xml:space="preserve">
+    <value>Schovat</value>
+  </data>
+  <data name="pacov" xml:space="preserve">
+    <value>Pacov</value>
+  </data>
 </root>

@@ -249,10 +249,11 @@ public class MapLogicService(MemogisContext context)
                         LongInfo = true,
                         Photo = b?.Entity.PacovEntitiesXMedia?.Select(c => c.Medium)?.FirstOrDefault()?.OmekaUrl,
                         Label = b?.Entity.Surname + ", " + b?.Entity.Firstname + (b?.Entity.Birthdate != null ? " (*" + b?.Entity.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
-                        RelationshipToAddressTypeCs = b?.RelationshipTypeNavigation.LabelCs,
-                        RelationshipToAddressTypeEn = b?.RelationshipTypeNavigation.LabelEn,
-                        RelationshipToAddressDateFrom = b?.DateFrom,
-                        RelationshipToAddressDateTo = b?.DateTo
+                        RelationshipToAddressType = b?.RelationshipType,
+                        //RelationshipToAddressTypeCs = b?.RelationshipTypeNavigation.LabelCs,
+                        //RelationshipToAddressTypeEn = b?.RelationshipTypeNavigation.LabelEn,
+                        //RelationshipToAddressDateFrom = b?.DateFrom,
+                        //RelationshipToAddressDateTo = b?.DateTo
                     }).ToList()
                 }).
                 ToList();

@@ -446,6 +446,11 @@ path.leaflet-interactive:focus {
     object-fit: cover;
 }
 
+.victim-photo-small {
+    width: 100%;
+    object-fit: cover;
+}
+
 .victim-label {
     height: 30px;
     width: 100%;

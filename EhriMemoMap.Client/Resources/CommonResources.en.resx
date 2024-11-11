@@ -474,4 +474,31 @@
   <data name="deportation" xml:space="preserve">
     <value>Deportation</value>
   </data>
+  <data name="allResidents" xml:space="preserve">
+    <value>All residents</value>
+  </data>
+  <data name="allResidents_help" xml:space="preserve">
+    <value>Everyone who lived at that address, regardless of the time period.</value>
+  </data>
+  <data name="residents_1939-05-13_help" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="residents_1942-11-13_help" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="residents_1942-11-13" xml:space="preserve">
+    <value>Residents on 13 November 1942</value>
+  </data>
+  <data name="residents_1939-05-13" xml:space="preserve">
+    <value>Residents on 13 May 1939</value>
+  </data>
+  <data name="show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="hide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="pacov" xml:space="preserve">
+    <value>Pacov</value>
+  </data>
 </root>

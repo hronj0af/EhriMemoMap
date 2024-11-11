@@ -26,7 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Components\Shared - Copy\" />
     <Folder Include="Pages\" />
   </ItemGroup>
 

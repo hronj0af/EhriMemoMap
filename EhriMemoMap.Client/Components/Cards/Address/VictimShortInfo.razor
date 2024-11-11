@@ -9,7 +9,7 @@
             <a href="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? Victim.DetailsCs : Victim.DetailsEn)" target="_blank" style="text-decoration:none;color:black">
                 <RadzenCard class="@(VictimCardCss)">
                     <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
-                        <RadzenImage class="victim-photo" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
+                        <RadzenImage class="@VictimPhotoCss" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
                         <div class="victim-label"><small>@((MarkupString)Victim.GetLabelForPicture())</small></div>
                     </RadzenStack>
                 </RadzenCard>
@@ -19,7 +19,7 @@
         {
             <RadzenCard class="@(VictimCardCss)" @onclick="OnVictimClick" Style="cursor:pointer">
                 <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
-                    <RadzenImage title="@Victim.GetBirthdateTitle()" class="victim-photo" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
+                    <RadzenImage title="@Victim.GetBirthdateTitle()" class="@VictimPhotoCss" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
                     <div class="victim-label">
                         <div>
                             <small>
@@ -57,10 +57,14 @@
     public bool Relative { get; set; } = false;
 
     private string? VictimCardCss;
+    private string? VictimPhotoCss;
+
 
     protected override void OnInitialized()
     {
         VictimCardCss = (Small ? "victim-card-small" : "victim-card") + " rz-mb-4";
+        VictimPhotoCss = (Small ? "victim-photo-small" : "victim-photo") + " rz-mb-4";
+
     }
 
     public async Task OnVictimClick()
