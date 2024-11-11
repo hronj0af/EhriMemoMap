@@ -449,6 +449,7 @@ path.leaflet-interactive:focus {
 .victim-photo-small {
     width: 100%;
     object-fit: cover;
+    max-height:120px;
 }
 
 .victim-label {
@@ -465,7 +466,7 @@ path.leaflet-interactive:focus {
 
 .victim-card-small {
     background-color: var(--Beige);
-    height: 220px;
+    /*height: 220px;*/
 }
 
 /* DOCUMENTS */

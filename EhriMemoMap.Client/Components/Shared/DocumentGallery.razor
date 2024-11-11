@@ -19,7 +19,7 @@
                 <RadzenCard class="document-card" title="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.LabelCs : doc.LabelEn)">
                     <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
                         <div style="position:relative;width:100%">
-                            <RadzenImage class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@doc.Url?.FirstOrDefault()" onclick="@(() => ShowImage(actIndex))" />
+                            <RadzenImage style="cursor:pointer" class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@doc.Url?.FirstOrDefault()" onclick="@(() => ShowImage(actIndex))" />
                         </div>
                     </RadzenStack>
                 </RadzenCard>
