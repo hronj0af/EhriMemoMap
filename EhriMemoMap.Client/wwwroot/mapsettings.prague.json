@@ -29,7 +29,7 @@
       },
       {
         "name": "MGS-prague_historical_map_1938-v2",
-        "url": "https://localhost:7294/wmsProxy?",
+        "url": "https://api.memomap.cz/wmsProxy?",
         "mapParameter": "/webdata/HGIS_cze/memogis_prague_CZE_pol.qgz",
         "layersParameter": "MGS-prague_historical_map_1938-v2",
         "type": "wms",

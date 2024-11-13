@@ -21,6 +21,12 @@
                         <div style="position:relative;width:100%">
                             <RadzenImage style="cursor:pointer" class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@doc.Url?.FirstOrDefault()" onclick="@(() => ShowImage(actIndex))" />
                         </div>
+                        <div id="documents_@actIndex" style="display:none;">
+                            @foreach (var url in doc.Url ?? [])
+                            {
+                                <img alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" src="@url" />
+                            }
+                        </div>
                     </RadzenStack>
                 </RadzenCard>
             </RadzenColumn>
@@ -28,15 +34,6 @@
         }
     </RadzenRow>
 
-    <div id="documents" style="display:none;">
-        @foreach (var doc in Documents)
-        {
-            foreach (var url in doc.Url ?? [])
-            {
-                <img alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" src="@url" />
-            }
-        }
-    </div>
 
 
 }
@@ -47,13 +44,9 @@
 
     private int documentIndex;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await JSRuntime.InvokeVoidAsync("initGallery");
-    }
-
     private async Task ShowImage(int imageNumber)
     {
-        await JSRuntime.InvokeVoidAsync("showImage", imageNumber);
+        await JSRuntime.InvokeVoidAsync("initGallery", imageNumber);
+        // await JSRuntime.InvokeVoidAsync("showImage", imageNumber);
     }
 }

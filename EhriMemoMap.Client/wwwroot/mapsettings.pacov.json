@@ -30,7 +30,7 @@
       },
       {
         "name": "MGS-pacov_historical_map_1942-cze-v1",
-        "url": "https://localhost:7294/wmsProxy?",
+        "url": "https://api.memomap.cz/wmsProxy?",
         "mapParameter": "",
         "layersParameter": "MGS-pacov_historical_map_1942-cze-v1",
         "type": "wms",
