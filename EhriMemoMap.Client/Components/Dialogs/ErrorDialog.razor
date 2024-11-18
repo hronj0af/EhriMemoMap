@@ -1,0 +1,46 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject DialogService DialogService
+@inject IJSRuntime JS
+@inject MapStateService MapState
+@inject IConfiguration configuration
+@if (!MapState.IsMobileView)
+{
+    <RadzenRow>
+
+        <RadzenColumn Size="12" Style="background-color:var(--Wine-Red);color:var(--Beige)">
+            <div style="padding:1.5rem">
+                <h1 style="padding-bottom:10px;font-size:48px;">MemoMap je mimo provoz</h1>
+                <div style="font-size:15px;padding-bottom:10px">
+                    @((MarkupString)(configuration?.GetSection("App")["MessageCzech"] ?? ""))
+                </div>
+                <h1 style="padding-bottom:10px;font-size:48px;">MemoMap is down</h1>
+                <div style="font-size:15px;padding-bottom:10px">
+                    @((MarkupString)(configuration?.GetSection("App")["MessageEnglish"] ?? ""))
+                </div>
+            </div>
+        </RadzenColumn>
+    </RadzenRow>
+}
+else
+{
+    <RadzenRow>
+
+        <RadzenColumn Size="12" Style="color:var(--Grey))">
+            <div style="padding:1.5rem">
+                <h1 style="padding-bottom:10px;font-size:48px;">MemoMap</h1>
+                <div style="font-size:12px;">
+                    @((MarkupString)(configuration?.GetSection("App")["AppState"] ?? ""))
+                </div>
+            </div>
+            <div style="padding:1.5rem">
+            </div>
+        </RadzenColumn>
+    </RadzenRow>
+
+}
+
+
+@code {
+
+
+}

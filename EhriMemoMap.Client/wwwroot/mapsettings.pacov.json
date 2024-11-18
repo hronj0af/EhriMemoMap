@@ -3,10 +3,10 @@
     "initialVariables": {
       "city": "pacov",
       "allCities": [ "prague", "pacov" ],
-      "zoom": 17,
+      "zoom": 15,
       "zoomMobile": 16,
-      "lat": 49.47155434802282,
-      "lng": 15.00363349914551,
+      "lat": 49.46755233053013,
+      "lng": 15.010156631469728,
       "minBounds": {
         "X": 49,
         "Y": 14
@@ -48,7 +48,7 @@
         "placeType": "interest",
         "order": 2,
         "type": "objects",
-        "minZoom": 16,
+        "minZoom": 15,
         "quickAccess": true,
         "backgroundColor": "#7E469B",
         "fontColor": "Light"
@@ -58,7 +58,7 @@
         "placeType": "address",
         "order": 1,
         "type": "objects",
-        "minZoom": 16,
+        "minZoom": 15,
         "quickAccess": true,
         "backgroundColor": "#FFD93D",
         "fontColor": "Dark"

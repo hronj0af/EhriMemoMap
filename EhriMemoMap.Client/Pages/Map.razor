@@ -8,20 +8,23 @@
 @inject MapStateService MapState
 @inject MapLogicService MapLogic
 
-<div id="map" style="cursor:default;">
-    <!-- TOTO JE FILTR, KTERÝ SE POUŽÍVÁ PRO HEZČÍ VYKRESLENÍ HRANIC OKRESŮ,
-         RESP. CELÉ PRAHY (viz soubor site.css, řádek div.leaflet-overlay-pane svg > g path.statistics-polygon) -->
-    <svg xmlns="w3.org/2000/svg" ; version="1.1">
-        <defs>
-            <filter id='inset-shadow'>
-                <feOffset dx='0' dy='0' />
-                <!-- Shadow blur -->
-                <feGaussianBlur stdDeviation='5' result='offset-blur' />
-                <!-- Invert drop shadow to make an inset shadow -->
-                <feComposite operator='out' in='SourceGraphic' in2='offset-blur' result='inverse' />
-            </filter>
-            @* Toto je filtr, který navrhl grafik Adam Gratz, ale nějak mi nefunguje, takže jsem ho zatím zakomentoval *@
-            @*             <filter id="inset-shadow2" x="0" y="0" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+@if (MapState.AppState != AppStateEnum.Shutdown)
+{
+
+    <div id="map" style="cursor:default;">
+        <!-- TOTO JE FILTR, KTERÝ SE POUŽÍVÁ PRO HEZČÍ VYKRESLENÍ HRANIC OKRESŮ,
+        RESP. CELÉ PRAHY (viz soubor site.css, řádek div.leaflet-overlay-pane svg > g path.statistics-polygon) -->
+        <svg xmlns="w3.org/2000/svg" ; version="1.1">
+            <defs>
+                <filter id='inset-shadow'>
+                    <feOffset dx='0' dy='0' />
+                    <!-- Shadow blur -->
+                    <feGaussianBlur stdDeviation='5' result='offset-blur' />
+                    <!-- Invert drop shadow to make an inset shadow -->
+                    <feComposite operator='out' in='SourceGraphic' in2='offset-blur' result='inverse' />
+                </filter>
+                @* Toto je filtr, který navrhl grafik Adam Gratz, ale nějak mi nefunguje, takže jsem ho zatím zakomentoval *@
+                @*             <filter id="inset-shadow2" x="0" y="0" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
             <feFlood flood-opacity="0" result="BackgroundImageFix" />
             <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
             <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
@@ -34,20 +37,21 @@
             *@
 
 
-        </defs>
-    </svg>
-</div>
+            </defs>
+        </svg>
+    </div>
 
-<ControlButtonsWrapper />
-<ZoomButtonsWrapper />
-@if (isMobileView == false)
-{
-    <LayersQuickAccess />
-    <TimelineWrapper />
-}
-else if (isMobileView == true)
-{
-    <MobileTopBarWrapper />
+    <ControlButtonsWrapper />
+    <ZoomButtonsWrapper />
+    @if (isMobileView == false)
+    {
+        <LayersQuickAccess />
+        <TimelineWrapper />
+    }
+    else if (isMobileView == true)
+    {
+        <MobileTopBarWrapper />
+    }
 }
 
 
@@ -101,6 +105,13 @@ else if (isMobileView == true)
             await MapState.Init(City, layers, timelinePointName);
 
             string? bounds = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "bounds");
+
+            if (MapState.AppState == AppStateEnum.Shutdown)
+            {
+                await DialogService.OpenAsync<ErrorDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = false, Width = "720px" });
+                return;
+            };
+
 
             // pokud není v url parametr bounds (uživatel s mapou ještě nezačal pracovat),
             // tak se zobrazí dialog s vysvětlením, jak se v mapě pohybovat

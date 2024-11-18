@@ -31,7 +31,7 @@ namespace mapAPI {
     let polygonColor: string = "#C5222C";
     let polygonColorSelected: string = "#000"; // "#cc1111";
     let heatmapLayer: HeatmapOverlay | null = null; // Globální proměnná pro heatmapu
-    let heatmapData: { id: string; heatmapdata: HeatmapData }[] | null = null;
+    let heatmapData: { id: string; heatmapdata: HeatmapData; }[] | null = null;
 
     //////////////////////////
     /// INIT
@@ -361,6 +361,7 @@ namespace mapAPI {
 
         if (heatmapData.data.length == 0)
             return;
+
 
         var cfg = {
             // radius should be small ONLY if scaleRadius is true (or small radius is intended)

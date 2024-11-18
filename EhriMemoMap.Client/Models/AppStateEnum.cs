@@ -3,6 +3,7 @@
     public enum AppStateEnum
     {
         Development,
-        Production
+        Production,
+        Shutdown
     }
 }

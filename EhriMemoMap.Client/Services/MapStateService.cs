@@ -27,7 +27,11 @@ namespace EhriMemoMap.Client.Services
             _js = js;
             _client = client;
             _appUrl = configuration?.GetSection("App")["AppURL"] ?? "";
-            AppState = configuration?.GetSection("App")["AppState"] == "Development" ? AppStateEnum.Development : AppStateEnum.Production;
+            AppState = configuration?.GetSection("App")["AppState"] == "Development" 
+                ? AppStateEnum.Development 
+                    : configuration?.GetSection("App")["AppState"] == "Shutdown"
+                        ? AppStateEnum.Shutdown
+                        : AppStateEnum.Production;
             WidthOfDialogPercent = Math.Round(100 * WidthOfDialogRatio) + "%";
             _dialogService = dialogService;
         }
