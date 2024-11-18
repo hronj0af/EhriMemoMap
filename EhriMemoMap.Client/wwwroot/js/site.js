@@ -23,6 +23,12 @@ var mapAPI;
     let polygonStrokeColor = "#222";
     let polygonColor = "#C5222C";
     let polygonColorSelected = "#000";
+    let heatmapLayer = null;
+    let heatmapData = null;
+    function getMap() {
+        return map;
+    }
+    mapAPI.getMap = getMap;
     function initMap(jsonMapSettings) {
         const mapSettings = JSON.parse(jsonMapSettings);
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
@@ -207,7 +213,7 @@ var mapAPI;
                 else
                     newObject.addTo(objectsGroup);
             }
-            else if (objects[i].mapPoint != null) {
+            else if (objects[i].mapPoint != null && !objects[i].heatmap) {
                 const markerObject = JSON.parse(objects[i].mapPoint);
                 newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon, "map-point");
                 newObject.options.guid = objects[i].guid;
@@ -215,8 +221,65 @@ var mapAPI;
             }
         }
         polygonsGroup.bringToFront();
+        if (heatmapLayer) {
+            map.removeLayer(heatmapLayer);
+        }
+        var heatmapIndex = getIndexOfHeatmapData(objects);
+        if (heatmapIndex != null) {
+            seedHeatmapData(objects, heatmapIndex);
+            showHeatmap(heatmapData.find(a => a.id === heatmapIndex).heatmapdata);
+        }
     }
     mapAPI.refreshObjectsOnMap = refreshObjectsOnMap;
+    function seedHeatmapData(objects, heatmapIndex) {
+        if (heatmapData != null && heatmapData.find(a => a.id == heatmapIndex) != null)
+            return;
+        if (heatmapData == null)
+            heatmapData = [{ id: heatmapIndex, heatmapdata: { max: 100, data: [] } }];
+        else if (heatmapData.find(a => a.id == heatmapIndex) == null)
+            heatmapData.push({ id: heatmapIndex, heatmapdata: { max: 100, data: [] } });
+        const heatmapEntry = heatmapData.find(a => a.id === heatmapIndex);
+        if (!heatmapEntry) {
+            console.error(`Heatmap entry with index ${heatmapIndex} was not found.`);
+            return;
+        }
+        for (let i = 0; i < objects.length; i++) {
+            if (objects[i].mapPoint != null && objects[i].heatmap) {
+                const markerObject = JSON.parse(objects[i].mapPoint);
+                heatmapEntry.heatmapdata.data.push({
+                    lat: markerObject.coordinates[1],
+                    lng: markerObject.coordinates[0],
+                    count: objects[i].citizens
+                });
+            }
+        }
+    }
+    mapAPI.seedHeatmapData = seedHeatmapData;
+    function getIndexOfHeatmapData(objects) {
+        for (let i = 0; i < objects.length; i++) {
+            if (objects[i].heatmap)
+                return objects[i].placeType;
+        }
+        return null;
+    }
+    mapAPI.getIndexOfHeatmapData = getIndexOfHeatmapData;
+    function showHeatmap(heatmapData) {
+        if (heatmapData.data.length == 0)
+            return;
+        var cfg = {
+            "radius": 20,
+            "maxOpacity": 1,
+            "scaleRadius": false,
+            "useLocalExtrema": true,
+            latField: 'lat',
+            lngField: 'lng',
+            valueField: 'count'
+        };
+        heatmapLayer = new HeatmapOverlay(cfg);
+        heatmapLayer.setData(heatmapData);
+        heatmapLayer.addTo(map);
+    }
+    mapAPI.showHeatmap = showHeatmap;
     function addObjectsFromJsonString(jsonInfo) {
         const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.clearLayers();

@@ -14,17 +14,22 @@ namespace EhriMemoMap.Models;
 
 public partial class MapObjectForLeafletModel
 {
-    public MapObjectForLeafletModel(MapObject mapObject)
-    {
 
-        Clickable = true;
-        PlaceType = mapObject.PlaceType;
+    public MapObjectForLeafletModel(MapObject mapObject, bool heatmap)
+    {
+        Clickable = !heatmap;
         Citizens = mapObject.Citizens;
+        MapPoint = mapObject.MapPoint;
+        PlaceType = mapObject.PlaceType;
+        Heatmap = heatmap;
+
+        if (heatmap)
+            return;
+
         CitizensTotal = mapObject.CitizensTotal;
         Id = mapObject.Id;
         Guid = mapObject.PlaceType + "_" + mapObject.Id + "_" + mapObject.DateFrom?.ToString("yyyy-mm-dd");
         Label = CultureInfo.CurrentCulture.Name == "en-US" ? mapObject.LabelEn : mapObject.LabelCs;
-        MapPoint = mapObject.MapPoint;
         MapPolygon = mapObject.MapPolygon;
 
         if (PlaceType == Shared.PlaceType.Incident.ToString())
@@ -145,5 +150,7 @@ public partial class MapObjectForLeafletModel
 
     public string? MapPolygon { get; set; }
     public string? HtmlIcon { get; set; }
+
+    public bool? Heatmap { get; set; }
 
 }

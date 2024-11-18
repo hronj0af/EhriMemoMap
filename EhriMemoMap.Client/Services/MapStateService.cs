@@ -181,14 +181,14 @@ namespace EhriMemoMap.Client.Services
             if (Map.Layers != null)
                 Map.Layers?.ForEach(layer =>
                 {
-                    if (layer.Type == LayerType.Base || layers == null || layers.Contains(layer.Name))
+                    if (layer.Type == LayerType.Base || (layers == null && layer.Type != LayerType.Heatmap) || (layers?.Contains(layer.Name) ?? false))
                         layer.Selected = true;
                     else
                         layer.Selected = false;
                 });
 
             if (Map.Timeline != null)
-                foreach (var layer in Map.Timeline?.Where(a => a.AdditionalLayers != null).SelectMany(a => a.AdditionalLayers))
+                foreach (var layer in Map.Timeline?.Where(a => a.AdditionalLayers != null).SelectMany(a => a.AdditionalLayers ?? []) ?? [])
                 {
                     if (layers == null || layers.Contains(layer.Name))
                         layer.Selected = true;

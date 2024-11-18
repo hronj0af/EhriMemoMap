@@ -633,4 +633,16 @@
 
 &lt;/div&gt;</value>
   </data>
+  <data name="layer_address_last_residence_heatmap_title_prague_last_residence" xml:space="preserve">
+    <value>Jewish Homes in Prague - before Deportation</value>
+  </data>
+  <data name="layer_address_last_residence_heatmap_abstract_prague_last_residence" xml:space="preserve">
+    <value>Heatmap: Addresses where Jewish residents of Prague lived during the Shoah, according to the victims' database. The data mostly come from the registration of Jews in the Protectorate, which was initiated in autumn 1941 by order of the Central Office for Jewish Emigration. Therefore, they may not correspond to the residence of Jewish families before the persecution began. The layer includes data on the number of occupants of each house, statistics on their fate and the number present on various historical dates. In some cases, where individual houses were difficult to identify, multiple addresses are grouped under the same coordinates (for example, on the same street). We are continuously working on refining the map location. Street names from the time of occupation (ca. 1941-1942) are used.</value>
+  </data>
+  <data name="layer_address_heatmap_abstract_prague_last_residence" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="layer_address_heatmap_title_prague_last_residence" xml:space="preserve">
+    <value>Jewish Homes - heatmap</value>
+  </data>
 </root>

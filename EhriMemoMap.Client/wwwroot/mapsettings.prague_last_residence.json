@@ -61,6 +61,17 @@
         "fontColor": "Dark"
       },
       {
+        "name": "address_last_residence_heatmap",
+        "placeType": "addressLastResidence",
+        "order": 1,
+        "type": "heatmap",
+        "minZoom": 10,
+        "quickAccess": false,
+        "backgroundColor": "#FFD93D",
+        "fontColor": "Dark",
+        "selected": false
+      },
+      {
         "name": "address",
         "placeType": "address",
         "order": 1,
@@ -69,6 +80,17 @@
         "quickAccess": true,
         "backgroundColor": "#FFD93D",
         "fontColor": "Dark"
+      },
+      {
+        "name": "address_heatmap",
+        "placeType": "address",
+        "order": 1,
+        "type": "heatmap",
+        "minZoom": 10,
+        "quickAccess": false,
+        "backgroundColor": "#FFD93D",
+        "fontColor": "Dark",
+        "selected": false
       },
       {
         "name": "interest",

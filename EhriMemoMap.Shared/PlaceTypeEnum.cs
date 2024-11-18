@@ -15,5 +15,7 @@
         Statistics,
 
         Memory,
+
+        HeatmapItem
     }
 }

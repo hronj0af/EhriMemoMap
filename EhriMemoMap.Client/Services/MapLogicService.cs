@@ -44,8 +44,12 @@ namespace EhriMemoMap.Client.Services
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
             var objects = await GetMapObjects(withPolygons, true);
+            
             var statistics = await GetDistrictStatistics();
             objects.AddRange(statistics);
+            
+            var heatmap = await GetHeatMap();
+            objects.AddRange(heatmap);
 
             var result = JsonConvert.SerializeObject(objects, serializerSettings);
             await _js.InvokeVoidAsync("mapAPI.refreshObjectsOnMap", result);
@@ -64,7 +68,7 @@ namespace EhriMemoMap.Client.Services
 
             // vyber objektu podle toho, do jake nalezi vrstvy
             var selectedLayerNames = new List<string?>();
-            foreach (var layer in _mapState.GetNotBaseLayers(true).Where(a => a.PlaceType != null && (withPolygons || a.Type != LayerType.Polygons)))
+            foreach (var layer in _mapState.GetNotBaseLayers(true).Where(a => a.Type != LayerType.Heatmap && a.PlaceType != null && (withPolygons || a.Type != LayerType.Polygons)))
             {
                 // krome nazvu vrstvy zkoumam i to, jestli se pri danem zoomu mapy ma vrstva vubec zobrazovat
                 if (!_mapState.ShowLayersForce && ((layer.MinZoom != null && _mapState.MapZoom < layer.MinZoom) || (layer.MaxZoom != null && _mapState.MapZoom > layer.MaxZoom)))
@@ -82,7 +86,7 @@ namespace EhriMemoMap.Client.Services
             if (aggregate)
                 objects = AggregateSameAddresses(objects);
 
-            return objects.Select(a => new MapObjectForLeafletModel(a)).ToList();
+            return objects.Select(a => new MapObjectForLeafletModel(a, false)).ToList();
         }
 
         /// <summary>
@@ -153,6 +157,29 @@ namespace EhriMemoMap.Client.Services
             statistics = await GetResultFromApiGet<List<MapStatistic>>("getdistrictstatistics", $"city={parameters.City}&total={parameters.Total}{(parameters.TimeLinePoint != null ? "&timeLinePoint=" + parameters.TimeLinePoint?.ToString("yyyy-MM-dd") : "")}");
             
             return statistics.GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
+        }
+
+        public async Task<List<MapObjectForLeafletModel>> GetHeatMap(Coordinate[]? customCoordinates = null)
+        {
+            // pokud neni zadna vrstva s statistikami vybrana, vratim prazdny seznam
+            var layer = _mapState.GetNotBaseLayers().FirstOrDefault(a => a.Selected && a.Type == LayerType.Heatmap);
+
+            // pokud neni zadna vrstva s statistikami vybrana, vratim prazdny seznam
+            if (layer == null)
+                return [];
+
+            var parameters = new MapObjectParameters
+            {
+                SelectedLayerNames = [layer.PlaceType?.ToString()],
+                SelectedTimeLinePoint = new TimelinePointModel { From = null, To = null},
+                CustomCoordinates = customCoordinates?.Select(a => new PointModel { X = a.X, Y = a.Y }).ToArray(),
+                MapSouthWestPoint = new PointModel { X = _mapState.MapSouthWestPoint.X, Y = _mapState.MapSouthWestPoint.Y },
+                MapNorthEastPoint = new PointModel { X = _mapState.MapNorthEastPoint.X, Y = _mapState.MapNorthEastPoint.Y },
+                City = _mapState.Map.InitialVariables?.City
+            };
+            var heatmap = await GetResultFromApiPost<List<MapObject>>("getheatmap", parameters);
+
+            return heatmap.Select(a => new MapObjectForLeafletModel(a, true)).ToList();
         }
 
         public async Task<WelcomeDialogStatistics> GetWelcomeDialogStatistics()

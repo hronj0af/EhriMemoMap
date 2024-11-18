@@ -58,6 +58,8 @@ app.MapGet("/getdistrictstatistics", (bool total, DateTime? timeLinePoint, strin
     return service.GetDistrictStatistics(parameters);
 });
 
+app.MapPost("/getheatmap", (MapObjectParameters parameters, MapLogicService service) => service.GetHeatmap(parameters));
+
 app.MapPost("/getmapobjects", (MapObjectParameters parameters, MapLogicService service) => service.GetMapObjects(parameters));
 
 app.MapGet("/getwelcomedialogstatistics", (string city, MapLogicService service) => service.GetWelcomeDialogStatistics(city));

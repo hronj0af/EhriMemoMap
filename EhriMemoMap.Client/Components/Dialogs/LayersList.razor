@@ -98,13 +98,18 @@
     private async Task OnLayerClick(LayerModel layer)
     {
         layer.Selected = !layer.Selected;
+
+        if (layer.Type == LayerType.Heatmap && layer.Selected)
+            foreach (var l in layers?.Where(a => a.Type == LayerType.Heatmap && a.Name != layer.Name) ?? [])
+                l.Selected = false;
+
         if (layer.Type == LayerType.WMS)
             await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", layer.Name, layer.Selected);
 
         else if (layer.Type == LayerType.Polygons)
             await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", LayerType.Polygons.ToString(), layer.Selected);
 
-        else if (layer.Type == LayerType.Objects)
+        else if (layer.Type == LayerType.Objects || layer.Type == LayerType.Heatmap)
             await MapLogic.RefreshObjectsOnMap(false);
 
         await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapState.GetLayersForUrlParameter());

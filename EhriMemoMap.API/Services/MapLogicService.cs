@@ -12,10 +12,10 @@ public class MapLogicService(MemogisContext context)
 {
     private readonly MemogisContext _context = context;
 
-    public List<MapObject> GetMapObjects(MapObjectParameters parameters)
+    public IQueryable<MapObject> PrepareMapObjectsQuery(MapObjectParameters parameters)
     {
         // nejdriv si pripravim mapove objekty pro dalsi dotazy
-        var query = _context.MapObjects.Where(a=>a.City == parameters.City).AsQueryable();
+        var query = _context.MapObjects.Where(a => a.City == parameters.City).AsQueryable();
 
         // vyfiltruju objekty podle toho, na jakem bode casove ose lezi
         if (parameters.SelectedTimeLinePoint != null)
@@ -49,8 +49,22 @@ public class MapLogicService(MemogisContext context)
             query = query.Where(a => !string.IsNullOrEmpty(a.MapPolygon) || (a.GeographyMapPoint != null && a.GeographyMapPoint.Intersects(bbox)));
         }
 
-        var result = query.ToList();
+        return query;
+    }
 
+    public MapObject[] GetMapObjects(MapObjectParameters parameters)
+    {
+        return [.. PrepareMapObjectsQuery(parameters)];
+    }
+
+    public MapObject[] GetHeatmap(MapObjectParameters parameters)
+    { 
+        var result = PrepareMapObjectsQuery(parameters).Select(a => new MapObject
+        {
+            MapPoint = a.MapPoint,
+            Citizens = a.Citizens,
+            PlaceType = a.PlaceType
+        }).ToArray();
         return result;
     }
 

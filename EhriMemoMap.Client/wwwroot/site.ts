@@ -30,10 +30,16 @@ namespace mapAPI {
     let polygonStrokeColor: string = "#222";
     let polygonColor: string = "#C5222C";
     let polygonColorSelected: string = "#000"; // "#cc1111";
+    let heatmapLayer: HeatmapOverlay | null = null; // Globální proměnná pro heatmapu
+    let heatmapData: { id: string; heatmapdata: HeatmapData }[] | null = null;
 
     //////////////////////////
     /// INIT
     //////////////////////////
+
+    export function getMap() {
+        return map;
+    }
 
     // připraví mapu do úvodního stavu
     export function initMap(jsonMapSettings: string): void {
@@ -119,7 +125,7 @@ namespace mapAPI {
         const pageHeight = window.innerHeight;
         const pageWidth = window.innerWidth;
 
-        const tempHeight = heightOfDialog != null && isMobileView() 
+        const tempHeight = heightOfDialog != null && isMobileView()
             ? pageHeight * (heightOfDialog / 100)
             : pageHeight - (document.getElementById("controlButtonsWrapper") != null
                 ? document.getElementById("controlButtonsWrapper").offsetTop
@@ -274,20 +280,27 @@ namespace mapAPI {
     export function refreshObjectsOnMap(objectJson) {
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
         const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
+
         objectsGroup.clearLayers();
+
         const objects = JSON.parse(objectJson) as MapObjectForLeafletModel[];
+
 
         for (let i = 0; i < objects.length; i++) {
             let newObject;
 
+            // polygony
             if (objects[i].mapPolygon != null) {
                 const polygonObject = JSON.parse(objects[i].mapPolygon) as PolygonModel;
                 newObject = getPolygon(polygonObject, objects[i].clickable, objects[i].label, null, objects[i].customTooltipClass, objects[i].customPolygonClass);
+
                 if (objects[i].placeType == "Inaccessible")
                     newObject.addTo(polygonsGroup);
                 else
                     newObject.addTo(objectsGroup);
-            } else if (objects[i].mapPoint != null) {
+
+            } else if (objects[i].mapPoint != null && !objects[i].heatmap) {
+                // nepolygony a ne heatmapa
                 const markerObject = JSON.parse(objects[i].mapPoint) as PointModel;
                 newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon, "map-point");
                 newObject.options.guid = objects[i].guid;
@@ -295,7 +308,82 @@ namespace mapAPI {
             }
         }
         polygonsGroup.bringToFront();
+
+        // pokud je heatmapa, tak ji zobrazíme
+        if (heatmapLayer) {
+            map.removeLayer(heatmapLayer);
+        }
+
+        var heatmapIndex = getIndexOfHeatmapData(objects);
+        if (heatmapIndex != null) {
+            seedHeatmapData(objects, heatmapIndex);
+            showHeatmap(heatmapData.find(a => a.id === heatmapIndex).heatmapdata);
+        }
     }
+
+    export function seedHeatmapData(objects: MapObjectForLeafletModel[], heatmapIndex: string) {
+        if (heatmapData != null && heatmapData.find(a => a.id == heatmapIndex) != null)
+            return;
+
+        if (heatmapData == null)
+            heatmapData = [{ id: heatmapIndex, heatmapdata: { max: 100, data: [] } }];
+        else if (heatmapData.find(a => a.id == heatmapIndex) == null)
+            heatmapData.push({ id: heatmapIndex, heatmapdata: { max: 100, data: [] } });
+
+        const heatmapEntry = heatmapData.find(a => a.id === heatmapIndex);
+
+        if (!heatmapEntry) {
+            console.error(`Heatmap entry with index ${heatmapIndex} was not found.`);
+            return;
+        }
+
+        for (let i = 0; i < objects.length; i++) {
+            if (objects[i].mapPoint != null && objects[i].heatmap) {
+                const markerObject = JSON.parse(objects[i].mapPoint) as PointModel;
+                heatmapEntry.heatmapdata.data.push({
+                    lat: markerObject.coordinates[1],
+                    lng: markerObject.coordinates[0],
+                    count: objects[i].citizens
+                });
+            }
+        }
+    }
+
+    export function getIndexOfHeatmapData(objects: MapObjectForLeafletModel[]): string {
+        for (let i = 0; i < objects.length; i++) {
+            if (objects[i].heatmap)
+                return objects[i].placeType;
+        }
+        return null;
+    }
+
+    export function showHeatmap(heatmapData: HeatmapData) {
+
+        if (heatmapData.data.length == 0)
+            return;
+
+        var cfg = {
+            // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+            // if scaleRadius is false it will be the constant radius used in pixels
+            "radius": 20,
+            "maxOpacity": 1,
+            // scales the radius based on map zoom
+            "scaleRadius": false,
+            // if set to false the heatmap uses the global maximum for colorization
+            // if activated: uses the data maximum within the current map boundaries
+            //   (there will always be a red spot with useLocalExtremas true)
+            "useLocalExtrema": true,
+            latField: 'lat',
+            lngField: 'lng',
+            valueField: 'count'
+        };
+
+        heatmapLayer = new HeatmapOverlay(cfg);
+        heatmapLayer.setData(heatmapData);
+
+        heatmapLayer.addTo(map);
+    }
+
 
     export function addObjectsFromJsonString(jsonInfo) {
         const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
@@ -380,7 +468,7 @@ namespace mapAPI {
         if (clickable) {
             result.on('click', callBlazor_ShowPlaceInfo);
         }
-        
+
 
         if (label != undefined && label != null) {
             result.bindTooltip(label, { sticky: true, className: customTooltipClass != undefined && customTooltipClass != null ? customTooltipClass : null });
@@ -595,7 +683,7 @@ namespace mapAPI {
         }
     }
 
-    export function getBlazorCulture() : string {
+    export function getBlazorCulture(): string {
         return window.localStorage['BlazorCulture'];
     };
 
@@ -626,7 +714,32 @@ window.addEventListener("resize", mapAPI.onResizeWindow);
 /// INTERFACES
 //////////////////////////
 
+declare class HeatmapOverlay extends L.Layer {
+    constructor(config: HeatmapOverlayConfig);
+    setData(data: HeatmapData): void;
+    addData(data: HeatmapData['data']): void;
+}
+
+interface HeatmapOverlayConfig {
+    radius?: number;
+    maxOpacity?: number;
+    scaleRadius?: boolean;
+    useLocalExtrema?: boolean;
+    latField?: string;
+    lngField?: string;
+    valueField?: string;
+}
+
+interface HeatmapData {
+    max: number;
+    data: {
+        lat: number;
+        lng: number;
+        count: number;
+    }[];
+}
 interface MapObjectForLeafletModel {
+    heatmap: boolean;
     clickable: boolean;
     placeType: string | null;
     citizens: number | null;
