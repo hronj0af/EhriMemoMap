@@ -7,7 +7,14 @@
         {
             <RadzenRow Gap="0" RowGap="5px" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
                 <RadzenColumn Size="12">
-                    <Home />
+                    @if (MapState?.Map?.InitialVariables?.AllCities != null && MapState.Map.InitialVariables.AllCities.Count() > 0)
+                    {
+                        <AllCities />
+                    }
+                    else
+                    {
+                        <Home />
+                    }
                 </RadzenColumn>
                 <RadzenColumn Size="12">
                     <Search />
@@ -27,13 +34,16 @@
         else
         {
             <RadzenRow Gap="0" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
-                <RadzenColumn Size="4">
+                <RadzenColumn Size="MapState.GetTimeline() != null ? 4 : 6">
                     <Search MobileVersion="true" Border="true" />
                 </RadzenColumn>
-                <RadzenColumn Size="4">
-                    <Timeline MobileVersion="true" Border="true" />
-                </RadzenColumn>
-                <RadzenColumn Size="4">
+                @if (MapState.GetTimeline() != null)
+                {
+                    <RadzenColumn Size="4">
+                        <Timeline MobileVersion="true" Border="true" />
+                    </RadzenColumn>
+                }
+                <RadzenColumn Size="MapState.GetTimeline() != null ? 4 : 6">
                     <Layers MobileVersion="true" />
                 </RadzenColumn>
             </RadzenRow>

@@ -26,5 +26,6 @@ public partial class PragueVictimsTimeline
 
     public string? Photo { get; set; }
 
+    public virtual ICollection<PragueLastResidence> PragueLastResidences { get; set; } = new List<PragueLastResidence>();
 
 }

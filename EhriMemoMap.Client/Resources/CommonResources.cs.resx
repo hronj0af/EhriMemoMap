@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -196,6 +196,55 @@
   &lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;
   &lt;/div&gt;</value>
   </data>
+  <data name="helpContent_prague_last_residence" xml:space="preserve">
+    <value>&lt;div&gt;
+  &lt;p&gt;
+  &lt;h4&gt;
+    Co je MemoMap?
+  &lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Interaktivní mapa Prahy z doby protektorátu. Mapa zobrazuje adresy obětí holokaustu, místa týkající se jejich perzekuce, ale také místa, kam Židé nesměli. Díky časové ose je vidět, jak lidé postupně mizeli ze svých domovů. Aplikace je přizpůsobena pro mobilní zařízení, můžete se s ní proto vydat přímo do města.&lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Co MemoMap obsahuje?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+  Aplikace zobrazuje informace o více než 40 000 obětech holokaustu, o 1 700 případech porušování protižidovských předpisů a nařízení, o 120 zajímavých místech souvisejících s jejich každodenním životem a pronásledováním a také o 110 místech, která byla židovským obyvatelům Prahy v době války nepřístupná.
+  &lt;/p&gt;
+  &lt;p&gt;Data o obětech holokaustu pocházejí z databáze, kterou spravuje Institut Terezínské iniciativy. Aplikace díky tomu zpřístupňuje nejen fotografie obětí, ale také skeny policejních záznamů, které se týkají porušování protižidovských předpisů a nařízení (tyto skeny pocházejí z fondu Policejního ředitelství Praha v Národním archivu).
+  &lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Jak se aplikace ovládá?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Jednotlivé typy dat jsou rozděleny do tzv. vrstev, mezi kterými můžete přepínat. Ovládání vrstev se nachází pod ikonou&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/layers-small.svg' /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Přiblížit nebo oddálit mapu můžete pomocí tlačítek&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/zoom-in-small.svg' /&gt;
+     &lt;img src='/images/zoom-out-small.svg' /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Svoji polohu na mapě najdete pomocí tlačítka&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/location-small.svg' /&gt;
+  &lt;/p&gt;
+
+  &lt;p&gt;
+  &lt;h4&gt;Našli jste chybu?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Pokud jste narazili na technický problém či na chybu v datech, dejte nám prosím vědět pomocí tohoto &lt;a href="https://docs.google.com/forms/d/15jprT8Sbc-Llt1CfAPrIzU4S8YIDjREixRADGzbA62k" target="_blank"&gt;formuláře&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;
+  &lt;h4&gt;Kredit&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Aplikace MemoMap původně vznikla v rámci projektu Integrace a segregace v prostoru města: dějiny holokaustu v Praze prostřednictvím mobilní webové aplikace (idenifikátor TL01000366). Projekt podpořila Technologická agentura České republiky v rámci veřejné soutěže ÉTA 1. MemoMap vytvořil Masarykův ústav a archiv AV ČR ve spolupráci s Institutem Terezínské iniciativy a Multikulturním centrem Praha.&lt;/p&gt;
+  &lt;p&gt;Rozvoj aplikace v letech 2023 a 2024 finančně podpořila Akademie věd České republiky v rámci programu Strategie AV21.&lt;/p&gt;
+&lt;p&gt;
+  Aplikace je dlouhodobě rozvíjena a provozována v rámci českého uzlu Evropské infrastruktury pro výzkum holokaustu. Ten je součástí infrastruktury LINDAT/CLARIAH-CZ, která je podporována Ministerstvem školství, mládeže a tělovýchovy České republiky v rámci programu "velkých infrastruktur".
+  &lt;/p&gt;
+  &lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;
+  &lt;/div&gt;</value>
+  </data>
   <data name="layerInfo" xml:space="preserve">
     <value>Podrobnosti o mapové vrstvě</value>
   </data>
@@ -277,6 +326,9 @@
   <data name="prague" xml:space="preserve">
     <value>Praha</value>
   </data>
+  <data name="prague_last_residence" xml:space="preserve">
+    <value>Praha</value>
+  </data>
   <data name="survivorsNotDisplayed" xml:space="preserve">
     <value>Přeživší a lidé s neznámým osudem nejsou níže zobrazeni.</value>
   </data>
@@ -325,6 +377,48 @@
   <data name="layer_MGS-prague_historical_map_1938-v2_abstract_prague" xml:space="preserve">
     <value>Orientační plán hlavního města Prahy s okolím (1938). Do digitální podoby zpracovala Městská knihovna v Praze, georeferencování provedl Masarykův ústav a Archiv Akademie věd České republiky. Dostupný také z WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
   </data>
+  <data name="layer_interest_title_prague_last_residence" xml:space="preserve">
+    <value>Body zájmu prostoru města Prahy</value>
+  </data>
+  <data name="layer_interest_abstract_prague_last_residence" xml:space="preserve">
+    <value>Body zájmu zahrnující místa pronásledování, židovské objekty a sklady zabaveného majetku.</value>
+  </data>
+  <data name="layer_incident_title_prague_last_residence" xml:space="preserve">
+    <value>Incidenty v prostoru města</value>
+  </data>
+  <data name="layer_incident_abstract_prague_last_residence" xml:space="preserve">
+    <value>Incidenty v prostoru města Prahy, při nichž byli židovští obyvatelé zatčeni či vyšetřováni pro porušení protižidovských nařízení. Údaje byly v rámci projektu MemoMap Praha vyexcerpovány z digitalizovaných dokumentů pražské policie. Jde například o informace o nedodržování prostorových zákazů, o občanských průkazech neoznačených písmenem \"J\" (Jude), apod.</value>
+  </data>
+  <data name="layer_address_title_prague_last_residence" xml:space="preserve">
+    <value>Bydliště Židů v době okupace</value>
+  </data>
+  <data name="layer_address_abstract_prague_last_residence" xml:space="preserve">
+    <value>Adresy, na nichž podle databáze obětí bydleli v době šoa židovští obyvatelé Prahy. Údaje většinou pocházejí z registrace Židů v protektorátu, která byla na základě nařízení Ústředny pro židovské vystěhovalectví zahájena na podzim 1941. Nemusí proto odpovídat bydlišti židovských rodin před začátkem pronásledování. Vrstva zahrnuje údaje o počtu obyvatel jednotlivých domů, statistiku jejich osudů a počet přítomných k různým historickým datům. V některých případech, kdy bylo obtížné jednotlivé domy identifikovat, je pod stejnými koordináty seskupeno více adres (například v jedné ulici). Na zpřesnění umístění na mapě průběžně pracujeme. Použity jsou názvy ulic z doby okupace (cca 1941-1942).</value>
+  </data>
+  <data name="layer_victim_title_prague_last_residence" xml:space="preserve">
+    <value>Oběti holokaustu</value>
+  </data>
+  <data name="layer_victim_abstract_prague_last_residence" xml:space="preserve">
+    <value>Databáze židovských obyvatel Prahy, kteří zahynuli v důsledku nacistického pronásledování. Záznamy jsou navázané na jejich pražské adresy. Detaily jsou přístupné skrze odkazy na portál holocaust.cz.</value>
+  </data>
+  <data name="layer_inaccessible_title_prague_last_residence" xml:space="preserve">
+    <value>Zakázaná místa v prostoru města</value>
+  </data>
+  <data name="layer_inaccessible_abstract_prague_last_residence" xml:space="preserve">
+    <value>Místa, která byla Židům v době války nepřístupná. Jejich zobrazení vychází z historické mapy z roku 1938. Současné prostory se mohou lišit velikostí i tvarem. </value>
+  </data>
+  <data name="layer_statistics_title_prague_last_residence" xml:space="preserve">
+    <value>Statistika čtvrtí</value>
+  </data>
+  <data name="layer_statistics_abstract_prague_last_residence" xml:space="preserve">
+    <value>Obrysy historické Prahy a pražských čtvrtí z roku 1930 doplněné o údaje o počtu záznamů přístupných v aplikaci. Mapa vychází z výstupu projektu NAKI „Zpřístupnění historických prostorových a statistických dat v prostředí GIS“ (číslo projektu DF12P01OVV033) a dále jej upravuje.</value>
+  </data>
+  <data name="layer_MGS-prague_historical_map_1938-v2_title_prague_last_residence" xml:space="preserve">
+    <value>Historická mapa Prahy (1938)</value>
+  </data>
+  <data name="layer_MGS-prague_historical_map_1938-v2_abstract_prague_last_residence" xml:space="preserve">
+    <value>Orientační plán hlavního města Prahy s okolím (1938). Do digitální podoby zpracovala Městská knihovna v Praze, georeferencování provedl Masarykův ústav a Archiv Akademie věd České republiky. Dostupný také z WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
+  </data>
   <data name="showStatistics" xml:space="preserve">
     <value>Zobrazit statistiku</value>
   </data>
@@ -359,6 +453,9 @@
     <value>Bydliště</value>
   </data>
   <data name="welcomeText_prague" xml:space="preserve">
+    <value>&lt;p&gt;Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli. Díky časové ose je vidět, jak lidé postupně mizeli ze svých domovů. Aplikace je přizpůsobena pro mobilní zařízení, můžete se s ní proto vydat přímo do města.&lt;/p&gt;</value>
+  </data>
+  <data name="welcomeText_prague_last_residence" xml:space="preserve">
     <value>&lt;p&gt;Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli. Díky časové ose je vidět, jak lidé postupně mizeli ze svých domovů. Aplikace je přizpůsobena pro mobilní zařízení, můžete se s ní proto vydat přímo do města.&lt;/p&gt;</value>
   </data>
   <data name="goToMap" xml:space="preserve">
@@ -400,6 +497,18 @@
   <data name="help_inaccessible_prague" xml:space="preserve">
     <value>Místa, která byla Židům v době holokaustu nepřístupná.</value>
   </data>
+  <data name="help_victims_prague_last_residence" xml:space="preserve">
+    <value>Místa, kde podle databáze obětí bydleli v době holokaustu židovští obyvatelé.</value>
+  </data>
+  <data name="help_incident_prague_last_residence" xml:space="preserve">
+    <value>Jednotlivé případy porušování protižidovských předpisů a nařízení.  </value>
+  </data>
+  <data name="help_interest_prague_last_residence" xml:space="preserve">
+    <value>Místa související s každodenním životem židovských obyvatel Prahy, ale i s jejich pronásledováním.</value>
+  </data>
+  <data name="help_inaccessible_prague_last_residence" xml:space="preserve">
+    <value>Místa, která byla Židům v době holokaustu nepřístupná.</value>
+  </data>
   <data name="featureType_Memory" xml:space="preserve">
     <value>Místa paměti</value>
   </data>
@@ -407,6 +516,12 @@
     <value>Místa paměti</value>
   </data>
   <data name="layer_memory_abstract_prague" xml:space="preserve">
+    <value>Místa a objekty připomínající pronásledování a oběti holokaustu. V současnosti vrstva obsahuje údaje o Stolpersteinech položených do dlažby. Data jsou převzata z projektu Veřejně prospěšného spolku na podporu osob dotčených holocaustem, https://stolpersteinecz.cz/.</value>
+  </data>
+  <data name="layer_memory_title_prague_last_residence" xml:space="preserve">
+    <value>Místa paměti</value>
+  </data>
+  <data name="layer_memory_abstract_prague_last_residence" xml:space="preserve">
     <value>Místa a objekty připomínající pronásledování a oběti holokaustu. V současnosti vrstva obsahuje údaje o Stolpersteinech položených do dlažby. Data jsou převzata z projektu Veřejně prospěšného spolku na podporu osob dotčených holocaustem, https://stolpersteinecz.cz/.</value>
   </data>
   <data name="layer_memory_title_short" xml:space="preserve">
@@ -425,6 +540,9 @@
     <value>Místa paměti</value>
   </data>
   <data name="city_prague" xml:space="preserve">
+    <value>Praha</value>
+  </data>
+  <data name="city_prague_last_residence" xml:space="preserve">
     <value>Praha</value>
   </data>
   <data name="city_pacov" xml:space="preserve">
@@ -501,5 +619,20 @@
   </data>
   <data name="pacov" xml:space="preserve">
     <value>Pacov</value>
+  </data>
+  <data name="cities" xml:space="preserve">
+    <value>Města</value>
+  </data>
+  <data name="refreshPage" xml:space="preserve">
+    <value>Obnovit stránku</value>
+  </data>
+  <data name="featureType_AddressLastResidence" xml:space="preserve">
+    <value>Bydliště Židů - před deportací</value>
+  </data>
+  <data name="layer_address_last_residence_title_prague_last_residence" xml:space="preserve">
+    <value>Bydliště Židů v době okupace - adresa před deportací</value>
+  </data>
+  <data name="layer_address_last_residence_abstract_prague_last_residence" xml:space="preserve">
+    <value>Adresy, na nichž podle databáze obětí bydleli těsně před deportací v době šoa židovští obyvatelé Prahy. Údaje většinou pocházejí z registrace Židů v protektorátu, která byla na základě nařízení Ústředny pro židovské vystěhovalectví zahájena na podzim 1941. Nemusí proto odpovídat bydlišti židovských rodin před začátkem pronásledování. Vrstva zahrnuje údaje o počtu obyvatel jednotlivých domů, statistiku jejich osudů a počet přítomných k různým historickým datům. V některých případech, kdy bylo obtížné jednotlivé domy identifikovat, je pod stejnými koordináty seskupeno více adres (například v jedné ulici). Na zpřesnění umístění na mapě průběžně pracujeme. Použity jsou názvy ulic z doby okupace (cca 1941-1942).</value>
   </data>
 </root>

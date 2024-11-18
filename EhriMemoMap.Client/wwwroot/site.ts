@@ -131,7 +131,7 @@ namespace mapAPI {
         if (mapElement == null || !mapElement)
             return;
 
-        mapElement.style.width = mapWidth == null ? "100%" : mapWidth + "px";
+        mapElement.style.width = mapWidth == null ? "100%" : mapWidth;
 
         const mapHeight = !mapAPI.isMobileView()
             ? pageHeight
@@ -289,7 +289,7 @@ namespace mapAPI {
                     newObject.addTo(objectsGroup);
             } else if (objects[i].mapPoint != null) {
                 const markerObject = JSON.parse(objects[i].mapPoint) as PointModel;
-                newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon);
+                newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon, "map-point");
                 newObject.options.guid = objects[i].guid;
                 newObject.addTo(objectsGroup);
             }
@@ -297,17 +297,44 @@ namespace mapAPI {
         polygonsGroup.bringToFront();
     }
 
-    export function addObjectFromJsonString(jsonInfo) {
-        const parsedObject = JSON.parse(jsonInfo);
-        const newObject = parsedObject.type == "Point" ? getPoint(parsedObject) : getPolygon(parsedObject, null, polygonColor);
+    export function addObjectsFromJsonString(jsonInfo) {
         const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.clearLayers();
-        newObject.addTo(objectsGroup);
+        const parsedObjects = JSON.parse(jsonInfo);
+        for (let i = 0; i < parsedObjects.length; i++) {
+            const parsedLocation = JSON.parse(parsedObjects[i].Location);
+            let htmlIcon = "<img src='css/images/marker-icon.png' />";
+            if (parsedObjects[i].Id.includes('victim_last_residence'))
+                htmlIcon = "<img src='css/images/marker-icon-red.png' />";
+            const newObject = parsedLocation.type == "Point" ? getPoint(parsedLocation, false, parsedObjects[i].Label, htmlIcon, 'z-index-999') : getPolygon(parsedLocation, null, polygonColor);
+            newObject.addTo(objectsGroup);
+        }
+        fitMapToAdditionalObjectsGroup();
     }
-    export function getPoint(markerObject: PointModel, clickable?: boolean, label?: string, htmlIcon?: string) {
+
+    export function fitMapToAdditionalObjectsGroup() {
+        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+
+        // Předpokládejme, že `objectsGroup` obsahuje všechny markery, které chcete zobrazit
+        var latlngs = [];
+
+        // Procházení všech markerů ve vrstvě `objectsGroup` a rozšíření bounds o jejich pozice
+        objectsGroup.eachLayer(function (layer) {
+            if (layer instanceof L.Marker) {
+                latlngs.push(layer.getLatLng());
+            }
+        });
+
+        // Nastavení pohledu na mapě tak, aby všechny markery byly vidět
+        map.fitBounds(latlngs, { padding: [100, 100] });
+    }
+
+
+
+    export function getPoint(markerObject: PointModel, clickable?: boolean, label?: string, htmlIcon?: string, className?: string) {
         let iconOptions = null;
         if (htmlIcon != undefined && htmlIcon != null)
-            iconOptions = { icon: new L.DivIcon({ className: "map-point", html: htmlIcon }) }
+            iconOptions = { icon: new L.DivIcon({ className: className, html: htmlIcon }) }
 
         const result = new L.Marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
 

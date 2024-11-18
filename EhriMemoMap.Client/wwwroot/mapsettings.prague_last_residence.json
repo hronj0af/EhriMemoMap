@@ -1,8 +1,8 @@
 ﻿{
   "map": {
     "initialVariables": {
-      "city": "prague",
-      "allCities": [ "prague", "pacov" ],
+      "city": "prague_last_residence",
+      "allCities": [ ],
       "zoom": 12,
       "zoomMobile": 11,
       "lat": 50.07905886,
@@ -30,7 +30,7 @@
       },
       {
         "name": "MGS-prague_historical_map_1938-v2",
-        "url": "https://api.memomap.cz/wmsProxy?",
+        "url": "https://localhost:7294/wmsProxy?",
         "mapParameter": "/webdata/HGIS_cze/memogis_prague_CZE_pol.qgz",
         "layersParameter": "MGS-prague_historical_map_1938-v2",
         "type": "wms",
@@ -48,6 +48,16 @@
         "order": 10,
         "type": "polygons",
         "backgroundColor": "#e3a1a2",
+        "fontColor": "Dark"
+      },
+      {
+        "name": "address_last_residence",
+        "placeType": "addressLastResidence",
+        "order": 1,
+        "type": "objects",
+        "minZoom": 16,
+        "quickAccess": false,
+        "backgroundColor": "#FFD93D",
         "fontColor": "Dark"
       },
       {

@@ -8,5 +8,7 @@
         public long?[]? PlacesOfMemoryIds { get; set; }
         public long?[]? InaccessiblePlacesIds { get; set; }
         public long?[]? AddressesIds { get; set; }
+        public long?[]? AddressesLastResidenceIds { get; set; }
+
     }
 }

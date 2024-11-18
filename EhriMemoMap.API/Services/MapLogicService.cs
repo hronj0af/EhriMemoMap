@@ -15,7 +15,7 @@ public class MapLogicService(MemogisContext context)
     public List<MapObject> GetMapObjects(MapObjectParameters parameters)
     {
         // nejdriv si pripravim mapove objekty pro dalsi dotazy
-        var query = _context.MapObjects.AsQueryable();
+        var query = _context.MapObjects.Where(a=>a.City == parameters.City).AsQueryable();
 
         // vyfiltruju objekty podle toho, na jakem bode casove ose lezi
         if (parameters.SelectedTimeLinePoint != null)
@@ -82,6 +82,7 @@ public class MapLogicService(MemogisContext context)
             PlacesOfInterest = GetPlacesOfInterest(parameters),
             InaccessiblePlaces = GetInaccessiblePlaces(parameters),
             Addresses = GetAddressesWithVictims(parameters),
+            AddressesLastResidence = GetAddressesLastResidenceWithVictims(parameters),
             PlacesOfMemory = GetPlacesOfMemories(parameters)
         };
 
@@ -100,7 +101,7 @@ public class MapLogicService(MemogisContext context)
 
     public List<PragueIncidentsTimeline>? GetIncidents(PlacesParameters parameters)
     {
-        if (parameters.IncidentsIds == null || parameters.City != "prague")
+        if (parameters.IncidentsIds == null || (!parameters.City?.Contains("prague") ?? false))
             return null;
 
         var result = new List<PragueIncidentsTimeline>();
@@ -122,7 +123,7 @@ public class MapLogicService(MemogisContext context)
         if (parameters.PlacesOfInterestIds == null)
             return null;
 
-        if (parameters.City == "prague")
+        if (parameters.City?.Contains("prague") ?? false)
             return _context.PraguePlacesOfInterestTimelines.
                 Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
                 Select(a => new PlaceInterest
@@ -177,7 +178,7 @@ public class MapLogicService(MemogisContext context)
         if (parameters.InaccessiblePlacesIds == null)
             return null;
 
-        if (parameters.City == "prague")
+        if (parameters.City?.Contains("prague") ?? false)
             return _context.PraguePlacesOfInterestTimelines.
             Where(p => parameters.InaccessiblePlacesIds.Contains(p.Id)).
             Select(a => new PlaceInterest
@@ -201,7 +202,7 @@ public class MapLogicService(MemogisContext context)
         if (parameters.AddressesIds == null)
             return null;
 
-        if (parameters.City == "prague")
+        if (parameters.City?.Contains("prague") ?? false)
         {
             return _context.PragueAddressesStatsTimelines.Where(p => parameters.AddressesIds.Contains(p.Id)).
                 Select(a => new AddressWithVictims
@@ -262,6 +263,42 @@ public class MapLogicService(MemogisContext context)
 
     }
 
+    public List<AddressWithVictims>? GetAddressesLastResidenceWithVictims(PlacesParameters parameters)
+    {
+        if (parameters.AddressesLastResidenceIds == null)
+            return null;
+
+        if (parameters.City != "prague_last_residence")
+            return null;
+
+        return _context.PragueAddressesStatsTimelines.Where(p => parameters.AddressesLastResidenceIds.Contains(p.Id)).
+            Select(a => new AddressWithVictims
+            {
+                Address = new AddressInfo
+                {
+                    Cs = a.AddressCs,
+                    En = a.AddressEn,
+                    De = a.AddressDe,
+                    CurrentCs = a.AddressCurrentCs,
+                    CurrentEn = a.AddressCurrentEn,
+                },
+                PragueAddress = a,
+                Victims = _context.PragueVictimsTimelines.Where(b => b.PragueLastResidences.Any(c => c.AddressId == a.Id)).OrderBy(a => a.Label).
+                    Select(a => new VictimShortInfoModel
+                    {
+                        DetailsCs = a.DetailsCs,
+                        DetailsEn = a.DetailsEn,
+                        Label = a.Label,
+                        Photo = a.Photo,
+                        TransportDate = a.TransportDate,
+                        LongInfo = false
+                    }).
+                    ToList()
+            }).
+            ToList();
+
+    }
+
     private Polygon GetBBox(PointModel southWestPoint, PointModel northEastPoint)
     {
         var imageOutlineCoordinates = new Coordinate[]
@@ -280,12 +317,12 @@ public class MapLogicService(MemogisContext context)
 
     public VictimLongInfoModel? GetVictimLongInfo(string city, long id)
     {
-        if (city == "prague")
+        if (city.Contains("prague"))
             return null;
 
         var result = _context.PacovEntities.
             Include(a => a.FateNavigation).
-            Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a=>a.PlaceFromNavigation).
+            Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceFromNavigation).
             Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceToNavigation).
             Include(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
             Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Place).

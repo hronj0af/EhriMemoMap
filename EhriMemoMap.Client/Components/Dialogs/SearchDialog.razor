@@ -18,7 +18,7 @@
             <span class="tooltiptext tooltiptext-right">@cl["help_search"]</span>
         </span>
 
-        
+
     </h1>
     <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End">
         <RadzenTextBox Change="LoadData" @bind-Value=@MapState.SearchedPlaceString Style="width:100%;box-sizing: border-box;">
@@ -51,41 +51,47 @@
                 }
             </h2>
             <div style="@(!openedTypes.Any(a=>a == placeGroup.Key) ? "display:none" : "")">
-                @foreach (var place in placeGroup.OrderBy(a => a.LabelCs))
+                @foreach (var place in placeGroup.GroupBy(a => a.LabelCs).OrderBy(a => a.Key))
                 {
-                    <RadzenRow class="rz-pt-4" RowGap="0" onclick="@(() => ShowPlace(place))" style="cursor:pointer">
+                    <RadzenRow class="rz-pt-4" RowGap="0" onclick="@(() => ShowPlace(place.Select(a=>a).ToArray()))" style="cursor:pointer">
                         <RadzenColumn Size="1">
-                            <RadzenImage style="height:25px" Path="@("images/" + place.Type + "-wine.svg")"></RadzenImage>
+                            <RadzenImage style="height:25px" Path="@("images/" + place.FirstOrDefault()?.Type + "-wine.svg")"></RadzenImage>
                         </RadzenColumn>
                         <RadzenColumn Size="11">
                             <h3 class="rz-mb-1">
                                 @if (CultureInfo.CurrentCulture.ToString() == "cs-CZ")
                                 {
-                                    @place.LabelCs
+                                    @place.FirstOrDefault()?.LabelCs
                                 }
                                 else
                                 {
-                                    @place.LabelEn
+                                    @place.FirstOrDefault()?.LabelEn
                                 }
                             </h3>
-                            @if (place.Date != null)
+                            @if (place.FirstOrDefault()?.Date != null)
                             {
-                                <h5>@place.Date?.ToString("d. M. yyyy")</h5>
+                                <h5>@place.FirstOrDefault()?.Date?.ToString("d. M. yyyy")</h5>
                             }
-                            @if (CultureInfo.CurrentCulture.ToString() == "cs-CZ" && !string.IsNullOrEmpty(place.PlaceCs))
+                            @foreach (var address in place.DistinctBy(a=>a.PlaceCs))
                             {
-                                <span style="font-size:14px">@place.PlaceCs</span>
+                                <div>
+                                    @if (CultureInfo.CurrentCulture.ToString() == "cs-CZ" && !string.IsNullOrEmpty(address.PlaceCs))
+                                    {
+                                        <span style="font-size:14px">@address.PlaceCs</span>
+                                    }
+                                    else if (!string.IsNullOrEmpty(address.PlaceEn))
+                                    {
+                                        <span style="font-size:14px">@address.PlaceEn</span>
+                                    }
+                                    @if (!string.IsNullOrEmpty(address.PlaceDe))
+                                    {
+                                        <text>
+                                            / <span style="font-size:14px">@address.PlaceDe</span>
+                                        </text>
+                                    }
+                                </div>
                             }
-                            else if (!string.IsNullOrEmpty(place.PlaceEn))
-                            {
-                                <span style="font-size:14px">@place.PlaceEn</span>
-                            }
-                            @if (!string.IsNullOrEmpty(place.PlaceDe))
-                            {
-                                <text>
-                                    / <span style="font-size:14px">@place.PlaceDe</span>
-                                </text>
-                            }
+
                         </RadzenColumn>
 
                     </RadzenRow>
@@ -105,15 +111,12 @@
     private List<string> openedTypes = new List<string>();
     private bool showLoading = false;
 
-    public async Task ShowPlace(Place place)
+    public async Task ShowPlace(Place?[] places)
     {
-        if (place != null)
+        if (places != null && places.Count() > 0)
         {
-            // var zoom = 15;
-            // if (place.MapObject == null || !place.MapObject.Contains("Polygon"))
-            //     zoom = 18;
-            await JS.InvokeVoidAsync("mapAPI.addObjectFromJsonString", place.MapLocation);
-            await JS.InvokeVoidAsync("mapAPI.goToLocation", place.MapLocation, MapState.MapZoom);
+            var jsonAddresses = System.Text.Json.JsonSerializer.Serialize(places.Select(a => new { Id = a.Id, Label = a.PlaceCs, Location = a.MapLocation }));
+            await JS.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", jsonAddresses);
         }
         else
             await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
@@ -138,8 +141,8 @@
 
     public async Task ShowPlace()
     {
-        var place = MapState.SearchedPlaces.FirstOrDefault(a => CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? a.DropDownInfoCs == MapState.SearchedPlaceString : a.DropDownInfoEn == MapState.SearchedPlaceString);
-        await ShowPlace(place);
+        var place = MapState.SearchedPlaces?.FirstOrDefault(a => CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? a.DropDownInfoCs == MapState.SearchedPlaceString : a.DropDownInfoEn == MapState.SearchedPlaceString);
+        await ShowPlace(new Place?[] { place });
     }
 
     private async void OnMyChangeHandler()

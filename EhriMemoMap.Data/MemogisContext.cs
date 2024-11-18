@@ -64,6 +64,8 @@ public partial class MemogisContext : DbContext
 
     public virtual DbSet<PragueIncidentsXDocument> PragueIncidentsXDocuments { get; set; }
 
+    public virtual DbSet<PragueLastResidence> PragueLastResidences { get; set; }
+
     public virtual DbSet<PraguePlacesOfInterest> PraguePlacesOfInterests { get; set; }
 
     public virtual DbSet<PraguePlacesOfInterestTimeline> PraguePlacesOfInterestTimelines { get; set; }
@@ -730,6 +732,32 @@ public partial class MemogisContext : DbContext
             entity.Property(e => e.DocumentEn).HasColumnName("document_en");
             entity.Property(e => e.Img).HasColumnName("img");
             entity.Property(e => e.IncidentId).HasColumnName("incident_id");
+        });
+
+
+        modelBuilder.Entity<PragueLastResidence>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("prague_last_residence_pkey");
+
+            entity.ToTable("prague_last_residence");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+
+            entity.Property(e => e.AddressId).HasColumnName("address_id");
+            entity.Property(e => e.VictimId).HasColumnName("victim_id");
+
+            entity.HasOne(d => d.Address).WithMany(p => p.PragueLastResidences)
+                .HasForeignKey(d => d.AddressId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("address_id_fkey");
+
+            entity.HasOne(d => d.Victim).WithMany(p => p.PragueLastResidences)
+                .HasForeignKey(d => d.VictimId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("victim_id_fkey");
+
         });
 
         modelBuilder.Entity<PraguePlacesOfInterest>(entity =>

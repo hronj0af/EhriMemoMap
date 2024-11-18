@@ -42,7 +42,7 @@ namespace EhriMemoMap.API.Services
                 new("indent", "true" ),
                 new("q.op", "OR" ),
                 new("fq", @$"city:""{queryParameters.City}"""),
-                new("fl", "label_cs, label_en, place_cs, place_en, place_de, place_current_cs, place_current_en, place_current_de, map_location, map_object, type, place_date"),
+                new("fl", "id label_cs, label_en, place_cs, place_en, place_de, place_current_cs, place_current_en, place_current_de, map_location, map_object, type, place_date"),
                 new("q", GetNormalizedQuery(queryParameters.Query)),
                 new("qf", "all"),
                 new("wt", "json"),
@@ -63,6 +63,7 @@ namespace EhriMemoMap.API.Services
                 var itemType = item["type"]?.ToString();
                 var newPlace = new Place
                 {
+                    Id = item["id"]?.ToString() ?? "",
                     Type = itemType?[0].ToString().ToUpper() + itemType?[1..],
                     LabelCs = item["label_cs"]?.ToString(),
                     LabelEn = item["label_en"]?.ToString(),

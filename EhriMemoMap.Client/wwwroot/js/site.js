@@ -94,7 +94,7 @@ var mapAPI;
         const pageElement = document.getElementsByClassName("page");
         if (mapElement == null || !mapElement)
             return;
-        mapElement.style.width = mapWidth == null ? "100%" : mapWidth + "px";
+        mapElement.style.width = mapWidth == null ? "100%" : mapWidth;
         const mapHeight = !mapAPI.isMobileView()
             ? pageHeight
             : pageHeight - 44 - tempHeight;
@@ -209,7 +209,7 @@ var mapAPI;
             }
             else if (objects[i].mapPoint != null) {
                 const markerObject = JSON.parse(objects[i].mapPoint);
-                newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon);
+                newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon, "map-point");
                 newObject.options.guid = objects[i].guid;
                 newObject.addTo(objectsGroup);
             }
@@ -217,18 +217,36 @@ var mapAPI;
         polygonsGroup.bringToFront();
     }
     mapAPI.refreshObjectsOnMap = refreshObjectsOnMap;
-    function addObjectFromJsonString(jsonInfo) {
-        const parsedObject = JSON.parse(jsonInfo);
-        const newObject = parsedObject.type == "Point" ? getPoint(parsedObject) : getPolygon(parsedObject, null, polygonColor);
+    function addObjectsFromJsonString(jsonInfo) {
         const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
         objectsGroup.clearLayers();
-        newObject.addTo(objectsGroup);
+        const parsedObjects = JSON.parse(jsonInfo);
+        for (let i = 0; i < parsedObjects.length; i++) {
+            const parsedLocation = JSON.parse(parsedObjects[i].Location);
+            let htmlIcon = "<img src='css/images/marker-icon.png' />";
+            if (parsedObjects[i].Id.includes('victim_last_residence'))
+                htmlIcon = "<img src='css/images/marker-icon-red.png' />";
+            const newObject = parsedLocation.type == "Point" ? getPoint(parsedLocation, false, parsedObjects[i].Label, htmlIcon, 'z-index-999') : getPolygon(parsedLocation, null, polygonColor);
+            newObject.addTo(objectsGroup);
+        }
+        fitMapToAdditionalObjectsGroup();
     }
-    mapAPI.addObjectFromJsonString = addObjectFromJsonString;
-    function getPoint(markerObject, clickable, label, htmlIcon) {
+    mapAPI.addObjectsFromJsonString = addObjectsFromJsonString;
+    function fitMapToAdditionalObjectsGroup() {
+        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+        var latlngs = [];
+        objectsGroup.eachLayer(function (layer) {
+            if (layer instanceof L.Marker) {
+                latlngs.push(layer.getLatLng());
+            }
+        });
+        map.fitBounds(latlngs, { padding: [100, 100] });
+    }
+    mapAPI.fitMapToAdditionalObjectsGroup = fitMapToAdditionalObjectsGroup;
+    function getPoint(markerObject, clickable, label, htmlIcon, className) {
         let iconOptions = null;
         if (htmlIcon != undefined && htmlIcon != null)
-            iconOptions = { icon: new L.DivIcon({ className: "map-point", html: htmlIcon }) };
+            iconOptions = { icon: new L.DivIcon({ className: className, html: htmlIcon }) };
         const result = new L.Marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
         var pos = map.latLngToLayerPoint(result.getLatLng()).round();
         result.setZIndexOffset(100 - pos.y);

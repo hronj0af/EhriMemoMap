@@ -1,5 +1,4 @@
 ﻿using EhriMemoMap.Client.Components.Cards;
-using EhriMemoMap.Client.Components.Dialogs;
 using EhriMemoMap.Models;
 using EhriMemoMap.Shared;
 using Microsoft.JSInterop;
@@ -7,7 +6,6 @@ using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Radzen;
-using System.Net.NetworkInformation;
 
 namespace EhriMemoMap.Client.Services
 {
@@ -89,11 +87,9 @@ namespace EhriMemoMap.Client.Services
         {
             DialogType = value;
             int? height = value == DialogTypeEnum.Welcome || value == DialogTypeEnum.None ? 0 : HeightOfDialog;
-            _js.InvokeVoidAsync("mapAPI.fitMapToWindow", height);
+            _js.InvokeVoidAsync("mapAPI.fitMapToWindow", height, IsMobileView ? "100%" : DialogType != DialogTypeEnum.None ? "67%" : "100%");
             NotifyStateChanged();
         }
-
-        private int topOfElement = 30;
 
         /// <summary>
         /// Aktuálně nastavený zoom mapy

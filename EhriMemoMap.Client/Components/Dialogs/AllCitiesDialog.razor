@@ -1,0 +1,17 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+@inject NavigationManager NavManager
+
+<DialogButtons />
+
+<div class="rz-px-6 rz-pt-12">
+    <h1 class="rz-pb-4" style="color:var(--Wine-Red)">
+        @cl["cities"]
+    </h1>
+    @foreach (var city in MapState.Map?.InitialVariables?.AllCities ?? [])
+    {
+        <div>
+            <a onclick="@(() => NavManager.NavigateTo("/" + city ?? "", true))" style="cursor:pointer;">@cl[city]</a>
+        </div>
+    }
+</div>

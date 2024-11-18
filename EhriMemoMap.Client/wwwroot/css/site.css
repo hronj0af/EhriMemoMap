@@ -231,6 +231,10 @@ path.leaflet-interactive:focus {
     z-index: 10000;
 }
 
+.z-index-999 {
+    z-index: 999!important;
+}
+
 /* CONTROL BUTTONS */
 
 .btn-language-topbar {
@@ -573,3 +577,5 @@ div.leaflet-overlay-pane svg > g path.statistics-polygon {
         transform: rotate(360deg)
     }
 }
+
+

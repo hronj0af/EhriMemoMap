@@ -47,6 +47,22 @@
             <CardAddress House="place" FilteredName="@FilteredName" />
         }
     }
+    @if (PlaceType == PlaceType.AddressLastResidence)
+    {
+        @if (PlacesToShow.AddressesLastResidence != null)
+        {
+            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.End">
+                <RadzenTextBox Placeholder="@cl["filterNames"]" @bind-Value=@FilteredName>
+                </RadzenTextBox>
+                <img src="images/search-only-dark.svg" onclik="(() => StateHasChanged())" style="cursor:pointer" class="rz-pb-2" />
+            </RadzenStack>
+
+        }
+        foreach (var place in PlacesToShow.AddressesLastResidence ?? [])
+        {
+            <CardAddress House="place" FilteredName="@FilteredName" />
+        }
+    }
     @if (PlaceType == PlaceType.Memory)
     {
         foreach (var memoryType in PlacesToShow.PlacesOfMemory?.GroupBy(a => a.Type).Select(a => a.Key) ?? [])

@@ -2,6 +2,7 @@
 {
     public class Place
     {
+        public string Id { get; set; }
         public DateTime? Date { get; set; }
         public string? Type { get; set; }
         public string? LabelCs { get; set; }

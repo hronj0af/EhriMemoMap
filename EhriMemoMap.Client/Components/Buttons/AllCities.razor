@@ -1,8 +1,10 @@
 ﻿@inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
+@inject IJSRuntime JS
 @inject NavigationManager NavManager
+@inject DialogService DialogService
 
-<div class="icon" title="@(cl["refreshPage"] + "...")" onclick="@(() => ShowHome())">
+<div class="icon" title="@(cl["cities"] + "...")" onclick="@(() => ShowAllCities())">
 
     <svg width="47" height="49" viewBox="0 0 47 49" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g id="Group 54">
@@ -42,8 +44,21 @@
         });
     }
 
-    private void ShowHome()
+    private async Task ShowAllCities()
     {
-        NavManager.NavigateTo("/" + MapState.Map?.InitialVariables?.City ?? "", true);
+        if (MapState.DialogType == DialogTypeEnum.AllCities)
+        {
+            MapState.SetDialogType(DialogTypeEnum.None);
+            DialogService.CloseSide();
+            await JS.InvokeVoidAsync("mapAPI.fitMapToWindow");
+
+        }
+        else
+        {
+            MapState.SetDialogType(DialogTypeEnum.AllCities);
+            await DialogService.OpenSideAsync<AllCitiesDialog>(cl["allCities"], options: await MapState.GetDialogOptions());
+            await JS.InvokeVoidAsync("mapAPI.fitMapToWindow", MapState.IsMobileView ? MapState.HeightOfDialog : null);
+        }
+        MapState.NotifyStateChanged();
     }
 }

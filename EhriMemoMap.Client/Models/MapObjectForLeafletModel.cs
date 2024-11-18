@@ -36,10 +36,10 @@ public partial class MapObjectForLeafletModel
         else if (PlaceType == Shared.PlaceType.Memory.ToString())
             HtmlIcon = "<img src='images/memory-map.png' />";
 
-        else if (PlaceType == Shared.PlaceType.Address.ToString())
+        else if (PlaceType == Shared.PlaceType.Address.ToString() || PlaceType == Shared.PlaceType.AddressLastResidence.ToString())
         {
             if (Citizens == null)
-                HtmlIcon = $"<div style='position:relative'><img src='images/addresses/victims_100.png' /></div>";
+                HtmlIcon = $"<div style='{(PlaceType == Shared.PlaceType.AddressLastResidence.ToString() ? "filter:invert(1);" : "")}position:relative'><img src='images/addresses/victims_100.png' /></div>";
             else
             {
                 var percents = (decimal)Citizens / CitizensTotal;
@@ -52,7 +52,7 @@ public partial class MapObjectForLeafletModel
                     _ => "victims_100"
                 };
 
-                HtmlIcon = $"<div style='position:relative'><img src='images/addresses/{iconFile}_{Citizens}.png' /></div>";
+                HtmlIcon = $"<div style='{(PlaceType == Shared.PlaceType.AddressLastResidence.ToString() ? "filter:invert(1);" : "")}position:relative'><img src='images/addresses/{iconFile}_{Citizens}.png' /></div>";
             }
         }
     }

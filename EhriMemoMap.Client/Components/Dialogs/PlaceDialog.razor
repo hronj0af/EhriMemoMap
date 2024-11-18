@@ -74,6 +74,9 @@
 
         var parameters = new PlacesParameters { City = MapState.Map.InitialVariables?.City };
 
+        if (Places.Any(a => a.PlaceType == PlaceType.AddressLastResidence.ToString()))
+            parameters.AddressesLastResidenceIds = Places.Where(a => a.PlaceType == PlaceType.AddressLastResidence.ToString()).Select(a => a.Id).ToArray();
+
         if (Places.Any(a => a.PlaceType == PlaceType.Incident.ToString()))
             parameters.IncidentsIds = Places.Where(a => a.PlaceType == PlaceType.Incident.ToString()).Select(a => a.Id).ToArray();
 

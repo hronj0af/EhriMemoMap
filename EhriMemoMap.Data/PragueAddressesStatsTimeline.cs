@@ -119,4 +119,7 @@ public partial class PragueAddressesStatsTimeline
     public string? AddressCurrentEn { get; set; }
 
     public string? AddressCurrentDe { get; set; }
+
+    public virtual ICollection<PragueLastResidence> PragueLastResidences { get; set; } = new List<PragueLastResidence>();
+
 }

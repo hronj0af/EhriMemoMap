@@ -6,6 +6,8 @@
         
         Address,
         
+        AddressLastResidence,
+
         Interest,
         
         Incident,
