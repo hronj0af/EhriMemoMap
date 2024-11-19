@@ -390,7 +390,7 @@
     <value>Incidenty v prostoru města Prahy, při nichž byli židovští obyvatelé zatčeni či vyšetřováni pro porušení protižidovských nařízení. Údaje byly v rámci projektu MemoMap Praha vyexcerpovány z digitalizovaných dokumentů pražské policie. Jde například o informace o nedodržování prostorových zákazů, o občanských průkazech neoznačených písmenem \"J\" (Jude), apod.</value>
   </data>
   <data name="layer_address_title_prague_last_residence" xml:space="preserve">
-    <value>Bydliště Židů v době okupace</value>
+    <value>Bydliště podle registrace v protektorátu</value>
   </data>
   <data name="layer_address_abstract_prague_last_residence" xml:space="preserve">
     <value>Adresy, na nichž podle databáze obětí bydleli v době šoa židovští obyvatelé Prahy. Údaje většinou pocházejí z registrace Židů v protektorátu, která byla na základě nařízení Ústředny pro židovské vystěhovalectví zahájena na podzim 1941. Nemusí proto odpovídat bydlišti židovských rodin před začátkem pronásledování. Vrstva zahrnuje údaje o počtu obyvatel jednotlivých domů, statistiku jejich osudů a počet přítomných k různým historickým datům. V některých případech, kdy bylo obtížné jednotlivé domy identifikovat, je pod stejnými koordináty seskupeno více adres (například v jedné ulici). Na zpřesnění umístění na mapě průběžně pracujeme. Použity jsou názvy ulic z doby okupace (cca 1941-1942).</value>
@@ -630,19 +630,19 @@
     <value>Bydliště Židů před deportací</value>
   </data>
   <data name="layer_address_last_residence_title_prague_last_residence" xml:space="preserve">
-    <value>Bydliště Židů v době okupace - před deportací</value>
+    <value>Poslední bydliště před deportací</value>
   </data>
   <data name="layer_address_last_residence_abstract_prague_last_residence" xml:space="preserve">
-    <value>Adresy, na nichž podle databáze obětí bydleli těsně před deportací v době šoa židovští obyvatelé Prahy. Údaje většinou pocházejí z registrace Židů v protektorátu, která byla na základě nařízení Ústředny pro židovské vystěhovalectví zahájena na podzim 1941. Nemusí proto odpovídat bydlišti židovských rodin před začátkem pronásledování. Vrstva zahrnuje údaje o počtu obyvatel jednotlivých domů, statistiku jejich osudů a počet přítomných k různým historickým datům. V některých případech, kdy bylo obtížné jednotlivé domy identifikovat, je pod stejnými koordináty seskupeno více adres (například v jedné ulici). Na zpřesnění umístění na mapě průběžně pracujeme. Použity jsou názvy ulic z doby okupace (cca 1941-1942).</value>
+    <value> </value>
   </data>
   <data name="layer_address_last_residence_heatmap_title_prague_last_residence" xml:space="preserve">
-    <value>Bydliště Židů před deportací - heatmap</value>
+    <value>Poslední bydliště před deportací - heatmap</value>
   </data>
   <data name="layer_address_last_residence_heatmap_abstract_prague_last_residence" xml:space="preserve">
-    <value>Heatmapa: adresy, na nichž podle databáze obětí bydleli těsně před deportací v době šoa židovští obyvatelé Prahy. Údaje většinou pocházejí z registrace Židů v protektorátu, která byla na základě nařízení Ústředny pro židovské vystěhovalectví zahájena na podzim 1941. Nemusí proto odpovídat bydlišti židovských rodin před začátkem pronásledování. Vrstva zahrnuje údaje o počtu obyvatel jednotlivých domů, statistiku jejich osudů a počet přítomných k různým historickým datům. V některých případech, kdy bylo obtížné jednotlivé domy identifikovat, je pod stejnými koordináty seskupeno více adres (například v jedné ulici). Na zpřesnění umístění na mapě průběžně pracujeme. Použity jsou názvy ulic z doby okupace (cca 1941-1942).</value>
+    <value> </value>
   </data>
   <data name="layer_address_heatmap_title_prague_last_residence" xml:space="preserve">
-    <value>Bydliště Židů - heatmap</value>
+    <value>Bydliště podle registrace v protektorátu - heatmap</value>
   </data>
   <data name="layer_address_heatmap_abstract_prague_last_residence" xml:space="preserve">
     <value> </value>
