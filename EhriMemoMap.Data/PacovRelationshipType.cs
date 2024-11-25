@@ -16,4 +16,7 @@ public partial class PacovRelationshipType
     public virtual ICollection<PacovEntitiesXEntity> PacovEntitiesXEntities { get; set; } = new List<PacovEntitiesXEntity>();
 
     public virtual ICollection<PacovEntitiesXPlace> PacovEntitiesXPlaces { get; set; } = new List<PacovEntitiesXPlace>();
+
+    public virtual ICollection<PacovNarrativeMapStopsXPlace> PacovNarrativeMapStopsXPlaces { get; set; } = [];
+
 }

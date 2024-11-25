@@ -42,6 +42,8 @@ public partial class PacovEntity
 
     public virtual ICollection<PacovEntitiesXMedium> PacovEntitiesXMedia { get; set; } = new List<PacovEntitiesXMedium>();
 
+    public virtual ICollection<PacovEntitiesXNarrativeMap> PacovEntitiesXNarrativeMaps { get; set; } = new List<PacovEntitiesXNarrativeMap>();
+
     public virtual ICollection<PacovEntitiesXPlace> PacovEntitiesXPlaces { get; set; } = new List<PacovEntitiesXPlace>();
 
     public virtual ICollection<PacovEntitiesXTransport> PacovEntitiesXTransports { get; set; } = new List<PacovEntitiesXTransport>();

@@ -30,11 +30,15 @@ public partial class MemogisContext : DbContext
 
     public virtual DbSet<PacovDocumentsXMedium> PacovDocumentsXMedia { get; set; }
 
+    public virtual DbSet<PacovDocumentsXNarrativeMapStop> PacovDocumentsXNarrativeMapStops { get; set; }
+
     public virtual DbSet<PacovDocumentsXPoi> PacovDocumentsXPois { get; set; }
 
     public virtual DbSet<PacovEntitiesXEntity> PacovEntitiesXEntities { get; set; }
 
     public virtual DbSet<PacovEntitiesXMedium> PacovEntitiesXMedia { get; set; }
+
+    public virtual DbSet<PacovEntitiesXNarrativeMap> PacovEntitiesXNarrativeMaps { get; set; }
 
     public virtual DbSet<PacovEntitiesXPlace> PacovEntitiesXPlaces { get; set; }
 
@@ -46,6 +50,14 @@ public partial class MemogisContext : DbContext
 
     public virtual DbSet<PacovMedium> PacovMedia { get; set; }
 
+    public virtual DbSet<PacovNarrativeMap> PacovNarrativeMaps { get; set; }
+
+    public virtual DbSet<PacovNarrativeMapStop> PacovNarrativeMapStops { get; set; }
+
+    public virtual DbSet<PacovNarrativeMapStopsXPlace> PacovNarrativeMapStopsXPlaces { get; set; }
+
+    public virtual DbSet<PacovNarrativeMapXNarrativeMapStop> PacovNarrativeMapXNarrativeMapStops { get; set; }
+    
     public virtual DbSet<PacovPlace> PacovPlaces { get; set; }
 
     public virtual DbSet<PacovPoi> PacovPois { get; set; }
@@ -219,6 +231,31 @@ public partial class MemogisContext : DbContext
                 .HasConstraintName("media_id_fkey");
         });
 
+        modelBuilder.Entity<PacovDocumentsXNarrativeMapStop>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pacov_documents_x_narrative_map_stops_pkey");
+
+            entity.ToTable("pacov_documents_x_narrative_map_stops");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+
+            entity.Property(e => e.DocumentId).HasColumnName("document_id");
+
+            entity.Property(e => e.NarrativeMapStopId).HasColumnName("narrative_map_stop_id");
+
+            entity.HasOne(d => d.Document).WithMany(p => p.PacovDocumentsXNarrativeMapStops)
+                .HasForeignKey(d => d.DocumentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("document_id_fkey");
+
+            entity.HasOne(d => d.NarrativeMapStop).WithMany(p => p.PacovDocumentsXNarrativeMapStops)
+                .HasForeignKey(d => d.NarrativeMapStopId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("narrative_map_stop_id_fkey");
+        });
+
         modelBuilder.Entity<PacovDocumentsXPoi>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("pacov_documents_x_pois_pkey");
@@ -292,6 +329,32 @@ public partial class MemogisContext : DbContext
                 .HasForeignKey(d => d.MediumId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("madia_id_fkey");
+        });
+
+        modelBuilder.Entity<PacovEntitiesXNarrativeMap>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pacov_entities_x_narrative_maps_pkey");
+
+            entity.ToTable("pacov_entities_x_narrative_maps");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+
+            entity.Property(e => e.EntityId).HasColumnName("entity_id");
+
+            entity.Property(e => e.NarrativeMapId).HasColumnName("narrative_map_id");
+
+            entity.HasOne(d => d.Entity).WithMany(p => p.PacovEntitiesXNarrativeMaps)
+                .HasForeignKey(d => d.EntityId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("entity_id_fkey");
+
+            entity.HasOne(d => d.NarrativeMap).WithMany(p => p.PacovEntitiesXNarrativeMaps)
+                .HasForeignKey(d => d.NarrativeMapId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("narrative_map_id_fkey");
+
         });
 
         modelBuilder.Entity<PacovEntitiesXPlace>(entity =>
@@ -425,6 +488,97 @@ public partial class MemogisContext : DbContext
                 .HasMaxLength(250)
                 .HasColumnName("omeka_url");
         });
+
+        modelBuilder.Entity<PacovNarrativeMap>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pacov_narrative_maps_pkey");
+            entity.ToTable("pacov_narrative_maps");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.DescritpionCs).HasColumnName("descritpion_cs");
+            entity.Property(e => e.DescritpionEn).HasColumnName("descritpion_en");
+            entity.Property(e => e.LabelCs)
+                .HasMaxLength(250)
+                .HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn)
+                .HasMaxLength(250)
+                .HasColumnName("label_en");
+            entity.Property(e => e.Type).HasColumnName("type");
+            entity.HasOne(d => d.TypeNavigation).WithMany(p => p.PacovNarrativeMaps)
+                .HasForeignKey(d => d.Type)
+                .HasConstraintName("type_fkey");
+        });
+
+        modelBuilder.Entity<PacovNarrativeMapStop>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pacov_narrative_map_stops_pkey");
+            entity.ToTable("pacov_narrative_map_stops");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.DateCs).HasColumnName("date_cs");
+            entity.Property(e => e.DateEn).HasColumnName("date_en");
+            entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
+            entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
+            entity.Property(e => e.LabelCs)
+                .HasMaxLength(250)
+                .HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn)
+                .HasMaxLength(250)
+                .HasColumnName("label_en");
+            entity.Property(e => e.StopOrder).HasColumnName("stop_order");
+        });
+
+        modelBuilder.Entity<PacovNarrativeMapStopsXPlace>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pacov_narrative_map_stops_x_places_pkey");
+            entity.ToTable("pacov_narrative_map_stops_x_places");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.NarrativeMapStopId).HasColumnName("narrative_map_stop_id");
+            entity.Property(e => e.PlaceId).HasColumnName("place_id");
+            entity.Property(e => e.RelationshipType).HasColumnName("relationship_type");
+            
+            entity.HasOne(d => d.NarrativeMapStop).WithMany(p => p.PacovNarrativeMapStopsXPlaces)
+                .HasForeignKey(d => d.NarrativeMapStopId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("narrative_map_stop_id_fkey");
+
+            entity.HasOne(d => d.Place).WithMany(p => p.PacovNarrativeMapStopsXPlaces)
+                .HasForeignKey(d => d.PlaceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("place_id_fkey");
+
+            entity.HasOne(d => d.RelationshipTypeNavigation).WithMany(p => p.PacovNarrativeMapStopsXPlaces)
+                .HasForeignKey(d => d.RelationshipType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("relationship_type_fkey");
+        });
+
+
+        modelBuilder.Entity<PacovNarrativeMapXNarrativeMapStop>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pacov_narrative_maps_x_narrative_map_stops_pkey");
+            entity.ToTable("pacov_narrative_maps_x_narrative_map_stops");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.NarrativeMapId).HasColumnName("narrative_map_id");
+            entity.Property(e => e.NarrativeMapStopId).HasColumnName("narrative_map_stop_id");
+
+            entity.HasOne(d => d.NarrativeMap).WithMany(p => p.PacovNarrativeMapXNarrativeMapStops)
+                .HasForeignKey(d => d.NarrativeMapId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("narrative_map_id_fkey");
+
+            entity.HasOne(d => d.NarrativeMapStop).WithMany(p => p.PacovNarrativeMapXNarrativeMapStops)
+                .HasForeignKey(d => d.NarrativeMapStopId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("narrative_map_stop_id_fkey");
+        });
+
 
         modelBuilder.Entity<PacovPlace>(entity =>
         {

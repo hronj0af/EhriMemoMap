@@ -39,4 +39,6 @@ public partial class PacovPlace
     public virtual ICollection<PacovTransport> PacovTransportPlaceFromNavigations { get; set; } = new List<PacovTransport>();
 
     public virtual ICollection<PacovTransport> PacovTransportPlaceToNavigations { get; set; } = new List<PacovTransport>();
+
+    public virtual ICollection<PacovNarrativeMapStopsXPlace> PacovNarrativeMapStopsXPlaces { get; set; } = [];
 }

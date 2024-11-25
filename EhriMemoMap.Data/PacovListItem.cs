@@ -16,4 +16,6 @@ public partial class PacovListItem
     public virtual ICollection<PacovEntity> PacovEntityFateNavigations { get; set; } = new List<PacovEntity>();
 
     public virtual ICollection<PacovEntity> PacovEntitySexNavigations { get; set; } = new List<PacovEntity>();
+
+    public virtual ICollection<PacovNarrativeMap> PacovNarrativeMaps { get; set; } = [];
 }

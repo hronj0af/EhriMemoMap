@@ -33,9 +33,11 @@ public partial class PacovDocument
 
     public virtual PacovPlace? CreationPlaceNavigation { get; set; }
 
-    public virtual ICollection<PacovDocumentsXEntity> PacovDocumentsXEntities { get; set; } = new List<PacovDocumentsXEntity>();
+    public virtual ICollection<PacovDocumentsXEntity> PacovDocumentsXEntities { get; set; } = [];
 
-    public virtual ICollection<PacovDocumentsXMedium> PacovDocumentsXMedia { get; set; } = new List<PacovDocumentsXMedium>();
+    public virtual ICollection<PacovDocumentsXMedium> PacovDocumentsXMedia { get; set; } = [];
 
-    public virtual ICollection<PacovDocumentsXPoi> PacovDocumentsXPois { get; set; } = new List<PacovDocumentsXPoi>();
+    public virtual ICollection<PacovDocumentsXPoi> PacovDocumentsXPois { get; set; } = [];
+    public virtual ICollection<PacovDocumentsXNarrativeMapStop> PacovDocumentsXNarrativeMapStops { get; set; } = [];
+
 }
