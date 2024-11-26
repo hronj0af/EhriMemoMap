@@ -296,7 +296,7 @@ var mapAPI;
             var newObject = null;
             if (parsedLocation.type == "Point") {
                 parsedObjects[i].mapPointModel = parsedLocation;
-                newObject = getPoint(parsedObjects[i], 'z-index-999');
+                newObject = getPoint(parsedObjects[i], 'z-index-999', parsedObjects[i].placeType == NarrativeMapStopPlaceType.Main ? scrollToStop : null);
             }
             else {
                 parsedObjects[i].mapPolygonModel = parsedLocation;
@@ -357,10 +357,10 @@ var mapAPI;
         map.fitBounds(latlngs, { padding: [100, 100] });
     }
     mapAPI.fitMapToGroup = fitMapToGroup;
-    function getPoint(markerObject, className) {
+    function getPoint(markerObject, className, clickFunction) {
         let iconOptions = null;
         if (markerObject.htmlIcon != undefined && markerObject.htmlIcon != null)
-            iconOptions = { type: markerObject.placeType, icon: new L.DivIcon({ className: className, html: markerObject.htmlIcon }) };
+            iconOptions = { stopId: markerObject.stopId, type: markerObject.placeType, icon: new L.DivIcon({ className: className, html: markerObject.htmlIcon }) };
         const result = new L.Marker([markerObject.mapPointModel.coordinates[1], markerObject.mapPointModel.coordinates[0]], iconOptions);
         var pos = map.latLngToLayerPoint(result.getLatLng()).round();
         result.setZIndexOffset(100 - pos.y);
@@ -368,7 +368,7 @@ var mapAPI;
             result.bindTooltip(markerObject.label, { sticky: true });
         }
         if (markerObject.clickable) {
-            result.on('click', callBlazor_ShowPlaceInfo);
+            result.on('click', clickFunction != null ? clickFunction : callBlazor_ShowPlaceInfo);
         }
         return result;
     }
@@ -588,6 +588,18 @@ var mapAPI;
         });
     }
     mapAPI.removeBluepoint = removeBluepoint;
+    function scrollToStop(event) {
+        const point = event.target;
+        const targetElement = document.getElementById("narrative-stop-" + point.options.stopId);
+        const container = document.querySelector("aside");
+        if (container && targetElement) {
+            const rect = targetElement.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            const scrollPosition = container.scrollTop + (rect.top - containerRect.top) - 20;
+            container.scrollTo({ top: scrollPosition, behavior: "smooth" });
+        }
+    }
+    mapAPI.scrollToStop = scrollToStop;
     function setDialogFullScreen(value) {
         if (value) {
             if (!isFullscreen) {

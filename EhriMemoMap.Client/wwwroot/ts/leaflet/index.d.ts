@@ -3077,6 +3077,7 @@ export interface MarkerOptions extends InteractiveLayerOptions {
     /** Number of pixels the map should pan by. */
     autoPanSpeed?: number | undefined;
     autoPanOnFocus?: boolean | undefined;
+    stopId?: number | undefined;
 }
 
 export class Marker<P = any> extends Layer {

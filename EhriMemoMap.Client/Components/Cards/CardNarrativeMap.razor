@@ -5,7 +5,7 @@
 
 <DialogButtons />
 
-<div style="padding:2.5rem 2.5rem 0 2.5rem;">
+<div style="padding:2.5rem 2.5rem 0 2.5rem;" id="card-narrative">
     @if (MapState.NarrativeMap != null)
     {
         <h3>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? MapState.NarrativeMap.LabelCs : MapState.NarrativeMap.LabelEn)</h3>
@@ -13,6 +13,7 @@
         foreach (var stop in MapState.NarrativeMap.Stops ?? [])
         {
             <text>
+                <a id="narrative-stop-@stop.Id" />
                 <hr class="rz-my-4" />
                 <RadzenRow>
                     <RadzenColumn Size="11">
@@ -26,7 +27,7 @@
                     </RadzenColumn>
                     <RadzenColumn Size="1">
                         <span>
-                            <i onclick="@(() => MapLogic.ShowStopPlacesOnMap(stop.Id))" title="@cl.GetString("showOnMap")..." class="fa fa-map"></i>
+                            <i onclick="@(() => MapLogic.ShowStopPlacesOnMap(stop.Id))" title="@cl.GetString("showOnMap")..." class="fa fa-map" style="cursor:pointer"></i>
                         </span>
                     </RadzenColumn>
                 </RadzenRow>

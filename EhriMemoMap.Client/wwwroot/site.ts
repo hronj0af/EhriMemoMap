@@ -411,7 +411,10 @@ namespace mapAPI {
 
             if (parsedLocation.type == "Point") {
                 parsedObjects[i].mapPointModel = parsedLocation;
-                newObject = getPoint(parsedObjects[i], 'z-index-999')
+                newObject = getPoint(
+                    parsedObjects[i],
+                    'z-index-999',
+                    parsedObjects[i].placeType == NarrativeMapStopPlaceType.Main ? scrollToStop : null)
             } else {
                 parsedObjects[i].mapPolygonModel = parsedLocation;
                 newObject = getPolygon(parsedObjects[i]);
@@ -489,10 +492,10 @@ namespace mapAPI {
 
 
 
-    export function getPoint(markerObject: MapObjectForLeafletModel, className?: string) {
-        let iconOptions = null;
+    export function getPoint(markerObject: MapObjectForLeafletModel, className?: string, clickFunction?: L.LayersControlEventHandlerFn) {
+        let iconOptions = null as L.MarkerOptions;
         if (markerObject.htmlIcon != undefined && markerObject.htmlIcon != null)
-            iconOptions = { type: markerObject.placeType, icon: new L.DivIcon({ className: className, html: markerObject.htmlIcon }) }
+            iconOptions = { stopId: markerObject.stopId, type: markerObject.placeType, icon: new L.DivIcon({ className: className, html: markerObject.htmlIcon }) }
 
         const result = new L.Marker([markerObject.mapPointModel.coordinates[1], markerObject.mapPointModel.coordinates[0]], iconOptions);
 
@@ -504,7 +507,7 @@ namespace mapAPI {
         }
 
         if (markerObject.clickable) {
-            result.on('click', callBlazor_ShowPlaceInfo);
+            result.on('click', clickFunction != null ? clickFunction : callBlazor_ShowPlaceInfo);
         }
 
         return result;
@@ -759,6 +762,25 @@ namespace mapAPI {
         });
     }
 
+    export function scrollToStop(event): void {
+
+        const point = event.target as L.Marker;
+        const targetElement = document.getElementById("narrative-stop-" + point.options.stopId);
+        const container = document.querySelector("aside");
+
+        if (container && targetElement) {
+            // Získáme pozici cílového prvku vůči kontejneru
+            const rect = targetElement.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+
+            // Vypočítáme pozici scrollu v kontejneru
+            const scrollPosition = container.scrollTop + (rect.top - containerRect.top) - 20; // Odečteme 20px
+
+            // Posuneme kontejner na vypočtenou pozici
+            container.scrollTo({ top: scrollPosition, behavior: "smooth" });
+        }
+    }
+
     //////////////////////////
     /// DIALOG
     //////////////////////////
@@ -854,6 +876,7 @@ interface MapObjectForLeafletModel {
     htmlIcon: string | null;
     customTooltipClass: string | null;
     customPolygonClass: string | null;
+    stopId: number | null;
 
 
 }

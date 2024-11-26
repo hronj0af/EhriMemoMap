@@ -36,10 +36,13 @@ public partial class MapObjectForLeafletModel
         Label = place.LabelCs;
         MapPoint = place.MapPoint;
         PlaceType = place.Type;
+        StopId = place.StopId;
+
         switch (place.Type)
         {
             case "main point":
                 HtmlIcon = "<img src='css/images/narrative-icon.png' />";
+                Clickable = true;
                 break;
             case "trajectory point":
                 HtmlIcon = "<img src='css/images/trajectory-icon.png' />";
@@ -187,5 +190,6 @@ public partial class MapObjectForLeafletModel
     public string? HtmlIcon { get; set; }
 
     public bool? Heatmap { get; set; }
+    public long? StopId { get; set; }
 
 }

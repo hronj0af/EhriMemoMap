@@ -442,8 +442,8 @@ public class MapLogicService(MemogisContext context)
                 Places = a.PacovNarrativeMapStopsXPlaces.Select(b => new Place
                 {
                     Id = b.Id,
-                    LabelCs = b.Place.LabelCs,
-                    LabelEn = b.Place.LabelEn,
+                    LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
+                    LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelEn + "<br/>" + b.Place.LabelEn : b.Place.LabelEn,
                     TownCs = b.Place.TownCs,
                     TownEn = b.Place.TownEn,
                     StreetCs = b.Place.StreetCs,
@@ -452,7 +452,8 @@ public class MapLogicService(MemogisContext context)
                     RemarkCs = b.Place.RemarkCs,
                     RemarkEn = b.Place.RemarkEn,
                     MapPoint = b.Place.Geography.AsJson(),
-                    Type = b.RelationshipTypeNavigation.LabelEn
+                    Type = b.RelationshipTypeNavigation.LabelEn,
+                    StopId = b.NarrativeMapStopId
                 }).ToArray(),
                 Documents = a.PacovDocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Document
                 {

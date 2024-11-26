@@ -27,6 +27,7 @@ public partial class Place
     public string? RemarkEn { get; set; }
 
     public string? MapPoint { get; set; }
+    public long? StopId { get; set; }
 
     public Document[]? Documents { get; set; } = [];
 }
