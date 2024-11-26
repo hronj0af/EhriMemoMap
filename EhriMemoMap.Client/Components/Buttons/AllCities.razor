@@ -57,7 +57,7 @@
         {
             MapState.SetDialogType(DialogTypeEnum.AllCities);
             await DialogService.OpenSideAsync<AllCitiesDialog>(cl["allCities"], options: await MapState.GetDialogOptions());
-            await JS.InvokeVoidAsync("mapAPI.fitMapToWindow", MapState.IsMobileView ? MapState.HeightOfDialog : null);
+            // await JS.InvokeVoidAsync("mapAPI.fitMapToWindow", MapState.IsMobileView ? MapState.HeightOfDialog : null);
         }
         MapState.NotifyStateChanged();
     }

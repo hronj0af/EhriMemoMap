@@ -14,4 +14,8 @@
             <a onclick="@(() => NavManager.NavigateTo("/" + city ?? "", true))" style="cursor:pointer;">@cl[city]</a>
         </div>
     }
+
+    <div class="rz-mt-8">
+        <RadzenButton ButtonStyle="ButtonStyle.Dark" Variant="Variant.Outlined" Text="Příběh" Click="@(() => MapState.ShowNarrativeMap(1))"/>
+    </div>
 </div>

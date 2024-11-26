@@ -9,6 +9,7 @@
         public string? DetailsCs { get; set; }
         public string? DetailsEn { get; set; }
         public string? Photo { get; set; }
+        public long? NarrativeMapId { get; set; }
         public DateTime? TransportDate { get; set; }
         //public DateTime? RelationshipToAddressDateFrom { get; set; }
         //public DateTime? RelationshipToAddressDateTo { get; set; }

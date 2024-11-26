@@ -50,20 +50,12 @@ else
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMyChangeHandler;
-    }
-
-    private async void OnMyChangeHandler()
-    {
-        await InvokeAsync(() =>
-        {
-            StateHasChanged();
-        });
+        MapState.OnChange -= StateHasChanged;
     }
 
     protected override async Task OnInitializedAsync()
     {
-        MapState.OnChange += OnMyChangeHandler;
+        MapState.OnChange += StateHasChanged;
         // style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
         otherLanguage = Culture.ToString() == "cs-CZ" ? "EN" : "CS";
         otherLanguageTitle = Culture.ToString() == "cs-CZ" ? "english" : "czech";

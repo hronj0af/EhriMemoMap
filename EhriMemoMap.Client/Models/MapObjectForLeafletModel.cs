@@ -14,6 +14,41 @@ namespace EhriMemoMap.Models;
 
 public partial class MapObjectForLeafletModel
 {
+    public MapObjectForLeafletModel() { }
+
+    public MapObjectForLeafletModel(SolrPlace? place)
+    {
+        if (place == null)
+            return;
+
+        Id = place.Id;
+        Label = place.PlaceCs;
+        MapPoint = place.MapLocation;
+
+        HtmlIcon = Id.Contains("victim_last_residence") 
+            ? "<img src='css/images/marker-icon-red.png' />" 
+            : "<img src='css/images/marker-icon.png' />";
+    }
+
+    public MapObjectForLeafletModel(Place place)
+    {
+        Id = place.Id.ToString();
+        Label = place.LabelCs;
+        MapPoint = place.MapPoint;
+        PlaceType = place.Type;
+        switch (place.Type)
+        {
+            case "main point":
+                HtmlIcon = "<img src='css/images/narrative-icon.png' />";
+                break;
+            case "trajectory point":
+                HtmlIcon = "<img src='css/images/trajectory-icon.png' />";
+                break;
+            default:
+                HtmlIcon = "<img src='css/images/marker-icon.png' />";
+                break;
+        }
+    }
 
     public MapObjectForLeafletModel(MapObject mapObject, bool heatmap)
     {
@@ -27,7 +62,7 @@ public partial class MapObjectForLeafletModel
             return;
 
         CitizensTotal = mapObject.CitizensTotal;
-        Id = mapObject.Id;
+        Id = mapObject.Id.ToString();
         Guid = mapObject.PlaceType + "_" + mapObject.Id + "_" + mapObject.DateFrom?.ToString("yyyy-mm-dd");
         Label = CultureInfo.CurrentCulture.Name == "en-US" ? mapObject.LabelEn : mapObject.LabelCs;
         MapPolygon = mapObject.MapPolygon;
@@ -68,7 +103,7 @@ public partial class MapObjectForLeafletModel
             return;
 
         PlaceType = Shared.PlaceType.Statistics.ToString();
-        Id = statistics.FirstOrDefault()?.Id;
+        Id = statistics.FirstOrDefault()?.Id?.ToString();
         Guid = PlaceType + "_" + statistics.FirstOrDefault()?.Id + "_";
         Clickable = false;
         MapPolygon = statistics.FirstOrDefault(a => !string.IsNullOrEmpty(a.MapPolygon))?.MapPolygon;
@@ -138,7 +173,7 @@ public partial class MapObjectForLeafletModel
     public decimal? Citizens { get; set; }
 
     public decimal? CitizensTotal { get; set; }
-    public long? Id { get; set; }
+    public string? Id { get; set; }
 
     public string? Guid { get; set; }
 

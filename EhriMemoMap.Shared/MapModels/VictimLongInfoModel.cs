@@ -17,8 +17,8 @@ namespace EhriMemoMap.Shared
         public VictimShortInfoModel[]? RelatedPersons { get; set; }
         public Document[]? Documents { get; set; }
         public Transport[]? Transports { get; set; }
-
         public DateTime? TransportDate { get; set; }
+        public long? NarrativeMapId { get; set; }
         public string GetLabelForPicture()
         => Label?.Insert(0, "<b>").Replace(" (*", "</b><br/>*").Replace(")", "") ?? "";
 

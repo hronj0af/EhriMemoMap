@@ -1,0 +1,68 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+@inject MapLogicService MapLogic
+@inject IJSRuntime JS
+
+<DialogButtons />
+
+<div style="padding:2.5rem 2.5rem 0 2.5rem;">
+    @if (MapState.NarrativeMap != null)
+    {
+        <h3>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? MapState.NarrativeMap.LabelCs : MapState.NarrativeMap.LabelEn)</h3>
+
+        foreach (var stop in MapState.NarrativeMap.Stops ?? [])
+        {
+            <text>
+                <hr class="rz-my-4" />
+                <RadzenRow>
+                    <RadzenColumn Size="11">
+                        <h4>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.LabelCs : stop.LabelEn)</h4>
+                        <div>
+                            <i>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DateCs : stop.DateEn)</i>
+                        </div>
+                        <div class="rz-mt-4">
+                            @(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DescriptionCs : stop.DescriptionEn)
+                        </div>
+                    </RadzenColumn>
+                    <RadzenColumn Size="1">
+                        <span>
+                            <i onclick="@(() => MapLogic.ShowStopPlacesOnMap(stop.Id))" title="@cl.GetString("showOnMap")..." class="fa fa-map"></i>
+                        </span>
+                    </RadzenColumn>
+                </RadzenRow>
+
+                @if (stop?.Documents?.Any() ?? false)
+                {
+                    <DocumentGallery ShowTitle="false" Documents="stop.Documents" />
+                }
+            </text>
+        }
+
+
+
+    }
+</div>
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id == null)
+            return;
+
+        await MapLogic.GetNarrativeMap(Id);
+        await MapLogic.ShowNarrativeMapPlaces();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        MapState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= StateHasChanged;
+    }
+}

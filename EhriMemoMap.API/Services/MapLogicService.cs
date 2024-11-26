@@ -2,6 +2,7 @@
 using EhriMemoMap.Shared;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
+using EhriMemoMap.API.Helpers;
 
 namespace EhriMemoMap.Services;
 
@@ -58,7 +59,7 @@ public class MapLogicService(MemogisContext context)
     }
 
     public MapObject[] GetHeatmap(MapObjectParameters parameters)
-    { 
+    {
         var result = PrepareMapObjectsQuery(parameters).Select(a => new MapObject
         {
             MapPoint = a.MapPoint,
@@ -249,6 +250,7 @@ public class MapLogicService(MemogisContext context)
             return _context.PacovPlaces.
                 Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
                 Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.PacovEntitiesXNarrativeMaps).
                 Where(p => parameters.AddressesIds.Contains(p.Id)).
                 AsEnumerable().
                 Select(a => new AddressWithVictims
@@ -265,10 +267,7 @@ public class MapLogicService(MemogisContext context)
                         Photo = b?.Entity.PacovEntitiesXMedia?.Select(c => c.Medium)?.FirstOrDefault()?.OmekaUrl,
                         Label = b?.Entity.Surname + ", " + b?.Entity.Firstname + (b?.Entity.Birthdate != null ? " (*" + b?.Entity.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
                         RelationshipToAddressType = b?.RelationshipType,
-                        //RelationshipToAddressTypeCs = b?.RelationshipTypeNavigation.LabelCs,
-                        //RelationshipToAddressTypeEn = b?.RelationshipTypeNavigation.LabelEn,
-                        //RelationshipToAddressDateFrom = b?.DateFrom,
-                        //RelationshipToAddressDateTo = b?.DateTo
+                        NarrativeMapId = b?.Entity.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
                     }).ToList()
                 }).
                 ToList();
@@ -336,12 +335,14 @@ public class MapLogicService(MemogisContext context)
 
         var result = _context.PacovEntities.
             Include(a => a.FateNavigation).
+            Include(a=>a.PacovEntitiesXNarrativeMaps).
             Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceFromNavigation).
             Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceToNavigation).
             Include(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
             Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Place).
             Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
             Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
+            Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.PacovEntitiesXNarrativeMaps).
             Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.RelationshipTypeNavigation).
             Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
             Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.CreationPlaceNavigation).
@@ -350,6 +351,7 @@ public class MapLogicService(MemogisContext context)
             Select(b => new VictimLongInfoModel
             {
                 Id = b.Id,
+                NarrativeMapId = b.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
                 BirthDate = b.Birthdate,
                 DeathDate = b.Deathdate,
                 Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
@@ -388,7 +390,8 @@ public class MapLogicService(MemogisContext context)
                     RelationshipToPersonCs = a.RelationshipTypeNavigation.LabelCs,
                     RelationshipToPersonEn = a.RelationshipTypeNavigation.LabelEn,
                     RelationshipToPersonType = a.RelationshipType,
-                    LongInfo = true
+                    LongInfo = true,
+                    NarrativeMapId = a?.Entity1.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
                 }).ToArray(),
                 Transports = b?.PacovEntitiesXTransports.Select(a => new Transport
                 {
@@ -402,5 +405,74 @@ public class MapLogicService(MemogisContext context)
             }).
             FirstOrDefault();
         return result;
+    }
+
+    public NarrativeMap? GetNarrativeMap(long id)
+    {
+        var map = _context.PacovNarrativeMaps.
+            Include(a => a.PacovEntitiesXNarrativeMaps).ThenInclude(a => a.Entity).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
+            Include(a => a.PacovNarrativeMapsXNarrativeMapStops).
+            Select(a => new NarrativeMap
+            {
+                Id = a.Id,
+                LabelCs = a.LabelCs,
+                LabelEn = a.LabelEn,
+                DescriptionCs = a.DescriptionCs,
+                DescriptionEn = a.DescriptionEn,
+                Type = a.Type
+            }).
+            FirstOrDefault(a => a.Id == id);
+
+        if (map == null)
+            return null;
+
+        var stops = _context.PacovNarrativeMapStops.
+            Include(a => a.PacovNarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
+            Include(a => a.PacovNarrativeMapStopsXPlaces).ThenInclude(a=>a.RelationshipTypeNavigation).
+            Include(a => a.PacovDocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
+            Where(a => a.PacovNarrativeMapXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
+            AsEnumerable().
+            Select(a => new NarrativeMapStop
+            {
+                Id = a.Id,
+                LabelCs = a.LabelCs,
+                LabelEn = a.LabelEn,
+                DescriptionCs = a.DescriptionCs,
+                DescriptionEn = a.DescriptionEn,
+                Places = a.PacovNarrativeMapStopsXPlaces.Select(b => new Place
+                {
+                    Id = b.Id,
+                    LabelCs = b.Place.LabelCs,
+                    LabelEn = b.Place.LabelEn,
+                    TownCs = b.Place.TownCs,
+                    TownEn = b.Place.TownEn,
+                    StreetCs = b.Place.StreetCs,
+                    StreetEn = b.Place.StreetEn,
+                    HouseNr = b.Place.HouseNr,
+                    RemarkCs = b.Place.RemarkCs,
+                    RemarkEn = b.Place.RemarkEn,
+                    MapPoint = b.Place.Geography.AsJson(),
+                    Type = b.RelationshipTypeNavigation.LabelEn
+                }).ToArray(),
+                Documents = a.PacovDocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Document
+                {
+                    CreationDateCs = b.CreationDateCs,
+                    CreationDateEn = b.CreationDateEn,
+                    DescriptionCs = b.DescriptionCs,
+                    DescriptionEn = b.DescriptionEn,
+                    LabelCs = b.LabelCs,
+                    LabelEn = b.LabelEn,
+                    CreationPlaceCs = b!.CreationPlaceNavigation?.LabelCs,
+                    CreationPlaceEn = b!.CreationPlaceNavigation?.LabelEn,
+                    Id = b!.Id,
+                    Owner = b.Owner,
+                    Type = b.Type,
+                    Url = b?.PacovDocumentsXMedia?.Select(c => c?.Medium?.OmekaUrl)?.ToArray() ?? []
+                }).ToArray()
+            }).ToArray();
+
+        map.Stops = stops;
+
+        return map;
     }
 }

@@ -46,11 +46,13 @@ namespace EhriMemoMap.Client.Services
         public bool IsDialogFullScreen = false;
 
         public string SearchedPlaceString = "";
-        public IEnumerable<Place>? SearchedPlaces;
+        public IEnumerable<SolrPlace>? SearchedPlaces;
 
         public bool MapStateWasInit = false;
 
         public event Action OnChange;
+        public NarrativeMap? NarrativeMap { get; set; }
+
         public void NotifyStateChanged()
         {
             OnChange?.Invoke();
@@ -145,7 +147,8 @@ namespace EhriMemoMap.Client.Services
             [
                 new() { Name = LayerType.Objects.ToString(), Type = LayerType.Objects.ToString(), Selected = true },
                 new() { Name = LayerType.Polygons.ToString(), Type = LayerType.Polygons.ToString(), Selected = true },
-                new() { Name = "AdditionalObjects", Type = LayerType.Polygons.ToString(), Selected = true, ZIndex = 9999 }
+                new() { Name = "AdditionalObjects", Type = LayerType.Polygons.ToString(), Selected = true, ZIndex = 9999 },
+                new() { Name = LayerType.Narration.ToString(), Type = LayerType.Narration.ToString(), Selected = false, ZIndex = 9999 }
             ]).
             ToList();
 
@@ -328,7 +331,15 @@ namespace EhriMemoMap.Client.Services
                 return;
             SetDialogType(DialogTypeEnum.Victim);
             await _dialogService.OpenSideAsync<CardVictim>(null, new Dictionary<string, object> { { "Id", id } }, await GetDialogOptions());
+        }
 
+        public async Task ShowNarrativeMap(long? id)
+        {
+            if (id == null)
+                return;
+            await _js.InvokeVoidAsync("mapAPI.hideAllLayers");
+            SetDialogType(DialogTypeEnum.NarrativeMap);
+            await _dialogService.OpenSideAsync<CardNarrativeMap>(null, new Dictionary<string, object> { { "Id", id } }, await GetDialogOptions());
         }
 
     }

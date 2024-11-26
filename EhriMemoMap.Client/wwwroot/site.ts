@@ -1,5 +1,7 @@
 ﻿// FUNKCE PRO OVLÁDÁNÍ MAPY
 /// <reference path="ts/leaflet/index.d.ts" />
+/// <reference path="ts/leaflet/leaflet.curve.d.ts" />
+
 
 namespace mapAPI {
 
@@ -32,14 +34,11 @@ namespace mapAPI {
     let polygonColorSelected: string = "#000"; // "#cc1111";
     let heatmapLayer: HeatmapOverlay | null = null; // Globální proměnná pro heatmapu
     let heatmapData: { id: string; heatmapdata: HeatmapData; }[] | null = null;
+    let initialVariables: InitialVariables = null;
 
     //////////////////////////
     /// INIT
     //////////////////////////
-
-    export function getMap() {
-        return map;
-    }
 
     // připraví mapu do úvodního stavu
     export function initMap(jsonMapSettings: string): void {
@@ -48,6 +47,7 @@ namespace mapAPI {
         const mapSettings = JSON.parse(jsonMapSettings) as MapSettingsForLeafletModel;
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
+        initialVariables = mapSettings.initialVariables;
 
         fitMapToWindow();
 
@@ -65,22 +65,20 @@ namespace mapAPI {
         map = new L.Map('map',
             {
                 zoomControl: false,
-                maxZoom: mapSettings.initialVariables.maxZoom,
-                minZoom: mapSettings.initialVariables.minZoom,
+                maxZoom: initialVariables.maxZoom,
+                minZoom: initialVariables.minZoom,
                 maxBounds: [
-                    [mapSettings.initialVariables.minBounds.x, mapSettings.initialVariables.minBounds.y],
-                    [mapSettings.initialVariables.maxBounds.x, mapSettings.initialVariables.maxBounds.y]
+                    [initialVariables.minBounds.x, initialVariables.minBounds.y],
+                    [initialVariables.maxBounds.x, initialVariables.maxBounds.y]
                 ],
                 zoomSnap: mapAPI.isMobileView() ? 0.1 : 1
             });
         map.attributionControl.setPosition('bottomleft');
         L.control.scale().setPosition(mapAPI.isMobileView() ? 'topright' : 'bottomleft').addTo(map);
 
+
         if (!setMapWithInfoFromUrl())
-            if (mapSettings.initialVariables == null)
-                map.setView([50.07905886, 14.43715096], 14); // defaultně nastavíme mapu na Prahu
-            else
-                map.setView([mapSettings.initialVariables.lat, mapSettings.initialVariables.lng], isMobileView() ? mapSettings.initialVariables.zoomMobile : mapSettings.initialVariables.zoom);
+            resetMapViewToInitialState();
 
         // update url a obrázkových vrstev po té, co se změní poloha mapy
         map.on("moveend", function () {
@@ -100,7 +98,11 @@ namespace mapAPI {
 
         // konverze json objektu do jednotlivých vrstev mapy a jejich přidání k mapě
         for (let i = 0; i < mapSettings.layers.length; i++) {
-            const group = new L.FeatureGroup(null, { id: mapSettings.layers[i].name + "_group" });
+            const group = new L.FeatureGroup(null, {
+                id: mapSettings.layers[i].name + "_group",
+                type: mapSettings.layers[i].type,
+                selected: mapSettings.layers[i].selected
+            });
             group.setZIndex(mapSettings.layers[i].zIndex);
             groups.push(group);
 
@@ -111,6 +113,14 @@ namespace mapAPI {
             if (layer != null)
                 group.addLayer(layer);
         }
+    }
+
+
+    export function resetMapViewToInitialState() {
+        if (initialVariables == null)
+            map.setView([50.07905886, 14.43715096], 14); // defaultně nastavíme mapu na Prahu
+        else
+            map.setView([initialVariables.lat, initialVariables.lng], isMobileView() ? initialVariables.zoomMobile : initialVariables.zoom);
     }
 
     export function onResizeWindow(): void {
@@ -291,8 +301,9 @@ namespace mapAPI {
 
             // polygony
             if (objects[i].mapPolygon != null) {
-                const polygonObject = JSON.parse(objects[i].mapPolygon) as PolygonModel;
-                newObject = getPolygon(polygonObject, objects[i].clickable, objects[i].label, null, objects[i].customTooltipClass, objects[i].customPolygonClass);
+
+                objects[i].mapPolygonModel = JSON.parse(objects[i].mapPolygon) as PolygonModel;
+                newObject = getPolygon(objects[i]);
 
                 if (objects[i].placeType == "Inaccessible")
                     newObject.addTo(polygonsGroup);
@@ -301,8 +312,10 @@ namespace mapAPI {
 
             } else if (objects[i].mapPoint != null && !objects[i].heatmap) {
                 // nepolygony a ne heatmapa
-                const markerObject = JSON.parse(objects[i].mapPoint) as PointModel;
-                newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon, "map-point");
+
+                objects[i].mapPointModel = JSON.parse(objects[i].mapPoint) as PointModel;
+                newObject = getPoint(objects[i], "map-point");
+
                 newObject.options.guid = objects[i].guid;
                 newObject.addTo(objectsGroup);
             }
@@ -386,23 +399,79 @@ namespace mapAPI {
     }
 
 
-    export function addObjectsFromJsonString(jsonInfo) {
-        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+    export function addObjectsFromJsonString(jsonInfo, group) {
+        var groupName = group + "_group";
+        const objectsGroup = groups.find(a => a.options.id == groupName);
         objectsGroup.clearLayers();
-        const parsedObjects = JSON.parse(jsonInfo);
+        const parsedObjects = JSON.parse(jsonInfo) as MapObjectForLeafletModel[];
         for (let i = 0; i < parsedObjects.length; i++) {
-            const parsedLocation = JSON.parse(parsedObjects[i].Location);
-            let htmlIcon = "<img src='css/images/marker-icon.png' />";
-            if (parsedObjects[i].Id.includes('victim_last_residence'))
-                htmlIcon = "<img src='css/images/marker-icon-red.png' />";
-            const newObject = parsedLocation.type == "Point" ? getPoint(parsedLocation, false, parsedObjects[i].Label, htmlIcon, 'z-index-999') : getPolygon(parsedLocation, null, polygonColor);
+
+            const parsedLocation = JSON.parse(parsedObjects[i].mapPoint);
+            var newObject = null;
+
+            if (parsedLocation.type == "Point") {
+                parsedObjects[i].mapPointModel = parsedLocation;
+                newObject = getPoint(parsedObjects[i], 'z-index-999')
+            } else {
+                parsedObjects[i].mapPolygonModel = parsedLocation;
+                newObject = getPolygon(parsedObjects[i]);
+            }
+
             newObject.addTo(objectsGroup);
         }
-        fitMapToAdditionalObjectsGroup();
+        toggleLayerGroup(group, false);
+        toggleLayerGroup(group, true);
+        drawCurveBettwenPoints(groupName);
+        fitMapToGroup(groupName);
     }
 
-    export function fitMapToAdditionalObjectsGroup() {
-        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+    export function drawCurveBettwenPoints(groupName) {
+        const objectsGroup = groups.find(a => a.options.id == groupName);
+        const layers = objectsGroup.getLayers() as L.Marker[];
+        var pointA = null;
+        var pointB = null;
+        for (let i = 0; i < layers.length; i++) {
+            if (layers[i].options.type == NarrativeMapStopPlaceType.Trajectory) {
+                if (pointA == null) {
+                    pointA = layers[i];
+                } else if (pointB == null) {
+                    pointB = layers[i];
+                    getCurve(pointA.getLatLng(), pointB.getLatLng()).addTo(objectsGroup);
+                    pointA = pointB;
+                    pointB = null;
+                }
+            }
+        }
+    }
+
+    export function getCurve(pointA: L.LatLng, pointB: L.LatLng) {
+
+        // Vypočítání kontrolního bodu pro Bezierovu křivku
+        const midLat = (pointA.lat + pointB.lat) / 2;
+        const midLng = (pointA.lng + pointB.lng) / 2;
+        const controlPoint = [midLat + 0.15, midLng]; // Kontrolní bod trochu posunutý nahoru
+
+        // Generování zakřivené trajektorie
+        const curve = L.curve(
+            [
+                'M', [pointA.lat, pointA.lng],
+                'Q', controlPoint, [pointB.lat, pointB.lng]
+            ],
+            {
+                color: '#C44527',
+                weight: 2,
+                dashArray: '10, 10', // Střídání délky čáry a mezery
+                dashOffset: '0'
+            }     // Počáteční posunutí (volitelné) }
+        );
+
+        return curve;
+
+    }
+
+
+    export function fitMapToGroup(groupName) {
+        const objectsGroup = groups.find(a => a.options.id == groupName);
 
         // Předpokládejme, že `objectsGroup` obsahuje všechny markery, které chcete zobrazit
         var latlngs = [];
@@ -420,32 +489,32 @@ namespace mapAPI {
 
 
 
-    export function getPoint(markerObject: PointModel, clickable?: boolean, label?: string, htmlIcon?: string, className?: string) {
+    export function getPoint(markerObject: MapObjectForLeafletModel, className?: string) {
         let iconOptions = null;
-        if (htmlIcon != undefined && htmlIcon != null)
-            iconOptions = { icon: new L.DivIcon({ className: className, html: htmlIcon }) }
+        if (markerObject.htmlIcon != undefined && markerObject.htmlIcon != null)
+            iconOptions = { type: markerObject.placeType, icon: new L.DivIcon({ className: className, html: markerObject.htmlIcon }) }
 
-        const result = new L.Marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
+        const result = new L.Marker([markerObject.mapPointModel.coordinates[1], markerObject.mapPointModel.coordinates[0]], iconOptions);
 
         var pos = map.latLngToLayerPoint(result.getLatLng()).round();
         result.setZIndexOffset(100 - pos.y);
 
-        if (!isMobileView() && label != undefined && label != null) {
-            result.bindTooltip(label, { sticky: true });
+        if (!isMobileView() && markerObject.label != undefined && markerObject.label != null) {
+            result.bindTooltip(markerObject.label, { sticky: true });
         }
 
-        if (clickable) {
+        if (markerObject.clickable) {
             result.on('click', callBlazor_ShowPlaceInfo);
         }
 
         return result;
     }
 
-    export function getPolygon(polygonObject: PolygonModel, clickable: boolean, label: string, color?: string, customTooltipClass?: string, customPolygonClass?: string): L.Polygon {
+    export function getPolygon(polygonObject: MapObjectForLeafletModel): L.Polygon {
         const pointsArray = [];
-        for (let j = 0; j < polygonObject.coordinates.length; j++) {
-            for (let m = 0; m < polygonObject.coordinates[j].length; m++) {
-                const polygon = polygonObject.coordinates[j][m];
+        for (let j = 0; j < polygonObject.mapPolygonModel.coordinates.length; j++) {
+            for (let m = 0; m < polygonObject.mapPolygonModel.coordinates[j].length; m++) {
+                const polygon = polygonObject.mapPolygonModel.coordinates[j][m];
                 pointsArray.push([]);
                 const innerArray = [];
                 for (let k = 0; k < polygon.length; k++) {
@@ -460,31 +529,36 @@ namespace mapAPI {
             }
         }
 
-        const polygonOptions = customPolygonClass != undefined && customPolygonClass != null
-            ? { className: customPolygonClass, color: null, weight: null, fillOpacity: null, opacity: null, fillColor: null } // tohle se používá pro statistiku čtvrtí
+        const polygonOptions = polygonObject.customPolygonClass != undefined && polygonObject.customPolygonClass != null
+            ? { className: polygonObject.customPolygonClass, color: null, weight: null, fillOpacity: null, opacity: null, fillColor: null } // tohle se používá pro statistiku čtvrtí
             : { fillColor: polygonColor, color: polygonStrokeColor, weight: 0.5, fillOpacity: 0.40, opacity: 1 }; // tohle se používá pro nepřístupná místa
 
         const result = new L.Polygon(pointsArray, polygonOptions);
 
-        if (clickable) {
+        if (polygonObject.clickable) {
             result.on('click', callBlazor_ShowPlaceInfo);
         }
 
 
-        if (label != undefined && label != null) {
-            result.bindTooltip(label, { sticky: true, className: customTooltipClass != undefined && customTooltipClass != null ? customTooltipClass : null });
+        if (polygonObject.label != undefined && polygonObject.label != null) {
+            result.bindTooltip(polygonObject.label, { sticky: true, className: polygonObject.customTooltipClass != undefined && polygonObject.customTooltipClass != null ? polygonObject.customTooltipClass : null });
         }
 
         return result;
     }
 
-    export function removeAdditionalObjects(): void {
-        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+    export function removeObjects(group: string): void {
+        const objectsGroup = groups.find(a => a.options.id == group + "_group");
         objectsGroup.eachLayer(function (item) {
             if (item.options.type == undefined || item.options.type !== "bluepoint") {
                 item.remove();
             }
         });
+    }
+
+    export function removeAdditionalObjects(): void {
+        removeObjects("AdditionalObjects");
+
         const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
         polygonsGroup.eachLayer(function (item: L.Polygon) {
             if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
@@ -520,12 +594,37 @@ namespace mapAPI {
     /// HELPER METHODS
     //////////////////////////
 
+    export function hideAllLayers() {
+        groups.forEach(group => {
+            if (group.options.type == "Base")
+                return;
+            map.eachLayer(function (layer) {
+                if (layer.options.id == group.options.id)
+                    layer.remove();
+            })
+        });
+    }
+
+    export function showAllLayers() {
+        // nejdřív všechny vrstvy odstraníme, aby se pak na mapě zbytečně nepřekrývaly
+        hideAllLayers();
+        groups.forEach(group => {
+            if (group.options.type == "Base" || group.options.type == "Narration")
+                return;
+            if (group.options.selected)
+                group.addTo(map);
+        });
+    }
+
     export function toggleLayerGroup(name: string, selected: boolean): void {
         const groupName = name + "_group";
-        if (!selected) {
-            map.eachLayer(function (layer) { if (layer.options.id == groupName) layer.remove(); })
-        } else {
-            const groupToAdd = groups.find(a => a.options.id == groupName);
+        const groupToAdd = groups.find(a => a.options.id == groupName);
+        groupToAdd.options.selected = selected;
+
+        // nejdřív vrstvu odstraníme, abych pak nepřidával přes starou další a další a další...
+        map.eachLayer(function (layer) { if (layer.options.id == groupName) layer.remove(); })
+
+        if (selected) {
             groupToAdd.addTo(map);
         }
     }
@@ -745,11 +844,13 @@ interface MapObjectForLeafletModel {
     placeType: string | null;
     citizens: number | null;
     citizensTotal: number | null;
-    id: number | null;
+    id: string | null;
     guid: string | null;
     label: string | null;
     mapPoint: string | null;
+    mapPointModel: PointModel | null;
     mapPolygon: string | null;
+    mapPolygonModel: PolygonModel | null;
     htmlIcon: string | null;
     customTooltipClass: string | null;
     customPolygonClass: string | null;
@@ -804,4 +905,10 @@ interface Coordinates {
 interface MapInfo {
     zoom: string;
     bounds: L.LatLngBounds;
+}
+
+enum NarrativeMapStopPlaceType {
+    Main = "main point",
+    Context = "context point",
+    Trajectory = "trajectory point",
 }

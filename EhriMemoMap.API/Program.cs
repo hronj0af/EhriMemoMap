@@ -37,6 +37,12 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    //options.SerializerOptions.Converters.Add(new GeoJsonConverterFactory());
+    options.SerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+});
+
 var app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -57,6 +63,8 @@ app.MapGet("/getdistrictstatistics", (bool total, DateTime? timeLinePoint, strin
     };
     return service.GetDistrictStatistics(parameters);
 });
+
+app.MapGet("/getnarrativemap", (long id, MapLogicService service) => service.GetNarrativeMap(id));
 
 app.MapPost("/getheatmap", (MapObjectParameters parameters, MapLogicService service) => service.GetHeatmap(parameters));
 

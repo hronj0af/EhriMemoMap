@@ -6,15 +6,18 @@
 @if (Documents != null && Documents.Count() > 0)
 {
     <br />
-    <h4>@cl["relatedDocuments"]</h4>
-    <hr />
+    @if (ShowTitle)
+    {
+        <h4>@cl["relatedDocuments"]</h4>
+        <hr />
+    }
     <RadzenRow class="rz-mt-2 rz-mb-4">
         @{
             documentIndex = 0;
         }
         @foreach (var doc in Documents)
         {
-            int actIndex = documentIndex;
+            long actIndex = doc.Id;
             <RadzenColumn Size="MapState.IsMobileView ? 3 : 2">
                 <RadzenCard class="document-card" title="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.LabelCs : doc.LabelEn)">
                     <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
@@ -42,9 +45,12 @@
     [Parameter]
     public Document[]? Documents { get; set; }
 
+    [Parameter]
+    public bool ShowTitle { get; set; } = true;
+
     private int documentIndex;
 
-    private async Task ShowImage(int imageNumber)
+    private async Task ShowImage(long imageNumber)
     {
         await JSRuntime.InvokeVoidAsync("initGallery", imageNumber);
         // await JSRuntime.InvokeVoidAsync("showImage", imageNumber);

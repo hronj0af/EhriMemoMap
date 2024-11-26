@@ -8,7 +8,18 @@
 <div style="padding:2.5rem 2.5rem 0 2.5rem;">
     @if (Victim != null)
     {
-        <h3>@Victim.Label</h3>
+        <RadzenRow>
+            <RadzenColumn Size="11">
+                <h3>@Victim.Label</h3>
+            </RadzenColumn>
+            @if (Victim.NarrativeMapId != null)
+            {
+                <RadzenColumn Size="1">
+                    <img style="cursor:pointer" title="@cl.GetString("viewStoryMap")..." onclick="@(() => MapState.ShowNarrativeMap(Victim.NarrativeMapId))" src="images/narrative.png" width="25"/>
+                </RadzenColumn>
+            }
+        </RadzenRow>
+
 
 
         @if (Victim.Places != null)

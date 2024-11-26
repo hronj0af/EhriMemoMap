@@ -40,7 +40,7 @@ namespace EhriMemoMap.Shared
 
     public enum LayerType
     {
-        Images, Objects, WMS, Base, Polygons, Heatmap
+        Images, Objects, WMS, Base, Polygons, Heatmap, Narration
     }
 
     public enum FontColor

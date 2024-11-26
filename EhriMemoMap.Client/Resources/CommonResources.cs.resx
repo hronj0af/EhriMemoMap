@@ -647,4 +647,13 @@
   <data name="layer_address_heatmap_abstract_prague_last_residence" xml:space="preserve">
     <value> </value>
   </data>
+  <data name="showOnMap" xml:space="preserve">
+    <value>Ukázat na mapě</value>
+  </data>
+  <data name="backToFullMap" xml:space="preserve">
+    <value>Zpět na celou mapu</value>
+  </data>
+  <data name="viewStoryMap" xml:space="preserve">
+    <value>Zobrazit příběhovou mapu</value>
+  </data>
 </root>

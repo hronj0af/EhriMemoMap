@@ -11,7 +11,7 @@ public class PacovNarrativeMapXNarrativeMapStop
 
     public long NarrativeMapStopId { get; set; }
 
-    public virtual PacovNarrativeMap NarrativeMap { get; set; } = null!;
+    public virtual PacovNarrativeMap? NarrativeMap { get; set; } = null!;
 
-    public virtual PacovNarrativeMapStop NarrativeMapStop { get; set; } = null!;
+    public virtual PacovNarrativeMapStop? NarrativeMapStop { get; set; } = null!;
 }

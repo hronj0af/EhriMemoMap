@@ -1,0 +1,28 @@
+﻿@inject MapStateService MapState
+@inject MapLogicService MapLogic
+
+@inject IStringLocalizer<CommonResources> cl
+
+    <div style="position:absolute;top:20px;left:20px;z-index:2000">
+        <div style="display:flex;gap:10px">
+        <RadzenButton Size="ButtonSize.Small" Click="(() => MapLogic.ShowNarrativeMapPlaces())" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat">
+            @cl["backToFullMap"]
+        </RadzenButton>
+
+    </div>
+</div>
+
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        MapState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= StateHasChanged;
+    }
+
+}

@@ -25,14 +25,12 @@ var mapAPI;
     let polygonColorSelected = "#000";
     let heatmapLayer = null;
     let heatmapData = null;
-    function getMap() {
-        return map;
-    }
-    mapAPI.getMap = getMap;
+    let initialVariables = null;
     function initMap(jsonMapSettings) {
         const mapSettings = JSON.parse(jsonMapSettings);
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
+        initialVariables = mapSettings.initialVariables;
         fitMapToWindow();
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
         addressIcon = new L.DivIcon();
@@ -44,21 +42,18 @@ var mapAPI;
         });
         map = new L.Map('map', {
             zoomControl: false,
-            maxZoom: mapSettings.initialVariables.maxZoom,
-            minZoom: mapSettings.initialVariables.minZoom,
+            maxZoom: initialVariables.maxZoom,
+            minZoom: initialVariables.minZoom,
             maxBounds: [
-                [mapSettings.initialVariables.minBounds.x, mapSettings.initialVariables.minBounds.y],
-                [mapSettings.initialVariables.maxBounds.x, mapSettings.initialVariables.maxBounds.y]
+                [initialVariables.minBounds.x, initialVariables.minBounds.y],
+                [initialVariables.maxBounds.x, initialVariables.maxBounds.y]
             ],
             zoomSnap: mapAPI.isMobileView() ? 0.1 : 1
         });
         map.attributionControl.setPosition('bottomleft');
         L.control.scale().setPosition(mapAPI.isMobileView() ? 'topright' : 'bottomleft').addTo(map);
         if (!setMapWithInfoFromUrl())
-            if (mapSettings.initialVariables == null)
-                map.setView([50.07905886, 14.43715096], 14);
-            else
-                map.setView([mapSettings.initialVariables.lat, mapSettings.initialVariables.lng], isMobileView() ? mapSettings.initialVariables.zoomMobile : mapSettings.initialVariables.zoom);
+            resetMapViewToInitialState();
         map.on("moveend", function () {
             document.getElementById("map").style.cursor = 'default';
             setUrlByMapInfo();
@@ -71,7 +66,11 @@ var mapAPI;
             coory = ev.containerPoint.y;
         });
         for (let i = 0; i < mapSettings.layers.length; i++) {
-            const group = new L.FeatureGroup(null, { id: mapSettings.layers[i].name + "_group" });
+            const group = new L.FeatureGroup(null, {
+                id: mapSettings.layers[i].name + "_group",
+                type: mapSettings.layers[i].type,
+                selected: mapSettings.layers[i].selected
+            });
             group.setZIndex(mapSettings.layers[i].zIndex);
             groups.push(group);
             if (mapSettings.layers[i].selected)
@@ -82,6 +81,13 @@ var mapAPI;
         }
     }
     mapAPI.initMap = initMap;
+    function resetMapViewToInitialState() {
+        if (initialVariables == null)
+            map.setView([50.07905886, 14.43715096], 14);
+        else
+            map.setView([initialVariables.lat, initialVariables.lng], isMobileView() ? initialVariables.zoomMobile : initialVariables.zoom);
+    }
+    mapAPI.resetMapViewToInitialState = resetMapViewToInitialState;
     function onResizeWindow() {
         fitMapToWindow();
         resizePhotoHeight();
@@ -206,16 +212,16 @@ var mapAPI;
         for (let i = 0; i < objects.length; i++) {
             let newObject;
             if (objects[i].mapPolygon != null) {
-                const polygonObject = JSON.parse(objects[i].mapPolygon);
-                newObject = getPolygon(polygonObject, objects[i].clickable, objects[i].label, null, objects[i].customTooltipClass, objects[i].customPolygonClass);
+                objects[i].mapPolygonModel = JSON.parse(objects[i].mapPolygon);
+                newObject = getPolygon(objects[i]);
                 if (objects[i].placeType == "Inaccessible")
                     newObject.addTo(polygonsGroup);
                 else
                     newObject.addTo(objectsGroup);
             }
             else if (objects[i].mapPoint != null && !objects[i].heatmap) {
-                const markerObject = JSON.parse(objects[i].mapPoint);
-                newObject = getPoint(markerObject, objects[i].clickable, objects[i].label, objects[i].htmlIcon, "map-point");
+                objects[i].mapPointModel = JSON.parse(objects[i].mapPoint);
+                newObject = getPoint(objects[i], "map-point");
                 newObject.options.guid = objects[i].guid;
                 newObject.addTo(objectsGroup);
             }
@@ -280,23 +286,68 @@ var mapAPI;
         heatmapLayer.addTo(map);
     }
     mapAPI.showHeatmap = showHeatmap;
-    function addObjectsFromJsonString(jsonInfo) {
-        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+    function addObjectsFromJsonString(jsonInfo, group) {
+        var groupName = group + "_group";
+        const objectsGroup = groups.find(a => a.options.id == groupName);
         objectsGroup.clearLayers();
         const parsedObjects = JSON.parse(jsonInfo);
         for (let i = 0; i < parsedObjects.length; i++) {
-            const parsedLocation = JSON.parse(parsedObjects[i].Location);
-            let htmlIcon = "<img src='css/images/marker-icon.png' />";
-            if (parsedObjects[i].Id.includes('victim_last_residence'))
-                htmlIcon = "<img src='css/images/marker-icon-red.png' />";
-            const newObject = parsedLocation.type == "Point" ? getPoint(parsedLocation, false, parsedObjects[i].Label, htmlIcon, 'z-index-999') : getPolygon(parsedLocation, null, polygonColor);
+            const parsedLocation = JSON.parse(parsedObjects[i].mapPoint);
+            var newObject = null;
+            if (parsedLocation.type == "Point") {
+                parsedObjects[i].mapPointModel = parsedLocation;
+                newObject = getPoint(parsedObjects[i], 'z-index-999');
+            }
+            else {
+                parsedObjects[i].mapPolygonModel = parsedLocation;
+                newObject = getPolygon(parsedObjects[i]);
+            }
             newObject.addTo(objectsGroup);
         }
-        fitMapToAdditionalObjectsGroup();
+        toggleLayerGroup(group, false);
+        toggleLayerGroup(group, true);
+        drawCurveBettwenPoints(groupName);
+        fitMapToGroup(groupName);
     }
     mapAPI.addObjectsFromJsonString = addObjectsFromJsonString;
-    function fitMapToAdditionalObjectsGroup() {
-        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+    function drawCurveBettwenPoints(groupName) {
+        const objectsGroup = groups.find(a => a.options.id == groupName);
+        const layers = objectsGroup.getLayers();
+        var pointA = null;
+        var pointB = null;
+        for (let i = 0; i < layers.length; i++) {
+            if (layers[i].options.type == NarrativeMapStopPlaceType.Trajectory) {
+                if (pointA == null) {
+                    pointA = layers[i];
+                }
+                else if (pointB == null) {
+                    pointB = layers[i];
+                    getCurve(pointA.getLatLng(), pointB.getLatLng()).addTo(objectsGroup);
+                    pointA = pointB;
+                    pointB = null;
+                }
+            }
+        }
+    }
+    mapAPI.drawCurveBettwenPoints = drawCurveBettwenPoints;
+    function getCurve(pointA, pointB) {
+        const midLat = (pointA.lat + pointB.lat) / 2;
+        const midLng = (pointA.lng + pointB.lng) / 2;
+        const controlPoint = [midLat + 0.15, midLng];
+        const curve = L.curve([
+            'M', [pointA.lat, pointA.lng],
+            'Q', controlPoint, [pointB.lat, pointB.lng]
+        ], {
+            color: '#C44527',
+            weight: 2,
+            dashArray: '10, 10',
+            dashOffset: '0'
+        });
+        return curve;
+    }
+    mapAPI.getCurve = getCurve;
+    function fitMapToGroup(groupName) {
+        const objectsGroup = groups.find(a => a.options.id == groupName);
         var latlngs = [];
         objectsGroup.eachLayer(function (layer) {
             if (layer instanceof L.Marker) {
@@ -305,28 +356,28 @@ var mapAPI;
         });
         map.fitBounds(latlngs, { padding: [100, 100] });
     }
-    mapAPI.fitMapToAdditionalObjectsGroup = fitMapToAdditionalObjectsGroup;
-    function getPoint(markerObject, clickable, label, htmlIcon, className) {
+    mapAPI.fitMapToGroup = fitMapToGroup;
+    function getPoint(markerObject, className) {
         let iconOptions = null;
-        if (htmlIcon != undefined && htmlIcon != null)
-            iconOptions = { icon: new L.DivIcon({ className: className, html: htmlIcon }) };
-        const result = new L.Marker([markerObject.coordinates[1], markerObject.coordinates[0]], iconOptions);
+        if (markerObject.htmlIcon != undefined && markerObject.htmlIcon != null)
+            iconOptions = { type: markerObject.placeType, icon: new L.DivIcon({ className: className, html: markerObject.htmlIcon }) };
+        const result = new L.Marker([markerObject.mapPointModel.coordinates[1], markerObject.mapPointModel.coordinates[0]], iconOptions);
         var pos = map.latLngToLayerPoint(result.getLatLng()).round();
         result.setZIndexOffset(100 - pos.y);
-        if (!isMobileView() && label != undefined && label != null) {
-            result.bindTooltip(label, { sticky: true });
+        if (!isMobileView() && markerObject.label != undefined && markerObject.label != null) {
+            result.bindTooltip(markerObject.label, { sticky: true });
         }
-        if (clickable) {
+        if (markerObject.clickable) {
             result.on('click', callBlazor_ShowPlaceInfo);
         }
         return result;
     }
     mapAPI.getPoint = getPoint;
-    function getPolygon(polygonObject, clickable, label, color, customTooltipClass, customPolygonClass) {
+    function getPolygon(polygonObject) {
         const pointsArray = [];
-        for (let j = 0; j < polygonObject.coordinates.length; j++) {
-            for (let m = 0; m < polygonObject.coordinates[j].length; m++) {
-                const polygon = polygonObject.coordinates[j][m];
+        for (let j = 0; j < polygonObject.mapPolygonModel.coordinates.length; j++) {
+            for (let m = 0; m < polygonObject.mapPolygonModel.coordinates[j].length; m++) {
+                const polygon = polygonObject.mapPolygonModel.coordinates[j][m];
                 pointsArray.push([]);
                 const innerArray = [];
                 for (let k = 0; k < polygon.length; k++) {
@@ -339,26 +390,30 @@ var mapAPI;
                     pointsArray[j].push(innerArray);
             }
         }
-        const polygonOptions = customPolygonClass != undefined && customPolygonClass != null
-            ? { className: customPolygonClass, color: null, weight: null, fillOpacity: null, opacity: null, fillColor: null }
+        const polygonOptions = polygonObject.customPolygonClass != undefined && polygonObject.customPolygonClass != null
+            ? { className: polygonObject.customPolygonClass, color: null, weight: null, fillOpacity: null, opacity: null, fillColor: null }
             : { fillColor: polygonColor, color: polygonStrokeColor, weight: 0.5, fillOpacity: 0.40, opacity: 1 };
         const result = new L.Polygon(pointsArray, polygonOptions);
-        if (clickable) {
+        if (polygonObject.clickable) {
             result.on('click', callBlazor_ShowPlaceInfo);
         }
-        if (label != undefined && label != null) {
-            result.bindTooltip(label, { sticky: true, className: customTooltipClass != undefined && customTooltipClass != null ? customTooltipClass : null });
+        if (polygonObject.label != undefined && polygonObject.label != null) {
+            result.bindTooltip(polygonObject.label, { sticky: true, className: polygonObject.customTooltipClass != undefined && polygonObject.customTooltipClass != null ? polygonObject.customTooltipClass : null });
         }
         return result;
     }
     mapAPI.getPolygon = getPolygon;
-    function removeAdditionalObjects() {
-        const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+    function removeObjects(group) {
+        const objectsGroup = groups.find(a => a.options.id == group + "_group");
         objectsGroup.eachLayer(function (item) {
             if (item.options.type == undefined || item.options.type !== "bluepoint") {
                 item.remove();
             }
         });
+    }
+    mapAPI.removeObjects = removeObjects;
+    function removeAdditionalObjects() {
+        removeObjects("AdditionalObjects");
         const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
         polygonsGroup.eachLayer(function (item) {
             if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
@@ -387,14 +442,34 @@ var mapAPI;
         });
     }
     mapAPI.selectPointOnMap = selectPointOnMap;
+    function hideAllLayers() {
+        groups.forEach(group => {
+            if (group.options.type == "Base")
+                return;
+            map.eachLayer(function (layer) {
+                if (layer.options.id == group.options.id)
+                    layer.remove();
+            });
+        });
+    }
+    mapAPI.hideAllLayers = hideAllLayers;
+    function showAllLayers() {
+        hideAllLayers();
+        groups.forEach(group => {
+            if (group.options.type == "Base" || group.options.type == "Narration")
+                return;
+            if (group.options.selected)
+                group.addTo(map);
+        });
+    }
+    mapAPI.showAllLayers = showAllLayers;
     function toggleLayerGroup(name, selected) {
         const groupName = name + "_group";
-        if (!selected) {
-            map.eachLayer(function (layer) { if (layer.options.id == groupName)
-                layer.remove(); });
-        }
-        else {
-            const groupToAdd = groups.find(a => a.options.id == groupName);
+        const groupToAdd = groups.find(a => a.options.id == groupName);
+        groupToAdd.options.selected = selected;
+        map.eachLayer(function (layer) { if (layer.options.id == groupName)
+            layer.remove(); });
+        if (selected) {
             groupToAdd.addTo(map);
         }
     }
@@ -554,4 +629,10 @@ var mapAPI;
     mapAPI.resizePhotoHeight = resizePhotoHeight;
 })(mapAPI || (mapAPI = {}));
 window.addEventListener("resize", mapAPI.onResizeWindow);
+var NarrativeMapStopPlaceType;
+(function (NarrativeMapStopPlaceType) {
+    NarrativeMapStopPlaceType["Main"] = "main point";
+    NarrativeMapStopPlaceType["Context"] = "context point";
+    NarrativeMapStopPlaceType["Trajectory"] = "trajectory point";
+})(NarrativeMapStopPlaceType || (NarrativeMapStopPlaceType = {}));
 //# sourceMappingURL=site.js.map

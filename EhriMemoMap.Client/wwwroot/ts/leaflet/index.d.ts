@@ -1683,6 +1683,7 @@ export interface LayerOptions {
     attribution?: string | undefined;
     id?: string | undefined;
     type?: string | undefined;
+    selected?: boolean | undefined;
 }
 
 export interface InteractiveLayerOptions extends LayerOptions {

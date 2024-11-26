@@ -18,27 +18,31 @@
         else
         {
             <RadzenCard class="@(VictimCardCss)" @onclick="OnVictimClick" Style="cursor:pointer">
-                <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
+                <div style="position:relative;width:100%">
                     <RadzenImage title="@Victim.GetBirthdateTitle()" class="@VictimPhotoCss" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
-                    <div class="victim-label">
-                        <div>
-                            <small>
-                                @if (Relative)
-                                {
-                                    <b>@Victim.Name</b>
-                                }
-                                else
-                                {
-                                    @((MarkupString)Victim.GetLabelForPicture())
-                                }
-                            </small>
-                        </div>
-                        @if (!string.IsNullOrEmpty(Victim.RelationshipToPersonCs))
-                        {
-                            <div><small>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? Victim.RelationshipToPersonCs : Victim.RelationshipToPersonEn)</small></div>
-                        }
+                    @if (Victim.NarrativeMapId != null)
+                    {
+                        <img width="15" class="document-forward-icon" src="/images/narrative.png" />
+                    }
+                </div>
+                <div class="victim-label">
+                    <div>
+                        <small>
+                            @if (Relative)
+                            {
+                                <b>@Victim.Name</b>
+                            }
+                            else
+                            {
+                                @((MarkupString)Victim.GetLabelForPicture())
+                            }
+                        </small>
                     </div>
-                </RadzenStack>
+                    @if (!string.IsNullOrEmpty(Victim.RelationshipToPersonCs))
+                    {
+                        <div><small>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? Victim.RelationshipToPersonCs : Victim.RelationshipToPersonEn)</small></div>
+                    }
+                </div>
             </RadzenCard>
 
         }

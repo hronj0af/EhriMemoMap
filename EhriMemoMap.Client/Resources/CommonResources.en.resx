@@ -645,4 +645,13 @@
   <data name="layer_address_heatmap_title_prague_last_residence" xml:space="preserve">
     <value>Residence by registration in the Protectorate - heatmap</value>
   </data>
+  <data name="showOnMap" xml:space="preserve">
+    <value>Show on the map</value>
+  </data>
+  <data name="backToFullMap" xml:space="preserve">
+    <value>Back to the full map</value>
+  </data>
+  <data name="viewStoryMap" xml:space="preserve">
+    <value>View Story Map</value>
+  </data>
 </root>

@@ -111,12 +111,16 @@
     private List<string> openedTypes = new List<string>();
     private bool showLoading = false;
 
-    public async Task ShowPlace(Place?[] places)
+    public async Task ShowPlace(SolrPlace?[] places)
     {
         if (places != null && places.Count() > 0)
         {
-            var jsonAddresses = System.Text.Json.JsonSerializer.Serialize(places.Select(a => new { Id = a.Id, Label = a.PlaceCs, Location = a.MapLocation }));
-            await JS.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", jsonAddresses);
+            var serializerSettings = new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                };
+            var jsonAddresses = JsonConvert.SerializeObject(places.Select(a => new MapObjectForLeafletModel(a)), serializerSettings);
+            await JS.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", jsonAddresses, "AdditionalObjects");
         }
         else
             await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
@@ -142,7 +146,7 @@
     public async Task ShowPlace()
     {
         var place = MapState.SearchedPlaces?.FirstOrDefault(a => CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? a.DropDownInfoCs == MapState.SearchedPlaceString : a.DropDownInfoEn == MapState.SearchedPlaceString);
-        await ShowPlace(new Place?[] { place });
+        await ShowPlace(new SolrPlace?[] { place });
     }
 
     private async void OnMyChangeHandler()

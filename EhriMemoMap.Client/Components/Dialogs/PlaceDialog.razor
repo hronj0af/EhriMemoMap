@@ -75,22 +75,22 @@
         var parameters = new PlacesParameters { City = MapState.Map.InitialVariables?.City };
 
         if (Places.Any(a => a.PlaceType == PlaceType.AddressLastResidence.ToString()))
-            parameters.AddressesLastResidenceIds = Places.Where(a => a.PlaceType == PlaceType.AddressLastResidence.ToString()).Select(a => a.Id).ToArray();
+            parameters.AddressesLastResidenceIds = Places.Where(a => a.PlaceType == PlaceType.AddressLastResidence.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
         if (Places.Any(a => a.PlaceType == PlaceType.Incident.ToString()))
-            parameters.IncidentsIds = Places.Where(a => a.PlaceType == PlaceType.Incident.ToString()).Select(a => a.Id).ToArray();
+            parameters.IncidentsIds = Places.Where(a => a.PlaceType == PlaceType.Incident.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
         if (Places.Any(a => a.PlaceType == PlaceType.Interest.ToString()))
-            parameters.PlacesOfInterestIds = Places.Where(a => a.PlaceType == PlaceType.Interest.ToString()).Select(a => a.Id).ToArray();
+            parameters.PlacesOfInterestIds = Places.Where(a => a.PlaceType == PlaceType.Interest.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
         if (Places.Any(a => a.PlaceType == PlaceType.Inaccessible.ToString()))
-            parameters.InaccessiblePlacesIds = Places.Where(a => a.PlaceType == PlaceType.Inaccessible.ToString()).Select(a => a.Id).ToArray();
+            parameters.InaccessiblePlacesIds = Places.Where(a => a.PlaceType == PlaceType.Inaccessible.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
         if (Places.Any(a => a.PlaceType == PlaceType.Address.ToString()))
-            parameters.AddressesIds = Places.Where(a => a.PlaceType == PlaceType.Address.ToString()).Select(a => a.Id).ToArray();
+            parameters.AddressesIds = Places.Where(a => a.PlaceType == PlaceType.Address.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
         if (Places.Any(a => a.PlaceType == PlaceType.Memory.ToString()))
-            parameters.PlacesOfMemoryIds = Places.Where(a => a.PlaceType == PlaceType.Memory.ToString()).Select(a => a.Id).ToArray();
+            parameters.PlacesOfMemoryIds = Places.Where(a => a.PlaceType == PlaceType.Memory.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
         PlacesToShow = await MapLogic.GetPlaces(parameters);
     }

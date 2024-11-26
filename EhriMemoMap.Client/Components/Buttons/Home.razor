@@ -24,22 +24,14 @@
 </div>
 
 @code {
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        MapState.OnChange += OnMyChangeHandler;
+        MapState.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMyChangeHandler;
-    }
-
-    private async void OnMyChangeHandler()
-    {
-        await InvokeAsync(() =>
-        {
-            StateHasChanged();
-        });
+        MapState.OnChange -= StateHasChanged;
     }
 
     private void ShowHome()

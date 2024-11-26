@@ -43,15 +43,9 @@
 
     <ControlButtonsWrapper />
     <ZoomButtonsWrapper />
-    @if (isMobileView == false)
-    {
-        <LayersQuickAccess />
-        <TimelineWrapper />
-    }
-    else if (isMobileView == true)
-    {
-        <MobileTopBarWrapper />
-    }
+    <ContextButtonsWrapper />
+    <TimelineWrapper />
+    <MobileTopBarWrapper />
 }
 
 

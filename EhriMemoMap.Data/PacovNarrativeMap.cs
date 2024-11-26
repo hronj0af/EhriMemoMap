@@ -9,21 +9,17 @@ public class PacovNarrativeMap
 
     public long Type { get; set; }
 
-    public string LabelCs { get; set; }
+    public string? LabelCs { get; set; }
 
-    public string LabelEn { get; set; }
+    public string? LabelEn { get; set; }
 
-    public string DescritpionCs { get; set; }
+    public string? DescriptionCs { get; set; }
 
-    public string DescritpionEn { get; set; }
+    public string? DescriptionEn { get; set; }
 
     public virtual ICollection<PacovEntitiesXNarrativeMap> PacovEntitiesXNarrativeMaps { get; set; } = [];
 
-
     public virtual ICollection<PacovNarrativeMapXNarrativeMapStop> PacovNarrativeMapsXNarrativeMapStops { get; set; } = [];
-
-    public virtual ICollection<PacovNarrativeMapXNarrativeMapStop> PacovNarrativeMapXNarrativeMapStops { get; set; } = [];
-
 
     public virtual PacovListItem TypeNavigation { get; set; } = null!;
 }

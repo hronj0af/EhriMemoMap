@@ -1,6 +1,6 @@
 ﻿namespace EhriMemoMap.Shared
 {
-    public class Place
+    public class SolrPlace
     {
         public string Id { get; set; }
         public DateTime? Date { get; set; }

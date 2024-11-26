@@ -496,8 +496,8 @@ public partial class MemogisContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
-            entity.Property(e => e.DescritpionCs).HasColumnName("descritpion_cs");
-            entity.Property(e => e.DescritpionEn).HasColumnName("descritpion_en");
+            entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
+            entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
             entity.Property(e => e.LabelCs)
                 .HasMaxLength(250)
                 .HasColumnName("label_cs");
@@ -568,7 +568,7 @@ public partial class MemogisContext : DbContext
             entity.Property(e => e.NarrativeMapId).HasColumnName("narrative_map_id");
             entity.Property(e => e.NarrativeMapStopId).HasColumnName("narrative_map_stop_id");
 
-            entity.HasOne(d => d.NarrativeMap).WithMany(p => p.PacovNarrativeMapXNarrativeMapStops)
+            entity.HasOne(d => d.NarrativeMap).WithMany(p => p.PacovNarrativeMapsXNarrativeMapStops)
                 .HasForeignKey(d => d.NarrativeMapId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("narrative_map_id_fkey");

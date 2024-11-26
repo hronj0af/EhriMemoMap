@@ -44,10 +44,10 @@ namespace EhriMemoMap.Client.Services
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
             var objects = await GetMapObjects(withPolygons, true);
-            
+
             var statistics = await GetDistrictStatistics();
             objects.AddRange(statistics);
-            
+
             var heatmap = await GetHeatMap();
             objects.AddRange(heatmap);
 
@@ -76,7 +76,7 @@ namespace EhriMemoMap.Client.Services
                 selectedLayerNames.Add(layer.PlaceType?.ToString());
             }
             parameters.SelectedLayerNames = selectedLayerNames;
-            parameters.CustomCoordinates = customCoordinates?.Select(a=> new PointModel { X = a.X, Y = a.Y }).ToArray();
+            parameters.CustomCoordinates = customCoordinates?.Select(a => new PointModel { X = a.X, Y = a.Y }).ToArray();
             parameters.MapSouthWestPoint = new PointModel { X = _mapState.MapSouthWestPoint.X, Y = _mapState.MapSouthWestPoint.Y };
             parameters.MapNorthEastPoint = new PointModel { X = _mapState.MapNorthEastPoint.X, Y = _mapState.MapNorthEastPoint.Y };
             parameters.City = _mapState.Map.InitialVariables?.City;
@@ -99,10 +99,10 @@ namespace EhriMemoMap.Client.Services
         public List<MapObject> AggregateSameAddresses(List<MapObject>? objects)
         {
             var result = new List<MapObject>();
-            
+
             if (objects == null)
                 return result;
-            
+
             var objectGroups = objects.GroupBy(a => a.PlaceType);
 
             foreach (var objectGroup in objectGroups)
@@ -155,7 +155,7 @@ namespace EhriMemoMap.Client.Services
             parameters.City = _mapState.Map.InitialVariables?.City;
 
             statistics = await GetResultFromApiGet<List<MapStatistic>>("getdistrictstatistics", $"city={parameters.City}&total={parameters.Total}{(parameters.TimeLinePoint != null ? "&timeLinePoint=" + parameters.TimeLinePoint?.ToString("yyyy-MM-dd") : "")}");
-            
+
             return statistics.GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
         }
 
@@ -171,7 +171,7 @@ namespace EhriMemoMap.Client.Services
             var parameters = new MapObjectParameters
             {
                 SelectedLayerNames = [layer.PlaceType?.ToString()],
-                SelectedTimeLinePoint = new TimelinePointModel { From = null, To = null},
+                SelectedTimeLinePoint = new TimelinePointModel { From = null, To = null },
                 CustomCoordinates = customCoordinates?.Select(a => new PointModel { X = a.X, Y = a.Y }).ToArray(),
                 MapSouthWestPoint = new PointModel { X = _mapState.MapSouthWestPoint.X, Y = _mapState.MapSouthWestPoint.Y },
                 MapNorthEastPoint = new PointModel { X = _mapState.MapNorthEastPoint.X, Y = _mapState.MapNorthEastPoint.Y },
@@ -184,7 +184,7 @@ namespace EhriMemoMap.Client.Services
 
         public async Task<WelcomeDialogStatistics> GetWelcomeDialogStatistics()
         {
-            var statistics = await GetResultFromApiGet<WelcomeDialogStatistics>("getwelcomedialogstatistics","city=" + _mapState.Map.InitialVariables?.City);
+            var statistics = await GetResultFromApiGet<WelcomeDialogStatistics>("getwelcomedialogstatistics", "city=" + _mapState.Map.InitialVariables?.City);
             return statistics;
         }
 
@@ -194,9 +194,9 @@ namespace EhriMemoMap.Client.Services
             return result;
         }
 
-        public async Task<List<Place>> GetSolrPlaces(SolrQueryParameters parameters)
+        public async Task<List<SolrPlace>> GetSolrPlaces(SolrQueryParameters parameters)
         {
-            var result = await GetResultFromApiPost<List<Place>>("getsolrplaces", parameters);
+            var result = await GetResultFromApiPost<List<SolrPlace>>("getsolrplaces", parameters);
             return result;
         }
 
@@ -236,6 +236,57 @@ namespace EhriMemoMap.Client.Services
                 return null;
             var result = await GetResultFromApiGet<VictimLongInfoModel>("getvictimlonginfo", "city=" + _mapState.Map.InitialVariables?.City + "&id=" + id);
             return result;
+        }
+
+        /////////////////////
+        /// NARRATIVE MAP ///
+        /////////////////////
+
+        public async Task GetNarrativeMap(long? id)
+        {
+            if (id == null)
+                return;
+
+            var result = await GetResultFromApiGet<NarrativeMap>("getnarrativemap", "id=" + id);
+            _mapState.NarrativeMap = result;
+        }
+
+        public async Task ShowNarrativeMapPlaces()
+        {
+            if (_mapState.NarrativeMap == null)
+                return;
+
+            await ShowPlacesOnMap(_mapState.NarrativeMap?.Stops?.SelectMany(a => a.Places!).Where(a => a.Type == "main point"));
+        }
+
+        public async Task ShowPlacesOnMap(IEnumerable<Place>? places)
+        {
+            if (places == null)
+                return;
+
+            var transformedPlaces = places.
+                Select(b => new MapObjectForLeafletModel(b)).ToList();
+
+            if (transformedPlaces.Any(a => a.PlaceType == "trajectory point"))
+                transformedPlaces.LastOrDefault(a => a.PlaceType == "trajectory point").HtmlIcon = "<img src='css/images/narrative-icon.png' />";
+
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
+            var jsonPlaces = JsonConvert.SerializeObject(transformedPlaces, serializerSettings);
+            await _js.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", jsonPlaces, LayerType.Narration.ToString());
+        }
+
+        public async Task ShowStopPlacesOnMap(long stopId)
+        {
+            var stop = _mapState.NarrativeMap?.Stops?.FirstOrDefault(a => a.Id == stopId);
+            if (stop == null)
+                return;
+            await ShowPlacesOnMap(stop.Places);
+
+
         }
     }
 }

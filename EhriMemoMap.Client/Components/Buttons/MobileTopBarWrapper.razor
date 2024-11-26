@@ -1,23 +1,35 @@
 ﻿@inject NavigationManager NavManager
+@inject MapStateService MapState
 
-<div style="background-color:var(--Wine-Red);color:var(--Beige);position:absolute;top:0px;left:0px;width:100%;z-index:1001;">
-    <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Style="padding:10px">
-        <RadzenColumn Size="6">
-            <h2 style="cursor:pointer" onclick="@(() => ShowHome())">MemoMap</h2>
-        </RadzenColumn>
-        <RadzenColumn Size="6">
-            <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End">
-                <Help MobileVersion="true" />
-                <Language MobileVersion="true" />
-            </RadzenStack>
-        </RadzenColumn>
-    </RadzenRow>
-</div>
+@if (isMobileView == false)
+{
+    <div style="background-color:var(--Wine-Red);color:var(--Beige);position:absolute;top:0px;left:0px;width:100%;z-index:1001;">
+        <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Style="padding:10px">
+            <RadzenColumn Size="6">
+                <h2 style="cursor:pointer" onclick="@(() => ShowHome())">MemoMap</h2>
+            </RadzenColumn>
+            <RadzenColumn Size="6">
+                <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End">
+                    <Help MobileVersion="true" />
+                    <Language MobileVersion="true" />
+                </RadzenStack>
+            </RadzenColumn>
+        </RadzenRow>
+    </div>
+}
 
 @code{
+
+    private bool? isMobileView;
+
     private void ShowHome()
     {
         NavManager.NavigateTo("/", true);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        isMobileView = MapState.IsMobileView;
     }
 
 }

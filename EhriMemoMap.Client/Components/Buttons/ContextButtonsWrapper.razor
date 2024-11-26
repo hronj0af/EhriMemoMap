@@ -2,13 +2,15 @@
 
 @if (MapState.IsMobileView == false && MapState.DialogType != DialogTypeEnum.NarrativeMap)
 {
-    <div class="timeline-wrapper">
-        <CardTimeline Width="550" MobileVersion="false" />
-    </div>
+    <LayersQuickAccess />
+}
+
+@if (MapState.DialogType == DialogTypeEnum.NarrativeMap)
+{
+    <NarrativeMapButtons/>
 }
 
 @code {
-
     protected override void OnInitialized()
     {
         MapState.OnChange += StateHasChanged;
@@ -18,5 +20,4 @@
     {
         MapState.OnChange -= StateHasChanged;
     }
-
 }

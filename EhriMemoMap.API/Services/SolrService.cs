@@ -31,9 +31,9 @@ namespace EhriMemoMap.API.Services
                 Aggregate((x, y) => x + " AND " + y);
         }
 
-        public async Task<List<Place>> SolrExecuteDocument(SolrQueryParameters queryParameters)
+        public async Task<List<SolrPlace>> SolrExecuteDocument(SolrQueryParameters queryParameters)
         {
-            var result = new List<Place>();
+            var result = new List<SolrPlace>();
             var client = _clientFactory.CreateClient();
 
             var parameters = new List<KeyValuePair<string, string>>
@@ -54,14 +54,14 @@ namespace EhriMemoMap.API.Services
             var solrResult = await client.GetStringAsync(url);
 
             if (string.IsNullOrEmpty(solrResult))
-                return new List<Place>();
+                return new List<SolrPlace>();
 
             var solrResultObject = JObject.Parse(solrResult);
 
             foreach (var item in solrResultObject["response"]["docs"])
             {
                 var itemType = item["type"]?.ToString();
-                var newPlace = new Place
+                var newPlace = new SolrPlace
                 {
                     Id = item["id"]?.ToString() ?? "",
                     Type = itemType?[0].ToString().ToUpper() + itemType?[1..],
