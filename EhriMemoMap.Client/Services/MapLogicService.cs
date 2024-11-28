@@ -247,7 +247,7 @@ namespace EhriMemoMap.Client.Services
             if (_mapState.AllNarrativeMaps != null && _mapState.AllNarrativeMaps.Count > 0)
                 return;
 
-            var result = await GetResultFromApiGet<List<Tuple<long, string?, string?>>>("getallnarrativemaps", "city=" + _mapState.Map.InitialVariables?.City);
+            var result = await GetResultFromApiGet<List<NarrativeMap>>("getallnarrativemaps", "city=" + _mapState.Map.InitialVariables?.City);
             _mapState.AllNarrativeMaps = result;
         }
 

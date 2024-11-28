@@ -54,7 +54,7 @@ namespace EhriMemoMap.Client.Services
 
         public event Action OnChange;
         public NarrativeMap? NarrativeMap { get; set; }
-        public List<Tuple<long, string?, string?>> AllNarrativeMaps { get; set; } = [];
+        public List<NarrativeMap> AllNarrativeMaps { get; set; } = [];
 
         public void NotifyStateChanged()
         {

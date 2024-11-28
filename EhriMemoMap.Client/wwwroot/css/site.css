@@ -252,17 +252,17 @@ path.leaflet-interactive:focus {
     font-weight: 700;
 }
 
-.mobile-menu-icon, .border {
+.mobile-menu-icon, .mobile-menu-icon-stroke, .border {
     border-right: 1px solid var(--Beige-LIGHT);
 }
 
-.mobile-menu-icon {
+.mobile-menu-icon, .mobile-menu-icon-stroke {
     padding: 8px;
     background-color: var(--Grey);
     cursor: pointer;
 }
 
-    .mobile-menu-icon:hover {
+    .mobile-menu-icon:hover, .mobile-menu-icon-stroke:hover {
         background-color: var(--Beige-LIGHT);
         color: black;
     }
@@ -271,7 +271,11 @@ path.leaflet-interactive:focus {
             fill: var(--Wine-Red);
         }
 
-.mobile-menu-icon-selected {
+        .mobile-menu-icon-stroke:hover path {
+            stroke: var(--Wine-Red);
+        }
+
+.mobile-menu-icon-selected, .mobile-menu-icon-stroke-selected {
     padding: 8px;
     background-color: var(--Beige-LIGHT);
     cursor: pointer;
@@ -279,6 +283,10 @@ path.leaflet-interactive:focus {
 
     .mobile-menu-icon-selected path {
         fill: var(--Wine-Red);
+    }
+
+    .mobile-menu-icon-stroke-selected path {
+        stroke: var(--Wine-Red);
     }
 
 /* LAYERS */

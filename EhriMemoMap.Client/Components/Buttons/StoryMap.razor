@@ -28,22 +28,9 @@
 }
 else
 {
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" class="@((MapState.DialogType == DialogTypeEnum.StoryMap ? "mobile-menu-icon-selected" : "mobile-menu-icon") + " " + (Border ? "mobile-menu-icon-border" : ""))" title="@(cl["timeline"] + "...")" onclick="@(() => ShowStoryMap())">
-        <svg width="47" height="49" viewBox="0 0 47 49" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="personIconTitle" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none">
-            <g id="Group 58">
-                <path id="Rectangle 23" d="M0 3.99999C0 1.79086 1.79086 0 4 0H47.1795V48.7521H4C1.79086 48.7521 0 46.9613 0 44.7521V3.99999Z" fill="#46463D" class="background" />
-                <g id="help">
-                    <mask id="mask0_1806_1113" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="6" y="7" width="35" height="34">
-                        <rect id="Bounding box" x="6.29059" y="7" width="33.812" height="33.812" fill="white" />
-                    </mask>
-                    <g mask="url(#mask0_1806_1113)">
-                        <g id="help_2">
-                            <path d="M4,20 C4,17 8,17 10,15 C11,14 8,14 8,9 C8,5.667 9.333,4 12,4 C14.667,4 16,5.667 16,9 C16,14 13,14 14,15 C16,17 20,17 20,20"
-                                  fill="none" stroke="#D9D9D9" stroke-width="1.5" transform="translate(2, 2) scale(1.8)" class="foreground-stroke" />
-                        </g>
-                    </g>
-                </g>
-            </g>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" class="@((MapState.DialogType == DialogTypeEnum.StoryMap ? "mobile-menu-icon-stroke-selected" : "mobile-menu-icon-stroke") + " " + (Border ? "mobile-menu-icon-border" : ""))" title="@(cl["storyMaps"] + "...")" onclick="@(() => ShowStoryMap())">
+        <svg width="26" height="28" viewBox="4 4 26 28" role="img" xmlns="http://www.w3.org/2000/svg" aria-labelledby="personIconTitle" stroke-width="1" stroke-linecap="square" stroke-linejoin="miter" fill="none">
+            <path d="M4,20 C4,17 8,17 10,15 C11,14 8,14 8,9 C8,5.667 9.333,4 12,4 C14.667,4 16,5.667 16,9 C16,14 13,14 14,15 C16,17 20,17 20,20" fill="none" stroke="#D9D9D9" stroke-width="2" transform="scale(1.4)"></path>
         </svg>
     </RadzenStack>
 
