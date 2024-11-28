@@ -3,6 +3,7 @@
     "initialVariables": {
       "city": "pacov",
       "allCities": [ "prague", "pacov" ],
+      "storyMaps": true,
       "zoom": 15,
       "zoomMobile": 16,
       "lat": 49.46755233053013,

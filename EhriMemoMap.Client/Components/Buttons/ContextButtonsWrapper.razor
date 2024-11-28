@@ -1,16 +1,17 @@
 ﻿@inject MapStateService MapState
 
-@if (MapState.IsMobileView == false && MapState.DialogType != DialogTypeEnum.NarrativeMap)
+@if (MapState.IsMobileView == false && MapState.MapType == MapTypeEnum.Normal)
 {
     <LayersQuickAccess />
 }
 
-@if (MapState.DialogType == DialogTypeEnum.NarrativeMap)
+@if (MapState.MapType != MapTypeEnum.Normal)
 {
-    <NarrativeMapButtons/>
+    <StoryMapButtons/>
 }
 
 @code {
+
     protected override void OnInitialized()
     {
         MapState.OnChange += StateHasChanged;
@@ -20,4 +21,6 @@
     {
         MapState.OnChange -= StateHasChanged;
     }
+
+
 }

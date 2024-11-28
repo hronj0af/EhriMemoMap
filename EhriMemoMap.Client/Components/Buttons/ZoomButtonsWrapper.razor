@@ -4,7 +4,7 @@
 @inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
 
-@if (!string.IsNullOrEmpty(style))
+@if (!(MapState.IsMobileView && MapState.MapType != MapTypeEnum.Normal) && !string.IsNullOrEmpty(style))
 {
     <div style="@style">
         <RadzenRow Gap="5" RowGap="5px" JustifyContent="justifyContent">

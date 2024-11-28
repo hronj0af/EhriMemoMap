@@ -17,12 +17,14 @@
         }
         else
         {
+            var storyMapTitle = Victim.NarrativeMapId != null ? "<br/>" + cl.GetString("storyMapExists") : "";
+
             <RadzenCard class="@(VictimCardCss)" @onclick="OnVictimClick" Style="cursor:pointer">
                 <div style="position:relative;width:100%">
-                    <RadzenImage title="@Victim.GetBirthdateTitle()" class="@VictimPhotoCss" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
+                    <RadzenImage title="@storyMapTitle" class="@VictimPhotoCss" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
                     @if (Victim.NarrativeMapId != null)
                     {
-                        <img width="15" class="document-forward-icon" src="/images/narrative.png" />
+                        <img title="@storyMapTitle" width="15" class="document-forward-icon" src="/images/narrative.png" />
                     }
                 </div>
                 <div class="victim-label">

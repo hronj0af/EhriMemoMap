@@ -242,6 +242,15 @@ namespace EhriMemoMap.Client.Services
         /// NARRATIVE MAP ///
         /////////////////////
 
+        public async Task GetAllNarrativeMaps()
+        {
+            if (_mapState.AllNarrativeMaps != null && _mapState.AllNarrativeMaps.Count > 0)
+                return;
+
+            var result = await GetResultFromApiGet<List<Tuple<long, string?, string?>>>("getallnarrativemaps", "city=" + _mapState.Map.InitialVariables?.City);
+            _mapState.AllNarrativeMaps = result;
+        }
+
         public async Task GetNarrativeMap(long? id)
         {
             if (id == null)
@@ -255,8 +264,8 @@ namespace EhriMemoMap.Client.Services
         {
             if (_mapState.NarrativeMap == null)
                 return;
-
             await ShowPlacesOnMap(_mapState.NarrativeMap?.Stops?.SelectMany(a => a.Places!).Where(a => a.Type == "main point"));
+            _mapState.SetMapType(MapTypeEnum.StoryMapWhole, false);
         }
 
         public async Task ShowPlacesOnMap(IEnumerable<Place>? places)
@@ -285,12 +294,11 @@ namespace EhriMemoMap.Client.Services
 
         public async Task ShowStopPlacesOnMap(long stopId)
         {
+            _mapState.SetMapType(MapTypeEnum.StoryMapOneStop, false);
             var stop = _mapState.NarrativeMap?.Stops?.FirstOrDefault(a => a.Id == stopId);
             if (stop == null)
                 return;
             await ShowPlacesOnMap(stop.Places);
-
-
         }
     }
 }

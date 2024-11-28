@@ -36,6 +36,7 @@
 
     private void ShowHome()
     {
-        NavManager.NavigateTo("/" + MapState.Map?.InitialVariables?.City ?? "", true);
+        NavManager.NavigateTo("/", true);
+        // NavManager.NavigateTo("/" + MapState.Map?.InitialVariables?.City ?? "", true);
     }
 }

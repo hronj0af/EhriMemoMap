@@ -1,0 +1,53 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+@inject MapLogicService MapLogic
+
+<RadzenRow class="rz-mt-8" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
+
+
+    @if (Victims != null && Victims.Count > 0 && (!string.IsNullOrEmpty(FilteredName) ? Victims.Any(a => a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower())) : true))
+    {
+        if (MapState?.GetTimelinePoint() != null)
+        {
+            if (Victims.Any(a => a.TransportDate > MapState?.GetTimelinePoint()) && (!string.IsNullOrEmpty(FilteredName) ? Victims.Any(a => a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower())) : true))
+            {
+                <RadzenColumn Size="12">
+                    <h4>@cl["present"] (@MapState?.GetTimelinePoint()?.ToString("d. M. yyyy"))</h4>
+                </RadzenColumn>
+                foreach (var victim in Victims.Where(a => a.TransportDate > MapState?.GetTimelinePoint()))
+                {
+                    <VictimShortInfo Victim="@victim" />
+                }
+            }
+
+            if (Victims.Any(a => a.TransportDate <= MapState?.GetTimelinePoint()) && (!string.IsNullOrEmpty(FilteredName) ? Victims.Any(a => a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower())) : true))
+            {
+                <RadzenColumn Size="12">
+                    <h4>@cl["absent"] (@MapState?.GetTimelinePoint()?.ToString("d. M. yyyy"))</h4>
+                </RadzenColumn>
+                foreach (var victim in Victims.Where(a => a.TransportDate <= MapState?.GetTimelinePoint()))
+                {
+                    <VictimShortInfo Victim="@victim" />
+                }
+            }
+        }
+        else
+        {
+            foreach (var victim in Victims.
+            Where(a => (!string.IsNullOrEmpty(FilteredName) ? a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower()) : true)))
+            {
+                <VictimShortInfo Victim="@victim" />
+            }
+        }
+    }
+</RadzenRow>
+
+
+@code {
+    [Parameter]
+    public List<VictimShortInfoModel>? Victims { get; set; }
+
+    [Parameter]
+    public string? FilteredName { get; set; }
+
+}

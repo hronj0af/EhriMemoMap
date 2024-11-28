@@ -454,21 +454,39 @@ namespace mapAPI {
         const midLng = (pointA.lng + pointB.lng) / 2;
         const controlPoint = [midLat + 0.15, midLng]; // Kontrolní bod trochu posunutý nahoru
 
-        // Generování zakřivené trajektorie
-        const curve = L.curve(
-            [
-                'M', [pointA.lat, pointA.lng],
-                'Q', controlPoint, [pointB.lat, pointB.lng]
-            ],
-            {
-                color: '#C44527',
-                weight: 2,
-                dashArray: '10, 10', // Střídání délky čáry a mezery
-                dashOffset: '0'
-            }     // Počáteční posunutí (volitelné) }
-        );
+        function sampleCurve(start, control, end, segments = 50) {
+            const points = [];
+            for (let t = 0; t <= 1; t += 1 / segments) {
+                const x =
+                    (1 - t) * (1 - t) * start[1] +
+                    2 * (1 - t) * t * control[1] +
+                    t * t * end[1];
+                const y =
+                    (1 - t) * (1 - t) * start[0] +
+                    2 * (1 - t) * t * control[0] +
+                    t * t * end[0];
+                points.push([y, x]);
+            }
+            return points;
+        }
 
-        return curve;
+        // Vygenerování bodů pro křivku
+        const curvePoints = sampleCurve([pointA.lat, pointA.lng], controlPoint, [pointB.lat, pointB.lng]);
+
+        // Přidání zakřivené čáry jako `L.Polyline`
+        const curveLine = L.polyline(curvePoints, {
+            color: '#C44527',
+            weight: 2,
+            dashArray: '10, 10', // Střídání délky čáry a mezery
+            dashOffset: '0'
+        }).arrowheads({
+            frequency: 'endonly',
+            fill: true,
+            size: '10px',
+            color: '#C44527'
+        });
+
+        return curveLine;
 
     }
 
@@ -701,6 +719,14 @@ namespace mapAPI {
         map.zoomOut();
     }
 
+    export function toggleScaleVisibility(visible: boolean) {
+        const scale = document.getElementsByClassName("leaflet-control-scale")[0] as HTMLElement;
+        if (visible)
+            scale.style.visibility = '';
+        else
+            scale.style.visibility = 'hidden';
+    }
+
     //////////////////////////
     /// TRACKING
     //////////////////////////
@@ -826,8 +852,6 @@ namespace mapAPI {
             item.style.height = photoHeight + "px";
         });
     }
-
-
 }
 
 window.addEventListener("resize", mapAPI.onResizeWindow);
@@ -935,3 +959,4 @@ enum NarrativeMapStopPlaceType {
     Context = "context point",
     Trajectory = "trajectory point",
 }
+

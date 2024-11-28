@@ -20,11 +20,6 @@
     {
         MapState.IsDialogFullScreen = false;
         await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
-        if (MapState.DialogType == DialogTypeEnum.NarrativeMap)
-        {
-            await JS.InvokeVoidAsync("mapAPI.showAllLayers");
-            await JS.InvokeVoidAsync("mapAPI.resetMapViewToInitialState");
-        }
         DialogService.CloseSide();
         MapState.SetDialogType(DialogTypeEnum.None);
         await JS.InvokeVoidAsync("mapAPI.fitMapToWindow");

@@ -6,9 +6,20 @@
 <DialogButtons />
 
 <div style="padding:2.5rem 2.5rem 0 2.5rem;" id="card-narrative">
+    <h1 class="rz-mb-4" style="color:var(--Wine-Red)">@cl.GetString("storyMaps")</h1>
+
     @if (MapState.NarrativeMap != null)
     {
-        <h3>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? MapState.NarrativeMap.LabelCs : MapState.NarrativeMap.LabelEn)</h3>
+        <RadzenRow>
+            <RadzenColumn Size="10">
+                <h3>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? MapState.NarrativeMap.LabelCs : MapState.NarrativeMap.LabelEn)</h3>
+            </RadzenColumn>
+            <RadzenColumn Size="2">
+                <RadzenButton Icon="arrow_back" Size="ButtonSize.Small" Click="ShowAllStoryMaps" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat">
+                    @cl["allStories"]
+                </RadzenButton>
+            </RadzenColumn>
+        </RadzenRow>
 
         foreach (var stop in MapState.NarrativeMap.Stops ?? [])
         {
@@ -38,10 +49,15 @@
                 }
             </text>
         }
-
-
-
     }
+    else if (Id == null && MapState.AllNarrativeMaps != null)
+    {
+        @foreach (var map in MapState.AllNarrativeMaps)
+        {
+            <a style="cursor:pointer" onclick="@(() => MapState.ShowNarrativeMap(map.Item1))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.Item2 : @map.Item3)</a>
+        }
+    }
+
 </div>
 
 @code {
@@ -51,13 +67,23 @@
     protected override async Task OnParametersSetAsync()
     {
         if (Id == null)
+        {
+            await MapLogic.GetAllNarrativeMaps();
             return;
+        }
 
         await MapLogic.GetNarrativeMap(Id);
         await MapLogic.ShowNarrativeMapPlaces();
     }
 
-    protected override async Task OnInitializedAsync()
+    private void ShowAllStoryMaps()
+    {
+        Id = null;
+        MapState.NarrativeMap = null;
+        MapState.SetMapType(MapTypeEnum.Normal, false);
+    }
+
+    protected override void OnInitialized()
     {
         MapState.OnChange += StateHasChanged;
     }

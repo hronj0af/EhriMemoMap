@@ -3,4 +3,7 @@
 
 <DialogButtons />
 
-<div style="padding:1.5rem 1.5rem 0 1.5rem;">@((MarkupString)(cl["helpContent_" + MapState?.Map?.InitialVariables?.City].ToString()))</div>
+    <div style="padding:2.5rem 2.5rem 0 2.5rem;" >
+        <h1 class="rz-mb-4" style="color:var(--Wine-Red)">@cl.GetString("help")</h1>
+    @((MarkupString)(cl["helpContent_" + MapState?.Map?.InitialVariables?.City].ToString()))
+</div>

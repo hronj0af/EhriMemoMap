@@ -17,9 +17,15 @@
         }
     }
 
-    <PragueHouse House="@House"></PragueHouse>
-
-    <VictimList Victims="@House.Victims" FilteredName="@FilteredName" />
+    @if (MapState.Map.InitialVariables?.City.Contains("prague") ?? false)
+    {
+        <PragueHouse House="@House"></PragueHouse>
+        <PragueVictimList Victims="@House.Victims" FilteredName="@FilteredName" />
+    }
+    else if (MapState.Map.InitialVariables?.City.Contains("pacov") ?? false)
+    {
+        <PacovVictimList Victims="@House.Victims" FilteredName="@FilteredName" />
+    }
 
 }
 

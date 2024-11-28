@@ -10396,10 +10396,14 @@ p-button[type] {
         }
 
     .rz-button.rz-dark, .rz-dark.rz-paginator-element {
-        background-color: var(--rz-base-900);
+        background-color: var(--Grey);
         color: var(--rz-text-contrast-color);
     }
 
+    .rz-button.rz-dark:hover {
+        background-color: var(--Beige-LIGHT);
+        color: var(--Wine-Red);
+    }
         .rz-button.rz-dark.rz-variant-flat, .rz-dark.rz-variant-flat.rz-paginator-element {
             box-shadow: none !important;
         }
@@ -11981,7 +11985,7 @@ p-button[type] {
 
 .rz-button-sm, .rz-paginator.rz-density-compact .rz-paginator-element, .rz-fileupload .rz-button, .rz-fileupload .rz-paginator-element, .rz-selectbutton .rz-fileupload .rz-button, .rz-selectbutton .rz-fileupload .rz-paginator-element, .rz-fileupload .rz-selectbutton .rz-button, .rz-fileupload .rz-selectbutton .rz-paginator-element, .rz-selectbutton .rz-button.rz-button-sm, .rz-selectbutton .rz-button-sm.rz-paginator-element, .rz-splitbutton .rz-button-sm {
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: 600;
     padding: 0.375rem 0.75rem;
     height: auto;
     line-height: 1rem;

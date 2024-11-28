@@ -334,16 +334,32 @@ var mapAPI;
         const midLat = (pointA.lat + pointB.lat) / 2;
         const midLng = (pointA.lng + pointB.lng) / 2;
         const controlPoint = [midLat + 0.15, midLng];
-        const curve = L.curve([
-            'M', [pointA.lat, pointA.lng],
-            'Q', controlPoint, [pointB.lat, pointB.lng]
-        ], {
+        function sampleCurve(start, control, end, segments = 50) {
+            const points = [];
+            for (let t = 0; t <= 1; t += 1 / segments) {
+                const x = (1 - t) * (1 - t) * start[1] +
+                    2 * (1 - t) * t * control[1] +
+                    t * t * end[1];
+                const y = (1 - t) * (1 - t) * start[0] +
+                    2 * (1 - t) * t * control[0] +
+                    t * t * end[0];
+                points.push([y, x]);
+            }
+            return points;
+        }
+        const curvePoints = sampleCurve([pointA.lat, pointA.lng], controlPoint, [pointB.lat, pointB.lng]);
+        const curveLine = L.polyline(curvePoints, {
             color: '#C44527',
             weight: 2,
             dashArray: '10, 10',
             dashOffset: '0'
+        }).arrowheads({
+            frequency: 'endonly',
+            fill: true,
+            size: '10px',
+            color: '#C44527'
         });
-        return curve;
+        return curveLine;
     }
     mapAPI.getCurve = getCurve;
     function fitMapToGroup(groupName) {
@@ -533,6 +549,14 @@ var mapAPI;
         map.zoomOut();
     }
     mapAPI.zoomOut = zoomOut;
+    function toggleScaleVisibility(visible) {
+        const scale = document.getElementsByClassName("leaflet-control-scale")[0];
+        if (visible)
+            scale.style.visibility = '';
+        else
+            scale.style.visibility = 'hidden';
+    }
+    mapAPI.toggleScaleVisibility = toggleScaleVisibility;
     function turnOnLocationTracking() {
         if (!navigator.geolocation) {
             console.log("Your browser doesn't support geolocation feature!");

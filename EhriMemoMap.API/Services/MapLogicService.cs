@@ -407,6 +407,12 @@ public class MapLogicService(MemogisContext context)
         return result;
     }
 
+    public List<Tuple<long, string?, string?>> GetAllNarrativeMaps(string city)
+    {
+        var result = _context.PacovNarrativeMaps.
+            Select(a => new Tuple<long, string?, string?>(a.Id, a.LabelCs, a.LabelEn)).ToList();
+        return result;
+    }
     public NarrativeMap? GetNarrativeMap(long id)
     {
         var map = _context.PacovNarrativeMaps.

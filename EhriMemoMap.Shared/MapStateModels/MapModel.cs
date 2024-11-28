@@ -16,6 +16,7 @@ namespace EhriMemoMap.Shared
     {
         public string City { get; set; }
         public string[]? AllCities { get; set; }
+        public bool? StoryMaps { get; set; }
         public int Zoom { get; set; }
         public int ZoomMobile { get; set; }
         public int MinZoom { get; set; }

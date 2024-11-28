@@ -1,6 +1,6 @@
 ﻿@inject MapStateService MapState
 
-@if (MapState.IsMobileView == false && MapState.DialogType != DialogTypeEnum.NarrativeMap)
+@if (MapState.IsMobileView == false && MapState.MapType != MapTypeEnum.Normal)
 {
     <div class="timeline-wrapper">
         <CardTimeline Width="550" MobileVersion="false" />

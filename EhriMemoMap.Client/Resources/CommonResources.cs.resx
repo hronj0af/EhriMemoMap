@@ -549,7 +549,7 @@
     <value>Pacov</value>
   </data>
   <data name="helpContent_pacov" xml:space="preserve">
-    <value>??? napoveda</value>
+    <value>Lorem ipsum..</value>
   </data>
   <data name="welcomeText_pacov" xml:space="preserve">
     <value>???</value>
@@ -650,10 +650,22 @@
   <data name="showOnMap" xml:space="preserve">
     <value>Ukázat na mapě</value>
   </data>
-  <data name="backToFullMap" xml:space="preserve">
-    <value>Zpět na celou mapu</value>
+  <data name="backToStoryMapWhole" xml:space="preserve">
+    <value>Celý příběh</value>
   </data>
   <data name="viewStoryMap" xml:space="preserve">
     <value>Zobrazit příběhovou mapu</value>
+  </data>
+  <data name="storyMapExists" xml:space="preserve">
+    <value>K danému člověku existuje příběhová mapa.</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>Zpět</value>
+  </data>
+  <data name="storyMaps" xml:space="preserve">
+    <value>Příběhové mapy</value>
+  </data>
+  <data name="allStories" xml:space="preserve">
+    <value>Všechny</value>
   </data>
 </root>

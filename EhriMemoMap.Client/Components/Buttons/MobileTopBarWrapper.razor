@@ -1,7 +1,7 @@
 ﻿@inject NavigationManager NavManager
 @inject MapStateService MapState
 
-@if (isMobileView == false)
+@if (MapState.IsMobileView == true)
 {
     <div style="background-color:var(--Wine-Red);color:var(--Beige);position:absolute;top:0px;left:0px;width:100%;z-index:1001;">
         <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Style="padding:10px">
@@ -20,16 +20,20 @@
 
 @code{
 
-    private bool? isMobileView;
-
     private void ShowHome()
     {
         NavManager.NavigateTo("/", true);
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnInitialized()
     {
-        isMobileView = MapState.IsMobileView;
+        MapState.OnChange += StateHasChanged;
     }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= StateHasChanged;
+    }
+
 
 }

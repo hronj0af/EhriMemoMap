@@ -1,4 +1,5 @@
 ﻿using EhriMemoMap.Client.Components.Cards;
+using EhriMemoMap.Client.Components.Dialogs;
 using EhriMemoMap.Models;
 using EhriMemoMap.Shared;
 using Microsoft.JSInterop;
@@ -6,6 +7,7 @@ using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Radzen;
+using System.Net.NetworkInformation;
 
 namespace EhriMemoMap.Client.Services
 {
@@ -27,8 +29,8 @@ namespace EhriMemoMap.Client.Services
             _js = js;
             _client = client;
             _appUrl = configuration?.GetSection("App")["AppURL"] ?? "";
-            AppState = configuration?.GetSection("App")["AppState"] == "Development" 
-                ? AppStateEnum.Development 
+            AppState = configuration?.GetSection("App")["AppState"] == "Development"
+                ? AppStateEnum.Development
                     : configuration?.GetSection("App")["AppState"] == "Shutdown"
                         ? AppStateEnum.Shutdown
                         : AppStateEnum.Production;
@@ -52,6 +54,7 @@ namespace EhriMemoMap.Client.Services
 
         public event Action OnChange;
         public NarrativeMap? NarrativeMap { get; set; }
+        public List<Tuple<long, string?, string?>> AllNarrativeMaps { get; set; } = [];
 
         public void NotifyStateChanged()
         {
@@ -97,6 +100,32 @@ namespace EhriMemoMap.Client.Services
             NotifyStateChanged();
         }
 
+        public MapTypeEnum MapType = MapTypeEnum.Normal;
+        public void SetMapType(MapTypeEnum value, bool closeDialog)
+        {
+            if (MapType != MapTypeEnum.Normal && value == MapTypeEnum.Normal)
+            {
+                _js.InvokeVoidAsync("mapAPI.resetMapViewToInitialState");
+                _js.InvokeVoidAsync("mapAPI.showAllLayers");
+                NarrativeMap = null;
+            }
+
+            MapType = value;
+
+            if (MapType != MapTypeEnum.Normal && IsMobileView)
+                _js.InvokeVoidAsync("mapAPI.toggleScaleVisibility", false);
+            else if (MapType == MapTypeEnum.Normal && IsMobileView)
+                _js.InvokeVoidAsync("mapAPI.toggleScaleVisibility", true);
+
+            if (closeDialog)
+            {
+                _dialogService.CloseSide();
+                SetDialogType(DialogTypeEnum.None);
+            }
+
+            NotifyStateChanged();
+        }
+
         /// <summary>
         /// Aktuálně nastavený zoom mapy
         /// </summary>
@@ -124,7 +153,7 @@ namespace EhriMemoMap.Client.Services
         /// Seznam podkladových map
         /// </summary>
         public MapModel Map { get; set; }
-        
+
         public string GetMapInfoForLeaflet()
         {
             var serializerSettings = new JsonSerializerSettings
@@ -338,8 +367,9 @@ namespace EhriMemoMap.Client.Services
             if (id == null)
                 return;
             await _js.InvokeVoidAsync("mapAPI.hideAllLayers");
-            SetDialogType(DialogTypeEnum.NarrativeMap);
-            await _dialogService.OpenSideAsync<CardNarrativeMap>(null, new Dictionary<string, object> { { "Id", id } }, await GetDialogOptions());
+            SetDialogType(DialogTypeEnum.StoryMap);
+            SetMapType(MapTypeEnum.StoryMapWhole, false);
+            await _dialogService.OpenSideAsync<StoryMapDialog>(null, new Dictionary<string, object> { { "Id", id } }, await GetDialogOptions());
         }
 
     }

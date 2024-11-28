@@ -190,6 +190,10 @@ path.leaflet-interactive:focus {
         fill: var(--Wine-Red);
     }
 
+    .icon:hover .foreground-stroke {
+        stroke: var(--Wine-Red);
+    }
+
     .icon:hover .background {
         fill: var(--Beige-LIGHT);
     }
@@ -200,6 +204,10 @@ path.leaflet-interactive:focus {
 
 .icon-selected .foreground {
     fill: var(--Wine-Red);
+}
+
+.icon-selected .foreground-stroke {
+    stroke: var(--Wine-Red);
 }
 
 .icon-selected .background {

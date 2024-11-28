@@ -430,7 +430,7 @@
     <value>Pacov</value>
   </data>
   <data name="helpContent_pacov" xml:space="preserve">
-    <value>help</value>
+    <value>Lorem ipsum..</value>
   </data>
   <data name="welcomeText_pacov" xml:space="preserve">
     <value>???</value>
@@ -648,10 +648,22 @@
   <data name="showOnMap" xml:space="preserve">
     <value>Show on the map</value>
   </data>
-  <data name="backToFullMap" xml:space="preserve">
-    <value>Back to the full map</value>
+  <data name="backToStoryMapWhole" xml:space="preserve">
+    <value>Whole Story</value>
   </data>
   <data name="viewStoryMap" xml:space="preserve">
     <value>View Story Map</value>
+  </data>
+  <data name="storyMapExists" xml:space="preserve">
+    <value>There is a story map for a given person.</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="storyMaps" xml:space="preserve">
+    <value>Story Maps</value>
+  </data>
+  <data name="allStories" xml:space="preserve">
+    <value>All</value>
   </data>
 </root>
