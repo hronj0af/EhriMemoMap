@@ -43,18 +43,30 @@
         else
         {
             <RadzenRow Gap="0" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
-                <RadzenColumn Size="MapState.GetTimeline() != null && MapState.MapType == MapTypeEnum.Normal ? 4 : 6">
-                    <Search MobileVersion="true" Border="true" />
-                </RadzenColumn>
-                @if (MapState.GetTimeline() != null && MapState.MapType == MapTypeEnum.Normal)
+                @if (MapState.MapType == MapTypeEnum.Normal)
                 {
-                    <RadzenColumn Size="4">
+                    <RadzenColumn Size="size">
+                        <Search MobileVersion="true" Border="true" />
+                    </RadzenColumn>
+                }
+                @if (ShowTimelineButton())
+                {
+                    <RadzenColumn Size="size">
                         <Timeline MobileVersion="true" Border="true" />
                     </RadzenColumn>
                 }
-                <RadzenColumn Size="MapState.GetTimeline() != null && MapState.MapType == MapTypeEnum.Normal ? 4 : 6">
-                    <Layers MobileVersion="true" />
-                </RadzenColumn>
+                @if (ShowStoryMapButton())
+                {
+                    <RadzenColumn Size="size">
+                        <StoryMap MobileVersion="true" Border="true" />
+                    </RadzenColumn>
+                }
+                @if (MapState.MapType == MapTypeEnum.Normal)
+                {
+                    <RadzenColumn Size="size">
+                        <Layers MobileVersion="true" />
+                    </RadzenColumn>
+                }
             </RadzenRow>
 
         }
@@ -65,18 +77,20 @@
 @code {
     public string style;
     public string gap;
+    public int? size;
     public JustifyContent justifyContent;
     public bool? isMobileView;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         MapState.OnChange += OnMyChangeHandler;
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnAfterRender(bool firstRender)
     {
         isMobileView = MapState.IsMobileView;
         style = GetStyle();
+        size = GetSize();
         if (!firstRender)
         {
             justifyContent = MapState.IsMobileView ? JustifyContent.Center : JustifyContent.End;
@@ -93,9 +107,36 @@
         await InvokeAsync(() =>
         {
             style = GetStyle();
+            size = GetSize();
             isMobileView = MapState.IsMobileView;
             StateHasChanged();
         });
+    }
+
+    public bool ShowStoryMapButton()
+    {
+        return MapState?.Map?.InitialVariables?.StoryMaps ?? false;
+    }
+
+    public bool ShowTimelineButton()
+    {
+        return MapState.GetTimeline() != null && MapState.MapType == MapTypeEnum.Normal;
+    }
+
+    public int GetSize()
+    {
+        var numberOfColumns = 0;
+
+        if (MapState.MapType == MapTypeEnum.Normal)
+            numberOfColumns = 2;
+
+        if (ShowStoryMapButton())
+            numberOfColumns++;
+
+        if (ShowTimelineButton())
+            numberOfColumns++;
+
+        return 12 / numberOfColumns;
     }
 
     public string GetStyle()
