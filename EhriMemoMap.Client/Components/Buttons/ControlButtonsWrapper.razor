@@ -3,7 +3,7 @@
 @if (!string.IsNullOrEmpty(style) && MapState.Map?.InitialVariables != null)
 {
     <div id="controlButtonsWrapper" style="@style">
-        @if (isMobileView == false)
+        @if (MapState.IsMobileView == false)
         {
             <RadzenRow Gap="0" RowGap="5px" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
                 <RadzenColumn Size="12">
@@ -79,7 +79,6 @@
     public string gap;
     public int? size;
     public JustifyContent justifyContent;
-    public bool? isMobileView;
 
     protected override void OnInitialized()
     {
@@ -88,7 +87,6 @@
 
     protected override void OnAfterRender(bool firstRender)
     {
-        isMobileView = MapState.IsMobileView;
         style = GetStyle();
         size = GetSize();
         if (!firstRender)
@@ -108,7 +106,6 @@
         {
             style = GetStyle();
             size = GetSize();
-            isMobileView = MapState.IsMobileView;
             StateHasChanged();
         });
     }

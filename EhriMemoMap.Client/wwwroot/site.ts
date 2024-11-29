@@ -1,7 +1,5 @@
 ﻿// FUNKCE PRO OVLÁDÁNÍ MAPY
 /// <reference path="ts/leaflet/index.d.ts" />
-/// <reference path="ts/leaflet/leaflet.curve.d.ts" />
-
 
 namespace mapAPI {
 
@@ -520,13 +518,22 @@ namespace mapAPI {
         var pos = map.latLngToLayerPoint(result.getLatLng()).round();
         result.setZIndexOffset(100 - pos.y);
 
-        if (!isMobileView() && markerObject.label != undefined && markerObject.label != null) {
+        if (markerObject.label != undefined && markerObject.label != null) {
             result.bindTooltip(markerObject.label, { sticky: true });
         }
 
         if (markerObject.clickable) {
             result.on('click', clickFunction != null ? clickFunction : callBlazor_ShowPlaceInfo);
         }
+
+        result.on('click', function () {
+            result.openTooltip();
+        });
+
+        // Zavření tooltipu na tapnutí mimo marker
+        map.on('click', function () {
+            result.closeTooltip();
+        });
 
         return result;
     }
@@ -559,6 +566,15 @@ namespace mapAPI {
         if (polygonObject.clickable) {
             result.on('click', callBlazor_ShowPlaceInfo);
         }
+
+        result.on('click', function () {
+            result.openTooltip();
+        });
+
+        // Zavření tooltipu na tapnutí mimo marker
+        map.on('click', function () {
+            result.closeTooltip();
+        });
 
 
         if (polygonObject.label != undefined && polygonObject.label != null) {
@@ -602,11 +618,11 @@ namespace mapAPI {
     export function selectPointOnMap(guidArrayJson: string): void {
         const guidArray = JSON.parse(guidArrayJson) as string[];
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
-        objectsGroup.eachLayer(function (item: any) {
-            if (item.options.guid !== undefined && guidArray.indexOf(item.options.guid) > -1 && !item._icon.className.includes('map-point-selected')) {
-                item._icon.className = item._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
-                item._icon.style.zIndex = '200';
-
+        objectsGroup.eachLayer(function (item: L.Marker) {
+            if (item.options.guid !== undefined && guidArray.indexOf(item.options.guid) > -1 && !item.getElement().className.includes('map-point-selected')) {
+                item.getElement().className = item.getElement().className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
+                item.getElement().style.zIndex = '200';
+                item.openTooltip();
             }
         });
     }
@@ -730,17 +746,16 @@ namespace mapAPI {
     //////////////////////////
     /// TRACKING
     //////////////////////////
-
     export function turnOnLocationTracking(): void {
         if (!navigator.geolocation) {
-            console.log("Your browser doesn't support geolocation feature!")
+            console.log("Your browser doesn't support geolocation feature!");
         } else {
-            navigator.geolocation.getCurrentPosition(showMyLocation)
-            trackingInterval = setInterval(() => {
-                navigator.geolocation.getCurrentPosition(showMyLocation)
-            }, 5000);
+            navigator.geolocation.watchPosition(showMyLocation, null, {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            });
         }
-
     }
 
     export function goToLocation(pointString, zoom: number): void {

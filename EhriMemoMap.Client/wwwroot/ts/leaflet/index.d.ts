@@ -1684,6 +1684,7 @@ export interface LayerOptions {
     id?: string | undefined;
     type?: string | undefined;
     selected?: boolean | undefined;
+    guid?: string | undefined;
 }
 
 export interface InteractiveLayerOptions extends LayerOptions {
@@ -2065,8 +2066,7 @@ export interface PolylineOptions extends PathOptions {
 }
 
 export class Polyline<T extends geojson.GeometryObject = geojson.LineString | geojson.MultiLineString, P = any>
-    extends Path
-{
+    extends Path {
     constructor(latlngs: LatLngExpression[] | LatLngExpression[][], options?: PolylineOptions);
     toGeoJSON(precision?: number | false): geojson.Feature<T, P>;
     getLatLngs(): LatLng[] | LatLng[][] | LatLng[][][];
@@ -2146,7 +2146,7 @@ export class Renderer extends Layer {
     options: RendererOptions;
 }
 
-export class SVG extends Renderer {}
+export class SVG extends Renderer { }
 
 export namespace SVG {
     function create<K extends keyof SVGElementTagNameMap>(name: K): SVGElementTagNameMap[K];
@@ -2157,7 +2157,7 @@ export namespace SVG {
 
 export function svg(options?: RendererOptions): SVG;
 
-export class Canvas extends Renderer {}
+export class Canvas extends Renderer { }
 
 export function canvas(options?: RendererOptions): Canvas;
 
@@ -2290,8 +2290,7 @@ export function featureGroup(layers?: Layer[], options?: LayerOptions): FeatureG
 export type StyleFunction<P = any> = (feature?: geojson.Feature<geojson.GeometryObject, P>) => PathOptions;
 
 export interface GeoJSONOptions<P = any, G extends geojson.GeometryObject = geojson.GeometryObject>
-    extends InteractiveLayerOptions
-{
+    extends InteractiveLayerOptions {
     /**
      * A Function defining how GeoJSON points spawn Leaflet layers.
      * It is internally called when data is added, passing the GeoJSON point
@@ -2703,7 +2702,7 @@ export interface PanOptions {
 }
 
 // This is not empty, it extends two interfaces into one...
-export interface ZoomPanOptions extends ZoomOptions, PanOptions {}
+export interface ZoomPanOptions extends ZoomOptions, PanOptions { }
 
 export interface InvalidateSizeOptions extends ZoomPanOptions {
     debounceMoveend?: boolean | undefined;
@@ -3172,3 +3171,54 @@ export const stamp: typeof Util["stamp"];
 export const setOptions: typeof Util["setOptions"];
 
 export function noConflict(): any;
+
+
+interface SingleArrowheadOptions {
+    /**
+     * The angle of opening of the arrowheads in degrees.  Defaults to 60.
+     */
+    yawn?: number;
+    /**
+     * The size of the arrowheads, give as a string specifying pixels, %, or meters.
+     * Defaults to '15%'
+     */
+    size?: `${number}px` | `${number}%` | `${number}m`;
+}
+
+interface ArrowheadOptions extends L.PolylineOptions, SingleArrowheadOptions {
+    /**
+     * The number and spacing of arrowheads to draw along the polyline.
+     * Defaults to 'allvertices'
+     */
+    frequency?: number | `${number}px` | `${number}m` | 'allvertices' | 'endonly';
+    /**
+     * If the size of the arrowheads, when given in percent, should be a percentage proportional
+     * to the total length of the polyline, rather than the average of all the segments.
+     * Defaults to false
+     */
+    proportionalToTotal?: boolean;
+    /**
+     * The offsets from start of end of where to begin/end drawing arrowheads.
+     * Deafult to undefined (no offets)
+     */
+    offsets?: {
+        start?: `${number}px` | `${number}m`;
+        end?: `${number}px` | `${number}m`;
+    };
+    /**
+     * Callback function to customize arrowheads on a 1-by-1 basis
+     * Defaults to undefined
+     */
+    perArrowheadOptions?: (
+        i: number
+    ) => L.PolylineOptions & SingleArrowheadOptions;
+}
+
+export interface Polyline {
+    /**
+     * Adds arrowheads to an L.polyline.  See documentation at https://github.com/slutske22/leaflet-arrowheads
+     * @param {object} options The options for the arrowhead.  See documentation for details
+     * @returns The L.polyline instance that they arrowheads are attached to
+     */
+    arrowheads: (options: ArrowheadOptions) => L.Polyline;
+}

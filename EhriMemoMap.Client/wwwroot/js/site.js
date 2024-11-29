@@ -380,12 +380,18 @@ var mapAPI;
         const result = new L.Marker([markerObject.mapPointModel.coordinates[1], markerObject.mapPointModel.coordinates[0]], iconOptions);
         var pos = map.latLngToLayerPoint(result.getLatLng()).round();
         result.setZIndexOffset(100 - pos.y);
-        if (!isMobileView() && markerObject.label != undefined && markerObject.label != null) {
+        if (markerObject.label != undefined && markerObject.label != null) {
             result.bindTooltip(markerObject.label, { sticky: true });
         }
         if (markerObject.clickable) {
             result.on('click', clickFunction != null ? clickFunction : callBlazor_ShowPlaceInfo);
         }
+        result.on('click', function () {
+            result.openTooltip();
+        });
+        map.on('click', function () {
+            result.closeTooltip();
+        });
         return result;
     }
     mapAPI.getPoint = getPoint;
@@ -413,6 +419,12 @@ var mapAPI;
         if (polygonObject.clickable) {
             result.on('click', callBlazor_ShowPlaceInfo);
         }
+        result.on('click', function () {
+            result.openTooltip();
+        });
+        map.on('click', function () {
+            result.closeTooltip();
+        });
         if (polygonObject.label != undefined && polygonObject.label != null) {
             result.bindTooltip(polygonObject.label, { sticky: true, className: polygonObject.customTooltipClass != undefined && polygonObject.customTooltipClass != null ? polygonObject.customTooltipClass : null });
         }
@@ -451,9 +463,10 @@ var mapAPI;
         const guidArray = JSON.parse(guidArrayJson);
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
         objectsGroup.eachLayer(function (item) {
-            if (item.options.guid !== undefined && guidArray.indexOf(item.options.guid) > -1 && !item._icon.className.includes('map-point-selected')) {
-                item._icon.className = item._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
-                item._icon.style.zIndex = '200';
+            if (item.options.guid !== undefined && guidArray.indexOf(item.options.guid) > -1 && !item.getElement().className.includes('map-point-selected')) {
+                item.getElement().className = item.getElement().className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
+                item.getElement().style.zIndex = '200';
+                item.openTooltip();
             }
         });
     }
@@ -562,10 +575,11 @@ var mapAPI;
             console.log("Your browser doesn't support geolocation feature!");
         }
         else {
-            navigator.geolocation.getCurrentPosition(showMyLocation);
-            trackingInterval = setInterval(() => {
-                navigator.geolocation.getCurrentPosition(showMyLocation);
-            }, 5000);
+            navigator.geolocation.watchPosition(showMyLocation, null, {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            });
         }
     }
     mapAPI.turnOnLocationTracking = turnOnLocationTracking;

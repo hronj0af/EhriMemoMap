@@ -6,7 +6,7 @@
 @inject IStringLocalizer<CommonResources> cl
 
 
-@if (timeline != null && timeline.Count > 1)
+@if (MapState.GetTimeline() != null && MapState.GetTimeline()?.Count() > 1)
 {
     @if (!MobileVersion)
     {
@@ -51,25 +51,15 @@
 
     List<TimelinePointModel>? timeline;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        MapState.OnChange += OnMyChangeHandler;
+        MapState.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMyChangeHandler;
+        MapState.OnChange -= StateHasChanged;
     }
-
-    private async void OnMyChangeHandler()
-    {
-        await InvokeAsync(() =>
-        {
-            timeline = MapState.GetTimeline();
-            StateHasChanged();
-        });
-    }
-
 
     private async Task ShowTimeline()
     {
