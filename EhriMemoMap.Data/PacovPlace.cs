@@ -34,6 +34,7 @@ public partial class PacovPlace
 
     public virtual ICollection<PacovEntitiesXPlace> PacovEntitiesXPlaces { get; set; } = new List<PacovEntitiesXPlace>();
 
+    public virtual ICollection<PacovIncident> PacovIncidents { get; set; } = new List<PacovIncident>();
     public virtual ICollection<PacovPoi> PacovPois { get; set; } = new List<PacovPoi>();
 
     public virtual ICollection<PacovTransport> PacovTransportPlaceFromNavigations { get; set; } = new List<PacovTransport>();

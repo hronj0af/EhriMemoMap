@@ -114,21 +114,66 @@ public class MapLogicService(MemogisContext context)
         return _context.PraguePlacesOfMemories.Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).ToList();
     }
 
-    public List<PragueIncidentsTimeline>? GetIncidents(PlacesParameters parameters)
+    public List<PlaceIncident>? GetIncidents(PlacesParameters parameters)
     {
-        if (parameters.IncidentsIds == null || (!parameters.City?.Contains("prague") ?? false))
+        if (parameters.IncidentsIds == null)
             return null;
 
-        var result = new List<PragueIncidentsTimeline>();
-        result = _context.PragueIncidentsTimelines.Where(p => parameters.IncidentsIds.Contains(p.Id)).ToList();
+        var result = new List<PlaceIncident>();
 
-        // protože v databázi neexistuje vazba mezi incidentem a dokumentem, musíme si ji vytvořit ručně
-        // tabulka prague_incident_x_documents obsahuje sloupec incident_id, 
-        // který je vazbou na tabulku prague_incidents_timelines, 
-        // jenže v ní je sloupec id, který není primárním klíčem
-        // databázi spravuje Aneta Plzáková, nikoli já - takže to prozatím necháme takto
-        foreach (var incident in result)
-            incident.Documents = _context.PragueIncidentsXDocuments.Where(a => a.IncidentId == incident.Id).ToList();
+        if (parameters.City?.Contains("prague") ?? false)
+        {
+            result = _context.PragueIncidentsTimelines.Where(p => parameters.IncidentsIds.Contains(p.Id)).
+            Select(a => new PlaceIncident
+            {
+                Date = a.DateIso,
+                DescriptionCs = a.DescriptionCs,
+                DescriptionEn = a.DescriptionEn,
+                LabelCs = a.LabelCs,
+                LabelEn = a.LabelEn,
+                SpecificationCs = a.Spec1Cs,
+                SpecificationEn = a.Spec1En,
+                TypeCs = a.Type1Cs,
+                TypeEn = a.Type1En,
+                AddressCs = a.PlaceCs,
+                AddressEn = a.PlaceEn,
+            }).
+            ToList();
+
+            // protože v databázi neexistuje vazba mezi incidentem a dokumentem, musíme si ji vytvořit ručně
+            // tabulka prague_incident_x_documents obsahuje sloupec incident_id, 
+            // který je vazbou na tabulku prague_incidents_timelines, 
+            // jenže v ní je sloupec id, který není primárním klíčem
+            // databázi spravuje Aneta Plzáková, nikoli já - takže to prozatím necháme takto
+            foreach (var incident in result)
+                incident.Documents = _context.PragueIncidentsXDocuments.Where(a => a.IncidentId == incident.Id).
+                    Select(a => new Document
+                    {
+                        DocumentUrlCs = a.DocumentCs,
+                        DocumentUrlEn = a.DocumentEn,
+                        Url = new string[] { a.Img }
+                    }).
+                    ToArray();
+        }
+        else if (parameters.City?.Contains("pacov") ?? false)
+        {
+            result = _context.PacovIncidents.
+                Include(a=>a.Place).
+                Where(p => parameters.IncidentsIds.Contains(p.Id)).
+                AsEnumerable().
+                Select(a => new PlaceIncident
+                {
+                    DateCs = a.DateCs,
+                    DateEn = a.DateEn,
+                    DescriptionCs = a.DescriptionCs,
+                    DescriptionEn = a.DescriptionEn,
+                    LabelCs = a.LabelCs,
+                    LabelEn = a.LabelEn,
+                    AddressCs = a.Place?.LabelCs,
+                    AddressEn = a.Place?.LabelEn,
+                }).ToList();
+        }
+
 
         return result;
     }

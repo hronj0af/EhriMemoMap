@@ -46,6 +46,8 @@ public partial class MemogisContext : DbContext
 
     public virtual DbSet<PacovEntity> PacovEntities { get; set; }
 
+    public virtual DbSet<PacovIncident> PacovIncidents { get; set; }
+
     public virtual DbSet<PacovListItem> PacovListItems { get; set; }
 
     public virtual DbSet<PacovMedium> PacovMedia { get; set; }
@@ -453,6 +455,35 @@ public partial class MemogisContext : DbContext
                 .HasForeignKey(d => d.Sex)
                 .HasConstraintName("sex_fkey");
         });
+
+        modelBuilder.Entity<PacovIncident>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("pacov_incidents_pkey");
+            entity.ToTable("pacov_incidents");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.DateCs)
+                .HasMaxLength(100)
+                .HasColumnName("date_cs");
+            entity.Property(e => e.DateEn)
+                .HasMaxLength(100)
+                .HasColumnName("date_en");
+            entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
+            entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
+            entity.Property(e => e.LabelCs)
+                .HasMaxLength(250)
+                .HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn)
+                .HasMaxLength(250)
+                .HasColumnName("label_en");
+            entity.Property(e => e.PlaceId).HasColumnName("place_id");
+            entity.HasOne(d => d.Place).WithMany(p => p.PacovIncidents)
+                .HasForeignKey(d => d.PlaceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("place_id_fkey");
+        });
+
 
         modelBuilder.Entity<PacovListItem>(entity =>
         {

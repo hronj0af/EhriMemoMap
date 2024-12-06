@@ -46,6 +46,8 @@ public partial class Document
 
     public string? Owner { get; set; }
     public string?[]? Url { get; set; }
+    public string? DocumentUrlCs { get; set; }
+    public string? DocumentUrlEn { get; set; }
 
     public string? GetTitle(string lang)
     {

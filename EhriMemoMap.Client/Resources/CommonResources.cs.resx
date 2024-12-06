@@ -552,19 +552,19 @@
     <value>Lorem ipsum..</value>
   </data>
   <data name="welcomeText_pacov" xml:space="preserve">
-    <value>???</value>
+    <value>Interaktivní mapa z doby protektorátu zobrazuje, kde v Pacově bydleli jeho židovští obyvatelé, a přináší informace o zajímavých místech spojených s židovskou historií města i interakci židovského a většinového obyvatelstva. Takzvané příběhové mapy umožňují detailně sledovat konkrétní osobní příběhy a trajektorie. Data jsou doplněna o digitalizované dokumenty a fotografie. Aplikace je přizpůsobena pro mobilní zařízení a můžete se s ní proto vydat přímo do města.</value>
   </data>
   <data name="layer_interest_title_pacov" xml:space="preserve">
-    <value>??? interest</value>
+    <value>Body zájmu</value>
   </data>
   <data name="layer_interest_abstract_pacov" xml:space="preserve">
-    <value>???</value>
+    <value>Body zájmu zahrnující místa číselně označená na historické mapě a další místa, která se váží k židovské historii Pacova.</value>
   </data>
   <data name="layer_address_title_pacov" xml:space="preserve">
-    <value>??? address</value>
+    <value>Bydliště</value>
   </data>
   <data name="layer_address_abstract_pacov" xml:space="preserve">
-    <value>???</value>
+    <value>Adresy, na nichž dle dochovaných zdrojů bydleli v době okupace židovští obyvatelé Pacova. Vrstva zahrnuje údaje o osobách, které na dané adrese bydlely bez ohledu na období, a informace vážící se ke dvěma konkrétním časovým údajům, konkrétně k 13. květnu 1939 (na základě Seznamu židovských obyvatel Pacova vypracovaného pacovskou četnickou stanicí k tomuto datu) a 13. listopadu 1942 (na základě údaje o posledním bydlišti před deportací uvedeném v transportních listinách).</value>
   </data>
   <data name="help_victims_pacov" xml:space="preserve">
     <value>???</value>
@@ -667,5 +667,20 @@
   </data>
   <data name="allStories" xml:space="preserve">
     <value>Všechny</value>
+  </data>
+  <data name="layer_incident_title_pacov" xml:space="preserve">
+    <value>Incidenty</value>
+  </data>
+  <data name="layer_incident_abstract_pacov" xml:space="preserve">
+    <value>Případy incidentů v prostoru města Pacova, během nichž došlo např. k zatčení nebo veřejnému ponižování. Informace byly excerpovány zejména ze vzpomínek pamětníků.</value>
+  </data>
+  <data name="help_incidents_pacov" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="layer_MGS-pacov_historical_map_1942-cze-v1_title_pacov" xml:space="preserve">
+    <value>Historická mapa Pacova (1942)</value>
+  </data>
+  <data name="layer_MGS-pacov_historical_map_1942-cze-v1_abstract_pacov" xml:space="preserve">
+    <value>Historická mapa Pacova pochází z května 1942. Červeně vybarvené plochy doplněné o čísla popisná označují židovské objeky a pozemky. Mapa pochází ze Státního okresního archivu Pelhřimově a pro účely projektu byla georeferencována Masarykovým ústavem a archivem AV ČR.</value>
   </data>
 </root>

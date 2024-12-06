@@ -76,8 +76,9 @@
         await MapLogic.ShowNarrativeMapPlaces();
     }
 
-    private void ShowAllStoryMaps()
+    private async Task ShowAllStoryMaps()
     {
+        await MapLogic.GetAllNarrativeMaps();
         Id = null;
         MapState.NarrativeMap = null;
         MapState.SetMapType(MapTypeEnum.Normal, false);

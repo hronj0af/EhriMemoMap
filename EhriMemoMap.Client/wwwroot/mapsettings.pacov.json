@@ -63,7 +63,18 @@
         "quickAccess": true,
         "backgroundColor": "#FFD93D",
         "fontColor": "Dark"
+      },
+      {
+        "name": "incident",
+        "placeType": "incident",
+        "order": 4,
+        "type": "objects",
+        "minZoom": 15,
+        "quickAccess": true,
+        "backgroundColor": "#C5222C",
+        "fontColor": "Light"
       }
+
 
     ]
   }
