@@ -21,7 +21,7 @@
 
             <RadzenCard class="@(VictimCardCss)" @onclick="OnVictimClick" Style="cursor:pointer">
                 <div style="position:relative;width:100%">
-                    <RadzenImage title="@storyMapTitle" class="@VictimPhotoCss" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
+                    <RadzenImage title="@storyMapTitle" class="@VictimPhotoCss" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : VictimFace)" />
                     @if (Victim.NarrativeMapId != null)
                     {
                         <img title="@storyMapTitle" width="15" class="document-forward-icon" src="/images/narrative.png" />
@@ -64,12 +64,14 @@
 
     private string? VictimCardCss;
     private string? VictimPhotoCss;
+    private string? VictimFace;
 
 
     protected override void OnInitialized()
     {
         VictimCardCss = (Small ? "victim-card-small" : "victim-card") + " rz-mb-4";
         VictimPhotoCss = (Small ? "victim-photo-small" : "victim-photo") + " rz-mb-4";
+        VictimFace = Small ? "images/face-small.png" : "images/face.png";
 
     }
 

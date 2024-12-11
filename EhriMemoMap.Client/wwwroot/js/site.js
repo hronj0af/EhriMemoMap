@@ -197,7 +197,6 @@ var mapAPI;
             event.target.setStyle({ fillColor: polygonColorSelected });
         else {
             event.target._icon.className = event.target._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
-            event.target._icon.style.zIndex = '200';
         }
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
@@ -374,12 +373,14 @@ var mapAPI;
     }
     mapAPI.fitMapToGroup = fitMapToGroup;
     function getPoint(markerObject, className, clickFunction) {
+        var _a;
         let iconOptions = null;
         if (markerObject.htmlIcon != undefined && markerObject.htmlIcon != null)
             iconOptions = { stopId: markerObject.stopId, type: markerObject.placeType, icon: new L.DivIcon({ className: className, html: markerObject.htmlIcon }) };
         const result = new L.Marker([markerObject.mapPointModel.coordinates[1], markerObject.mapPointModel.coordinates[0]], iconOptions);
         var pos = map.latLngToLayerPoint(result.getLatLng()).round();
-        result.setZIndexOffset(100 - pos.y);
+        var zIndex = ((_a = markerObject.priorityOnMap) !== null && _a !== void 0 ? _a : 0);
+        result.setZIndexOffset(zIndex);
         if (markerObject.label != undefined && markerObject.label != null) {
             result.bindTooltip(markerObject.label, { sticky: true });
         }
@@ -451,11 +452,12 @@ var mapAPI;
     }
     mapAPI.removeAdditionalObjects = removeAdditionalObjects;
     function unselectAllSelectedPoints() {
-        var selectedPoints = document.getElementsByClassName('map-point-selected');
-        Array.from(selectedPoints).forEach(function (item) {
-            item.className = item.className.replace('map-point-selected', 'map-point');
-            if (item !== undefined)
-                item.style.zIndex = '100';
+        const objectsGroup = groups.find(a => a.options.id == "Objects_group");
+        objectsGroup.eachLayer(function (item) {
+            if (item.getElement().className.indexOf("map-point-selected") != -1) {
+                item.getElement().className = item.getElement().className.replace('map-point-selected', 'map-point');
+                item.getElement().style.zIndex = (map.latLngToLayerPoint(item.getLatLng()).round().y + item.options.zIndexOffset).toString();
+            }
         });
     }
     mapAPI.unselectAllSelectedPoints = unselectAllSelectedPoints;
@@ -463,9 +465,9 @@ var mapAPI;
         const guidArray = JSON.parse(guidArrayJson);
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
         objectsGroup.eachLayer(function (item) {
-            if (item.options.guid !== undefined && guidArray.indexOf(item.options.guid) > -1 && !item.getElement().className.includes('map-point-selected')) {
+            if (item.getElement() != null && item.options.guid !== undefined && guidArray.indexOf(item.options.guid) > -1) {
                 item.getElement().className = item.getElement().className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
-                item.getElement().style.zIndex = '200';
+                item.getElement().style.zIndex = (map.latLngToLayerPoint(item.getLatLng()).round().y * 2 + item.options.zIndexOffset).toString();
                 item.openTooltip();
             }
         });

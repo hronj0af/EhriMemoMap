@@ -9,6 +9,7 @@ using NodaTime;
 using EhriMemoMap.Resources;
 using Microsoft.Extensions.Localization;
 using EhriMemoMap.Shared;
+using EhriMemoMap.Client.Services;
 
 namespace EhriMemoMap.Models;
 
@@ -48,18 +49,19 @@ public partial class MapObjectForLeafletModel
                 HtmlIcon = "<img src='css/images/trajectory-icon.png' />";
                 break;
             default:
-                HtmlIcon = "<img src='css/images/marker-icon.png' />";
+                HtmlIcon = "<img src='css/images/marker-icon-coral.png' />";
                 break;
         }
     }
 
-    public MapObjectForLeafletModel(MapObject mapObject, bool heatmap)
+    public MapObjectForLeafletModel(MapObject mapObject, bool heatmap, List<LayerModel>? layers = null)
     {
         Clickable = !heatmap;
         Citizens = mapObject.Citizens;
         MapPoint = mapObject.MapPoint;
         PlaceType = mapObject.PlaceType;
         Heatmap = heatmap;
+        PriorityOnMap = layers?.FirstOrDefault(a => !string.IsNullOrEmpty(a.Name) && a.Name?.ToLower() == mapObject.PlaceType?.ToLower())?.PriorityOnMap;
 
         if (heatmap)
             return;
@@ -191,5 +193,6 @@ public partial class MapObjectForLeafletModel
 
     public bool? Heatmap { get; set; }
     public long? StopId { get; set; }
+    public int? PriorityOnMap { get; set; }
 
 }

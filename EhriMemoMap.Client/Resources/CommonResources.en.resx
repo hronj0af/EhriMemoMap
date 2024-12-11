@@ -448,10 +448,10 @@
     <value>Addresses where Jewish inhabitants of Pacov lived at the time of the occupation, according to existing sources. The layer includes data on the persons who lived at the given address, regardless of the period, and information relating to two specific dates, namely 13 May 1939 (based on the List of Jewish inhabitants of Pacov prepared by the Pacov Gendarmerie on that date) and 13 November 1942 (based on the last residence before deportation given in the transport lists).</value>
   </data>
   <data name="help_victims_pacov" xml:space="preserve">
-    <value>???</value>
+    <value>Places where Jewish residents lived during the Holocaust.</value>
   </data>
   <data name="help_interest_pacov" xml:space="preserve">
-    <value>???</value>
+    <value>Interesting places in Pacov.</value>
   </data>
   <data name="onAddress" xml:space="preserve">
     <value>on address</value>
@@ -466,13 +466,13 @@
     <value>Known addresses</value>
   </data>
   <data name="fate" xml:space="preserve">
-    <value>Fate</value>
+    <value>fate</value>
   </data>
   <data name="relatedClosestFamily" xml:space="preserve">
     <value>Closest family</value>
   </data>
   <data name="deportation" xml:space="preserve">
-    <value>Deportation</value>
+    <value>deportation</value>
   </data>
   <data name="allResidents" xml:space="preserve">
     <value>All residents</value>
@@ -672,8 +672,8 @@
   <data name="layer_incident_abstract_pacov" xml:space="preserve">
     <value>Cases of incidents in the area of Pacov during which, for example, arrests or public humiliation occurred. The information was excerpted mainly from the recollections of witnesses.</value>
   </data>
-  <data name="help_incidents_pacov" xml:space="preserve">
-    <value>???</value>
+  <data name="help_incident_pacov" xml:space="preserve">
+    <value>Cases of incidents during which arrests or public humiliation occurred.</value>
   </data>
   <data name="layer_MGS-pacov_historical_map_1942-cze-v1_abstract_pacov" xml:space="preserve">
     <value>The historical map of Pacov dates back to May 1942. The red coloured areas with house numbers mark Jewish buildings and properties. The map comes from the State District Archive in Pelhřimov, georeferencing was carried out by the Masaryk Institute and the Archive of the Czech Academy of Sciences.</value>

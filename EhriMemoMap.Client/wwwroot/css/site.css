@@ -469,7 +469,7 @@ path.leaflet-interactive:focus {
 .victim-photo-small {
     width: 100%;
     object-fit: cover;
-    max-height:120px !important;
+    height:120px !important;
 }
 
 .victim-label {

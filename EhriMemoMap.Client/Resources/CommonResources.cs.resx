@@ -567,10 +567,10 @@
     <value>Adresy, na nichž dle dochovaných zdrojů bydleli v době okupace židovští obyvatelé Pacova. Vrstva zahrnuje údaje o osobách, které na dané adrese bydlely bez ohledu na období, a informace vážící se ke dvěma konkrétním časovým údajům, konkrétně k 13. květnu 1939 (na základě Seznamu židovských obyvatel Pacova vypracovaného pacovskou četnickou stanicí k tomuto datu) a 13. listopadu 1942 (na základě údaje o posledním bydlišti před deportací uvedeném v transportních listinách).</value>
   </data>
   <data name="help_victims_pacov" xml:space="preserve">
-    <value>???</value>
+    <value>Místa, kde v době holokaustu bydleli židovští obyvatelé.</value>
   </data>
   <data name="help_interest_pacov" xml:space="preserve">
-    <value>???</value>
+    <value>Zajímavá místa v Pacově.</value>
   </data>
   <data name="onAddress" xml:space="preserve">
     <value>na adrese</value>
@@ -585,13 +585,13 @@
     <value>Známé adresy</value>
   </data>
   <data name="fate" xml:space="preserve">
-    <value>Osud</value>
+    <value>osud</value>
   </data>
   <data name="relatedClosestFamily" xml:space="preserve">
     <value>Nejbližší rodina</value>
   </data>
   <data name="deportation" xml:space="preserve">
-    <value>Deportace</value>
+    <value>deportace</value>
   </data>
   <data name="allResidents" xml:space="preserve">
     <value>Všichni obyvatelé</value>
@@ -674,8 +674,8 @@
   <data name="layer_incident_abstract_pacov" xml:space="preserve">
     <value>Případy incidentů v prostoru města Pacova, během nichž došlo např. k zatčení nebo veřejnému ponižování. Informace byly excerpovány zejména ze vzpomínek pamětníků.</value>
   </data>
-  <data name="help_incidents_pacov" xml:space="preserve">
-    <value>???</value>
+  <data name="help_incident_pacov" xml:space="preserve">
+    <value>Případy incidentů, během nichž došlo např. k zatčení nebo veřejnému ponižování.</value>
   </data>
   <data name="layer_MGS-pacov_historical_map_1942-cze-v1_title_pacov" xml:space="preserve">
     <value>Historická mapa Pacova (1942)</value>

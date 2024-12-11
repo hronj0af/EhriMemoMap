@@ -177,6 +177,7 @@
             return;
 
         selectedPointGuidsJson = JsonConvert.SerializeObject(placesOnMap.Select(a => a.Guid).ToArray());
+        await JS.InvokeVoidAsync("mapAPI.selectPointOnMap", selectedPointGuidsJson);
 
         var serializerSettings = new JsonSerializerSettings
             {
@@ -187,6 +188,7 @@
 
         MapState.SetDialogType(DialogTypeEnum.Place);
         DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, await MapState.GetDialogOptions());
+        
 
         if (MapState.ShouldBeMapCenteredAfterClick(mouseClickPointX))
             await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), zoom);

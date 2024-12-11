@@ -18,6 +18,7 @@ namespace EhriMemoMap.Shared
         public string? MapParameter { get; set; }
         public string? LayersParameter { get; set; }
         public bool Selected { get; set; }
+        public int PriorityOnMap { get; set; }
         public int Order { get; set; }
         public bool QuickAccess { get; set; }
         public string? BackgroundColor { get; set; }

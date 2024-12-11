@@ -86,7 +86,7 @@ namespace EhriMemoMap.Client.Services
             if (aggregate)
                 objects = AggregateSameAddresses(objects);
 
-            return objects.Select(a => new MapObjectForLeafletModel(a, false)).ToList();
+            return objects.Select(a => new MapObjectForLeafletModel(a, false, _mapState.Map.Layers)).ToList();
         }
 
         /// <summary>

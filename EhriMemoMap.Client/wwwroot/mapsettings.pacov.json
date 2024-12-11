@@ -45,6 +45,17 @@
 
       },
       {
+        "name": "incident",
+        "placeType": "incident",
+        "order": 3,
+        "type": "objects",
+        "minZoom": 15,
+        "quickAccess": true,
+        "backgroundColor": "#C5222C",
+        "fontColor": "Light",
+        "priorityOnMap": 3
+      },
+      {
         "name": "interest",
         "placeType": "interest",
         "order": 2,
@@ -52,7 +63,8 @@
         "minZoom": 15,
         "quickAccess": true,
         "backgroundColor": "#7E469B",
-        "fontColor": "Light"
+        "fontColor": "Light",
+        "priorityOnMap": 1
       },
       {
         "name": "address",
@@ -62,19 +74,9 @@
         "minZoom": 15,
         "quickAccess": true,
         "backgroundColor": "#FFD93D",
-        "fontColor": "Dark"
-      },
-      {
-        "name": "incident",
-        "placeType": "incident",
-        "order": 4,
-        "type": "objects",
-        "minZoom": 15,
-        "quickAccess": true,
-        "backgroundColor": "#C5222C",
-        "fontColor": "Light"
+        "fontColor": "Dark",
+        "priorityOnMap": 2
       }
-
 
     ]
   }

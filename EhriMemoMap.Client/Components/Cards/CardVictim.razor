@@ -15,7 +15,7 @@
             @if (Victim.NarrativeMapId != null)
             {
                 <RadzenColumn Size="1">
-                    <img style="cursor:pointer" title="@cl.GetString("viewStoryMap")..." onclick="@(() => MapState.ShowNarrativeMap(Victim.NarrativeMapId))" src="images/narrative.png" width="25"/>
+                    <img style="cursor:pointer" title="@cl.GetString("viewStoryMap")..." onclick="@(() => MapState.ShowNarrativeMap(Victim.NarrativeMapId))" src="images/narrative.png" width="25" />
                 </RadzenColumn>
             }
         </RadzenRow>
@@ -25,62 +25,60 @@
         @if (Victim.Places != null)
         {
             <hr />
-            <ul>
-                @* místo narození, bydliště k 13. květnu 1939, poslední bydliště před deportací *@
-                @foreach (var place in Victim.Places.Where(a => new long?[] { 22, 24, 26 }.Contains(a.Type)) ?? [])
+            @* místo narození, bydliště k 13. květnu 1939, poslední bydliště před deportací *@
+            @foreach (var place in Victim.Places.Where(a => new long?[] { 22, 24, 26 }.Contains(a.Type)) ?? [])
+            {
+                <div>
+                    @(CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs):
+                    @(CultureInfo.CurrentCulture.Name == "en-US" ? place.En : place.Cs)
+                </div>
+            }
+
+            @* deportace *@
+            @if (Victim.Transports != null && Victim.Transports.Count() > 0)
+            {
+                <div>
+                    @cl["deportation"]:
+                    <ul style="margin:0">
+                        @foreach (var transport in Victim.Transports)
+                        {
+                            <li>
+                                @transport.Code
+                                (@transport.Date?.ToString("d. M. yyyy"),
+                                @(CultureInfo.CurrentCulture.Name == "en-US" ? transport.FromEn : transport.FromCs)
+                                →
+                                @(CultureInfo.CurrentCulture.Name == "en-US" ? transport.ToEn : transport.ToCs))
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+            }
+            @* místo věznění *@
+            @if (Victim.Places.Any(a => a.Type == 28))
+            {
+                <div>
+                    @(CultureInfo.CurrentCulture.Name == "en-US"
+                        ? Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeEn
+                        : Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeCs):
+
+                    @(CultureInfo.CurrentCulture.Name == "en-US"
+                        ? Victim.Places.Where(a => a.Type == 28).Select(a => a.En).Aggregate((x, y) => x + ", " + y)
+                        : Victim.Places.Where(a => a.Type == 28).Select(a => a.Cs).Aggregate((x, y) => x + ", " + y))
+                </div>
+            }
+
+            @* osud úmrtí *@
+            <div>
+                @cl["fate"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Victim.FateEn : Victim.FateCs)
+                @Victim.DeathDate?.ToString("d. M. yyyy")
+                @if (Victim.Places.Any(a => a.Type == 23))
                 {
-                    <li>
-                        @(CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs):
-                        @(CultureInfo.CurrentCulture.Name == "en-US" ? place.En : place.Cs)
-                    </li>
+                    @(CultureInfo.CurrentCulture.Name == "en-US"
+                        ? Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeEn
+                        : Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeCs)
                 }
-
-                @* deportace *@
-                @if (Victim.Transports != null && Victim.Transports.Count() > 0)
-                {
-                    <li>
-                        @cl["deportation"]:
-                        <ul>
-                            @foreach (var transport in Victim.Transports)
-                            {
-                                <li>
-                                    @transport.Code
-                                    (@transport.Date?.ToString("d. M. yyyy"),
-                                    @(CultureInfo.CurrentCulture.Name == "en-US" ? transport.FromEn : transport.FromCs)
-                                    →
-                                    @(CultureInfo.CurrentCulture.Name == "en-US" ? transport.ToEn : transport.ToCs))
-                                </li>
-                            }
-                        </ul>
-                    </li>
-
-                }
-                @* místo věznění *@
-                @if (Victim.Places.Any(a => a.Type == 28))
-                {
-                    <li>
-                        @(CultureInfo.CurrentCulture.Name == "en-US"
-                            ? Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeEn
-                            : Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeCs):
-
-                        @(CultureInfo.CurrentCulture.Name == "en-US"
-                            ? Victim.Places.Where(a => a.Type == 28).Select(a => a.En).Aggregate((x, y) => x + ", " + y)
-                            : Victim.Places.Where(a => a.Type == 28).Select(a => a.Cs).Aggregate((x, y) => x + ", " + y))
-                    </li>
-                }
-
-                @* osud úmrtí *@
-                <li>
-                    @cl["fate"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Victim.FateEn : Victim.FateCs)
-                    @Victim.DeathDate?.ToString("d. M. yyyy")
-                    @if (Victim.Places.Any(a => a.Type == 23))
-                    {
-                        @(CultureInfo.CurrentCulture.Name == "en-US"
-                            ? Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeEn
-                            : Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeCs)
-                    }
-                </li>
-            </ul>
+            </div>
         }
 
         @if (Victim.RelatedPersons != null && Victim.RelatedPersons.Count() > 0)
@@ -127,7 +125,7 @@
                     <RadzenRow class="rz-mt-8" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
                         @foreach (var relatedPerson in Victim.RelatedPersons.Where(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
                         {
-                            <VictimShortInfo Victim="@relatedPerson" Small="true" Relative="true"/>
+                            <VictimShortInfo Victim="@relatedPerson" Small="true" Relative="true" />
                         }
                     </RadzenRow>
                 }
