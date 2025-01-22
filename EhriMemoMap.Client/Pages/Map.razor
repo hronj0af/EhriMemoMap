@@ -127,6 +127,13 @@
             MapState.MapZoom = await JS.InvokeAsync<float>("mapAPI.getZoom");
             MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
 
+            var coordinates = await GetCoordinatesFromUrl();
+            if (coordinates != null)
+            {
+                await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), MapState.MapZoom);
+                await ShowPlaceInfo(MapState.MapZoom, coordinates, 0);
+            }
+
             // a posledně zmiňované informace se pak použijí pro zobrazení špendlíků a polygonů na mapě
             await MapLogic.RefreshObjectsOnMap(true);
 
@@ -159,7 +166,6 @@
         if (!string.IsNullOrEmpty(selectedPointGuidsJson))
         {
             await JS.InvokeVoidAsync("mapAPI.selectPointOnMap", selectedPointGuidsJson);
-
         }
     }
 
@@ -188,12 +194,24 @@
 
         MapState.SetDialogType(DialogTypeEnum.Place);
         DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, await MapState.GetDialogOptions());
-        
+
 
         if (MapState.ShouldBeMapCenteredAfterClick(mouseClickPointX))
-            await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), zoom);
+            await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), MapState.MapZoom);
 
+        await JS.InvokeVoidAsync("mapAPI.setUrlFromSelectedPlace", JsonConvert.SerializeObject(new object[] 
+            { 
+                new { coordinates[0].X, coordinates[0].Y }, 
+                new { coordinates[0].X, coordinates[0].Y } 
+            } ));
+    }
 
+    private async Task<Coordinate[]?> GetCoordinatesFromUrl()
+    {
+        var coordinates = await JS.InvokeAsync<Coordinate[]?>("mapAPI.getSelectedPlaceFromUrl");
+        if (coordinates == null || coordinates[0]?.X == null || coordinates[0]?.Y == null || coordinates[1]?.X == null || coordinates[1]?.Y == null)
+            return null;
+        return coordinates;
     }
 
 }

@@ -453,10 +453,24 @@ var mapAPI;
     mapAPI.removeAdditionalObjects = removeAdditionalObjects;
     function unselectAllSelectedPoints() {
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
-        objectsGroup.eachLayer(function (item) {
-            if (item.getElement().className.indexOf("map-point-selected") != -1) {
-                item.getElement().className = item.getElement().className.replace('map-point-selected', 'map-point');
-                item.getElement().style.zIndex = (map.latLngToLayerPoint(item.getLatLng()).round().y + item.options.zIndexOffset).toString();
+        objectsGroup.eachLayer((item) => {
+            const element = item.getElement();
+            if (element && element.className) {
+                let className;
+                if (typeof element.className === 'string') {
+                    className = element.className;
+                }
+                else if (typeof element.className === 'object' && 'baseVal' in element.className) {
+                    className = element.className.baseVal;
+                }
+                else {
+                    return;
+                }
+                if (className.indexOf("map-point-selected") !== -1) {
+                    element.className = className.replace('map-point-selected', 'map-point');
+                    element.style.zIndex = (map.latLngToLayerPoint(item.getLatLng()).round().y +
+                        item.options.zIndexOffset).toString();
+                }
             }
         });
     }
@@ -530,6 +544,32 @@ var mapAPI;
         return [{ X: bounds.getSouthWest().lng, Y: bounds.getSouthWest().lat }, { X: bounds.getNorthEast().lng, Y: bounds.getNorthEast().lat }];
     }
     mapAPI.getMapBoundsForMapState = getMapBoundsForMapState;
+    function getSelectedPlaceFromUrl() {
+        const x1 = getUrlParam("x1");
+        const y1 = getUrlParam("y1");
+        const x2 = getUrlParam("x2");
+        const y2 = getUrlParam("y2");
+        if (x1 == null || y1 == null || x2 == null || y2 == null)
+            return null;
+        return [{
+                X: parseFloat(x1),
+                Y: parseFloat(y1)
+            }, {
+                X: parseFloat(x2),
+                Y: parseFloat(y2)
+            }];
+    }
+    mapAPI.getSelectedPlaceFromUrl = getSelectedPlaceFromUrl;
+    function setUrlFromSelectedPlace(coordinatesJson) {
+        const coordinates = JSON.parse(coordinatesJson);
+        if (coordinates == null || coordinates.length != 2)
+            return;
+        setUrlParam("x1", coordinates[0].X);
+        setUrlParam("y1", coordinates[0].Y);
+        setUrlParam("x2", coordinates[1].X);
+        setUrlParam("y2", coordinates[1].Y);
+    }
+    mapAPI.setUrlFromSelectedPlace = setUrlFromSelectedPlace;
     function getWindowLocationSearch() {
         return window.location.search;
     }

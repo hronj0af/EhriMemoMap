@@ -54,7 +54,9 @@
     {
         @foreach (var map in MapState.AllNarrativeMaps)
         {
+            <div>
             <a style="cursor:pointer" onclick="@(() => MapState.ShowNarrativeMap(map.Id))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.LabelCs : @map.LabelEn)</a>
+            </div>
         }
     }
 

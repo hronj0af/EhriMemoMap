@@ -3,6 +3,7 @@ using EhriMemoMap.Shared;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using EhriMemoMap.API.Helpers;
+using Newtonsoft.Json;
 
 namespace EhriMemoMap.Services;
 
@@ -41,6 +42,7 @@ public class MapLogicService(MemogisContext context)
         // a nakonec vyberu ty objekty, ktere jsou viditelne na zobrazenem vyrezu na mape
         if (parameters.CustomCoordinates != null && parameters.CustomCoordinates.Length == 2)
         {
+            NormalizeCustomCoordinate(parameters);
             var bbox = GetBBox(parameters.CustomCoordinates[0], parameters.CustomCoordinates[1]);
             query = query.Where(a => (a.GeographyMapPoint != null && bbox.Intersects(a.GeographyMapPoint)) || (a.GeographyMapPolygon != null && bbox.Intersects(a.GeographyMapPolygon)));
         }
@@ -53,9 +55,39 @@ public class MapLogicService(MemogisContext context)
         return query;
     }
 
+    private static void NormalizeCustomCoordinate(MapObjectParameters? parameters)
+    {
+        if (parameters?.CustomCoordinates == null || parameters.CustomCoordinates.Length != 2)
+            return;
+
+        var point1 = parameters.CustomCoordinates[0];
+        var point2 = parameters.CustomCoordinates[1];
+
+        // Kontrola, zda body nejsou totožné
+        if (point1.X == point2.X && point1.Y == point2.Y)
+        {
+            // Pokud jsou body totožné, mírně je posuneme, aby vznikl malý čtverec
+            double offset = 0.0001; // Velikost posunutí (upravte dle potřeby)
+            point1.X += offset;
+            point1.X += offset;
+            point2.X -= offset;
+            point2.Y -= offset;
+        }
+
+        // Vytvoření geometrie z bodů
+        var geometry1 = new PointModel { X = point1.X, Y = point1.Y };
+        var geometry2 = new PointModel { X = point2.X, Y = point2.Y };
+
+        parameters.CustomCoordinates = [geometry1, geometry2];
+
+    }
+
     public MapObject[] GetMapObjects(MapObjectParameters parameters)
     {
-        return [.. PrepareMapObjectsQuery(parameters)];
+        var result = PrepareMapObjectsQuery(parameters);
+        Console.WriteLine(JsonConvert.SerializeObject(parameters));
+        var temp = result.ToList();
+        return [.. result];
     }
 
     public MapObject[] GetHeatmap(MapObjectParameters parameters)
@@ -158,7 +190,7 @@ public class MapLogicService(MemogisContext context)
         else if (parameters.City?.Contains("pacov") ?? false)
         {
             result = _context.PacovIncidents.
-                Include(a=>a.Place).
+                Include(a => a.Place).
                 Where(p => parameters.IncidentsIds.Contains(p.Id)).
                 AsEnumerable().
                 Select(a => new PlaceIncident
@@ -380,7 +412,7 @@ public class MapLogicService(MemogisContext context)
 
         var result = _context.PacovEntities.
             Include(a => a.FateNavigation).
-            Include(a=>a.PacovEntitiesXNarrativeMaps).
+            Include(a => a.PacovEntitiesXNarrativeMaps).
             Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceFromNavigation).
             Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceToNavigation).
             Include(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
@@ -479,7 +511,7 @@ public class MapLogicService(MemogisContext context)
 
         var stops = _context.PacovNarrativeMapStops.
             Include(a => a.PacovNarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
-            Include(a => a.PacovNarrativeMapStopsXPlaces).ThenInclude(a=>a.RelationshipTypeNavigation).
+            Include(a => a.PacovNarrativeMapStopsXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
             Include(a => a.PacovDocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
             Where(a => a.PacovNarrativeMapXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
             AsEnumerable().

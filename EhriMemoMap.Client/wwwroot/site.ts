@@ -606,26 +606,34 @@ namespace mapAPI {
 
     }
 
-    export function unselectAllSelectedPoints(): void {
+    export function unselectAllSelectedPoints() {
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
-        objectsGroup.eachLayer(function (item: L.Marker) {
-            if (item.getElement().className.indexOf("map-point-selected") != -1) {
-                item.getElement().className = item.getElement().className.replace('map-point-selected', 'map-point');
-                item.getElement().style.zIndex = (map.latLngToLayerPoint(item.getLatLng()).round().y + item.options.zIndexOffset).toString();
+        objectsGroup.eachLayer((item: any) => {
+            const element = item.getElement();
+            if (element && element.className) {
+                let className: string;
+
+                if (typeof element.className === 'string') {
+                    // HTML element s běžným className
+                    className = element.className;
+                } else if (typeof element.className === 'object' && 'baseVal' in element.className) {
+                    // SVG element s className jako SVGAnimatedString
+                    className = (element.className as SVGAnimatedString).baseVal;
+                } else {
+                    // Nepodporovaný typ className
+                    return;
+                }
+
+                // Kontrola, zda obsahuje "map-point-selected"
+                if (className.indexOf("map-point-selected") !== -1) {
+                    element.className = className.replace('map-point-selected', 'map-point');
+                    element.style.zIndex = (
+                        map.latLngToLayerPoint(item.getLatLng()).round().y +
+                        item.options.zIndexOffset
+                    ).toString();
+                }
             }
         });
-
-
-
-    //    var selectedPoints = document.getElementsByClassName('map-point-selected') as HTMLCollectionOf<HTMLElement>;
-
-    //    Array.from(selectedPoints).forEach(function (item) {
-    //        item.className = item.className.replace('map-point-selected', 'map-point');
-    //        if (item !== undefined) {
-    //            item.style.zIndex = (map.latLngToLayerPoint(item.getLatLng()).round().y * 2 + item.options.zIndexOffset).toString();
-
-    //        }
-    //    });
     }
 
     export function selectPointOnMap(guidArrayJson: string): void {
@@ -708,6 +716,37 @@ namespace mapAPI {
     export function getMapBoundsForMapState(): Coordinates[] {
         const bounds = map.getBounds();
         return [{ X: bounds.getSouthWest().lng, Y: bounds.getSouthWest().lat }, { X: bounds.getNorthEast().lng, Y: bounds.getNorthEast().lat }];
+    }
+
+    export function getSelectedPlaceFromUrl(): Coordinates[] {
+
+        const x1 = getUrlParam("x1");
+        const y1 = getUrlParam("y1");
+        const x2 = getUrlParam("x2");
+        const y2 = getUrlParam("y2");
+
+        if (x1 == null || y1 == null || x2 == null || y2 == null)
+            return null;
+
+        return [{
+            X: parseFloat(x1),
+            Y: parseFloat(y1)
+        }, {
+            X: parseFloat(x2),
+            Y: parseFloat(y2)
+        }];
+    }
+
+    export function setUrlFromSelectedPlace(coordinatesJson: string): void {
+        const coordinates = (JSON.parse(coordinatesJson) as Coordinates[]);
+
+        if (coordinates == null || coordinates.length != 2)
+            return;
+
+        setUrlParam("x1", coordinates[0].X);
+        setUrlParam("y1", coordinates[0].Y);
+        setUrlParam("x2", coordinates[1].X);
+        setUrlParam("y2", coordinates[1].Y);
     }
 
     export function getWindowLocationSearch(): string {

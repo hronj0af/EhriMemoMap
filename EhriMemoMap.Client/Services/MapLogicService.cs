@@ -270,7 +270,7 @@ namespace EhriMemoMap.Client.Services
 
         public async Task ShowPlacesOnMap(IEnumerable<Place>? places)
         {
-            if (places == null)
+            if (places == null || !places.Any())
                 return;
 
             var transformedPlaces = places.
