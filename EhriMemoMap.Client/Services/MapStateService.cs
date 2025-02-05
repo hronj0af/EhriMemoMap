@@ -154,8 +154,11 @@ namespace EhriMemoMap.Client.Services
         /// </summary>
         public MapModel Map { get; set; }
 
-        public string GetMapInfoForLeaflet()
+        public string GetMapInfoForLeaflet(int zoom = 0)
         {
+            if (zoom > 0 && Map.InitialVariables != null)
+                Map.InitialVariables.Zoom = zoom;
+            
             var serializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()

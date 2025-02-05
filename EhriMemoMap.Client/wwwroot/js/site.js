@@ -85,7 +85,7 @@ var mapAPI;
         if (initialVariables == null)
             map.setView([50.07905886, 14.43715096], 14);
         else
-            map.setView([initialVariables.lat, initialVariables.lng], isMobileView() ? initialVariables.zoomMobile : initialVariables.zoom);
+            map.setView([initialVariables.lat, initialVariables.lng], initialVariables.zoom);
     }
     mapAPI.resetMapViewToInitialState = resetMapViewToInitialState;
     function onResizeWindow() {
@@ -122,15 +122,21 @@ var mapAPI;
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const urlBounds = urlParams.get("bounds");
-        if (urlBounds == null)
-            return null;
-        const bounds = urlBounds.split(",");
-        const southWest = new L.LatLng(Number(bounds[0]), Number(bounds[1]));
-        const northEast = new L.LatLng(Number(bounds[2]), Number(bounds[3]));
+        var southWest = null, northEast = null, bounds = null, customCoordinates = null;
+        if (urlBounds != null) {
+            const splittedBounds = urlBounds.split(",");
+            southWest = new L.LatLng(Number(splittedBounds[0]), Number(splittedBounds[1]));
+            northEast = new L.LatLng(Number(splittedBounds[2]), Number(splittedBounds[3]));
+        }
+        const x1 = urlParams.get("x1");
+        const y1 = urlParams.get("y1");
+        if (x1 != null && y1 != null)
+            customCoordinates = { X: x1, Y: y1 };
         const zoom = urlParams.get("zoom");
         return {
-            bounds: new L.LatLngBounds(southWest, northEast),
-            zoom: zoom !== null && zoom !== void 0 ? zoom : "13"
+            bounds: bounds,
+            zoom: zoom !== null && zoom !== void 0 ? zoom : "13",
+            customCoordinates: customCoordinates
         };
     }
     mapAPI.getMapInfoFromUrl = getMapInfoFromUrl;
@@ -154,13 +160,18 @@ var mapAPI;
     mapAPI.getUrlParam = getUrlParam;
     function setMapWithInfoFromUrl() {
         const infoFromUrl = getMapInfoFromUrl();
-        if (infoFromUrl == null)
-            return false;
-        map.fitBounds(infoFromUrl.bounds);
-        const latAvg = (infoFromUrl.bounds.getSouthWest().lat + infoFromUrl.bounds.getNorthEast().lat) / 2;
-        const lngAvg = (infoFromUrl.bounds.getSouthWest().lng + infoFromUrl.bounds.getNorthEast().lng) / 2;
-        map.setView([latAvg, lngAvg], Number(infoFromUrl.zoom));
-        return true;
+        if (infoFromUrl.bounds != null) {
+            map.fitBounds(infoFromUrl.bounds);
+            const latAvg = (infoFromUrl.bounds.getSouthWest().lat + infoFromUrl.bounds.getNorthEast().lat) / 2;
+            const lngAvg = (infoFromUrl.bounds.getSouthWest().lng + infoFromUrl.bounds.getNorthEast().lng) / 2;
+            map.setView([latAvg, lngAvg], Number(infoFromUrl.zoom));
+            return true;
+        }
+        if (infoFromUrl.customCoordinates != null) {
+            map.setView([infoFromUrl.customCoordinates.Y, infoFromUrl.customCoordinates.X], Number(infoFromUrl.zoom));
+            return true;
+        }
+        return false;
     }
     mapAPI.setMapWithInfoFromUrl = setMapWithInfoFromUrl;
     function convertMapSettingsObjectToMapLayer(mapSettingsObject) {

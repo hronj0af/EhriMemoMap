@@ -107,10 +107,14 @@
             };
 
 
-            // pokud není v url parametr bounds (uživatel s mapou ještě nezačal pracovat),
+            var coordinates = await GetCoordinatesFromUrl();
+            var mapZoom = int.Parse(await JS.InvokeAsync<string>("mapAPI.getUrlParam", "zoom") ?? "0");
+
+            // pokud není v url parametr bounds (uživatel s mapou ještě nezačal pracovat), 
+            // a nejsou zadané koordináty pro zobrazení určitého místa
             // tak se zobrazí dialog s vysvětlením, jak se v mapě pohybovat
             // pokud už s mapou začal pracovat, tak ho s tímto uvítacím dialogem nebudeme otravovat
-            if (string.IsNullOrEmpty(bounds))
+            if (string.IsNullOrEmpty(bounds) && coordinates == null)
                 if (!MapState.IsMobileView)
                     DialogService.OpenAsync<WelcomeDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "720px" });
                 else
@@ -119,19 +123,19 @@
                     DialogService.OpenSideAsync<WelcomeDialog>(" ", options: await MapState.GetDialogOptions());
                 }
 
+
             // voláme javascriptovou metodu leafletu, která inicializuje mapu
             // jako parametr předám informace o vrstvách a počátečním zobrazení mapy
-            await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet());
+            await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet(mapZoom));
 
             // tady se zase zjistí, jak je velká oblast, která se zobrazuje na mapě
-            MapState.MapZoom = await JS.InvokeAsync<float>("mapAPI.getZoom");
+            MapState.MapZoom = mapZoom == 0 ? await JS.InvokeAsync<float>("mapAPI.getZoom") : mapZoom;
             MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
 
-            var coordinates = await GetCoordinatesFromUrl();
             if (coordinates != null)
             {
-                await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), MapState.MapZoom);
-                await ShowPlaceInfo(MapState.MapZoom, coordinates, 0);
+                // await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), 17);
+                await ShowPlaceInfo(mapZoom, coordinates, 0);
             }
 
             // a posledně zmiňované informace se pak použijí pro zobrazení špendlíků a polygonů na mapě
@@ -201,8 +205,8 @@
 
         await JS.InvokeVoidAsync("mapAPI.setUrlFromSelectedPlace", JsonConvert.SerializeObject(new object[] 
             { 
-                new { coordinates[0].X, coordinates[0].Y }, 
-                new { coordinates[0].X, coordinates[0].Y } 
+                new { coordinates[0].Y, coordinates[0].X }, 
+                new { coordinates[0].Y, coordinates[0].X } 
             } ));
     }
 

@@ -118,7 +118,7 @@ namespace mapAPI {
         if (initialVariables == null)
             map.setView([50.07905886, 14.43715096], 14); // defaultně nastavíme mapu na Prahu
         else
-            map.setView([initialVariables.lat, initialVariables.lng], isMobileView() ? initialVariables.zoomMobile : initialVariables.zoom);
+            map.setView([initialVariables.lat, initialVariables.lng], /*isMobileView() ? initialVariables.zoomMobile : */initialVariables.zoom);
     }
 
     export function onResizeWindow(): void {
@@ -173,19 +173,30 @@ namespace mapAPI {
 
         const urlBounds = urlParams.get("bounds");
 
-        if (urlBounds == null)
-            return null;
+        var southWest = null,
+            northEast = null,
+            bounds = null,
+            customCoordinates = null;
 
-        const bounds = urlBounds.split(",");
+        if (urlBounds != null) {
+            const splittedBounds = urlBounds.split(",");
 
-        const southWest = new L.LatLng(Number(bounds[0]), Number(bounds[1]));
-        const northEast = new L.LatLng(Number(bounds[2]), Number(bounds[3]));
+            southWest = new L.LatLng(Number(splittedBounds[0]), Number(splittedBounds[1]));
+            northEast = new L.LatLng(Number(splittedBounds[2]), Number(splittedBounds[3]));
+        }
+
+        const x1 = urlParams.get("x1");
+        const y1 = urlParams.get("y1");
+
+        if (x1 != null && y1 != null)
+            customCoordinates = { X: x1, Y: y1 };
 
         const zoom = urlParams.get("zoom");
 
         return {
-            bounds: new L.LatLngBounds(southWest, northEast),
-            zoom: zoom ?? "13"
+            bounds: bounds,
+            zoom: zoom ?? "13",
+            customCoordinates: customCoordinates
         }
     }
 
@@ -216,16 +227,20 @@ namespace mapAPI {
     // nastaví mapu podle parametrů url
     export function setMapWithInfoFromUrl(): boolean {
         const infoFromUrl = getMapInfoFromUrl();
-        if (infoFromUrl == null)
-            return false;
-        map.fitBounds(infoFromUrl.bounds);
+        if (infoFromUrl.bounds != null) {
+            map.fitBounds(infoFromUrl.bounds);
+            const latAvg = (infoFromUrl.bounds.getSouthWest().lat + infoFromUrl.bounds.getNorthEast().lat) / 2;
+            const lngAvg = (infoFromUrl.bounds.getSouthWest().lng + infoFromUrl.bounds.getNorthEast().lng) / 2;
+            map.setView([latAvg, lngAvg], Number(infoFromUrl.zoom));
+            return true;
+        }
 
-        const latAvg = (infoFromUrl.bounds.getSouthWest().lat + infoFromUrl.bounds.getNorthEast().lat) / 2;
-        const lngAvg = (infoFromUrl.bounds.getSouthWest().lng + infoFromUrl.bounds.getNorthEast().lng) / 2;
+        if (infoFromUrl.customCoordinates != null) {
+            map.setView([infoFromUrl.customCoordinates.Y, infoFromUrl.customCoordinates.X], Number(infoFromUrl.zoom));
+            return true;
+        }
 
-        map.setView([latAvg, lngAvg], Number(infoFromUrl.zoom));
-
-        return true;
+        return false;
     }
 
     // konvertuje objekt s nastavením mapových vrstev do mapových vrstev leafletu
@@ -1019,7 +1034,8 @@ interface Coordinates {
 
 interface MapInfo {
     zoom: string;
-    bounds: L.LatLngBounds;
+    bounds: L.LatLngBounds | null;
+    customCoordinates: Coordinates | null;
 }
 
 enum NarrativeMapStopPlaceType {

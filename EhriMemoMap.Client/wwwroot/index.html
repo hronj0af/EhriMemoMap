@@ -12,9 +12,23 @@
 
         gtag('config', 'G-39PMF0ZRMB');
     </script>
-
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "MemoMap",
+        "description": {
+            "cs": "Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli.",
+            "en": "An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war."
+          },
+        "url": "https://www.memomap.cz" // Nahraďte vaší URL
+        }
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli." hreflang="cs" />
+    <meta name="description" content="An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war." hreflang="en" />
+    <meta name="robots" content="nofollow" />
     <title>MemoMap</title>
     <base href="/" />
     <link href="css/leaflet.css" rel="stylesheet" />
@@ -32,7 +46,7 @@
     <link href="css/app.css?v=20241129" rel="stylesheet" />
     <link href="css/site.css?v=20241129" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Barlow:400,700|Noto%20Serif:400" rel="stylesheet" />
-    <script src="js/site.js?v=20241129"></script>
+    <script src="js/site.js?v=20250124-v1"></script>
     <script src="js/helpers.js"></script>
     <!--<link href="EhriMemoMap.styles.css" rel="stylesheet" />-->
     <link rel="icon" type="image/png" href="favicon.png" />
@@ -53,7 +67,7 @@
         <div class="loading-progress-text"></div>
     </div>
 
-    <div id="blazor-error-ui">
+    <div id="blazor-error-ui" aria-hidden="true">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>

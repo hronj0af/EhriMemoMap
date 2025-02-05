@@ -158,6 +158,7 @@ public class MapLogicService(MemogisContext context)
             result = _context.PragueIncidentsTimelines.Where(p => parameters.IncidentsIds.Contains(p.Id)).
             Select(a => new PlaceIncident
             {
+                Id = a.Id,
                 Date = a.DateIso,
                 DescriptionCs = a.DescriptionCs,
                 DescriptionEn = a.DescriptionEn,
