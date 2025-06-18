@@ -1,0 +1,68 @@
+﻿{
+  "map": {
+    "initialVariables": {
+      "city": "ricany",
+      "allCities": [ "ricany" ],
+      "storyMaps": true,
+      "zoom": 15,
+      "zoomMobile": 15,
+      "lat": 49.9836291,
+      "lng": 14.6607151,
+      "minBounds": {
+        "X": -90,
+        "Y": -90
+      },
+      "maxBounds": {
+        "X": 90,
+        "Y": 90
+      },
+      "minZoom": 1,
+      "maxZoom": 18
+    },
+    "layers": [
+      {
+        "name": "OSM",
+        "url": "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+        "attribution": "MÚA AVČR, ITI &copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
+        "attributionUrl": "https://ehri.cz/memogis_cs.html#howto_credit",
+        "type": "base",
+        "zIndex": "50",
+        "selected": true
+      },
+      {
+        "name": "incident",
+        "placeType": "incident",
+        "order": 3,
+        "type": "objects",
+        "minZoom": 15,
+        "quickAccess": true,
+        "backgroundColor": "#C5222C",
+        "fontColor": "Light",
+        "priorityOnMap": 3
+      },
+      {
+        "name": "interest",
+        "placeType": "interest",
+        "order": 2,
+        "type": "objects",
+        "minZoom": 15,
+        "quickAccess": true,
+        "backgroundColor": "#7E469B",
+        "fontColor": "Light",
+        "priorityOnMap": 1
+      },
+      {
+        "name": "address",
+        "placeType": "address",
+        "order": 1,
+        "type": "objects",
+        "minZoom": 15,
+        "quickAccess": true,
+        "backgroundColor": "#FFD93D",
+        "fontColor": "Dark",
+        "priorityOnMap": 2
+      }
+
+    ]
+  }
+}

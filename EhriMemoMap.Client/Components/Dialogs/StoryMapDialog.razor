@@ -74,7 +74,7 @@
             return;
         }
 
-        await MapLogic.GetNarrativeMap(Id);
+        await MapLogic.GetNarrativeMap(Id, MapState.Map.InitialVariables?.City);
         await MapLogic.ShowNarrativeMapPlaces();
     }
 

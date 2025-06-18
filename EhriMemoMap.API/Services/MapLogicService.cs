@@ -206,6 +206,24 @@ public class MapLogicService(MemogisContext context)
                     AddressEn = a.Place?.LabelEn,
                 }).ToList();
         }
+        else if (parameters.City?.Contains("ricany") ?? false)
+        {
+            result = _context.RicanyIncidents.
+                Include(a => a.Place).
+                Where(p => parameters.IncidentsIds.Contains(p.Id)).
+                AsEnumerable().
+                Select(a => new PlaceIncident
+                {
+                    DateCs = a.DateCs,
+                    DateEn = a.DateEn,
+                    DescriptionCs = a.DescriptionCs,
+                    DescriptionEn = a.DescriptionEn,
+                    LabelCs = a.LabelCs,
+                    LabelEn = a.LabelEn,
+                    AddressCs = a.Place?.LabelCs,
+                    AddressEn = a.Place?.LabelEn,
+                }).ToList();
+        }
 
 
         return result;
@@ -262,6 +280,38 @@ public class MapLogicService(MemogisContext context)
                     }).ToArray()
                 }).
                 ToList();
+        else if (parameters.City == "ricany")
+            return _context.RicanyPois.
+                Include(a => a.Place).
+                Include(a => a.RicanyDocumentsXPois).ThenInclude(a => a.Document).ThenInclude(a => a.RicanyDocumentsXMedia).ThenInclude(a => a.Medium).
+                AsNoTracking().
+                AsEnumerable().
+                Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
+                Select(a => new PlaceInterest
+                {
+                    AddressCs = a.Place.LabelCs,
+                    AddressEn = a.Place.LabelEn,
+                    LabelCs = a.LabelCs,
+                    LabelEn = a.LabelEn,
+                    DescriptionCs = a.DescriptionCs,
+                    DescriptionEn = a.DescriptionEn,
+                    Documents = a.RicanyDocumentsXPois.Select(b => b.Document).Select(c => new Document
+                    {
+                        CreationDateCs = c.CreationDateCs,
+                        CreationDateEn = c.CreationDateEn,
+                        DescriptionCs = c.DescriptionCs,
+                        DescriptionEn = c.DescriptionEn,
+                        LabelCs = c.LabelCs,
+                        LabelEn = c.LabelEn,
+                        CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
+                        CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
+                        Id = c.Id,
+                        Owner = c.Owner,
+                        Type = c.Type,
+                        Url = c?.RicanyDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? []
+                    }).ToArray()
+                }).
+                ToList();
         return null;
 
     }
@@ -284,7 +334,7 @@ public class MapLogicService(MemogisContext context)
                 DescriptionEn = a.DescriptionEn,
             }).
             ToList();
-        else if (parameters.City == "pacov")
+        else if (parameters.City == "pacov" || parameters.City == "ricany")
         { }
         return null;
 
@@ -350,6 +400,33 @@ public class MapLogicService(MemogisContext context)
                 }).
                 ToList();
         }
+        else if (parameters.City == "ricany")
+        {
+            return _context.RicanyPlaces.
+                Include(a => a.RicanyEntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.RicanyEntitiesXMedia).ThenInclude(a => a.Medium).
+                Include(a => a.RicanyEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.RicanyEntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.RicanyEntitiesXNarrativeMaps).
+                Where(p => parameters.AddressesIds.Contains(p.Id)).
+                AsEnumerable().
+                Select(a => new AddressWithVictims
+                {
+                    Address = new AddressInfo
+                    {
+                        Cs = a.LabelCs,
+                        En = a.LabelEn,
+                    },
+                    Victims = a.RicanyEntitiesXPlaces.Select(b => new VictimShortInfoModel
+                    {
+                        Id = b?.Entity.Id ?? 0,
+                        LongInfo = true,
+                        Photo = b?.Entity.RicanyEntitiesXMedia?.Select(c => c.Medium)?.FirstOrDefault()?.OmekaUrl,
+                        Label = b?.Entity.Surname + ", " + b?.Entity.Firstname + (b?.Entity.Birthdate != null ? " (*" + b?.Entity.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
+                        RelationshipToAddressType = b?.RelationshipType,
+                        NarrativeMapId = b?.Entity.RicanyEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                    }).ToList()
+                }).
+                ToList();
+        }
         return null;
 
     }
@@ -411,150 +488,294 @@ public class MapLogicService(MemogisContext context)
         if (city.Contains("prague"))
             return null;
 
-        var result = _context.PacovEntities.
-            Include(a => a.FateNavigation).
-            Include(a => a.PacovEntitiesXNarrativeMaps).
-            Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceFromNavigation).
-            Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceToNavigation).
-            Include(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
-            Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Place).
-            Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
-            Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
-            Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.PacovEntitiesXNarrativeMaps).
-            Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.RelationshipTypeNavigation).
-            Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
-            Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.CreationPlaceNavigation).
-            Where(a => a.Id == id).
-            AsEnumerable().
-            Select(b => new VictimLongInfoModel
-            {
-                Id = b.Id,
-                NarrativeMapId = b.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
-                BirthDate = b.Birthdate,
-                DeathDate = b.Deathdate,
-                Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
-                FateCs = b?.Sex == 3 ? b?.FateNavigation?.LabelCs?.Replace("/", "") : b?.FateNavigation?.LabelCs?.Replace("/a", ""),
-                FateEn = b?.FateNavigation?.LabelEn,
-                Photo = b?.PacovEntitiesXMedia.Select(a => a.Medium).FirstOrDefault()?.OmekaUrl,
-                Places = b?.PacovEntitiesXPlaces.Select(a => new AddressInfo
+        var result = new VictimLongInfoModel();
+        
+        if (city == "pacov")
+            result = _context.PacovEntities.
+                Include(a => a.FateNavigation).
+                Include(a => a.PacovEntitiesXNarrativeMaps).
+                Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceFromNavigation).
+                Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceToNavigation).
+                Include(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
+                Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Place).
+                Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
+                Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.PacovEntitiesXNarrativeMaps).
+                Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
+                Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.CreationPlaceNavigation).
+                Where(a => a.Id == id).
+                AsEnumerable().
+                Select(b => new VictimLongInfoModel
                 {
-                    Cs = a.Place.LabelCs,
-                    En = a.Place.LabelEn ?? a.Place.LabelCs,
-                    Type = a.RelationshipType,
-                    TypeCs = a.RelationshipTypeNavigation.LabelCs,
-                    TypeEn = a.RelationshipTypeNavigation.LabelEn
-                }).ToArray(),
-                Documents = b?.PacovDocumentsXEntities.Select(c => c.Document).Select(c => new Document
+                    Id = b.Id,
+                    NarrativeMapId = b.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                    BirthDate = b.Birthdate,
+                    DeathDate = b.Deathdate,
+                    Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
+                    FateCs = b?.Sex == 3 ? b?.FateNavigation?.LabelCs?.Replace("/", "") : b?.FateNavigation?.LabelCs?.Replace("/a", ""),
+                    FateEn = b?.FateNavigation?.LabelEn,
+                    Photo = b?.PacovEntitiesXMedia.Select(a => a.Medium).FirstOrDefault()?.OmekaUrl,
+                    Places = b?.PacovEntitiesXPlaces.Select(a => new AddressInfo
+                    {
+                        Cs = a.Place.LabelCs,
+                        En = a.Place.LabelEn ?? a.Place.LabelCs,
+                        Type = a.RelationshipType,
+                        TypeCs = a.RelationshipTypeNavigation.LabelCs,
+                        TypeEn = a.RelationshipTypeNavigation.LabelEn
+                    }).ToArray(),
+                    Documents = b?.PacovDocumentsXEntities.Select(c => c.Document).Select(c => new Document
+                    {
+                        CreationDateCs = c.CreationDateCs,
+                        CreationDateEn = c.CreationDateEn,
+                        DescriptionCs = c.DescriptionCs,
+                        DescriptionEn = c.DescriptionEn,
+                        LabelCs = c.LabelCs,
+                        LabelEn = c.LabelEn,
+                        CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
+                        CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
+                        Id = c.Id,
+                        Owner = c.Owner,
+                        Type = c.Type,
+                        Url = c?.PacovDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? []
+                    }).ToArray(),
+                    RelatedPersons = b?.PacovEntitiesXEntityEntity2s.Select(a => new VictimShortInfoModel
+                    {
+                        Id = a.Entity1.Id,
+                        Name = a.Entity1.Surname + ", " + a.Entity1.Firstname,
+                        Birthdate = a.Entity1.Birthdate?.ToString("d.M.yyyy"),
+                        Photo = a.Entity1.PacovEntitiesXMedia.Select(c => c.Medium).FirstOrDefault()?.OmekaUrl,
+                        RelationshipToPersonCs = a.RelationshipTypeNavigation.LabelCs,
+                        RelationshipToPersonEn = a.RelationshipTypeNavigation.LabelEn,
+                        RelationshipToPersonType = a.RelationshipType,
+                        LongInfo = true,
+                        NarrativeMapId = a?.Entity1.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                    }).ToArray(),
+                    Transports = b?.PacovEntitiesXTransports.Select(a => new Transport
+                    {
+                        Date = a.Transport.Date,
+                        FromCs = a.Transport?.PlaceFromNavigation?.LabelCs,
+                        FromEn = a.Transport?.PlaceFromNavigation?.LabelEn,
+                        ToCs = a.Transport?.PlaceToNavigation?.LabelCs,
+                        ToEn = a.Transport?.PlaceToNavigation?.LabelEn,
+                        Code = a.Transport?.TransportCode,
+                    }).ToArray(),
+                }).
+                FirstOrDefault();
+        else if (city == "ricany")
+            result = _context.RicanyEntities.
+                Include(a => a.FateNavigation).
+                Include(a => a.RicanyEntitiesXNarrativeMaps).
+                Include(a => a.RicanyEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceFromNavigation).
+                Include(a => a.RicanyEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceToNavigation).
+                Include(a => a.RicanyEntitiesXMedia).ThenInclude(a => a.Medium).
+                Include(a => a.RicanyEntitiesXPlaces).ThenInclude(a => a.Place).
+                Include(a => a.RicanyEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.RicanyEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.RicanyEntitiesXMedia).ThenInclude(a => a.Medium).
+                Include(a => a.RicanyEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.RicanyEntitiesXNarrativeMaps).
+                Include(a => a.RicanyEntitiesXEntityEntity2s).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.RicanyDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.RicanyDocumentsXMedia).ThenInclude(a => a.Medium).
+                Include(a => a.RicanyDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.CreationPlaceNavigation).
+                Where(a => a.Id == id).
+                AsEnumerable().
+                Select(b => new VictimLongInfoModel
                 {
-                    CreationDateCs = c.CreationDateCs,
-                    CreationDateEn = c.CreationDateEn,
-                    DescriptionCs = c.DescriptionCs,
-                    DescriptionEn = c.DescriptionEn,
-                    LabelCs = c.LabelCs,
-                    LabelEn = c.LabelEn,
-                    CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
-                    CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
-                    Id = c.Id,
-                    Owner = c.Owner,
-                    Type = c.Type,
-                    Url = c?.PacovDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? []
-                }).ToArray(),
-                RelatedPersons = b?.PacovEntitiesXEntityEntity2s.Select(a => new VictimShortInfoModel
-                {
-                    Id = a.Entity1.Id,
-                    Name = a.Entity1.Surname + ", " + a.Entity1.Firstname,
-                    Birthdate = a.Entity1.Birthdate?.ToString("d.M.yyyy"),
-                    Photo = a.Entity1.PacovEntitiesXMedia.Select(c => c.Medium).FirstOrDefault()?.OmekaUrl,
-                    RelationshipToPersonCs = a.RelationshipTypeNavigation.LabelCs,
-                    RelationshipToPersonEn = a.RelationshipTypeNavigation.LabelEn,
-                    RelationshipToPersonType = a.RelationshipType,
-                    LongInfo = true,
-                    NarrativeMapId = a?.Entity1.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
-                }).ToArray(),
-                Transports = b?.PacovEntitiesXTransports.Select(a => new Transport
-                {
-                    Date = a.Transport.Date,
-                    FromCs = a.Transport?.PlaceFromNavigation?.LabelCs,
-                    FromEn = a.Transport?.PlaceFromNavigation?.LabelEn,
-                    ToCs = a.Transport?.PlaceToNavigation?.LabelCs,
-                    ToEn = a.Transport?.PlaceToNavigation?.LabelEn,
-                    Code = a.Transport?.TransportCode,
-                }).ToArray(),
-            }).
-            FirstOrDefault();
+                    Id = b.Id,
+                    NarrativeMapId = b.RicanyEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                    BirthDate = b.Birthdate,
+                    DeathDate = b.Deathdate,
+                    Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
+                    FateCs = b?.Sex == 3 ? b?.FateNavigation?.LabelCs?.Replace("/", "") : b?.FateNavigation?.LabelCs?.Replace("/a", ""),
+                    FateEn = b?.FateNavigation?.LabelEn,
+                    Photo = b?.RicanyEntitiesXMedia.Select(a => a.Medium).FirstOrDefault()?.OmekaUrl,
+                    Places = b?.RicanyEntitiesXPlaces.Select(a => new AddressInfo
+                    {
+                        Cs = a.Place.LabelCs,
+                        En = a.Place.LabelEn ?? a.Place.LabelCs,
+                        Type = a.RelationshipType,
+                        TypeCs = a.RelationshipTypeNavigation.LabelCs,
+                        TypeEn = a.RelationshipTypeNavigation.LabelEn
+                    }).ToArray(),
+                    Documents = b?.RicanyDocumentsXEntities.Select(c => c.Document).Select(c => new Document
+                    {
+                        CreationDateCs = c.CreationDateCs,
+                        CreationDateEn = c.CreationDateEn,
+                        DescriptionCs = c.DescriptionCs,
+                        DescriptionEn = c.DescriptionEn,
+                        LabelCs = c.LabelCs,
+                        LabelEn = c.LabelEn,
+                        CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
+                        CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
+                        Id = c.Id,
+                        Owner = c.Owner,
+                        Type = c.Type,
+                        Url = c?.RicanyDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? []
+                    }).ToArray(),
+                    RelatedPersons = b?.RicanyEntitiesXEntityEntity2s.Select(a => new VictimShortInfoModel
+                    {
+                        Id = a.Entity1.Id,
+                        Name = a.Entity1.Surname + ", " + a.Entity1.Firstname,
+                        Birthdate = a.Entity1.Birthdate?.ToString("d.M.yyyy"),
+                        Photo = a.Entity1.RicanyEntitiesXMedia.Select(c => c.Medium).FirstOrDefault()?.OmekaUrl,
+                        RelationshipToPersonCs = a.RelationshipTypeNavigation.LabelCs,
+                        RelationshipToPersonEn = a.RelationshipTypeNavigation.LabelEn,
+                        RelationshipToPersonType = a.RelationshipType,
+                        LongInfo = true,
+                        NarrativeMapId = a?.Entity1.RicanyEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                    }).ToArray(),
+                    Transports = b?.RicanyEntitiesXTransports.Select(a => new Transport
+                    {
+                        Date = a.Transport.Date,
+                        FromCs = a.Transport?.PlaceFromNavigation?.LabelCs,
+                        FromEn = a.Transport?.PlaceFromNavigation?.LabelEn,
+                        ToCs = a.Transport?.PlaceToNavigation?.LabelCs,
+                        ToEn = a.Transport?.PlaceToNavigation?.LabelEn,
+                        Code = a.Transport?.TransportCode,
+                    }).ToArray(),
+                }).
+                FirstOrDefault();
         return result;
     }
 
     public List<NarrativeMap> GetAllNarrativeMaps(string city)
     {
-        var result = _context.PacovNarrativeMaps.
-            Select(a => new NarrativeMap { Id = a.Id, LabelCs = a.LabelCs, LabelEn = a.LabelEn }).ToList();
+        var result = new List<NarrativeMap>();
+        if (city == "pacov")
+            result = _context.PacovNarrativeMaps.
+                Select(a => new NarrativeMap { Id = a.Id, LabelCs = a.LabelCs, LabelEn = a.LabelEn }).ToList();
+        else if (city == "ricany")
+            result = _context.RicanyNarrativeMaps.
+                Select(a => new NarrativeMap { Id = a.Id, LabelCs = a.LabelCs, LabelEn = a.LabelEn }).ToList();
         return result;
     }
-    public NarrativeMap? GetNarrativeMap(long id)
+    public NarrativeMap? GetNarrativeMap(long id, string city)
     {
-        var map = _context.PacovNarrativeMaps.
-            Include(a => a.PacovEntitiesXNarrativeMaps).ThenInclude(a => a.Entity).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
-            Include(a => a.PacovNarrativeMapsXNarrativeMapStops).
-            Select(a => new NarrativeMap
-            {
-                Id = a.Id,
-                LabelCs = a.LabelCs,
-                LabelEn = a.LabelEn,
-                DescriptionCs = a.DescriptionCs,
-                DescriptionEn = a.DescriptionEn,
-                Type = a.Type
-            }).
-            FirstOrDefault(a => a.Id == id);
-
-        if (map == null)
+        var map = new NarrativeMap();
+        if (city == "pacov")
+            map = _context.PacovNarrativeMaps.
+                Include(a => a.PacovEntitiesXNarrativeMaps).ThenInclude(a => a.Entity).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
+                Include(a => a.PacovNarrativeMapsXNarrativeMapStops).
+                Select(a => new NarrativeMap
+                {
+                    Id = a.Id,
+                    LabelCs = a.LabelCs,
+                    LabelEn = a.LabelEn,
+                    DescriptionCs = a.DescriptionCs,
+                    DescriptionEn = a.DescriptionEn,
+                    Type = a.Type
+                }).
+                FirstOrDefault(a => a.Id == id);
+        else if (city == "ricany")
+            map = _context.RicanyNarrativeMaps.
+                Include(a => a.RicanyEntitiesXNarrativeMaps).ThenInclude(a => a.Entity).ThenInclude(a => a.RicanyEntitiesXMedia).ThenInclude(a => a.Medium).
+                Include(a => a.RicanyNarrativeMapsXNarrativeMapStops).
+                Select(a => new NarrativeMap
+                {
+                    Id = a.Id,
+                    LabelCs = a.LabelCs,
+                    LabelEn = a.LabelEn,
+                    DescriptionCs = a.DescriptionCs,
+                    DescriptionEn = a.DescriptionEn,
+                    Type = a.Type
+                }).
+                FirstOrDefault(a => a.Id == id);
+        else
             return null;
 
-        var stops = _context.PacovNarrativeMapStops.
-            Include(a => a.PacovNarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
-            Include(a => a.PacovNarrativeMapStopsXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
-            Include(a => a.PacovDocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
-            Where(a => a.PacovNarrativeMapXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
-            AsEnumerable().
-            Select(a => new NarrativeMapStop
-            {
-                Id = a.Id,
-                LabelCs = a.LabelCs,
-                LabelEn = a.LabelEn,
-                DescriptionCs = a.DescriptionCs,
-                DescriptionEn = a.DescriptionEn,
-                Places = a.PacovNarrativeMapStopsXPlaces.Select(b => new Place
+        var stops = Array.Empty<NarrativeMapStop>();
+
+        if (city == "pacov")
+            stops = _context.PacovNarrativeMapStops.
+                Include(a => a.PacovNarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
+                Include(a => a.PacovNarrativeMapStopsXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.PacovDocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
+                Where(a => a.PacovNarrativeMapXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
+                AsEnumerable().
+                Select(a => new NarrativeMapStop
                 {
-                    Id = b.Id,
-                    LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
-                    LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelEn + "<br/>" + b.Place.LabelEn : b.Place.LabelEn,
-                    TownCs = b.Place.TownCs,
-                    TownEn = b.Place.TownEn,
-                    StreetCs = b.Place.StreetCs,
-                    StreetEn = b.Place.StreetEn,
-                    HouseNr = b.Place.HouseNr,
-                    RemarkCs = b.Place.RemarkCs,
-                    RemarkEn = b.Place.RemarkEn,
-                    MapPoint = b.Place.Geography.AsJson(),
-                    Type = b.RelationshipTypeNavigation.LabelEn,
-                    StopId = b.NarrativeMapStopId
-                }).ToArray(),
-                Documents = a.PacovDocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Document
+                    Id = a.Id,
+                    LabelCs = a.LabelCs,
+                    LabelEn = a.LabelEn,
+                    DescriptionCs = a.DescriptionCs,
+                    DescriptionEn = a.DescriptionEn,
+                    Places = a.PacovNarrativeMapStopsXPlaces.Select(b => new Place
+                    {
+                        Id = b.Id,
+                        LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
+                        LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelEn + "<br/>" + b.Place.LabelEn : b.Place.LabelEn,
+                        TownCs = b.Place.TownCs,
+                        TownEn = b.Place.TownEn,
+                        StreetCs = b.Place.StreetCs,
+                        StreetEn = b.Place.StreetEn,
+                        HouseNr = b.Place.HouseNr,
+                        RemarkCs = b.Place.RemarkCs,
+                        RemarkEn = b.Place.RemarkEn,
+                        MapPoint = b.Place.Geography.AsJson(),
+                        Type = b.RelationshipTypeNavigation.LabelEn,
+                        StopId = b.NarrativeMapStopId
+                    }).ToArray(),
+                    Documents = a.PacovDocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Document
+                    {
+                        CreationDateCs = b.CreationDateCs,
+                        CreationDateEn = b.CreationDateEn,
+                        DescriptionCs = b.DescriptionCs,
+                        DescriptionEn = b.DescriptionEn,
+                        LabelCs = b.LabelCs,
+                        LabelEn = b.LabelEn,
+                        CreationPlaceCs = b!.CreationPlaceNavigation?.LabelCs,
+                        CreationPlaceEn = b!.CreationPlaceNavigation?.LabelEn,
+                        Id = b!.Id,
+                        Owner = b.Owner,
+                        Type = b.Type,
+                        Url = b?.PacovDocumentsXMedia?.Select(c => c?.Medium?.OmekaUrl)?.ToArray() ?? []
+                    }).ToArray()
+                }).ToArray();
+        else if (city == "ricany")
+            stops = _context.RicanyNarrativeMapStops.
+                Include(a => a.RicanyNarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
+                Include(a => a.RicanyNarrativeMapStopsXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.RicanyDocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.RicanyDocumentsXMedia).ThenInclude(a => a.Medium).
+                Where(a => a.RicanyNarrativeMapXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
+                AsEnumerable().
+                Select(a => new NarrativeMapStop
                 {
-                    CreationDateCs = b.CreationDateCs,
-                    CreationDateEn = b.CreationDateEn,
-                    DescriptionCs = b.DescriptionCs,
-                    DescriptionEn = b.DescriptionEn,
-                    LabelCs = b.LabelCs,
-                    LabelEn = b.LabelEn,
-                    CreationPlaceCs = b!.CreationPlaceNavigation?.LabelCs,
-                    CreationPlaceEn = b!.CreationPlaceNavigation?.LabelEn,
-                    Id = b!.Id,
-                    Owner = b.Owner,
-                    Type = b.Type,
-                    Url = b?.PacovDocumentsXMedia?.Select(c => c?.Medium?.OmekaUrl)?.ToArray() ?? []
-                }).ToArray()
-            }).ToArray();
+                    Id = a.Id,
+                    LabelCs = a.LabelCs,
+                    LabelEn = a.LabelEn,
+                    DescriptionCs = a.DescriptionCs,
+                    DescriptionEn = a.DescriptionEn,
+                    Places = a.RicanyNarrativeMapStopsXPlaces.Select(b => new Place
+                    {
+                        Id = b.Id,
+                        LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
+                        LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelEn + "<br/>" + b.Place.LabelEn : b.Place.LabelEn,
+                        TownCs = b.Place.TownCs,
+                        TownEn = b.Place.TownEn,
+                        StreetCs = b.Place.StreetCs,
+                        StreetEn = b.Place.StreetEn,
+                        HouseNr = b.Place.HouseNr,
+                        RemarkCs = b.Place.RemarkCs,
+                        RemarkEn = b.Place.RemarkEn,
+                        MapPoint = b.Place.Geography.AsJson(),
+                        Type = b.RelationshipTypeNavigation.LabelEn,
+                        StopId = b.NarrativeMapStopId
+                    }).ToArray(),
+                    Documents = a.RicanyDocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Document
+                    {
+                        CreationDateCs = b.CreationDateCs,
+                        CreationDateEn = b.CreationDateEn,
+                        DescriptionCs = b.DescriptionCs,
+                        DescriptionEn = b.DescriptionEn,
+                        LabelCs = b.LabelCs,
+                        LabelEn = b.LabelEn,
+                        CreationPlaceCs = b!.CreationPlaceNavigation?.LabelCs,
+                        CreationPlaceEn = b!.CreationPlaceNavigation?.LabelEn,
+                        Id = b!.Id,
+                        Owner = b.Owner,
+                        Type = b.Type,
+                        Url = b?.RicanyDocumentsXMedia?.Select(c => c?.Medium?.OmekaUrl)?.ToArray() ?? []
+                    }).ToArray()
+                }).ToArray();
 
         map.Stops = stops;
 

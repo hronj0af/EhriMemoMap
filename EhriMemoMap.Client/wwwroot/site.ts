@@ -412,7 +412,7 @@ namespace mapAPI {
     }
 
 
-    export function addObjectsFromJsonString(jsonInfo, group) {
+    export function addObjectsFromJsonString(jsonInfo: string, group: string) {
         var groupName = group + "_group";
         const objectsGroup = groups.find(a => a.options.id == groupName);
         objectsGroup.clearLayers();
@@ -467,7 +467,7 @@ namespace mapAPI {
         const midLng = (pointA.lng + pointB.lng) / 2;
         const controlPoint = [midLat + 0.15, midLng]; // Kontrolní bod trochu posunutý nahoru
 
-        function sampleCurve(start, control, end, segments = 50) {
+        function sampleCurve(start: number[], control: number[], end: number[], segments = 50) {
             const points = [];
             for (let t = 0; t <= 1; t += 1 / segments) {
                 const x =

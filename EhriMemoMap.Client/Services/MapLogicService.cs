@@ -9,8 +9,6 @@ using Microsoft.Extensions.Localization;
 using EhriMemoMap.Resources;
 using NetTopologySuite.IO;
 using EhriMemoMap.Shared;
-using System.Net.Http.Json;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace EhriMemoMap.Client.Services
@@ -251,12 +249,12 @@ namespace EhriMemoMap.Client.Services
             _mapState.AllNarrativeMaps = result;
         }
 
-        public async Task GetNarrativeMap(long? id)
+        public async Task GetNarrativeMap(long? id, string? city)
         {
             if (id == null)
                 return;
 
-            var result = await GetResultFromApiGet<NarrativeMap>("getnarrativemap", "id=" + id);
+            var result = await GetResultFromApiGet<NarrativeMap>("getnarrativemap", "id=" + id + "&city=" + city);
             _mapState.NarrativeMap = result;
         }
 

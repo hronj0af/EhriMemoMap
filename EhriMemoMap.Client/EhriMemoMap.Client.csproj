@@ -5,8 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <!--<WasmEnableAOT>true</WasmEnableAOT>-->
-    <!--<RunAOTCompilation>true</RunAOTCompilation>
-    <WasmStripILAfterAOT>true</WasmStripILAfterAOT>-->
+    <!--<RunAOTCompilation>true</RunAOTCompilation>-->
+    <!--<WasmStripILAfterAOT>true</WasmStripILAfterAOT>-->
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
 
@@ -53,6 +53,9 @@
     <Content Update="wwwroot\js\viewer.js">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="wwwroot\mapsettings.ricany.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\mapsettings.prague_last_residence.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

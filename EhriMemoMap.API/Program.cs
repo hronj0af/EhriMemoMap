@@ -66,7 +66,7 @@ app.MapGet("/getdistrictstatistics", (bool total, DateTime? timeLinePoint, strin
 
 app.MapGet("/getallnarrativemaps", (string city, MapLogicService service) => service.GetAllNarrativeMaps(city));
 
-app.MapGet("/getnarrativemap", (long id, MapLogicService service) => service.GetNarrativeMap(id));
+app.MapGet("/getnarrativemap", (long id, string city, MapLogicService service) => service.GetNarrativeMap(id, city));
 
 app.MapPost("/getheatmap", (MapObjectParameters parameters, MapLogicService service) => service.GetHeatmap(parameters));
 

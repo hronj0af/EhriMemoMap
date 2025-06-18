@@ -68,6 +68,54 @@ public partial class MemogisContext : DbContext
 
     public virtual DbSet<PacovTransport> PacovTransports { get; set; }
 
+    /// RICANY
+    
+    public virtual DbSet<RicanyDocument> RicanyDocuments { get; set; }
+
+    public virtual DbSet<RicanyDocumentsXEntity> RicanyDocumentsXEntities { get; set; }
+
+    public virtual DbSet<RicanyDocumentsXMedium> RicanyDocumentsXMedia { get; set; }
+
+    public virtual DbSet<RicanyDocumentsXNarrativeMapStop> RicanyDocumentsXNarrativeMapStops { get; set; }
+
+    public virtual DbSet<RicanyDocumentsXPoi> RicanyDocumentsXPois { get; set; }
+
+    public virtual DbSet<RicanyEntitiesXEntity> RicanyEntitiesXEntities { get; set; }
+
+    public virtual DbSet<RicanyEntitiesXMedium> RicanyEntitiesXMedia { get; set; }
+
+    public virtual DbSet<RicanyEntitiesXNarrativeMap> RicanyEntitiesXNarrativeMaps { get; set; }
+
+    public virtual DbSet<RicanyEntitiesXPlace> RicanyEntitiesXPlaces { get; set; }
+
+    public virtual DbSet<RicanyEntitiesXTransport> RicanyEntitiesXTransports { get; set; }
+
+    public virtual DbSet<RicanyEntity> RicanyEntities { get; set; }
+
+    public virtual DbSet<RicanyIncident> RicanyIncidents { get; set; }
+
+    public virtual DbSet<RicanyListItem> RicanyListItems { get; set; }
+
+    public virtual DbSet<RicanyMedium> RicanyMedia { get; set; }
+
+    public virtual DbSet<RicanyNarrativeMap> RicanyNarrativeMaps { get; set; }
+
+    public virtual DbSet<RicanyNarrativeMapStop> RicanyNarrativeMapStops { get; set; }
+
+    public virtual DbSet<RicanyNarrativeMapStopsXPlace> RicanyNarrativeMapStopsXPlaces { get; set; }
+
+    public virtual DbSet<RicanyNarrativeMapXNarrativeMapStop> RicanyNarrativeMapXNarrativeMapStops { get; set; }
+
+    public virtual DbSet<RicanyPlace> RicanyPlaces { get; set; }
+
+    public virtual DbSet<RicanyPoi> RicanyPois { get; set; }
+
+    public virtual DbSet<RicanyRelationshipType> RicanyRelationshipTypes { get; set; }
+
+    public virtual DbSet<RicanyTransport> RicanyTransports { get; set; }
+
+
+
     public virtual DbSet<PragueAddressesStat> PragueAddressesStats { get; set; }
 
     public virtual DbSet<PragueAddressesStatsTimeline> PragueAddressesStatsTimelines { get; set; }
@@ -720,6 +768,589 @@ public partial class MemogisContext : DbContext
                 .HasForeignKey(d => d.PlaceTo)
                 .HasConstraintName("place_to_fkey");
         });
+
+        //// RICANY
+
+        modelBuilder.Entity<RicanyDocument>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_documents_pkey");
+
+            entity.ToTable("ricany_documents");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.CreationDateCs)
+                .HasMaxLength(100)
+                .HasColumnName("creation_date_cs");
+            entity.Property(e => e.CreationDateEn)
+                .HasMaxLength(100)
+                .HasColumnName("creation_date_en");
+            entity.Property(e => e.CreationPlace).HasColumnName("creation_place");
+            entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
+            entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
+            entity.Property(e => e.LabelCs)
+                .HasMaxLength(250)
+                .HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn)
+                .HasMaxLength(250)
+                .HasColumnName("label_en");
+            entity.Property(e => e.OmekaId).HasColumnName("omeka_id");
+            entity.Property(e => e.OmekaIdno)
+                .HasMaxLength(25)
+                .HasColumnName("omeka_idno");
+            entity.Property(e => e.OmekaUrl)
+                .HasMaxLength(250)
+                .HasColumnName("omeka_url");
+            entity.Property(e => e.Owner)
+                .HasMaxLength(250)
+                .HasColumnName("owner");
+            entity.Property(e => e.Type)
+                .HasMaxLength(50)
+                .HasColumnName("type");
+
+            entity.HasOne(d => d.CreationPlaceNavigation).WithMany(p => p.RicanyDocuments)
+                .HasForeignKey(d => d.CreationPlace)
+                .HasConstraintName("creation_place_fkey");
+        });
+
+        modelBuilder.Entity<RicanyDocumentsXEntity>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_documents_x_entities_pkey");
+
+            entity.ToTable("ricany_documents_x_entities");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.DocumentId).HasColumnName("document_id");
+            entity.Property(e => e.EntityId).HasColumnName("entity_id");
+
+            entity.HasOne(d => d.Document).WithMany(p => p.RicanyDocumentsXEntities)
+                .HasForeignKey(d => d.DocumentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("document_id_fkey");
+
+            entity.HasOne(d => d.Entity).WithMany(p => p.RicanyDocumentsXEntities)
+                .HasForeignKey(d => d.EntityId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("entity_id_fkey");
+        });
+
+        modelBuilder.Entity<RicanyDocumentsXMedium>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_documents_x_media_pkey");
+
+            entity.ToTable("ricany_documents_x_media");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.DocumentId).HasColumnName("document_id");
+            entity.Property(e => e.MediumId).HasColumnName("media_id");
+
+            entity.HasOne(d => d.Document).WithMany(p => p.RicanyDocumentsXMedia)
+                .HasForeignKey(d => d.DocumentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("document_id_fkey");
+
+            entity.HasOne(d => d.Medium).WithMany(p => p.RicanyDocumentsXMedia)
+                .HasForeignKey(d => d.MediumId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("media_id_fkey");
+        });
+
+        modelBuilder.Entity<RicanyDocumentsXNarrativeMapStop>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_documents_x_narrative_map_stops_pkey");
+
+            entity.ToTable("ricany_documents_x_narrative_map_stops");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+
+            entity.Property(e => e.DocumentId).HasColumnName("document_id");
+
+            entity.Property(e => e.NarrativeMapStopId).HasColumnName("narrative_map_stop_id");
+
+            entity.HasOne(d => d.Document).WithMany(p => p.RicanyDocumentsXNarrativeMapStops)
+                .HasForeignKey(d => d.DocumentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("document_id_fkey");
+
+            entity.HasOne(d => d.NarrativeMapStop).WithMany(p => p.RicanyDocumentsXNarrativeMapStops)
+                .HasForeignKey(d => d.NarrativeMapStopId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("narrative_map_stop_id_fkey");
+        });
+
+        modelBuilder.Entity<RicanyDocumentsXPoi>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_documents_x_pois_pkey");
+
+            entity.ToTable("ricany_documents_x_pois");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.DocumentId).HasColumnName("document_id");
+            entity.Property(e => e.PoiId).HasColumnName("poi_id");
+
+            entity.HasOne(d => d.Document).WithMany(p => p.RicanyDocumentsXPois)
+                .HasForeignKey(d => d.DocumentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("document_id_fkey");
+
+            entity.HasOne(d => d.Poi).WithMany(p => p.RicanyDocumentsXPois)
+                .HasForeignKey(d => d.PoiId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("poi_id_fkey");
+        });
+
+        modelBuilder.Entity<RicanyEntitiesXEntity>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_entities_x_entities_pkey");
+
+            entity.ToTable("ricany_entities_x_entities");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Entity1Id).HasColumnName("entity_1_id");
+            entity.Property(e => e.Entity2Id).HasColumnName("entity_2_id");
+            entity.Property(e => e.RelationshipType).HasColumnName("relationship_type");
+
+            entity.HasOne(d => d.Entity1).WithMany(p => p.RicanyEntitiesXEntityEntity1s)
+                .HasForeignKey(d => d.Entity1Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("entity_1_id_fkey");
+
+            entity.HasOne(d => d.Entity2).WithMany(p => p.RicanyEntitiesXEntityEntity2s)
+                .HasForeignKey(d => d.Entity2Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("entity_2_id_fkey");
+
+            entity.HasOne(d => d.RelationshipTypeNavigation).WithMany(p => p.RicanyEntitiesXEntities)
+                .HasForeignKey(d => d.RelationshipType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("relationship_type_fkey");
+        });
+
+        modelBuilder.Entity<RicanyEntitiesXMedium>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_entities_x_media_pkey");
+
+            entity.ToTable("ricany_entities_x_media");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.EntityId).HasColumnName("entity_id");
+            entity.Property(e => e.MediumId).HasColumnName("media_id");
+
+            entity.HasOne(d => d.Entity).WithMany(p => p.RicanyEntitiesXMedia)
+                .HasForeignKey(d => d.EntityId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("entity_id_fkey");
+
+            entity.HasOne(d => d.Medium).WithMany(p => p.RicanyEntitiesXMedia)
+                .HasForeignKey(d => d.MediumId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("madia_id_fkey");
+        });
+
+        modelBuilder.Entity<RicanyEntitiesXNarrativeMap>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_entities_x_narrative_maps_pkey");
+
+            entity.ToTable("ricany_entities_x_narrative_maps");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+
+            entity.Property(e => e.EntityId).HasColumnName("entity_id");
+
+            entity.Property(e => e.NarrativeMapId).HasColumnName("narrative_map_id");
+
+            entity.HasOne(d => d.Entity).WithMany(p => p.RicanyEntitiesXNarrativeMaps)
+                .HasForeignKey(d => d.EntityId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("entity_id_fkey");
+
+            entity.HasOne(d => d.NarrativeMap).WithMany(p => p.RicanyEntitiesXNarrativeMaps)
+                .HasForeignKey(d => d.NarrativeMapId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("narrative_map_id_fkey");
+
+        });
+
+        modelBuilder.Entity<RicanyEntitiesXPlace>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_entities_x_places_pkey");
+
+            entity.ToTable("ricany_entities_x_places");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.DateFrom).HasColumnName("date_from");
+            entity.Property(e => e.DateTo).HasColumnName("date_to");
+            entity.Property(e => e.EntityId).HasColumnName("entity_id");
+            entity.Property(e => e.PlaceId).HasColumnName("place_id");
+            entity.Property(e => e.RelationshipType).HasColumnName("relationship_type");
+
+            entity.HasOne(d => d.Entity).WithMany(p => p.RicanyEntitiesXPlaces)
+                .HasForeignKey(d => d.EntityId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("entity_id_fkey");
+
+            entity.HasOne(d => d.Place).WithMany(p => p.RicanyEntitiesXPlaces)
+                .HasForeignKey(d => d.PlaceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("place_id_fkey");
+
+            entity.HasOne(d => d.RelationshipTypeNavigation).WithMany(p => p.RicanyEntitiesXPlaces)
+                .HasForeignKey(d => d.RelationshipType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("relationsip_type_fkey");
+        });
+
+        modelBuilder.Entity<RicanyEntitiesXTransport>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_entities_x_transports_pkey");
+
+            entity.ToTable("ricany_entities_x_transports");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.EntityId).HasColumnName("entity_id");
+            entity.Property(e => e.NrInTransport).HasColumnName("nr_in_transport");
+            entity.Property(e => e.TransportId).HasColumnName("transport_id");
+            entity.Property(e => e.TransportOrder).HasColumnName("transport_order");
+
+            entity.HasOne(d => d.Entity).WithMany(p => p.RicanyEntitiesXTransports)
+                .HasForeignKey(d => d.EntityId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("entity_id_fkey");
+
+            entity.HasOne(d => d.Transport).WithMany(p => p.RicanyEntitiesXTransports)
+                .HasForeignKey(d => d.TransportId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("transport_id_fkey");
+        });
+
+        modelBuilder.Entity<RicanyEntity>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_entities_pkey");
+
+            entity.ToTable("ricany_entities");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Birthdate).HasColumnName("birthdate");
+            entity.Property(e => e.Deathdate).HasColumnName("deathdate");
+            entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
+            entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
+            entity.Property(e => e.Fate).HasColumnName("fate");
+            entity.Property(e => e.Firstname)
+                .HasMaxLength(50)
+                .HasColumnName("firstname");
+            entity.Property(e => e.IdIti).HasColumnName("id_iti");
+            entity.Property(e => e.Idno)
+                .HasMaxLength(25)
+                .HasColumnName("idno");
+            entity.Property(e => e.Maidenname)
+                .HasMaxLength(50)
+                .HasColumnName("maidenname");
+            entity.Property(e => e.Sex).HasColumnName("sex");
+            entity.Property(e => e.Surname)
+                .HasMaxLength(50)
+                .HasColumnName("surname");
+            entity.Property(e => e.Title)
+                .HasMaxLength(25)
+                .HasColumnName("title");
+
+            entity.HasOne(d => d.FateNavigation).WithMany(p => p.RicanyEntityFateNavigations)
+                .HasForeignKey(d => d.Fate)
+                .HasConstraintName("fate_fkey");
+
+            entity.HasOne(d => d.SexNavigation).WithMany(p => p.RicanyEntitySexNavigations)
+                .HasForeignKey(d => d.Sex)
+                .HasConstraintName("sex_fkey");
+        });
+
+        modelBuilder.Entity<RicanyIncident>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_incidents_pkey");
+            entity.ToTable("ricany_incidents");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.DateCs)
+                .HasMaxLength(100)
+                .HasColumnName("date_cs");
+            entity.Property(e => e.DateEn)
+                .HasMaxLength(100)
+                .HasColumnName("date_en");
+            entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
+            entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
+            entity.Property(e => e.LabelCs)
+                .HasMaxLength(250)
+                .HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn)
+                .HasMaxLength(250)
+                .HasColumnName("label_en");
+            entity.Property(e => e.PlaceId).HasColumnName("place_id");
+            entity.HasOne(d => d.Place).WithMany(p => p.RicanyIncidents)
+                .HasForeignKey(d => d.PlaceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("place_id_fkey");
+        });
+
+
+        modelBuilder.Entity<RicanyListItem>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_list_items_pkey");
+
+            entity.ToTable("ricany_list_items");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.LabelCs)
+                .HasMaxLength(100)
+                .HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn)
+                .HasMaxLength(100)
+                .HasColumnName("label_en");
+            entity.Property(e => e.ListType)
+                .HasMaxLength(100)
+                .HasColumnName("list_type");
+        });
+
+        modelBuilder.Entity<RicanyMedium>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_media_pkey");
+
+            entity.ToTable("ricany_media");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.OmekaId).HasColumnName("omeka_id");
+            entity.Property(e => e.OmekaUrl)
+                .HasMaxLength(250)
+                .HasColumnName("omeka_url");
+        });
+
+        modelBuilder.Entity<RicanyNarrativeMap>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_narrative_maps_pkey");
+            entity.ToTable("ricany_narrative_maps");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
+            entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
+            entity.Property(e => e.LabelCs)
+                .HasMaxLength(250)
+                .HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn)
+                .HasMaxLength(250)
+                .HasColumnName("label_en");
+            entity.Property(e => e.Type).HasColumnName("type");
+            entity.HasOne(d => d.TypeNavigation).WithMany(p => p.RicanyNarrativeMaps)
+                .HasForeignKey(d => d.Type)
+                .HasConstraintName("type_fkey");
+        });
+
+        modelBuilder.Entity<RicanyNarrativeMapStop>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_narrative_map_stops_pkey");
+            entity.ToTable("ricany_narrative_map_stops");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.DateCs).HasColumnName("date_cs");
+            entity.Property(e => e.DateEn).HasColumnName("date_en");
+            entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
+            entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
+            entity.Property(e => e.LabelCs)
+                .HasMaxLength(250)
+                .HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn)
+                .HasMaxLength(250)
+                .HasColumnName("label_en");
+            entity.Property(e => e.StopOrder).HasColumnName("stop_order");
+        });
+
+        modelBuilder.Entity<RicanyNarrativeMapStopsXPlace>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_narrative_map_stops_x_places_pkey");
+            entity.ToTable("ricany_narrative_map_stops_x_places");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.NarrativeMapStopId).HasColumnName("narrative_map_stop_id");
+            entity.Property(e => e.PlaceId).HasColumnName("place_id");
+            entity.Property(e => e.RelationshipType).HasColumnName("relationship_type");
+
+            entity.HasOne(d => d.NarrativeMapStop).WithMany(p => p.RicanyNarrativeMapStopsXPlaces)
+                .HasForeignKey(d => d.NarrativeMapStopId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("narrative_map_stop_id_fkey");
+
+            entity.HasOne(d => d.Place).WithMany(p => p.RicanyNarrativeMapStopsXPlaces)
+                .HasForeignKey(d => d.PlaceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("place_id_fkey");
+
+            entity.HasOne(d => d.RelationshipTypeNavigation).WithMany(p => p.RicanyNarrativeMapStopsXPlaces)
+                .HasForeignKey(d => d.RelationshipType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("relationship_type_fkey");
+        });
+
+
+        modelBuilder.Entity<RicanyNarrativeMapXNarrativeMapStop>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_narrative_maps_x_narrative_map_stops_pkey");
+            entity.ToTable("ricany_narrative_maps_x_narrative_map_stops");
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.NarrativeMapId).HasColumnName("narrative_map_id");
+            entity.Property(e => e.NarrativeMapStopId).HasColumnName("narrative_map_stop_id");
+
+            entity.HasOne(d => d.NarrativeMap).WithMany(p => p.RicanyNarrativeMapsXNarrativeMapStops)
+                .HasForeignKey(d => d.NarrativeMapId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("narrative_map_id_fkey");
+
+            entity.HasOne(d => d.NarrativeMapStop).WithMany(p => p.RicanyNarrativeMapXNarrativeMapStops)
+                .HasForeignKey(d => d.NarrativeMapStopId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("narrative_map_stop_id_fkey");
+        });
+
+
+        modelBuilder.Entity<RicanyPlace>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_places_pkey");
+
+            entity.ToTable("ricany_places");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Geography)
+                .HasColumnType("geography")
+                .HasColumnName("geography");
+            entity.Property(e => e.HouseNr)
+                .HasMaxLength(10)
+                .HasColumnName("house_nr");
+            entity.Property(e => e.LabelCs)
+                .HasMaxLength(250)
+                .HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn)
+                .HasMaxLength(250)
+                .HasColumnName("label_en");
+            entity.Property(e => e.RemarkCs).HasColumnName("remark_cs");
+            entity.Property(e => e.RemarkEn).HasColumnName("remark_en");
+            entity.Property(e => e.StreetCs)
+                .HasMaxLength(100)
+                .HasColumnName("street_cs");
+            entity.Property(e => e.StreetEn)
+                .HasMaxLength(100)
+                .HasColumnName("street_en");
+            entity.Property(e => e.TownCs)
+                .HasMaxLength(100)
+                .HasColumnName("town_cs");
+            entity.Property(e => e.TownEn)
+                .HasMaxLength(100)
+                .HasColumnName("town_en");
+            entity.Property(e => e.Type)
+                .HasMaxLength(25)
+                .HasColumnName("type");
+        });
+
+        modelBuilder.Entity<RicanyPoi>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_pois_pkey");
+
+            entity.ToTable("ricany_pois");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
+            entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
+            entity.Property(e => e.LabelCs)
+                .HasMaxLength(250)
+                .HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn)
+                .HasMaxLength(250)
+                .HasColumnName("label_en");
+            entity.Property(e => e.PlaceId).HasColumnName("place_id");
+
+            entity.HasOne(d => d.Place).WithMany(p => p.RicanyPois)
+                .HasForeignKey(d => d.PlaceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("place_id_fkey");
+        });
+
+        modelBuilder.Entity<RicanyRelationshipType>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_relationship_types_pkey");
+
+            entity.ToTable("ricany_relationship_types");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.LabelCs)
+                .HasMaxLength(250)
+                .HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn)
+                .HasMaxLength(250)
+                .HasColumnName("label_en");
+            entity.Property(e => e.Table)
+                .HasMaxLength(250)
+                .HasColumnName("table");
+        });
+
+        modelBuilder.Entity<RicanyTransport>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_transports_pkey");
+
+            entity.ToTable("ricany_transports");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Date).HasColumnName("date");
+            entity.Property(e => e.PlaceFrom).HasColumnName("place_from");
+            entity.Property(e => e.PlaceTo).HasColumnName("place_to");
+            entity.Property(e => e.TransportCode)
+                .HasMaxLength(10)
+                .HasColumnName("transport_code");
+
+            entity.HasOne(d => d.PlaceFromNavigation).WithMany(p => p.RicanyTransportPlaceFromNavigations)
+                .HasForeignKey(d => d.PlaceFrom)
+                .HasConstraintName("place_from_fkey");
+
+            entity.HasOne(d => d.PlaceToNavigation).WithMany(p => p.RicanyTransportPlaceToNavigations)
+                .HasForeignKey(d => d.PlaceTo)
+                .HasConstraintName("place_to_fkey");
+        });
+
+
+        /// PRAGUE
+
 
         modelBuilder.Entity<PragueAddressesStat>(entity =>
         {
