@@ -16,7 +16,7 @@
             <h4 class="rz-mb-8">@(CultureInfo.CurrentCulture.Name == "en-US" ? House.Address.CurrentEn : House.Address.CurrentCs) <RadzenText TextStyle="TextStyle.Caption">(@cl["addressCurrent"])</RadzenText></h4>
         }
     }
-
+ 
     @if (MapState.Map.InitialVariables?.City.Contains("prague") ?? false)
     {
         <PragueHouse House="@House"></PragueHouse>
@@ -25,6 +25,10 @@
     else if (MapState.Map.InitialVariables?.City.Contains("pacov") ?? false)
     {
         <PacovVictimList Victims="@House.Victims" FilteredName="@FilteredName" />
+    }
+    else if (MapState.Map.InitialVariables?.City.Contains("ricany") ?? false)
+    {
+        <RicanyVictimList Victims="@House.Victims" FilteredName="@FilteredName" />
     }
 
 }

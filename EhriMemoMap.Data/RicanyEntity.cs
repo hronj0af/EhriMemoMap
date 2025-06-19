@@ -8,7 +8,7 @@ public partial class RicanyEntity
 {
     public long Id { get; set; }
 
-    public string Idno { get; set; } = null!;
+    public string? Idno { get; set; }
 
     public long? IdIti { get; set; }
 
