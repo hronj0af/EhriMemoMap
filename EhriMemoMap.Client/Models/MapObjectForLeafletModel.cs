@@ -81,6 +81,9 @@ public partial class MapObjectForLeafletModel
         else if (PlaceType == Shared.PlaceType.Memory.ToString())
             HtmlIcon = "<img src='images/memory-map.png' />";
 
+        else if (PlaceType == Shared.PlaceType.Memorial.ToString())
+            HtmlIcon = "<img src='images/memorial-map.png' />";
+
         else if (PlaceType == Shared.PlaceType.Address.ToString() || PlaceType == Shared.PlaceType.AddressLastResidence.ToString())
         {
             if (Citizens == null)

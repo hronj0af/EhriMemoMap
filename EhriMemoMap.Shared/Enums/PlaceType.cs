@@ -16,6 +16,8 @@
 
         Memory,
 
-        HeatmapItem
+        HeatmapItem,
+
+        Memorial
     }
 }

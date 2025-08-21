@@ -105,6 +105,25 @@ else
                 </td>
             </tr>
         }
+
+        @if (statistics.Memorials != null)
+        {
+            <tr>
+                <td class='cell firstCell'>
+                    <img src='images/memorial-map.png' width=28 />
+                </td>
+                <td class='cell secondCell'>
+                    @cl["countMemorials"]
+                    <span class="tooltip">
+                        <img src='/images/help-small.svg' class="icon-help" />
+                        <span class="tooltiptext tooltiptext-top">@cl["help_memorials_" + MapState?.Map?.InitialVariables?.City]</span>
+                    </span>
+                </td>
+                <td class='cell thirdCell'>
+                    @statistics.Memorials
+                </td>
+            </tr>
+        }
     </table>
 }
 

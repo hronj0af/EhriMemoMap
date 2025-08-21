@@ -10,5 +10,6 @@ namespace EhriMemoMap.Shared
         public List<AddressWithVictims>? Addresses { get; set; }
         public List<AddressWithVictims>? AddressesLastResidence { get; set; }
         public List<PlaceMemory>? PlacesOfMemory { get; set; }
+        public List<PlaceMemorial>? PlacesOfMemorial { get; set; }
     }
 }

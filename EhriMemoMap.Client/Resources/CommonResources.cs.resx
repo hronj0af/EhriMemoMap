@@ -692,4 +692,16 @@
   <data name="memoryType_stolperstein_set" xml:space="preserve">
     <value>Kameny zmizelých</value>
   </data>
+  <data name="commemorative event" xml:space="preserve">
+    <value>Připomínková akce</value>
+  </data>
+  <data name="countMemorials" xml:space="preserve">
+    <value>Připomínkové akce</value>
+  </data>
+  <data name="help_memorials_ricany" xml:space="preserve">
+    <value>Místa, kde se odehrály připomínkové akce.</value>
+  </data>
+  <data name="featureType_Memorial" xml:space="preserve">
+    <value>Připomínkové akce</value>
+  </data>
 </root>

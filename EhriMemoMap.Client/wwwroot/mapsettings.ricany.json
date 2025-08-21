@@ -71,8 +71,17 @@
         "quickAccess": true,
         "backgroundColor": "#468a9b",
         "fontColor": "Light"
+      },
+      {
+        "name": "memorial",
+        "placeType": "memorial",
+        "order": 3,
+        "type": "objects",
+        "minZoom": 15,
+        "quickAccess": false,
+        "backgroundColor": "#FF7F2A",
+        "fontColor": "Light"
       }
-
 
     ]
   }

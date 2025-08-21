@@ -117,7 +117,8 @@ public class MapLogicService(MemogisContext context)
             Incidents = statistics.FirstOrDefault(a => a.Type.Contains("incidents"))?.Count,
             Interests = statistics.FirstOrDefault(a => a.Type.Contains("pois_points"))?.Count,
             Inaccessibles = statistics.FirstOrDefault(a => a.Type.Contains("pois_polygons"))?.Count,
-            PlacesOfMemory = statistics.FirstOrDefault(a => a.Type.Contains("places_of_memory"))?.Count
+            PlacesOfMemory = statistics.FirstOrDefault(a => a.Type.Contains("places_of_memory"))?.Count,
+            Memorials = statistics.FirstOrDefault(a => a.Type.Contains("memorials"))?.Count,
         };
     }
 
@@ -130,7 +131,8 @@ public class MapLogicService(MemogisContext context)
             InaccessiblePlaces = GetInaccessiblePlaces(parameters),
             Addresses = GetAddressesWithVictims(parameters),
             AddressesLastResidence = GetAddressesLastResidenceWithVictims(parameters),
-            PlacesOfMemory = GetPlacesOfMemories(parameters)
+            PlacesOfMemory = GetPlacesOfMemories(parameters),
+            PlacesOfMemorial = GetMemorials(parameters)
         };
 
 
@@ -375,6 +377,47 @@ public class MapLogicService(MemogisContext context)
                     }).ToArray()
                 }).
                 ToList();
+        return null;
+
+    }
+
+    public List<PlaceMemorial>? GetMemorials(PlacesParameters parameters)
+    {
+        if (parameters.PlacesOfInterestIds == null)
+            return null;
+
+        //if (parameters.City == "ricany")
+        //    return _context.RicanyEvents.
+        //        Include(a => a.RicanyEventsXPlaces).ThenInclude(a=>a.Place).
+        //        Include(a => a.Ric).ThenInclude(a => a.D).ThenInclude(a => a.RicanyDocumentsXMedia).ThenInclude(a => a.Medium).
+        //        AsNoTracking().
+        //        AsEnumerable().
+        //        Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
+        //        Select(a => new PlaceInterest
+        //        {
+        //            AddressCs = a.Place.LabelCs,
+        //            AddressEn = a.Place.LabelEn,
+        //            LabelCs = a.LabelCs,
+        //            LabelEn = a.LabelEn,
+        //            DescriptionCs = a.DescriptionCs,
+        //            DescriptionEn = a.DescriptionEn,
+        //            Documents = a.RicanyDocumentsXPois.Select(b => b.Document).Select(c => new Document
+        //            {
+        //                CreationDateCs = c.CreationDateCs,
+        //                CreationDateEn = c.CreationDateEn,
+        //                DescriptionCs = c.DescriptionCs,
+        //                DescriptionEn = c.DescriptionEn,
+        //                LabelCs = c.LabelCs,
+        //                LabelEn = c.LabelEn,
+        //                CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
+        //                CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
+        //                Id = c.Id,
+        //                Owner = c.Owner,
+        //                Type = c.Type,
+        //                Url = c?.RicanyDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? []
+        //            }).ToArray()
+        //        }).
+        //        ToList();
         return null;
 
     }

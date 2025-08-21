@@ -690,4 +690,16 @@
   <data name="memoryType_stolperstein_set" xml:space="preserve">
     <value>Stolpersteins</value>
   </data>
+  <data name="commemorative event" xml:space="preserve">
+    <value>Commemorative Event</value>
+  </data>
+  <data name="countMemorials" xml:space="preserve">
+    <value>Commemorative events</value>
+  </data>
+  <data name="help_memorials_ricany" xml:space="preserve">
+    <value>Places where commemorative events took place.</value>
+  </data>
+  <data name="featureType_Memorial" xml:space="preserve">
+    <value>Commemorative Events</value>
+  </data>
 </root>
