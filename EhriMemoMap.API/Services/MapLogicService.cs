@@ -4,15 +4,17 @@ using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using EhriMemoMap.API.Helpers;
 using Newtonsoft.Json;
+using EhriMemoMap.Data.Ricany;
 
 namespace EhriMemoMap.Services;
 
 /// <summary>
 /// Logika nad mapou
 /// </summary>
-public class MapLogicService(MemogisContext context)
+public class MapLogicService(MemogisContext context, RicanyContext ricanyContext)
 {
     private readonly MemogisContext _context = context;
+    private readonly RicanyContext _ricanyContext = ricanyContext;
 
     public IQueryable<MapObject> PrepareMapObjectsQuery(MapObjectParameters parameters)
     {
@@ -183,21 +185,21 @@ public class MapLogicService(MemogisContext context)
         if (parameters.PlacesOfMemoryIds == null)
             return null;
 
-        var result = _context.RicanyPlacesOfMemory.
+        var result = _ricanyContext.PlacesOfMemories.
             Where(a => a.Type == "stolperstein_set").
             Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).
-            Include(a => a.RicanyPlacesXPlacesOfMemory).
-            Include(a => a.RicanyPlacesOfMemoryXPlaceOfMemoryPlaceOfMemory2s).ThenInclude(a => a.PlaceOfMemory1).
+            Include(a => a.PlacesXPlacesOfMemories).
+            Include(a => a.PlacesOfMemoryXPlacesOfMemoryPlaceOfMemory2s).ThenInclude(a => a.PlaceOfMemory1).
             AsEnumerable().
             Select(a => new PlaceMemory
             {
                 Type = a.Type,
                 City = "ricany",
-                AddressCs = a.RicanyPlacesXPlacesOfMemory.FirstOrDefault(b => b.RelationshipType == 38)?.Place?.LabelCs,
-                AddressEn = a.RicanyPlacesXPlacesOfMemory.FirstOrDefault(b => b.RelationshipType == 38)?.Place?.LabelEn,
+                AddressCs = a.PlacesXPlacesOfMemories.FirstOrDefault(b => b.RelationshipType == 38)?.Place?.LabelCs,
+                AddressEn = a.PlacesXPlacesOfMemories.FirstOrDefault(b => b.RelationshipType == 38)?.Place?.LabelEn,
                 DescriptionCs = a.DescriptionCs,
                 DescriptionEn = a.DescriptionEn,
-                Items = a.RicanyPlacesOfMemoryXPlaceOfMemoryPlaceOfMemory2s.Select(b => b.PlaceOfMemory1).Select(b => new PlaceMemoryItem
+                Items = a.PlacesOfMemoryXPlacesOfMemoryPlaceOfMemory2s.Select(b => b.PlaceOfMemory1).Select(b => new PlaceMemoryItem
                 {
                     Id = b.Id,
                     LabelCs = b.LabelCs,
@@ -245,7 +247,7 @@ public class MapLogicService(MemogisContext context)
             // databázi spravuje Aneta Plzáková, nikoli já - takže to prozatím necháme takto
             foreach (var incident in result)
                 incident.Documents = _context.PragueIncidentsXDocuments.Where(a => a.IncidentId == incident.Id).
-                    Select(a => new Document
+                    Select(a => new EhriMemoMap.Shared.Document
                     {
                         DocumentUrlCs = a.DocumentCs,
                         DocumentUrlEn = a.DocumentEn,
@@ -273,7 +275,7 @@ public class MapLogicService(MemogisContext context)
         }
         else if (parameters.City?.Contains("ricany") ?? false)
         {
-            result = _context.RicanyIncidents.
+            result = _ricanyContext.Incidents.
                 Include(a => a.Place).
                 Where(p => parameters.IncidentsIds.Contains(p.Id)).
                 AsEnumerable().
@@ -328,7 +330,7 @@ public class MapLogicService(MemogisContext context)
                     LabelEn = a.LabelEn,
                     DescriptionCs = a.DescriptionCs,
                     DescriptionEn = a.DescriptionEn,
-                    Documents = a.PacovDocumentsXPois.Select(b => b.Document).Select(c => new Document
+                    Documents = a.PacovDocumentsXPois.Select(b => b.Document).Select(c => new Shared.Document
                     {
                         CreationDateCs = c.CreationDateCs,
                         CreationDateEn = c.CreationDateEn,
@@ -346,9 +348,9 @@ public class MapLogicService(MemogisContext context)
                 }).
                 ToList();
         else if (parameters.City == "ricany")
-            return _context.RicanyPois.
+            return _ricanyContext.Pois.
                 Include(a => a.Place).
-                Include(a => a.RicanyDocumentsXPois).ThenInclude(a => a.Document).ThenInclude(a => a.RicanyDocumentsXMedia).ThenInclude(a => a.Medium).
+                Include(a => a.DocumentsXPois).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
                 AsNoTracking().
                 AsEnumerable().
                 Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
@@ -360,7 +362,7 @@ public class MapLogicService(MemogisContext context)
                     LabelEn = a.LabelEn,
                     DescriptionCs = a.DescriptionCs,
                     DescriptionEn = a.DescriptionEn,
-                    Documents = a.RicanyDocumentsXPois.Select(b => b.Document).Select(c => new Document
+                    Documents = a.DocumentsXPois.Select(b => b.Document).Select(c => new Shared.Document
                     {
                         CreationDateCs = c.CreationDateCs,
                         CreationDateEn = c.CreationDateEn,
@@ -373,7 +375,7 @@ public class MapLogicService(MemogisContext context)
                         Id = c.Id,
                         Owner = c.Owner,
                         Type = c.Type,
-                        Url = c?.RicanyDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? []
+                        Url = c?.DocumentsXMedia?.Select(d => d?.Media?.OmekaUrl)?.ToArray() ?? []
                     }).ToArray()
                 }).
                 ToList();
@@ -508,10 +510,10 @@ public class MapLogicService(MemogisContext context)
         }
         else if (parameters.City == "ricany")
         {
-            return _context.RicanyPlaces.
-                Include(a => a.RicanyEntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.RicanyEntitiesXMedia).ThenInclude(a => a.Medium).
-                Include(a => a.RicanyEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
-                Include(a => a.RicanyEntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.RicanyEntitiesXNarrativeMaps).
+            return _ricanyContext.Places.
+                Include(a => a.EntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.EntitiesXMedia).ThenInclude(a => a.Media).
+                Include(a => a.EntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.EntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.EntitiesXNarrativeMaps).
                 Where(p => parameters.AddressesIds.Contains(p.Id)).
                 AsEnumerable().
                 Select(a => new AddressWithVictims
@@ -521,14 +523,14 @@ public class MapLogicService(MemogisContext context)
                         Cs = a.LabelCs,
                         En = a.LabelEn,
                     },
-                    Victims = a.RicanyEntitiesXPlaces.Select(b => new VictimShortInfoModel
+                    Victims = a.EntitiesXPlaces.Select(b => new VictimShortInfoModel
                     {
                         Id = b?.Entity.Id ?? 0,
                         LongInfo = true,
-                        Photo = b?.Entity.RicanyEntitiesXMedia?.Select(c => c.Medium)?.FirstOrDefault()?.OmekaUrl,
+                        Photo = b?.Entity.EntitiesXMedia?.Select(c => c.Media)?.FirstOrDefault()?.OmekaUrl,
                         Label = b?.Entity.Surname + ", " + b?.Entity.Firstname + (b?.Entity.Birthdate != null ? " (*" + b?.Entity.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
                         RelationshipToAddressType = b?.RelationshipType,
-                        NarrativeMapId = b?.Entity.RicanyEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                        NarrativeMapId = b?.Entity.EntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
                     }).ToList()
                 }).
                 ToList();
@@ -630,7 +632,7 @@ public class MapLogicService(MemogisContext context)
                         TypeCs = a.RelationshipTypeNavigation.LabelCs,
                         TypeEn = a.RelationshipTypeNavigation.LabelEn
                     }).ToArray(),
-                    Documents = b?.PacovDocumentsXEntities.Select(c => c.Document).Select(c => new Document
+                    Documents = b?.PacovDocumentsXEntities.Select(c => c.Document).Select(c => new Shared.Document
                     {
                         CreationDateCs = c.CreationDateCs,
                         CreationDateEn = c.CreationDateEn,
@@ -657,7 +659,7 @@ public class MapLogicService(MemogisContext context)
                         LongInfo = true,
                         NarrativeMapId = a?.Entity1.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
                     }).ToArray(),
-                    Transports = b?.PacovEntitiesXTransports.Select(a => new Transport
+                    Transports = b?.PacovEntitiesXTransports.Select(a => new Shared.Transport
                     {
                         Date = a.Transport.Date,
                         FromCs = a.Transport?.PlaceFromNavigation?.LabelCs,
@@ -669,32 +671,32 @@ public class MapLogicService(MemogisContext context)
                 }).
                 FirstOrDefault();
         else if (city == "ricany")
-            result = _context.RicanyEntities.
+            result = _ricanyContext.Entities.
                 Include(a => a.FateNavigation).
-                Include(a => a.RicanyEntitiesXNarrativeMaps).
-                Include(a => a.RicanyEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceFromNavigation).
-                Include(a => a.RicanyEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceToNavigation).
-                Include(a => a.RicanyEntitiesXMedia).ThenInclude(a => a.Medium).
-                Include(a => a.RicanyEntitiesXPlaces).ThenInclude(a => a.Place).
-                Include(a => a.RicanyEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
-                Include(a => a.RicanyEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.RicanyEntitiesXMedia).ThenInclude(a => a.Medium).
-                Include(a => a.RicanyEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.RicanyEntitiesXNarrativeMaps).
-                Include(a => a.RicanyEntitiesXEntityEntity2s).ThenInclude(a => a.RelationshipTypeNavigation).
-                Include(a => a.RicanyDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.RicanyDocumentsXMedia).ThenInclude(a => a.Medium).
-                Include(a => a.RicanyDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.CreationPlaceNavigation).
+                Include(a => a.EntitiesXNarrativeMaps).
+                Include(a => a.EntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceFromNavigation).
+                Include(a => a.EntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceToNavigation).
+                Include(a => a.EntitiesXMedia).ThenInclude(a => a.Media).
+                Include(a => a.EntitiesXPlaces).ThenInclude(a => a.Place).
+                Include(a => a.EntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.EntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.EntitiesXMedia).ThenInclude(a => a.Media).
+                Include(a => a.EntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.EntitiesXNarrativeMaps).
+                Include(a => a.EntitiesXEntityEntity2s).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.DocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
+                Include(a => a.DocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.CreationPlaceNavigation).
                 Where(a => a.Id == id).
                 AsEnumerable().
                 Select(b => new VictimLongInfoModel
                 {
                     Id = b.Id,
-                    NarrativeMapId = b.RicanyEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                    NarrativeMapId = b.EntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
                     BirthDate = b.Birthdate,
                     DeathDate = b.Deathdate,
                     Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
                     FateCs = b?.Sex == 3 ? b?.FateNavigation?.LabelCs?.Replace("/", "") : b?.FateNavigation?.LabelCs?.Replace("/a", ""),
                     FateEn = b?.FateNavigation?.LabelEn,
-                    Photo = b?.RicanyEntitiesXMedia.Select(a => a.Medium).FirstOrDefault()?.OmekaUrl,
-                    Places = b?.RicanyEntitiesXPlaces.Select(a => new AddressInfo
+                    Photo = b?.EntitiesXMedia.Select(a => a.Media).FirstOrDefault()?.OmekaUrl,
+                    Places = b?.EntitiesXPlaces.Select(a => new AddressInfo
                     {
                         Cs = a.Place.LabelCs,
                         En = a.Place.LabelEn ?? a.Place.LabelCs,
@@ -702,7 +704,7 @@ public class MapLogicService(MemogisContext context)
                         TypeCs = a.RelationshipTypeNavigation.LabelCs,
                         TypeEn = a.RelationshipTypeNavigation.LabelEn
                     }).ToArray(),
-                    Documents = b?.RicanyDocumentsXEntities.Select(c => c.Document).Select(c => new Document
+                    Documents = b?.DocumentsXEntities.Select(c => c.Document).Select(c => new Shared.Document
                     {
                         CreationDateCs = c.CreationDateCs,
                         CreationDateEn = c.CreationDateEn,
@@ -715,21 +717,21 @@ public class MapLogicService(MemogisContext context)
                         Id = c.Id,
                         Owner = c.Owner,
                         Type = c.Type,
-                        Url = c?.RicanyDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? []
+                        Url = c?.DocumentsXMedia?.Select(d => d?.Media?.OmekaUrl)?.ToArray() ?? []
                     }).ToArray(),
-                    RelatedPersons = b?.RicanyEntitiesXEntityEntity2s.Select(a => new VictimShortInfoModel
+                    RelatedPersons = b?.EntitiesXEntityEntity2s.Select(a => new VictimShortInfoModel
                     {
                         Id = a.Entity1.Id,
                         Name = a.Entity1.Surname + ", " + a.Entity1.Firstname,
                         Birthdate = a.Entity1.Birthdate?.ToString("d.M.yyyy"),
-                        Photo = a.Entity1.RicanyEntitiesXMedia.Select(c => c.Medium).FirstOrDefault()?.OmekaUrl,
+                        Photo = a.Entity1.EntitiesXMedia.Select(c => c.Media).FirstOrDefault()?.OmekaUrl,
                         RelationshipToPersonCs = a.RelationshipTypeNavigation.LabelCs,
                         RelationshipToPersonEn = a.RelationshipTypeNavigation.LabelEn,
                         RelationshipToPersonType = a.RelationshipType,
                         LongInfo = true,
-                        NarrativeMapId = a?.Entity1.RicanyEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                        NarrativeMapId = a?.Entity1.EntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
                     }).ToArray(),
-                    Transports = b?.RicanyEntitiesXTransports.Select(a => new Transport
+                    Transports = b?.EntitiesXTransports.Select(a => new Shared.Transport
                     {
                         Date = a.Transport.Date,
                         FromCs = a.Transport?.PlaceFromNavigation?.LabelCs,
@@ -743,25 +745,25 @@ public class MapLogicService(MemogisContext context)
         return result;
     }
 
-    public List<NarrativeMap> GetAllNarrativeMaps(string city)
+    public List<Shared.NarrativeMap> GetAllNarrativeMaps(string city)
     {
-        var result = new List<NarrativeMap>();
+        var result = new List<Shared.NarrativeMap>();
         if (city == "pacov")
             result = _context.PacovNarrativeMaps.
-                Select(a => new NarrativeMap { Id = a.Id, LabelCs = a.LabelCs, LabelEn = a.LabelEn }).ToList();
+                Select(a => new Shared.NarrativeMap { Id = a.Id, LabelCs = a.LabelCs, LabelEn = a.LabelEn }).ToList();
         else if (city == "ricany")
-            result = _context.RicanyNarrativeMaps.
-                Select(a => new NarrativeMap { Id = a.Id, LabelCs = a.LabelCs, LabelEn = a.LabelEn }).ToList();
+            result = _ricanyContext.NarrativeMaps.
+                Select(a => new Shared.NarrativeMap { Id = a.Id, LabelCs = a.LabelCs, LabelEn = a.LabelEn }).ToList();
         return result;
     }
-    public NarrativeMap? GetNarrativeMap(long id, string city)
+    public Shared.NarrativeMap? GetNarrativeMap(long id, string city)
     {
-        var map = new NarrativeMap();
+        var map = new Shared.NarrativeMap();
         if (city == "pacov")
             map = _context.PacovNarrativeMaps.
                 Include(a => a.PacovEntitiesXNarrativeMaps).ThenInclude(a => a.Entity).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
                 Include(a => a.PacovNarrativeMapsXNarrativeMapStops).
-                Select(a => new NarrativeMap
+                Select(a => new Shared.NarrativeMap
                 {
                     Id = a.Id,
                     LabelCs = a.LabelCs,
@@ -772,10 +774,10 @@ public class MapLogicService(MemogisContext context)
                 }).
                 FirstOrDefault(a => a.Id == id);
         else if (city == "ricany")
-            map = _context.RicanyNarrativeMaps.
-                Include(a => a.RicanyEntitiesXNarrativeMaps).ThenInclude(a => a.Entity).ThenInclude(a => a.RicanyEntitiesXMedia).ThenInclude(a => a.Medium).
-                Include(a => a.RicanyNarrativeMapsXNarrativeMapStops).
-                Select(a => new NarrativeMap
+            map = _ricanyContext.NarrativeMaps.
+                Include(a => a.EntitiesXNarrativeMaps).ThenInclude(a => a.Entity).ThenInclude(a => a.EntitiesXMedia).ThenInclude(a => a.Media).
+                Include(a => a.NarrativeMapsXNarrativeMapStops).
+                Select(a => new Shared.NarrativeMap
                 {
                     Id = a.Id,
                     LabelCs = a.LabelCs,
@@ -788,7 +790,7 @@ public class MapLogicService(MemogisContext context)
         else
             return null;
 
-        var stops = Array.Empty<NarrativeMapStop>();
+        var stops = Array.Empty<Shared.NarrativeMapStop>();
 
         if (city == "pacov")
             stops = _context.PacovNarrativeMapStops.
@@ -797,14 +799,14 @@ public class MapLogicService(MemogisContext context)
                 Include(a => a.PacovDocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
                 Where(a => a.PacovNarrativeMapXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
                 AsEnumerable().
-                Select(a => new NarrativeMapStop
+                Select(a => new Shared.NarrativeMapStop
                 {
                     Id = a.Id,
                     LabelCs = a.LabelCs,
                     LabelEn = a.LabelEn,
                     DescriptionCs = a.DescriptionCs,
                     DescriptionEn = a.DescriptionEn,
-                    Places = a.PacovNarrativeMapStopsXPlaces.Select(b => new Place
+                    Places = a.PacovNarrativeMapStopsXPlaces.Select(b => new Shared.Place
                     {
                         Id = b.Id,
                         LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
@@ -820,7 +822,7 @@ public class MapLogicService(MemogisContext context)
                         Type = b.RelationshipTypeNavigation.LabelEn,
                         StopId = b.NarrativeMapStopId
                     }).ToArray(),
-                    Documents = a.PacovDocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Document
+                    Documents = a.PacovDocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Shared.Document
                     {
                         CreationDateCs = b.CreationDateCs,
                         CreationDateEn = b.CreationDateEn,
@@ -837,20 +839,20 @@ public class MapLogicService(MemogisContext context)
                     }).ToArray()
                 }).ToArray();
         else if (city == "ricany")
-            stops = _context.RicanyNarrativeMapStops.
-                Include(a => a.RicanyNarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
-                Include(a => a.RicanyNarrativeMapStopsXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
-                Include(a => a.RicanyDocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.RicanyDocumentsXMedia).ThenInclude(a => a.Medium).
-                Where(a => a.RicanyNarrativeMapXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
+            stops = _ricanyContext.NarrativeMapStops.
+                Include(a => a.NarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
+                Include(a => a.NarrativeMapStopsXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+                Include(a => a.DocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
+                Where(a => a.NarrativeMapsXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
                 AsEnumerable().
-                Select(a => new NarrativeMapStop
+                Select(a => new Shared.NarrativeMapStop
                 {
                     Id = a.Id,
                     LabelCs = a.LabelCs,
                     LabelEn = a.LabelEn,
                     DescriptionCs = a.DescriptionCs,
                     DescriptionEn = a.DescriptionEn,
-                    Places = a.RicanyNarrativeMapStopsXPlaces.Select(b => new Place
+                    Places = a.NarrativeMapStopsXPlaces.Select(b => new Shared.Place
                     {
                         Id = b.Id,
                         LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
@@ -866,7 +868,7 @@ public class MapLogicService(MemogisContext context)
                         Type = b.RelationshipTypeNavigation.LabelEn,
                         StopId = b.NarrativeMapStopId
                     }).ToArray(),
-                    Documents = a.RicanyDocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Document
+                    Documents = a.DocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Shared.Document
                     {
                         CreationDateCs = b.CreationDateCs,
                         CreationDateEn = b.CreationDateEn,
@@ -879,7 +881,7 @@ public class MapLogicService(MemogisContext context)
                         Id = b!.Id,
                         Owner = b.Owner,
                         Type = b.Type,
-                        Url = b?.RicanyDocumentsXMedia?.Select(c => c?.Medium?.OmekaUrl)?.ToArray() ?? []
+                        Url = b?.DocumentsXMedia?.Select(c => c?.Media?.OmekaUrl)?.ToArray() ?? []
                     }).ToArray()
                 }).ToArray();
 
