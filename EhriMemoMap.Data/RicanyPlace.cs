@@ -42,4 +42,8 @@ public partial class RicanyPlace
     public virtual ICollection<RicanyTransport> RicanyTransportPlaceToNavigations { get; set; } = new List<RicanyTransport>();
 
     public virtual ICollection<RicanyNarrativeMapStopsXPlace> RicanyNarrativeMapStopsXPlaces { get; set; } = [];
+
+    public virtual ICollection<RicanyEventsXPlace> RicanyEventsXPlaces { get; set; } = new List<RicanyEventsXPlace>();
+
+    public virtual ICollection<RicanyPlacesXPlaceOfMemory> RicanyPlacesXPlacesOfMemory { get; set; } = new List<RicanyPlacesXPlaceOfMemory>();
 }

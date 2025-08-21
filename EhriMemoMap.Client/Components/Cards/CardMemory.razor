@@ -5,27 +5,52 @@
 
 <RadzenRow class="rz-mb-4">
     <RadzenCard Style="width:100%">
-        <h3>@Place.Label</h3>
-        <h5>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h5>
-        <ul class="no-bullets">
-            <li>
-                <a href="@Place.LinkStolpersteineCs" target="_blank">
-                    www.stolpersteinecz.cz
-                    @* <RadzenImage class="document-forward-icon" Path="/images/forward.svg"></RadzenImage> *@
-                </a>
-            </li>
-            <li>
-                <a href="@Place.LinkHolocaustCs" target="_blank">
-                    www.holocaust.cz
-                    @* <RadzenImage class="document-forward-icon" Path="/images/forward.svg"></RadzenImage> *@
-                </a>
-            </li>
-        </ul>
-
+        <h2>@cl["memoryType_" + Place.Type]</h2>
+        <h3>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h3>
+        @if (!string.IsNullOrEmpty(Place.DescriptionCs))
+        {
+            <p>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn : Place.DescriptionCs)</p>
+        }
     </RadzenCard>
 </RadzenRow>
 
+@foreach (var item in Place.Items)
+{
+    <RadzenRow class="rz-mb-4">
+        <RadzenCard Style="width:100%">
+            <h3>@item.LabelCs</h3>
+            @if (Place.City == "prague")
+            {
+                <ul class="no-bullets">
+                    <li>
+                        <a href="@item.LinkStolpersteineCs" target="_blank">
+                            www.stolpersteinecz.cz
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@item.LinkHolocaustCs" target="_blank">
+                            www.holocaust.cz
+                        </a>
+                    </li>
+                </ul>
+            }
+
+            @if (Place.City == "ricany")
+            {
+                <ul class="no-bullets">
+                    <li>
+                        <b>@cl["date_of_laying"]:</b> @item.CreationDate?.ToString("d", CultureInfo.CurrentCulture)
+                    </li>
+                    <li>
+                        <b>@cl["text_on_stolperstein"]:</b> @(CultureInfo.CurrentCulture.Name == "en-US" ? item.InscriptionEn : item.InscriptionCs)
+                    </li>
+                </ul>
+            }
+        </RadzenCard>
+    </RadzenRow>
+}
+
 @code {
     [Parameter]
-    public PraguePlacesOfMemory Place { get; set; }
+    public PlaceMemory Place { get; set; }
 }

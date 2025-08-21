@@ -683,4 +683,13 @@
   <data name="layer_MGS-pacov_historical_map_1942-cze-v1_abstract_pacov" xml:space="preserve">
     <value>Historická mapa Pacova pochází z května 1942. Červeně vybarvené plochy doplněné o čísla popisná označují židovské objeky a pozemky. Mapa pochází ze Státního okresního archivu Pelhřimově a pro účely projektu byla georeferencována Masarykovým ústavem a archivem AV ČR.</value>
   </data>
+  <data name="date_of_laying" xml:space="preserve">
+    <value>Datum položení</value>
+  </data>
+  <data name="text_on_stolperstein" xml:space="preserve">
+    <value>Text na kameni</value>
+  </data>
+  <data name="memoryType_stolperstein_set" xml:space="preserve">
+    <value>Kameny zmizelých</value>
+  </data>
 </root>

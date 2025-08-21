@@ -681,4 +681,13 @@
   <data name="layer_MGS-pacov_historical_map_1942-cze-v1_title_pacov" xml:space="preserve">
     <value>Historical Map of Pacov (1942)</value>
   </data>
+  <data name="date_of_laying" xml:space="preserve">
+    <value>Date of laying</value>
+  </data>
+  <data name="text_on_stolperstein" xml:space="preserve">
+    <value>Text on stolperstein</value>
+  </data>
+  <data name="memoryType_stolperstein_set" xml:space="preserve">
+    <value>Stolpersteins</value>
+  </data>
 </root>

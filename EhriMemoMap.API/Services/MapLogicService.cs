@@ -138,12 +138,75 @@ public class MapLogicService(MemogisContext context)
         return result;
     }
 
-    public List<PraguePlacesOfMemory>? GetPlacesOfMemories(PlacesParameters parameters)
+    public List<PlaceMemory>? GetPlacesOfMemories(PlacesParameters parameters)
+    {
+        if (parameters.City == "prague")
+            return GetPlacesOfMemoriesPrague(parameters);
+        else if (parameters.City == "ricany")
+            return GetPlacesOfMemoriesRicany(parameters);
+        else
+            return null;
+    }
+
+    public List<PlaceMemory>? GetPlacesOfMemoriesPrague(PlacesParameters parameters)
     {
         if (parameters.PlacesOfMemoryIds == null)
             return null;
 
-        return _context.PraguePlacesOfMemories.Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).ToList();
+        var result = _context.PraguePlacesOfMemories.Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).
+            AsEnumerable().
+            GroupBy(p => (p.Type, p.AddressCs)).Select(a => new PlaceMemory
+            {
+                Type = a.Key.Type,
+                City = "prague",
+                AddressCs = a.Key.AddressCs,
+                AddressEn = a.FirstOrDefault()?.AddressEn,
+                Items = a.Select(b => new PlaceMemoryItem
+                {
+                    Id = b.Id,
+                    LabelCs = b.Label,
+                    LabelEn = b.Label,
+                    LinkStolpersteineCs = b.LinkStolpersteineCs,
+                    LinkStolpersteineEn = b.LinkStolpersteineEn,
+                    LinkHolocaustCs = b.LinkHolocaustCs,
+                    LinkHolocaustEn = b.LinkHolocaustEn
+                }).ToList()
+            });
+
+        return result.ToList();
+    }
+
+    public List<PlaceMemory>? GetPlacesOfMemoriesRicany(PlacesParameters parameters)
+    {
+        if (parameters.PlacesOfMemoryIds == null)
+            return null;
+
+        var result = _context.RicanyPlacesOfMemory.
+            Where(a => a.Type == "stolperstein_set").
+            Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).
+            Include(a => a.RicanyPlacesXPlacesOfMemory).
+            Include(a => a.RicanyPlacesOfMemoryXPlaceOfMemoryPlaceOfMemory2s).ThenInclude(a => a.PlaceOfMemory1).
+            AsEnumerable().
+            Select(a => new PlaceMemory
+            {
+                Type = a.Type,
+                City = "ricany",
+                AddressCs = a.RicanyPlacesXPlacesOfMemory.FirstOrDefault(b => b.RelationshipType == 38)?.Place?.LabelCs,
+                AddressEn = a.RicanyPlacesXPlacesOfMemory.FirstOrDefault(b => b.RelationshipType == 38)?.Place?.LabelEn,
+                DescriptionCs = a.DescriptionCs,
+                DescriptionEn = a.DescriptionEn,
+                Items = a.RicanyPlacesOfMemoryXPlaceOfMemoryPlaceOfMemory2s.Select(b => b.PlaceOfMemory1).Select(b => new PlaceMemoryItem
+                {
+                    Id = b.Id,
+                    LabelCs = b.LabelCs,
+                    LabelEn = b.LabelEn,
+                    InscriptionCs = b.InscriptionCs,
+                    InscriptionEn = b.InscriptionEn,
+                    CreationDate = b.CreationDate,
+                }).ToList()
+            });
+
+        return result.ToList();
     }
 
     public List<PlaceIncident>? GetIncidents(PlacesParameters parameters)
@@ -489,7 +552,7 @@ public class MapLogicService(MemogisContext context)
             return null;
 
         var result = new VictimLongInfoModel();
-        
+
         if (city == "pacov")
             result = _context.PacovEntities.
                 Include(a => a.FateNavigation).

@@ -65,18 +65,9 @@
     }
     @if (PlaceType == PlaceType.Memory)
     {
-        foreach (var memoryType in PlacesToShow.PlacesOfMemory?.GroupBy(a => a.Type).Select(a => a.Key) ?? [])
+        foreach (var place in PlacesToShow.PlacesOfMemory ?? [])
         {
-            <RadzenRow class="rz-mb-4">
-                <RadzenCard Style="width:100%">
-                    <h2>@cl["memoryType_" + memoryType]</h2>
-                </RadzenCard>
-            </RadzenRow>
-
-            foreach (var place in PlacesToShow.PlacesOfMemory?.Where(a => a.Type == memoryType) ?? [])
-            {
-                <CardMemory Place="place" />
-            }
+            <CardMemory Place="place" />
         }
     }
 }

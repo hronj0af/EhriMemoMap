@@ -19,4 +19,10 @@ public partial class RicanyRelationshipType
 
     public virtual ICollection<RicanyNarrativeMapStopsXPlace> RicanyNarrativeMapStopsXPlaces { get; set; } = [];
 
+    public virtual ICollection<RicanyEventsXPlace> RicanyEventsXPlaces { get; set; } = new List<RicanyEventsXPlace>();
+
+    public virtual ICollection<RicanyPlacesOfMemoryXPlaceOfMemory> RicanyPlacesOfMemoryXPlaceOfMemory { get; set; } = new List<RicanyPlacesOfMemoryXPlaceOfMemory>();
+
+    public virtual ICollection<RicanyPlacesXPlaceOfMemory> RicanyPlacesXPlacesOfMemory { get; set; } = new List<RicanyPlacesXPlaceOfMemory>();
+
 }

@@ -9,6 +9,6 @@ namespace EhriMemoMap.Shared
         public List<PlaceInterest>? InaccessiblePlaces { get; set; }
         public List<AddressWithVictims>? Addresses { get; set; }
         public List<AddressWithVictims>? AddressesLastResidence { get; set; }
-        public List<PraguePlacesOfMemory>? PlacesOfMemory { get; set; }
+        public List<PlaceMemory>? PlacesOfMemory { get; set; }
     }
 }

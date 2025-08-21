@@ -92,6 +92,8 @@ public partial class MemogisContext : DbContext
 
     public virtual DbSet<RicanyEntity> RicanyEntities { get; set; }
 
+    public virtual DbSet<RicanyEvent> RicanyEvents { get; set; }
+    public virtual DbSet<RicanyEventsXPlace> RicanyEventsXPlaces { get; set; }
     public virtual DbSet<RicanyIncident> RicanyIncidents { get; set; }
 
     public virtual DbSet<RicanyListItem> RicanyListItems { get; set; }
@@ -107,7 +109,9 @@ public partial class MemogisContext : DbContext
     public virtual DbSet<RicanyNarrativeMapXNarrativeMapStop> RicanyNarrativeMapXNarrativeMapStops { get; set; }
 
     public virtual DbSet<RicanyPlace> RicanyPlaces { get; set; }
-
+    public virtual DbSet<RicanyPlaceOfMemory> RicanyPlacesOfMemory { get; set; }
+    public virtual DbSet<RicanyPlacesOfMemoryXPlaceOfMemory> RicanyPlacesOfMemoryXPlaceOfMemory { get; set; }
+    public virtual DbSet<RicanyPlacesXPlaceOfMemory> RicanyPlacesXPlacesOfMemory { get; set; }
     public virtual DbSet<RicanyPoi> RicanyPois { get; set; }
 
     public virtual DbSet<RicanyRelationshipType> RicanyRelationshipTypes { get; set; }
@@ -141,6 +145,7 @@ public partial class MemogisContext : DbContext
     public virtual DbSet<PragueVictim> PragueVictims { get; set; }
 
     public virtual DbSet<PragueVictimsTimeline> PragueVictimsTimelines { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -769,7 +774,7 @@ public partial class MemogisContext : DbContext
                 .HasConstraintName("place_to_fkey");
         });
 
-        //// RICANY
+        // RICANY
 
         modelBuilder.Entity<RicanyDocument>(entity =>
         {
@@ -1348,6 +1353,127 @@ public partial class MemogisContext : DbContext
                 .HasConstraintName("place_to_fkey");
         });
 
+
+        modelBuilder.Entity<RicanyEvent>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_events_pkey");
+            entity.ToTable("ricany_events");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Type).HasColumnName("type");
+            entity.Property(e => e.LabelCs).HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn).HasColumnName("label_en");
+            entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
+            entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
+            entity.Property(e => e.Date).HasColumnName("date");
+            entity.Property(e => e.LinkCs).HasColumnName("link_cs");
+            entity.Property(e => e.LinkEn).HasColumnName("link_en");
+        });
+
+        modelBuilder.Entity<RicanyEventsXPlace>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_events_x_ricany_places_pkey");
+            entity.ToTable("ricany_events_x_ricany_places");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.EventId).HasColumnName("event_id");
+            entity.Property(e => e.PlaceId).HasColumnName("place_id");
+            entity.Property(e => e.RelationshipType).HasColumnName("relationship_type");
+
+            entity.HasOne(d => d.Event).WithMany(p => p.RicanyEventsXPlaces)
+                .HasForeignKey(d => d.EventId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("event_id_fkey");
+
+            entity.HasOne(d => d.Place).WithMany(p => p.RicanyEventsXPlaces)
+                .HasForeignKey(d => d.PlaceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("place_id_fkey");
+
+            entity.HasOne(d => d.RelationshipTypeNavigation).WithMany(p => p.RicanyEventsXPlaces)
+                .HasForeignKey(d => d.RelationshipType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("relationship_type_fkey");
+        });
+
+        // Ricany Places Of Memory
+        modelBuilder.Entity<RicanyPlaceOfMemory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_places_of_memory_pkey");
+            entity.ToTable("ricany_places_of_memory");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Type).HasColumnName("type");
+            entity.Property(e => e.LabelCs).HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn).HasColumnName("label_en");
+            entity.Property(e => e.InscriptionCs).HasColumnName("inscription_cs");
+            entity.Property(e => e.InscriptionEn).HasColumnName("inscription_en");
+            entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
+            entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
+            entity.Property(e => e.CreationDate).HasColumnName("creation_date");
+        });
+
+        modelBuilder.Entity<RicanyPlacesOfMemoryXPlaceOfMemory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_places_of_memory_x_ricany_places_of_memory_pkey");
+            entity.ToTable("ricany_places_of_memory_x_ricany_places_of_memory");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.PlaceOfMemory1Id).HasColumnName("place_of_memory_1_id");
+            entity.Property(e => e.PlaceOfMemory2Id).HasColumnName("place_of_memory_2_id");
+            entity.Property(e => e.RelationshipType).HasColumnName("relationship_type");
+
+            entity.HasOne(d => d.PlaceOfMemory1).WithMany(p => p.RicanyPlacesOfMemoryXPlaceOfMemoryPlaceOfMemory1s)
+                .HasForeignKey(d => d.PlaceOfMemory1Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("place_of_memory_1_id_fkey");
+
+            entity.HasOne(d => d.PlaceOfMemory2).WithMany(p => p.RicanyPlacesOfMemoryXPlaceOfMemoryPlaceOfMemory2s)
+                .HasForeignKey(d => d.PlaceOfMemory2Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("place_of_memory_2_id_fkey");
+
+            entity.HasOne(d => d.RelationshipTypeNavigation).WithMany(p => p.RicanyPlacesOfMemoryXPlaceOfMemory)
+                .HasForeignKey(d => d.RelationshipType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("relationship_type_fkey");
+        });
+
+        modelBuilder.Entity<RicanyPlacesXPlaceOfMemory>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("ricany_places_x_ricany_places_of_memory_pkey");
+            entity.ToTable("ricany_places_x_ricany_places_of_memory");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.PlaceId).HasColumnName("place_id");
+            entity.Property(e => e.PlaceOfMemoryId).HasColumnName("place_of_memory_id");
+            entity.Property(e => e.RelationshipType).HasColumnName("relationship_type");
+
+            entity.HasOne(d => d.Place).WithMany(p => p.RicanyPlacesXPlacesOfMemory)
+                .HasForeignKey(d => d.PlaceId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("place_id_fkey");
+
+            entity.HasOne(d => d.PlaceOfMemory).WithMany(p => p.RicanyPlacesXPlacesOfMemory)
+                .HasForeignKey(d => d.PlaceOfMemoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("place_of_memory_id_fkey");
+
+            entity.HasOne(d => d.RelationshipTypeNavigation).WithMany(p => p.RicanyPlacesXPlacesOfMemory)
+                .HasForeignKey(d => d.RelationshipType)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("relationship_type_fkey");
+        });
 
         /// PRAGUE
 
