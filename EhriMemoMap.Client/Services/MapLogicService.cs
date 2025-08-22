@@ -1,5 +1,4 @@
-﻿using EhriMemoMap.Data;
-using EhriMemoMap.Models;
+﻿using EhriMemoMap.Models;
 using NetTopologySuite.Geometries;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
@@ -79,7 +78,7 @@ namespace EhriMemoMap.Client.Services
             parameters.MapNorthEastPoint = new PointModel { X = _mapState.MapNorthEastPoint.X, Y = _mapState.MapNorthEastPoint.Y };
             parameters.City = _mapState.Map.InitialVariables?.City;
 
-            var objects = await GetResultFromApiPost<List<MapObject>>("getmapobjects", parameters);
+            var objects = await GetResultFromApiPost<List<EhriMemoMap.Shared.MapObject>>("getmapobjects", parameters);
 
             if (aggregate)
                 objects = AggregateSameAddresses(objects);
@@ -94,9 +93,9 @@ namespace EhriMemoMap.Client.Services
         /// </summary>
         /// <param name="objects"></param>
         /// <returns></returns>
-        public List<MapObject> AggregateSameAddresses(List<MapObject>? objects)
+        public List<EhriMemoMap.Shared.MapObject> AggregateSameAddresses(List<EhriMemoMap.Shared.MapObject>? objects)
         {
-            var result = new List<MapObject>();
+            var result = new List<EhriMemoMap.Shared.MapObject>();
 
             if (objects == null)
                 return result;
@@ -143,7 +142,7 @@ namespace EhriMemoMap.Client.Services
             if (!(_mapState.MapZoom >= layer.MinZoom && _mapState.MapZoom <= layer.MaxZoom) && !(_mapState.MapZoom < layer.MinZoom && _mapState.MapZoom >= 0))
                 return [];
 
-            var statistics = new List<MapStatistic>();
+            var statistics = new List<EhriMemoMap.Shared.MapStatistic>();
             var parameters = new DistrictStatisticsParameters { Total = true, TimeLinePoint = _mapState.GetTimelinePoint() };
 
             // pokud je zoom vetsi nez maximalni zoom vrstvy, zobrazim statistiky pro jednotlive casti Prahy
@@ -152,7 +151,7 @@ namespace EhriMemoMap.Client.Services
 
             parameters.City = _mapState.Map.InitialVariables?.City;
 
-            statistics = await GetResultFromApiGet<List<MapStatistic>>("getdistrictstatistics", $"city={parameters.City}&total={parameters.Total}{(parameters.TimeLinePoint != null ? "&timeLinePoint=" + parameters.TimeLinePoint?.ToString("yyyy-MM-dd") : "")}");
+            statistics = await GetResultFromApiGet<List<EhriMemoMap.Shared.MapStatistic>>("getdistrictstatistics", $"city={parameters.City}&total={parameters.Total}{(parameters.TimeLinePoint != null ? "&timeLinePoint=" + parameters.TimeLinePoint?.ToString("yyyy-MM-dd") : "")}");
 
             return statistics.GroupBy(a => a.QuarterCs).Select(a => new MapObjectForLeafletModel(a.ToList(), _cl)).ToList();
         }
@@ -175,7 +174,7 @@ namespace EhriMemoMap.Client.Services
                 MapNorthEastPoint = new PointModel { X = _mapState.MapNorthEastPoint.X, Y = _mapState.MapNorthEastPoint.Y },
                 City = _mapState.Map.InitialVariables?.City
             };
-            var heatmap = await GetResultFromApiPost<List<MapObject>>("getheatmap", parameters);
+            var heatmap = await GetResultFromApiPost<List<EhriMemoMap.Shared.MapObject>>("getheatmap", parameters);
 
             return heatmap.Select(a => new MapObjectForLeafletModel(a, true)).ToList();
         }

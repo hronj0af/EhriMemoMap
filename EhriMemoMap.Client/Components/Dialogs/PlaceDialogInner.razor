@@ -70,6 +70,14 @@
             <CardMemory Place="place" />
         }
     }
+
+    @if (PlaceType == PlaceType.Memorial)
+    {
+        foreach (var place in PlacesToShow.Memorials ?? [])
+        {
+            <CardMemorial Place="place" />
+        }
+    }
 }
 
 @code {

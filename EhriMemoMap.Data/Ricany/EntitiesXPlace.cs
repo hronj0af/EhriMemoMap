@@ -14,9 +14,9 @@ public partial class EntitiesXPlace
 
     public long RelationshipType { get; set; }
 
-    public LocalDate? DateFrom { get; set; }
+    public DateTime? DateFrom { get; set; }
 
-    public LocalDate? DateTo { get; set; }
+    public DateTime? DateTo { get; set; }
 
     public virtual Entity Entity { get; set; } = null!;
 

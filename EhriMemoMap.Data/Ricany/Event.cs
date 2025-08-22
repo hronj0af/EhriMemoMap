@@ -18,7 +18,7 @@ public partial class Event
 
     public string? DescriptionEn { get; set; }
 
-    public LocalDate? Date { get; set; }
+    public DateTime? Date { get; set; }
 
     public string? LinkCs { get; set; }
 

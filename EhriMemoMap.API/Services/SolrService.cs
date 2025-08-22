@@ -1,22 +1,11 @@
 ﻿using EhriMemoMap.Shared;
 using Newtonsoft.Json.Linq;
-using System.Text.RegularExpressions;
 
 namespace EhriMemoMap.API.Services
 {
-    public partial class SolrService
+    public partial class SolrService(IConfiguration configuration, IHttpClientFactory clientFactory)
     {
-        private readonly IHttpClientFactory _clientFactory;
-        private readonly string _solrUrl;
-
-
-        public SolrService(
-            IConfiguration configuration,
-            IHttpClientFactory clientFactory)
-        {
-            _solrUrl = configuration.GetSection("App")["SolrUrl"] ?? "";
-            _clientFactory = clientFactory;
-        }
+        private readonly string _solrUrl = configuration.GetSection("App")["SolrUrl"] ?? "";
 
         public string GetNormalizedQuery(string query)
         {
@@ -34,7 +23,7 @@ namespace EhriMemoMap.API.Services
         public async Task<List<SolrPlace>> SolrExecuteDocument(SolrQueryParameters queryParameters)
         {
             var result = new List<SolrPlace>();
-            var client = _clientFactory.CreateClient();
+            var client = clientFactory.CreateClient();
 
             var parameters = new List<KeyValuePair<string, string>>
             {

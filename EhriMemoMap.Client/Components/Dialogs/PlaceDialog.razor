@@ -92,6 +92,9 @@
         if (Places.Any(a => a.PlaceType == PlaceType.Memory.ToString()))
             parameters.PlacesOfMemoryIds = Places.Where(a => a.PlaceType == PlaceType.Memory.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
+        if (Places.Any(a => a.PlaceType == PlaceType.Memorial.ToString()))
+            parameters.MemorialsIds = Places.Where(a => a.PlaceType == PlaceType.Memorial.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
+
         PlacesToShow = await MapLogic.GetPlaces(parameters);
     }
 

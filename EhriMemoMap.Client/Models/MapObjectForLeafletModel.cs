@@ -54,7 +54,7 @@ public partial class MapObjectForLeafletModel
         }
     }
 
-    public MapObjectForLeafletModel(MapObject mapObject, bool heatmap, List<LayerModel>? layers = null)
+    public MapObjectForLeafletModel(Shared.MapObject mapObject, bool heatmap, List<LayerModel>? layers = null)
     {
         Clickable = !heatmap;
         Citizens = mapObject.Citizens;
@@ -105,7 +105,7 @@ public partial class MapObjectForLeafletModel
         }
     }
 
-    public MapObjectForLeafletModel(List<MapStatistic> statistics, IStringLocalizer<CommonResources> cl)
+    public MapObjectForLeafletModel(List<Shared.MapStatistic> statistics, IStringLocalizer<CommonResources> cl)
     {
         if (statistics == null || statistics.Count == 0)
             return;

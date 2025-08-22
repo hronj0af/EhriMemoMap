@@ -6,10 +6,23 @@ namespace EhriMemoMap.Data.Ricany;
 
 public partial class RicanyContext : DbContext
 {
+    public RicanyContext()
+    {
+    }
+
     public RicanyContext(DbContextOptions<RicanyContext> options)
         : base(options)
     {
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    => optionsBuilder.UseNpgsql(x => x
+            .UseNodaTime()
+            .UseNetTopologySuite());
+
+    public virtual DbSet<MapObject> MapObjects { get; set; }
+
+    public virtual DbSet<MapStatistic> MapStatistics { get; set; }
 
     public virtual DbSet<Document> Documents { get; set; }
 
@@ -74,6 +87,50 @@ public partial class RicanyContext : DbContext
         modelBuilder
             .HasPostgresExtension("dblink")
             .HasPostgresExtension("postgis");
+
+        modelBuilder.Entity<MapObject>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("map_objects");
+
+            entity.Property(e => e.Citizens).HasColumnName("citizens");
+            entity.Property(e => e.CitizensTotal).HasColumnName("citizens_total");
+            entity.Property(e => e.DateFrom).HasColumnName("date_from");
+            entity.Property(e => e.DateTo).HasColumnName("date_to");
+            entity.Property(e => e.GeographyMapPoint)
+                .HasColumnType("geography")
+                .HasColumnName("geography_map_point");
+            entity.Property(e => e.GeographyMapPolygon).HasColumnName("geography_map_polygon");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.LabelCs).HasColumnName("label_cs");
+            entity.Property(e => e.LabelEn).HasColumnName("label_en");
+            entity.Property(e => e.MapPoint).HasColumnName("map_point");
+            entity.Property(e => e.MapPolygon).HasColumnName("map_polygon");
+            entity.Property(e => e.PlaceType).HasColumnName("place_type");
+        });
+
+        modelBuilder.Entity<MapStatistic>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("map_statistics");
+
+            entity.Property(e => e.Count).HasColumnName("count");
+            entity.Property(e => e.DateFrom).HasColumnName("date_from");
+            entity.Property(e => e.DateTo).HasColumnName("date_to");
+            entity.Property(e => e.Geography)
+                .HasColumnType("geography")
+                .HasColumnName("geography");
+            entity.Property(e => e.GeographyPolygon).HasColumnName("geography_polygon");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.MapPoint).HasColumnName("map_point");
+            entity.Property(e => e.MapPolygon).HasColumnName("map_polygon");
+            entity.Property(e => e.QuarterCs).HasColumnName("quarter_cs");
+            entity.Property(e => e.QuarterEn).HasColumnName("quarter_en");
+            entity.Property(e => e.Type).HasColumnName("type");
+
+        });
 
         modelBuilder.Entity<Document>(entity =>
         {
