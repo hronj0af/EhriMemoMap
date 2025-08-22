@@ -309,11 +309,11 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
             // databázi spravuje Aneta Plzáková, nikoli já - takže to prozatím necháme takto
             foreach (var incident in result)
                 incident.Documents = context.PragueIncidentsXDocuments.Where(a => a.IncidentId == incident.Id).
-                    Select(a => new EhriMemoMap.Shared.Document
+                    Select(a => new Shared.Document
                     {
                         DocumentUrlCs = a.DocumentCs,
                         DocumentUrlEn = a.DocumentEn,
-                        Url = new string[] { a.Img }
+                        Url = new OmekaUrl[] { new(a.Img, null) }
                     }).
                     ToArray();
         }
@@ -405,7 +405,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         Id = c.Id,
                         Owner = c.Owner,
                         Type = c.Type,
-                        Url = c?.PacovDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? []
+                        Url = c?.PacovDocumentsXMedia?.Select(d => new OmekaUrl(d?.Medium?.OmekaUrl, null)).ToArray() ?? []
                     }).ToArray()
                 }).
                 ToList();
@@ -437,7 +437,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         Id = c.Id,
                         Owner = c.Owner,
                         Type = c.Type,
-                        Url = c?.DocumentsXMedia?.Select(d => d?.Media?.OmekaUrl)?.ToArray() ?? []
+                        Url = c?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, d?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
                     }).ToArray()
                 }).
                 ToList();
@@ -478,7 +478,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         Id = c.Id,
                         Owner = c.Owner,
                         Type = c.Type,
-                        Url = c?.DocumentsXMedia?.Select(d => d?.Media?.OmekaUrl)?.ToArray() ?? []
+                        Url = c?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, d?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
                     }).ToArray()
                 }).
                 ToList();
@@ -704,7 +704,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         Id = c.Id,
                         Owner = c.Owner,
                         Type = c.Type,
-                        Url = c?.PacovDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? []
+                        Url = c?.PacovDocumentsXMedia?.Select(d => new OmekaUrl(d?.Medium?.OmekaUrl, null))?.ToArray() ?? []
                     }).ToArray(),
                     RelatedPersons = b?.PacovEntitiesXEntityEntity2s.Select(a => new VictimShortInfoModel
                     {
@@ -776,7 +776,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         Id = c.Id,
                         Owner = c.Owner,
                         Type = c.Type,
-                        Url = c?.DocumentsXMedia?.Select(d => d?.Media?.OmekaUrl)?.ToArray() ?? []
+                        Url = c?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, d?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
                     }).ToArray(),
                     RelatedPersons = b?.EntitiesXEntityEntity2s.Select(a => new VictimShortInfoModel
                     {
@@ -894,7 +894,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         Id = b!.Id,
                         Owner = b.Owner,
                         Type = b.Type,
-                        Url = b?.PacovDocumentsXMedia?.Select(c => c?.Medium?.OmekaUrl)?.ToArray() ?? []
+                        Url = b?.PacovDocumentsXMedia?.Select(c => new OmekaUrl(c?.Medium?.OmekaUrl, null))?.ToArray() ?? []
                     }).ToArray()
                 }).ToArray();
         else if (city == "ricany")
@@ -940,7 +940,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         Id = b!.Id,
                         Owner = b.Owner,
                         Type = b.Type,
-                        Url = b?.DocumentsXMedia?.Select(c => c?.Media?.OmekaUrl)?.ToArray() ?? []
+                        Url = b?.DocumentsXMedia?.Select(c => new OmekaUrl(c?.Media?.OmekaUrl, c?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
                     }).ToArray()
                 }).ToArray();
 

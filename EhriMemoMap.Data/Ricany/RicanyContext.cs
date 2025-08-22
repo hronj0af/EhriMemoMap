@@ -597,6 +597,9 @@ public partial class RicanyContext : DbContext
             entity.Property(e => e.OmekaUrl)
                 .HasMaxLength(250)
                 .HasColumnName("omeka_url");
+            entity.Property(e => e.OmekaThumbnailUrl)
+                .HasMaxLength(250)
+                .HasColumnName("omeka_thumbnail_url");
         });
 
         modelBuilder.Entity<NarrativeMap>(entity =>

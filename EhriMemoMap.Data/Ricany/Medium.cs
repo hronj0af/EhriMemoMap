@@ -10,7 +10,7 @@ public partial class Medium
     public int? OmekaId { get; set; }
 
     public string? OmekaUrl { get; set; }
-
+    public string? OmekaThumbnailUrl { get; set; }
     public virtual ICollection<DocumentsXMedium> DocumentsXMedia { get; set; } = new List<DocumentsXMedium>();
 
     public virtual ICollection<EntitiesXMedium> EntitiesXMedia { get; set; } = new List<EntitiesXMedium>();

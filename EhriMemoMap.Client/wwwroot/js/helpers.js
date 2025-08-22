@@ -1,6 +1,6 @@
 ﻿var bp;
 
-function initGallery(id) {
+function initGallery(id, index = 0) {
     try {
         var container = document.getElementById('documents_' + id);
         if (!container) return;
@@ -25,7 +25,7 @@ function initGallery(id) {
         // Open on first item; you can change this to a specific index if needed
         bp.open({
             items: links,
-            el: links[0]
+            el: links[index]
         });
     } catch (err) {
         console.error('initGallery error', err);

@@ -35,7 +35,7 @@
                             <RadzenCard class="document-card">
                                 <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
                                     <div style="position:relative;width:100%">
-                                        <RadzenImage class="document-photo" Path="@doc.Url?.FirstOrDefault()" />
+                                        <RadzenImage class="document-photo" Path="@doc.Url?.FirstOrDefault()?.Url" />
                                         <RadzenImage class="document-forward-icon" Path="/images/forward.svg"></RadzenImage>
                                     </div>
                                 </RadzenStack>

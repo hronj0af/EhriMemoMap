@@ -14,55 +14,61 @@
         <h4>@cl["relatedDocuments"]</h4>
         <hr />
     }
-    <RadzenRow class="rz-mt-2 rz-mb-4">
-        @{
-            documentIndex = 0;
-        }
-        @foreach (var doc in Documents)
-        {
-            long actIndex = doc.Id;
-            <RadzenColumn Size="MapState.IsMobileView ? 3 : 2">
-                <RadzenCard class="document-card" title="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.LabelCs : doc.LabelEn)">
-                    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
-                        <div style="position:relative;width:100%">
-                            <RadzenImage style="cursor:pointer" class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@doc.Url?.FirstOrDefault()" onclick="@(() => ShowImage(actIndex))" />
-                        </div>
+    <div id="documents_0">
+        <RadzenRow class="rz-mt-2 rz-mb-4">
+            @{
+                var documentIndex = 0;
+            }
+            @foreach (var doc in Documents)
+            {
+                long actIndex = doc.Id;
+                <RadzenColumn Size="MapState.IsMobileView ? 3 : 2">
+                    <RadzenCard class="document-card" title="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.LabelCs : doc.LabelEn)">
+                        <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
+                            <div style="position:relative;width:100%">
+                                @{
+                                    var docTb = @doc.Url?.FirstOrDefault()?.ThumbnailUrl ?? @doc.Url?.FirstOrDefault()?.Url;
+                                }
+                                <RadzenImage style="cursor:pointer" class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@docTb" onclick="@(() => ShowImage(actIndex, documentIndex))" />
+                            </div>
 
-                        <!-- Hidden container used by BiggerPicture -->
-                        <div id="documents_@actIndex" style="display:none;">
-                            @if (doc.Url != null)
-                            {
-                                if (doc.Type == "image")
+                            <!-- Hidden container used by BiggerPicture -->
+                            <div id="documents_@actIndex" style="display:none;">
+                                @if (doc.Url != null)
                                 {
-                                    foreach (var url in doc.Url)
+                                    if (doc.Type == "image")
                                     {
-                                        <a href="@url"
-                                           data-img="@url"
-                                           data-caption="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())"
-                                           data-alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())">
-                                            <img src="@url" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" />
-                                        </a>
+                                        foreach (var url in doc.Url)
+                                        {
+                                            <a href="@url.Url"
+                                               data-img="@url.Url"
+                                               data-caption="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())"
+                                               data-alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())">
+                                                <img src="@url.Url" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" />
+                                            </a>
+                                            documentIndex += 1;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // One anchor per video (keeps parity with previous behavior)
+                                        foreach (var url in doc.Url)
+                                        {
+                                            var sourcesJson = GetSourcesJson(url);
+                                            <a href="@url.Url"
+                                               data-sources="@sourcesJson">
+                                            </a>
+                                            documentIndex += 1;
+                                        }
                                     }
                                 }
-                                else 
-                                {
-                                    // One anchor per video (keeps parity with previous behavior)
-                                    foreach (var url in doc.Url)
-                                    {
-                                        var sourcesJson = GetSourcesJson(new[] { url });
-                                        <a href="@url"
-                                           data-sources="@sourcesJson">
-                                        </a>
-                                    }
-                                }
-                            }
-                        </div>
-                    </RadzenStack>
-                </RadzenCard>
-            </RadzenColumn>
-            documentIndex += (doc.Url?.Count() ?? 0);
-        }
-    </RadzenRow>
+                            </div>
+                        </RadzenStack>
+                    </RadzenCard>
+                </RadzenColumn>
+            }
+        </RadzenRow>
+    </div>
 }
 
 @code {
@@ -72,17 +78,17 @@
     [Parameter]
     public bool ShowTitle { get; set; } = true;
 
-    private int documentIndex;
-
-    private async Task ShowImage(long imageNumber)
+    private async Task ShowImage(long imageNumber, int documentIndex)
     {
-        await JSRuntime.InvokeVoidAsync("initGallery", imageNumber);
+        if (Documents?.Any(a => a.Url?.Length > 1) ?? false)
+            await JSRuntime.InvokeVoidAsync("initGallery", imageNumber, 0);
+        await JSRuntime.InvokeVoidAsync("initGallery", 0, documentIndex);
     }
 
-    private static string GetSourcesJson(IEnumerable<string>? urls)
+    private static string GetSourcesJson(OmekaUrl? url)
     {
-        if (urls == null) return "[]";
-        var items = urls.Select(u => new { src = u, type = GetMimeTypeFromUrl(u) });
+        if (url == null) return "[]";
+        var items = new[] { new { src = url.Url, type = GetMimeTypeFromUrl(url.Url) } };
         return System.Text.Json.JsonSerializer.Serialize(items);
     }
 
@@ -93,6 +99,7 @@
         {
             ".webm" => "video/webm",
             ".mp4" => "video/mp4",
+            ".mp3" => "audio/mp3",
             ".ogv" or ".ogg" => "video/ogg",
             _ => "video/mp4"
         };

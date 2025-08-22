@@ -26,7 +26,7 @@ public partial class Document
     public string? CreationPlaceEn { get; set; }
 
     public string? Owner { get; set; }
-    public string?[]? Url { get; set; }
+    public OmekaUrl[]? Url { get; set; }
     public string? DocumentUrlCs { get; set; }
     public string? DocumentUrlEn { get; set; }
 
@@ -47,4 +47,10 @@ public partial class Document
                     (!string.IsNullOrEmpty(Owner) ? " | " + Owner : "")
         };
     }
+}
+
+public class OmekaUrl(string? url, string? thumbnailUrl)
+{
+    public string? Url { get; set; } = url;
+    public string? ThumbnailUrl { get; set; } = thumbnailUrl;
 }
