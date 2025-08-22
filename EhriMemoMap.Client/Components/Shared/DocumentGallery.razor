@@ -2,6 +2,9 @@
 @inject MapStateService MapState
 @inject MapLogicService MapLogic
 @inject IJSRuntime JSRuntime
+@using System.Text.Json
+@using System.IO
+@using System.Globalization
 
 @if (Documents != null && Documents.Count() > 0)
 {
@@ -24,10 +27,34 @@
                         <div style="position:relative;width:100%">
                             <RadzenImage style="cursor:pointer" class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@doc.Url?.FirstOrDefault()" onclick="@(() => ShowImage(actIndex))" />
                         </div>
+
+                        <!-- Hidden container used by BiggerPicture -->
                         <div id="documents_@actIndex" style="display:none;">
-                            @foreach (var url in doc.Url ?? [])
+                            @if (doc.Url != null)
                             {
-                                <img alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" src="@url" />
+                                if (doc.Type == "image")
+                                {
+                                    foreach (var url in doc.Url)
+                                    {
+                                        <a href="@url"
+                                           data-img="@url"
+                                           data-caption="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())"
+                                           data-alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())">
+                                            <img src="@url" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" />
+                                        </a>
+                                    }
+                                }
+                                else 
+                                {
+                                    // One anchor per video (keeps parity with previous behavior)
+                                    foreach (var url in doc.Url)
+                                    {
+                                        var sourcesJson = GetSourcesJson(new[] { url });
+                                        <a href="@url"
+                                           data-sources="@sourcesJson">
+                                        </a>
+                                    }
+                                }
                             }
                         </div>
                     </RadzenStack>
@@ -36,9 +63,6 @@
             documentIndex += (doc.Url?.Count() ?? 0);
         }
     </RadzenRow>
-
-
-
 }
 
 @code {
@@ -53,6 +77,24 @@
     private async Task ShowImage(long imageNumber)
     {
         await JSRuntime.InvokeVoidAsync("initGallery", imageNumber);
-        // await JSRuntime.InvokeVoidAsync("showImage", imageNumber);
+    }
+
+    private static string GetSourcesJson(IEnumerable<string>? urls)
+    {
+        if (urls == null) return "[]";
+        var items = urls.Select(u => new { src = u, type = GetMimeTypeFromUrl(u) });
+        return System.Text.Json.JsonSerializer.Serialize(items);
+    }
+
+    private static string GetMimeTypeFromUrl(string url)
+    {
+        var ext = Path.GetExtension(url)?.ToLowerInvariant();
+        return ext switch
+        {
+            ".webm" => "video/webm",
+            ".mp4" => "video/mp4",
+            ".ogv" or ".ogg" => "video/ogg",
+            _ => "video/mp4"
+        };
     }
 }

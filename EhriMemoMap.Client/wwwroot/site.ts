@@ -148,13 +148,13 @@ namespace mapAPI {
         mapElement.style.width = mapWidth == null ? "100%" : mapWidth;
 
         const mapHeight = !mapAPI.isMobileView()
-            ? pageHeight
+            ? pageHeight - 1
             : pageHeight - 44 - tempHeight // 44 je horní panel
         mapElement.style.height = mapHeight + "px";
 
         if (mapAPI.isMobileView())
             mapElement.style.marginTop = "44px";
-        pageElement[0].style.height = !isMobileView() ? pageHeight + "px" : (pageHeight - 44) + "px";
+        pageElement[0].style.height = !isMobileView() ? (pageHeight - 1) + "px" : (pageHeight - 44) + "px";
 
         if (map != null)
             map.invalidateSize();

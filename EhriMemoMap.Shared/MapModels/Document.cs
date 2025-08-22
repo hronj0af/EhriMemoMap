@@ -1,28 +1,9 @@
-﻿using EhriMemoMap.Data;
-using System;
-
-namespace EhriMemoMap.Shared;
+﻿namespace EhriMemoMap.Shared;
 
 public partial class Document
 {
     public Document()
     {
-    }
-
-    public Document(PacovDocument document)
-    {
-        Id = document.Id;
-        Type = document.Type;
-        LabelCs = document.LabelCs;
-        LabelEn = document.LabelEn;
-        DescriptionCs = document.DescriptionCs;
-        DescriptionEn = document.DescriptionEn;
-        CreationDateCs = document.CreationDateCs;
-        CreationDateEn = document.CreationDateEn;
-        CreationPlaceCs = document.CreationPlaceNavigation?.LabelCs;
-        CreationPlaceEn = document.CreationPlaceNavigation?.LabelEn;
-        Owner = document.Owner;
-        Url = document?.PacovDocumentsXMedia?.Select(d => d?.Medium?.OmekaUrl)?.ToArray() ?? [];
     }
 
     public long Id { get; set; }
