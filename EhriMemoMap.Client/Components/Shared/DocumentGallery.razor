@@ -14,7 +14,7 @@
         <h4>@cl["relatedDocuments"]</h4>
         <hr />
     }
-    <div id="documents_0">
+    <div id="documents_@(guid)">
         <RadzenRow class="rz-mt-2 rz-mb-4">
             @{
                 var documentIndex = 0;
@@ -43,11 +43,11 @@
                                     {
                                         foreach (var url in doc.Url)
                                         {
-                                            <a href="@url.Url"
+                                            <a 
                                                data-img="@url.Url"
                                                data-caption="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())"
                                                data-alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())">
-                                                <img src="@url.Url" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" />
+                                                @* <img src="@url.Url" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" /> *@
                                             </a>
                                         }
                                     }
@@ -79,11 +79,13 @@
     [Parameter]
     public bool ShowTitle { get; set; } = true;
 
+    private string guid = Guid.NewGuid().ToString();
+
     private async Task ShowImage(long imageNumber, int documentIndex)
     {
         if (Documents?.Any(a => a.Url?.Length > 1) ?? false)
             await JSRuntime.InvokeVoidAsync("initGallery", imageNumber, 0);
-        await JSRuntime.InvokeVoidAsync("initGallery", 0, documentIndex);
+        await JSRuntime.InvokeVoidAsync("initGallery", guid, documentIndex);
     }
 
     private static string GetSourcesJson(OmekaUrl? url)

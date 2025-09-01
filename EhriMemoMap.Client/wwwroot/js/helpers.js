@@ -25,7 +25,8 @@ function initGallery(id, index = 0) {
         // Open on first item; you can change this to a specific index if needed
         bp.open({
             items: links,
-            el: links[index]
+            el: links[index],
+            intro: "fadeup"
         });
     } catch (err) {
         console.error('initGallery error', err);
