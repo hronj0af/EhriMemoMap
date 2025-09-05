@@ -59,14 +59,14 @@
             {
                 <div>
                     @(CultureInfo.CurrentCulture.Name == "en-US"
-                        ? Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeEn
-                        : Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeCs):
+                            ? Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeEn
+                            : Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeCs):
 
                     @(CultureInfo.CurrentCulture.Name == "en-US"
-                        ? Victim.Places.Where(a => a.Type == 28).Select(a => a.En).Aggregate((x, y) => x + ", " + y)
-                        : Victim.Places.Where(a => a.Type == 28).Select(a => a.Cs).Aggregate((x, y) => x + ", " + y))
-                </div>
-            }
+                            ? Victim.Places.Where(a => a.Type == 28).Select(a => a.En).Aggregate((x, y) => x + ", " + y)
+                            : Victim.Places.Where(a => a.Type == 28).Select(a => a.Cs).Aggregate((x, y) => x + ", " + y))
+    </div>
+        }
 
             @* osud úmrtí *@
             <div>
@@ -75,8 +75,8 @@
                 @if (Victim.Places.Any(a => a.Type == 23))
                 {
                     @(CultureInfo.CurrentCulture.Name == "en-US"
-                        ? Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeEn
-                        : Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeCs)
+                            ? Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeEn
+                            : Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeCs)
                 }
             </div>
         }
@@ -138,19 +138,29 @@
 </div>
 
 @code {
-    [Parameter]
-    public long? Id { get; set; }
 
     private VictimLongInfoModel? Victim { get; set; }
 
     private bool RelativesOpen = false;
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnInitialized()
     {
-        if (Id == null)
+        MapState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= StateHasChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool first)
+    {
+
+        if (MapState.DialogParameters?.Id == null)
             return;
 
-        Victim = await MapLogic.GetVictimLongInfo(Id);
+        Victim = await MapLogic.GetVictimLongInfo(MapState.DialogParameters.Id);
+        StateHasChanged();
     }
 
     private void ToggleRelatives()

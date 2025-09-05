@@ -119,8 +119,9 @@
                     DialogService.OpenAsync<WelcomeDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "720px" });
                 else
                 {
-                    MapState.SetDialogType(DialogTypeEnum.Welcome);
-                    DialogService.OpenSideAsync<WelcomeDialog>(" ", options: await MapState.GetDialogOptions());
+
+                    await MapState.ToggleDialog(DialogTypeEnum.Welcome);
+                    DialogService.OpenSideAsync<WelcomeDialog>(" ", options: MapState.GetDialogOptions());
                 }
 
 
@@ -196,9 +197,7 @@
 
         var mapLocationJson = JsonConvert.SerializeObject(new { type = "Point", coordinates = new double[] { coordinates[0].X, coordinates[1].Y } }, serializerSettings);
 
-        MapState.SetDialogType(DialogTypeEnum.Place);
-        DialogService.OpenSideAsync<PlaceDialog>(null, new Dictionary<string, object> { { "Places", placesOnMap } }, await MapState.GetDialogOptions());
-
+        await MapState.ToggleDialog(DialogTypeEnum.Place, new DialogParameters { Places = placesOnMap });
 
         if (MapState.ShouldBeMapCenteredAfterClick(mouseClickPointX))
             await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), MapState.MapZoom);

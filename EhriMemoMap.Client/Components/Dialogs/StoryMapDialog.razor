@@ -66,33 +66,43 @@
     [Parameter]
     public long? Id { get; set; }
 
-    protected override async Task OnParametersSetAsync()
-    {
-        if (Id == null)
-        {
-            await MapLogic.GetAllNarrativeMaps();
-            return;
-        }
-
-        await MapLogic.GetNarrativeMap(Id, MapState.Map.InitialVariables?.City);
-        await MapLogic.ShowNarrativeMapPlaces();
-    }
-
     private async Task ShowAllStoryMaps()
     {
         await MapLogic.GetAllNarrativeMaps();
-        Id = null;
+        MapState.DialogParameters.Id = null;
         MapState.NarrativeMap = null;
-        MapState.SetMapType(MapTypeEnum.Normal, false);
+        await MapState.SetMapType(MapTypeEnum.Normal);
+        MapState.NotifyStateChanged();
     }
 
-    protected override void OnInitialized()
+    private async Task FetchData()
     {
-        MapState.OnChange += StateHasChanged;
+        if (MapState.DialogParameters?.Id == null)
+        {
+            await MapLogic.GetAllNarrativeMaps();
+        }
+        else if (MapState.MapType == MapTypeEnum.StoryMapWhole)
+        {
+            await MapLogic.GetNarrativeMap(MapState.DialogParameters.Id, MapState.Map.InitialVariables?.City);
+            await MapLogic.ShowNarrativeMapPlaces();
+        }
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        MapState.OnChange += OnMapStateChanged;
+        await FetchData();
+    }
+
+    private async void OnMapStateChanged()
+    {
+        await FetchData();
+        StateHasChanged();
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= StateHasChanged;
+        MapState.OnChange -= OnMapStateChanged;
     }
 }

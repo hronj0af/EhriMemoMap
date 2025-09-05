@@ -46,19 +46,6 @@
 
     private async Task ShowAllCities()
     {
-        if (MapState.DialogType == DialogTypeEnum.AllCities)
-        {
-            MapState.SetDialogType(DialogTypeEnum.None);
-            DialogService.CloseSide();
-            await JS.InvokeVoidAsync("mapAPI.fitMapToWindow");
-
-        }
-        else
-        {
-            MapState.SetDialogType(DialogTypeEnum.AllCities);
-            await DialogService.OpenSideAsync<AllCitiesDialog>(cl["allCities"], options: await MapState.GetDialogOptions());
-            // await JS.InvokeVoidAsync("mapAPI.fitMapToWindow", MapState.IsMobileView ? MapState.HeightOfDialog : null);
-        }
-        MapState.NotifyStateChanged();
+        await MapState.ToggleDialog(DialogTypeEnum.AllCities);
     }
 }

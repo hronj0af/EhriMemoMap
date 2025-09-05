@@ -58,19 +58,7 @@ else
 
     private async Task ShowSearch()
     {
-        if (MapState.DialogType == DialogTypeEnum.Search)
-        {
-            MapState.SetDialogType(DialogTypeEnum.None);
-            DialogService.CloseSide();
-            await JS.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
-
-        }
-        else
-        {
-            MapState.SetDialogType(DialogTypeEnum.Search);
-            await DialogService.OpenSideAsync<SearchDialog>(cl["search"], options: await MapState.GetDialogOptions());
-        }
-        MapState.NotifyStateChanged();
+        await MapState.ToggleDialog(DialogTypeEnum.Search);
     }
 
 

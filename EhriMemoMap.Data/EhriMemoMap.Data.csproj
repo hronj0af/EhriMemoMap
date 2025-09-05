@@ -23,4 +23,8 @@
     <Folder Include="Ricany\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EhriMemoMap.Shared\EhriMemoMap.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

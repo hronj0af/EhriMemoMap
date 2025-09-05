@@ -1,6 +1,4 @@
-﻿using EhriMemoMap.Data;
-
-namespace EhriMemoMap.Shared
+﻿namespace EhriMemoMap.Shared
 {
     public class VictimLongInfoModel
     {

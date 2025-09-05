@@ -52,8 +52,7 @@
     {
         DialogService.CloseSide();
         DialogService.Close();
-        MapState.SetDialogType(DialogTypeEnum.None);
-        // await JS.InvokeVoidAsync("mapAPI.fitMapToWindow");
+        await MapState.ToggleDialog(DialogTypeEnum.None);
         await JS.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
     }
 

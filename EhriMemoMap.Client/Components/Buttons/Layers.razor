@@ -74,17 +74,6 @@ else
 
     private async Task ShowLayersList()
     {
-        if (MapState.DialogType == DialogTypeEnum.Layers)
-        {
-            MapState.SetDialogType(DialogTypeEnum.None);
-            DialogService.CloseSide();
-            await JS.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
-
-        }
-        else
-        {
-            MapState.SetDialogType(DialogTypeEnum.Layers);
-            await DialogService.OpenSideAsync<LayersList>(cl["layerInfo"], options: await MapState.GetDialogOptions());
-        }
+        await MapState.ToggleDialog(DialogTypeEnum.Layers);
     }
 }

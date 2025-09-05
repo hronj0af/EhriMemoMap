@@ -1,0 +1,45 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+
+<DialogButtons />
+
+@switch (MapState.DialogType)
+{
+    case DialogTypeEnum.Help:
+        <HelpDialog />
+        break;
+    case DialogTypeEnum.Layers:
+        <LayersList />
+        break;
+    case DialogTypeEnum.AllCities:
+        <AllCitiesDialog />
+        break;
+    case DialogTypeEnum.Search:
+        <SearchDialog />
+        break;
+    case DialogTypeEnum.Place:
+        <PlaceDialog />
+        break;
+    case DialogTypeEnum.Timeline:
+        <TimelineDialog />
+        break;
+    case DialogTypeEnum.StoryMap:
+        <StoryMapDialog />
+        break;
+    case DialogTypeEnum.Victim:
+        <CardVictim />
+        break;
+}
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        MapState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= StateHasChanged;
+    }
+}

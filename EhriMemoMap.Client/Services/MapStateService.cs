@@ -91,39 +91,53 @@ namespace EhriMemoMap.Client.Services
             }
         }
 
+
+        public DialogParameters? DialogParameters { get; set; } = new DialogParameters();
+
         public DialogTypeEnum DialogType = DialogTypeEnum.None;
-        public void SetDialogType(DialogTypeEnum value)
+
+        public async Task ToggleDialog(DialogTypeEnum value, DialogParameters? parameters = null)
         {
-            DialogType = value;
-            int? height = value == DialogTypeEnum.Welcome || value == DialogTypeEnum.None ? 0 : HeightOfDialog;
-            _js.InvokeVoidAsync("mapAPI.fitMapToWindow", height, IsMobileView ? "100%" : DialogType != DialogTypeEnum.None ? "67%" : "100%");
+            DialogParameters = parameters;
+
+            var isOpen = DialogType != DialogTypeEnum.None;
+
+            if (value == DialogTypeEnum.None || (value == DialogType && DialogType != DialogTypeEnum.Place && DialogType != DialogTypeEnum.StoryMap))
+            {
+                await _dialogService.CloseSideAsync();
+                DialogType = DialogTypeEnum.None;
+                if (value == DialogTypeEnum.Layers || value == DialogTypeEnum.Search || value == DialogTypeEnum.Timeline)
+                    await _js.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
+            }
+            else
+                DialogType = value;
+
             NotifyStateChanged();
+
+            int? height = DialogType == DialogTypeEnum.Welcome || value == DialogTypeEnum.None ? 0 : HeightOfDialog;
+
+            await _js.InvokeVoidAsync("mapAPI.fitMapToWindow", height, IsMobileView ? "100%" : DialogType != DialogTypeEnum.None ? "67%" : "100%");
+
+            if (!isOpen && DialogType != DialogTypeEnum.None)
+                await _dialogService.OpenSideAsync<_SideDialogContent>("", options: GetDialogOptions());
         }
 
         public MapTypeEnum MapType = MapTypeEnum.Normal;
-        public void SetMapType(MapTypeEnum value, bool closeDialog)
+        public async Task SetMapType(MapTypeEnum value)
         {
             if (MapType != MapTypeEnum.Normal && value == MapTypeEnum.Normal)
             {
-                _js.InvokeVoidAsync("mapAPI.resetMapViewToInitialState");
-                _js.InvokeVoidAsync("mapAPI.showAllLayers");
+                await _js.InvokeVoidAsync("mapAPI.resetMapViewToInitialState");
+                await _js.InvokeVoidAsync("mapAPI.showAllLayers");
                 NarrativeMap = null;
             }
 
             MapType = value;
 
             if (MapType != MapTypeEnum.Normal && IsMobileView)
-                _js.InvokeVoidAsync("mapAPI.toggleScaleVisibility", false);
+                await _js.InvokeVoidAsync("mapAPI.toggleScaleVisibility", false);
             else if (MapType == MapTypeEnum.Normal && IsMobileView)
-                _js.InvokeVoidAsync("mapAPI.toggleScaleVisibility", true);
-
-            if (closeDialog)
-            {
-                _dialogService.CloseSide();
-                SetDialogType(DialogTypeEnum.None);
-            }
-
-            NotifyStateChanged();
+                await _js.InvokeVoidAsync("mapAPI.toggleScaleVisibility", true);
         }
 
         /// <summary>
@@ -158,7 +172,7 @@ namespace EhriMemoMap.Client.Services
         {
             if (zoom > 0 && Map.InitialVariables != null)
                 Map.InitialVariables.Zoom = zoom;
-            
+
             var serializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -323,7 +337,7 @@ namespace EhriMemoMap.Client.Services
         /// Vrátí nastavení pro dialogové okno, aby se dobře vykreslovalo na mobilech i desktopech
         /// </summary>
         /// <returns></returns>
-        public async Task<SideDialogOptions> GetDialogOptions()
+        public SideDialogOptions GetDialogOptions()
         {
             //var height = await _js.InvokeAsync<int>("mapAPI.getWindowHeight");
             return new SideDialogOptions()
@@ -357,22 +371,14 @@ namespace EhriMemoMap.Client.Services
             return false;
         }
 
-        public async Task ShowVictimInfo(long? id)
-        {
-            if (id == null)
-                return;
-            SetDialogType(DialogTypeEnum.Victim);
-            await _dialogService.OpenSideAsync<CardVictim>(null, new Dictionary<string, object> { { "Id", id } }, await GetDialogOptions());
-        }
-
         public async Task ShowNarrativeMap(long? id)
         {
             if (id == null)
                 return;
             await _js.InvokeVoidAsync("mapAPI.hideAllLayers");
-            SetDialogType(DialogTypeEnum.StoryMap);
-            SetMapType(MapTypeEnum.StoryMapWhole, false);
-            await _dialogService.OpenSideAsync<StoryMapDialog>(null, new Dictionary<string, object> { { "Id", id } }, await GetDialogOptions());
+            await ToggleDialog(DialogTypeEnum.StoryMap, new DialogParameters { Id = id });
+            await SetMapType(MapTypeEnum.StoryMapWhole);
+            NotifyStateChanged();
         }
 
     }

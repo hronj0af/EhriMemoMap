@@ -129,11 +129,11 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
         if (parameters.City == "ricany")
         {
             var resultRicany = PrepareMapObjectsQueryRicany(parameters);
-            return [.. resultRicany.Select(a => Shared.MapObject.ConvertFromRicanyObject(a))];
+            return [.. resultRicany.Select(a => a.ConvertToMapObjectShared())];
         }
 
         var result = PrepareMapObjectsQuery(parameters);
-        return [.. result.Select(a => Shared.MapObject.ConvertFromMemogisObject(a))];
+        return [.. result.Select(a => a.ConvertToMapObjectShared())];
     }
 
     public Shared.MapObject[] GetHeatmap(MapObjectParameters parameters)
@@ -153,12 +153,12 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
         {
             var resultRicany = ricanyContext.MapStatistics.
                 Where(a => (parameters.Total ? a.Type.Contains("total") : !a.Type.Contains("total")) && a.DateFrom == parameters.TimeLinePoint).ToList();
-            return resultRicany.Select(a => Shared.MapStatistic.ConvertFromRicanyStatistic(a)).ToList();
+            return resultRicany.Select(a => a.ConvertToSharedStatistic()).ToList();
         }
 
         var result = context.MapStatistics.
             Where(a => (parameters.Total ? a.Type.Contains("total") : !a.Type.Contains("total")) && a.DateFrom == parameters.TimeLinePoint).ToList();
-        return result.Select(a => Shared.MapStatistic.ConvertFromMemogisStatistic(a)).ToList();
+        return result.Select(a => a.ConvertToSharedStatistic()).ToList();
     }
 
     public WelcomeDialogStatistics GetWelcomeDialogStatistics(string city)
@@ -528,7 +528,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         CurrentCs = a.AddressCurrentCs,
                         CurrentEn = a.AddressCurrentEn,
                     },
-                    PragueAddress = a,
+                    PragueAddress = a.ConvertToPragueAddressesStatsTimelineShared(),
                     Victims = context.PragueVictimsTimelines.Where(b => b.PlaceId == a.Id).OrderBy(a => a.Label).
                         Select(a => new VictimShortInfoModel
                         {
@@ -608,6 +608,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
             return null;
 
         return [.. context.PragueAddressesStatsTimelines.Where(p => parameters.AddressesLastResidenceIds.Contains(p.Id)).
+            AsEnumerable().
             Select(a => new AddressWithVictims
             {
                 Address = new AddressInfo
@@ -618,7 +619,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     CurrentCs = a.AddressCurrentCs,
                     CurrentEn = a.AddressCurrentEn,
                 },
-                PragueAddress = a,
+                PragueAddress = a.ConvertToPragueAddressesStatsTimelineShared(),
                 Victims = context.PragueVictimsTimelines.Where(b => b.PragueLastResidences.Any(c => c.AddressId == a.Id)).OrderBy(a => a.Label).
                     Select(a => new VictimShortInfoModel
                     {

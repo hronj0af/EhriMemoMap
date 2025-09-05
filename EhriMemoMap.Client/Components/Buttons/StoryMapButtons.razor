@@ -7,7 +7,7 @@
 {
     <div style="@style">
         <div style="display:flex;gap:5px">
-            <RadzenButton Size="ButtonSize.Small" Click="(() => MapState.SetMapType(MapTypeEnum.Normal, true))" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat">
+            <RadzenButton Size="ButtonSize.Small" Click="CloseNarrativeMap" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat">
                 @cl["back"]
             </RadzenButton>
             @if (MapState.MapType == MapTypeEnum.StoryMapOneStop)
@@ -33,6 +33,13 @@
     public void Dispose()
     {
         MapState.OnChange -= OnMyChangeHandler;
+    }
+
+    public async Task CloseNarrativeMap()
+    {
+        await MapState.SetMapType(MapTypeEnum.Normal);
+        await MapState.ToggleDialog(DialogTypeEnum.None);
+
     }
 
     public string GetStyle()

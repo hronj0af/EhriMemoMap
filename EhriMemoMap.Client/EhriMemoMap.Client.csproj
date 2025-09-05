@@ -4,20 +4,17 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <!--<WasmEnableAOT>true</WasmEnableAOT>-->
-    <!--<RunAOTCompilation>true</RunAOTCompilation>-->
-    <!--<WasmStripILAfterAOT>true</WasmStripILAfterAOT>-->
+    <!--<WasmEnableAOT>false</WasmEnableAOT>
+    <RunAOTCompilation>false</RunAOTCompilation>
+    <WasmStripILAfterAOT>false</WasmStripILAfterAOT>-->
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.8" PrivateAssets="all" />
-    <!--<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.10" PrivateAssets="all" />-->
     <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.3.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.8" />
+    
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.8" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.8" />
@@ -27,7 +24,7 @@
     </PackageReference>
     <PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="4.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Radzen.Blazor" Version="7.2.3" />
+    <PackageReference Include="Radzen.Blazor" Version="7.3.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,8 +32,15 @@
     <Folder Include="wwwroot\ts\leaflet-arrowheads\" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <BlazorLinkOnBuild>false</BlazorLinkOnBuild>
+  </PropertyGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\EhriMemoMap.Data\EhriMemoMap.Data.csproj" />
+    <TrimmerRootAssembly Include="Radzen.Blazor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EhriMemoMap.Shared\EhriMemoMap.Shared.csproj" />
   </ItemGroup>
 
@@ -67,5 +71,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+
+  <!--<ItemGroup>
+    <LinkerDescriptor Include="rd.xml" />
+  </ItemGroup>-->
 
 </Project>

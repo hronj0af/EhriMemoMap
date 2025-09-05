@@ -80,6 +80,6 @@
         if (Victim == null || (!Victim?.LongInfo ?? false))
             return;
 
-        await MapState.ShowVictimInfo(Victim?.Id);
+        await MapState.ToggleDialog(DialogTypeEnum.Victim, new DialogParameters { Id = Victim!.Id });
     }
 }

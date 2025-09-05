@@ -174,7 +174,7 @@ namespace EhriMemoMap.Client.Services
                 MapNorthEastPoint = new PointModel { X = _mapState.MapNorthEastPoint.X, Y = _mapState.MapNorthEastPoint.Y },
                 City = _mapState.Map.InitialVariables?.City
             };
-            var heatmap = await GetResultFromApiPost<List<EhriMemoMap.Shared.MapObject>>("getheatmap", parameters);
+            var heatmap = await GetResultFromApiPost<List<MapObject>>("getheatmap", parameters);
 
             return heatmap.Select(a => new MapObjectForLeafletModel(a, true)).ToList();
         }
@@ -262,7 +262,7 @@ namespace EhriMemoMap.Client.Services
             if (_mapState.NarrativeMap == null)
                 return;
             await ShowPlacesOnMap(_mapState.NarrativeMap?.Stops?.SelectMany(a => a.Places!).Where(a => a.Type == "main point"));
-            _mapState.SetMapType(MapTypeEnum.StoryMapWhole, false);
+            //await _mapState.SetMapType(MapTypeEnum.StoryMapWhole, false);
         }
 
         public async Task ShowPlacesOnMap(IEnumerable<Place>? places)
@@ -291,11 +291,12 @@ namespace EhriMemoMap.Client.Services
 
         public async Task ShowStopPlacesOnMap(long stopId)
         {
-            _mapState.SetMapType(MapTypeEnum.StoryMapOneStop, false);
+            await _mapState.SetMapType(MapTypeEnum.StoryMapOneStop);
             var stop = _mapState.NarrativeMap?.Stops?.FirstOrDefault(a => a.Id == stopId);
             if (stop == null)
                 return;
             await ShowPlacesOnMap(stop.Places);
+            _mapState.NotifyStateChanged();
         }
     }
 }

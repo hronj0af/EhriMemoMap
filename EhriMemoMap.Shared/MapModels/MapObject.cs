@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using NetTopologySuite.Geometries;
-using NodaTime;
+﻿using NetTopologySuite.Geometries;
 
 namespace EhriMemoMap.Shared;
 
@@ -32,41 +29,4 @@ public partial class MapObject
     public DateTime? DateTo { get; set; }
 
 
-    public static MapObject ConvertFromMemogisObject(Data.MapObject mapObject)
-    {
-        return new MapObject
-        {
-            PlaceType = mapObject.PlaceType,
-            Citizens = mapObject.Citizens,
-            CitizensTotal = mapObject.CitizensTotal,
-            Id = mapObject.Id,
-            LabelCs = mapObject.LabelCs,
-            LabelEn = mapObject.LabelEn,
-            GeographyMapPoint = mapObject.GeographyMapPoint,
-            GeographyMapPolygon = mapObject.GeographyMapPolygon,
-            MapPoint = mapObject.MapPoint,
-            MapPolygon = mapObject.MapPolygon,
-            DateFrom = mapObject.DateFrom,
-            DateTo = mapObject.DateTo
-        };
-    }
-
-    public static MapObject ConvertFromRicanyObject(Data.Ricany.MapObject ricanyObject)
-    {
-        return new MapObject
-        {
-            PlaceType = ricanyObject.PlaceType,
-            Citizens = ricanyObject.Citizens,
-            CitizensTotal = ricanyObject.CitizensTotal,
-            Id = ricanyObject.Id,
-            LabelCs = ricanyObject.LabelCs,
-            LabelEn = ricanyObject.LabelEn,
-            GeographyMapPoint = ricanyObject.GeographyMapPoint,
-            GeographyMapPolygon = ricanyObject.GeographyMapPolygon,
-            MapPoint = ricanyObject.MapPoint,
-            MapPolygon = ricanyObject.MapPolygon,
-            DateFrom = ricanyObject.DateFrom,
-            DateTo = ricanyObject.DateTo
-        };
-    }
 }

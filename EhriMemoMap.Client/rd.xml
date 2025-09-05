@@ -1,0 +1,8 @@
+<linker>
+  <assembly fullname="System.Runtime">
+    <type fullname="System.Threading.Tasks.TaskCompletionSource" preserve="all" />
+  </assembly>
+  <assembly fullname="Radzen.Blazor">
+    <type fullname="Radzen.DialogService" preserve="all" />
+  </assembly>
+</linker>

@@ -38,6 +38,7 @@ else
 }
 
 @code {
+
     [Parameter]
     public bool MobileVersion { get; set; } = false;
 
@@ -61,18 +62,6 @@ else
 
     private async Task ShowHelp()
     {
-        if (MapState.DialogType != DialogTypeEnum.Help)
-        {
-            MapState.SetDialogType(DialogTypeEnum.Help);
-            await DialogService.OpenSideAsync<HelpDialog>(cl["help"], options: await MapState.GetDialogOptions());
-        }
-        else
-        {
-            MapState.SetDialogType(DialogTypeEnum.None);
-            DialogService.CloseSide();
-        }
-
-        MapState.NotifyStateChanged();
-
+        await MapState.ToggleDialog(DialogTypeEnum.Help);
     }
 }

@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using EhriMemoMap.Data;
-using NetTopologySuite.Geometries;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
-using NodaTime;
+﻿using System.Globalization;
 using EhriMemoMap.Resources;
 using Microsoft.Extensions.Localization;
 using EhriMemoMap.Shared;
-using EhriMemoMap.Client.Services;
 
 namespace EhriMemoMap.Models;
 

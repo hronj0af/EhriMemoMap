@@ -63,20 +63,7 @@
 
     private async Task ShowTimeline()
     {
-        if (MapState.DialogType == DialogTypeEnum.Timeline)
-        {
-            MapState.SetDialogType(DialogTypeEnum.None);
-            DialogService.CloseSide();
-            await JS.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
-
-        }
-        else
-        {
-            MapState.SetDialogType(DialogTypeEnum.Timeline);
-            await DialogService.OpenSideAsync<TimelineDialog>(cl["timeline"], options: await MapState.GetDialogOptions());
-        }
-        MapState.NotifyStateChanged();
-
+        await MapState.ToggleDialog(DialogTypeEnum.Timeline);
     }
 
 }
