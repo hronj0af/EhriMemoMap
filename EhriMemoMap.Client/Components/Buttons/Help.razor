@@ -62,6 +62,7 @@ else
 
     private async Task ShowHelp()
     {
-        await MapState.ToggleDialog(DialogTypeEnum.Help);
+        await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.Help ? DialogTypeEnum.None : DialogTypeEnum.Help);
+        MapState.NotifyStateChanged();
     }
 }

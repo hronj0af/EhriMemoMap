@@ -52,8 +52,8 @@
     {
         DialogService.CloseSide();
         DialogService.Close();
-        await MapState.ToggleDialog(DialogTypeEnum.None);
-        await JS.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
+        await MapState.SetDialog(DialogTypeEnum.None);
+        MapState.NotifyStateChanged();
     }
 
 }

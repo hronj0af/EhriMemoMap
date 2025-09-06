@@ -44,6 +44,7 @@ else
 
     private async Task ShowStoryMap()
     {
-        await MapState.ToggleDialog(DialogTypeEnum.StoryMap);
+        await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.StoryMap ? DialogTypeEnum.None : DialogTypeEnum.StoryMap);
+        MapState.NotifyStateChanged();
     }
 }

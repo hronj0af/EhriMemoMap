@@ -63,7 +63,8 @@
 
     private async Task ShowTimeline()
     {
-        await MapState.ToggleDialog(DialogTypeEnum.Timeline);
+        await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.Timeline ? DialogTypeEnum.None : DialogTypeEnum.Timeline);
+        MapState.NotifyStateChanged();
     }
 
 }

@@ -74,6 +74,7 @@ else
 
     private async Task ShowLayersList()
     {
-        await MapState.ToggleDialog(DialogTypeEnum.Layers);
+        await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.Layers ? DialogTypeEnum.None : DialogTypeEnum.Layers);
+        MapState.NotifyStateChanged();
     }
 }

@@ -55,7 +55,7 @@
         @foreach (var map in MapState.AllNarrativeMaps)
         {
             <div>
-            <a style="cursor:pointer" onclick="@(() => MapState.ShowNarrativeMap(map.Id))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.LabelCs : @map.LabelEn)</a>
+            <a style="cursor:pointer" onclick="@(() => ShowNarrativeMap(map.Id))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.LabelCs : @map.LabelEn)</a>
             </div>
         }
     }
@@ -75,9 +75,19 @@
         MapState.NotifyStateChanged();
     }
 
+    private async Task ShowNarrativeMap(long? id)
+    {
+        if (id == null)
+            return;
+        await MapState.SetDialog(DialogTypeEnum.StoryMap, new DialogParameters { Id = id });
+        await MapState.SetMapType(MapTypeEnum.StoryMapWhole);
+        MapState.NotifyStateChanged();
+    }
+
+
     private async Task FetchData()
     {
-        if (MapState.DialogParameters?.Id == null)
+        if (MapState.DialogParameters.Id == null)
         {
             await MapLogic.GetAllNarrativeMaps();
         }

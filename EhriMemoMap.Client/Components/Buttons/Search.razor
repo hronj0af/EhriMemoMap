@@ -58,7 +58,8 @@ else
 
     private async Task ShowSearch()
     {
-        await MapState.ToggleDialog(DialogTypeEnum.Search);
+        await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.Search ? DialogTypeEnum.None : DialogTypeEnum.Search);
+        MapState.NotifyStateChanged();
     }
 
 

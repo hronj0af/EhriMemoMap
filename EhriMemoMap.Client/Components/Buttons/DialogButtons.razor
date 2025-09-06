@@ -19,13 +19,8 @@
     private async Task OnClose()
     {
         MapState.IsDialogFullScreen = false;
-        await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
-        DialogService.CloseSide(MapState.DialogType);
-        await MapState.ToggleDialog(DialogTypeEnum.None);
-        await JS.InvokeVoidAsync("mapAPI.fitMapToWindow");
-        await JS.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
-
-        
+        await MapState.SetDialog(DialogTypeEnum.None);
+        MapState.NotifyStateChanged();
     }
 
     private async Task OnFullscreen()

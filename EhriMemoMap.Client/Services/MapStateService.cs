@@ -92,52 +92,47 @@ namespace EhriMemoMap.Client.Services
         }
 
 
-        public DialogParameters? DialogParameters { get; set; } = new DialogParameters();
+        public DialogParameters DialogParameters { get; set; } = new DialogParameters();
 
         public DialogTypeEnum DialogType = DialogTypeEnum.None;
 
-        public async Task ToggleDialog(DialogTypeEnum value, DialogParameters? parameters = null)
+        public async Task SetDialog(DialogTypeEnum newDialogType, DialogParameters? parameters = null)
         {
-            DialogParameters = parameters;
-
-            var isOpen = DialogType != DialogTypeEnum.None;
-
-            if (value == DialogTypeEnum.None || (value == DialogType && DialogType != DialogTypeEnum.Place && DialogType != DialogTypeEnum.StoryMap))
+            if (newDialogType == DialogTypeEnum.None)
             {
                 await _dialogService.CloseSideAsync();
-                DialogType = DialogTypeEnum.None;
-                if (value == DialogTypeEnum.Layers || value == DialogTypeEnum.Search || value == DialogTypeEnum.Timeline)
-                    await _js.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
+                await _js.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
+                await _js.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
             }
-            else
-                DialogType = value;
 
-            NotifyStateChanged();
+            int? height = newDialogType == DialogTypeEnum.Welcome || newDialogType == DialogTypeEnum.None ? 0 : HeightOfDialog;
 
-            int? height = DialogType == DialogTypeEnum.Welcome || value == DialogTypeEnum.None ? 0 : HeightOfDialog;
+            await _js.InvokeVoidAsync("mapAPI.fitMapToWindow", height, IsMobileView ? "100%" : newDialogType != DialogTypeEnum.None ? "67%" : "100%");
 
-            await _js.InvokeVoidAsync("mapAPI.fitMapToWindow", height, IsMobileView ? "100%" : DialogType != DialogTypeEnum.None ? "67%" : "100%");
+            if (DialogType == DialogTypeEnum.None && newDialogType != DialogTypeEnum.None)
+                _dialogService.OpenSide<_SideDialogContent>("", options: GetDialogOptions());
 
-            if (!isOpen && DialogType != DialogTypeEnum.None)
-                await _dialogService.OpenSideAsync<_SideDialogContent>("", options: GetDialogOptions());
+            DialogType = newDialogType;
+            DialogParameters = parameters ?? new DialogParameters();
         }
 
         public MapTypeEnum MapType = MapTypeEnum.Normal;
-        public async Task SetMapType(MapTypeEnum value)
+        public async Task SetMapType(MapTypeEnum newValue)
         {
-            if (MapType != MapTypeEnum.Normal && value == MapTypeEnum.Normal)
+            if (newValue == MapTypeEnum.Normal)
             {
                 await _js.InvokeVoidAsync("mapAPI.resetMapViewToInitialState");
                 await _js.InvokeVoidAsync("mapAPI.showAllLayers");
+
                 NarrativeMap = null;
             }
+            else if (newValue == MapTypeEnum.StoryMapWhole)
+                await _js.InvokeVoidAsync("mapAPI.hideAllLayers");
 
-            MapType = value;
+            if (isMobileView)
+                await _js.InvokeVoidAsync("mapAPI.toggleScaleVisibility", newValue == MapTypeEnum.Normal);
 
-            if (MapType != MapTypeEnum.Normal && IsMobileView)
-                await _js.InvokeVoidAsync("mapAPI.toggleScaleVisibility", false);
-            else if (MapType == MapTypeEnum.Normal && IsMobileView)
-                await _js.InvokeVoidAsync("mapAPI.toggleScaleVisibility", true);
+            MapType = newValue;
         }
 
         /// <summary>
@@ -369,16 +364,6 @@ namespace EhriMemoMap.Client.Services
             if ((int)mousePointClickX > WindowWidth - WindowWidth * WidthOfDialogRatio)
                 return true;
             return false;
-        }
-
-        public async Task ShowNarrativeMap(long? id)
-        {
-            if (id == null)
-                return;
-            await _js.InvokeVoidAsync("mapAPI.hideAllLayers");
-            await ToggleDialog(DialogTypeEnum.StoryMap, new DialogParameters { Id = id });
-            await SetMapType(MapTypeEnum.StoryMapWhole);
-            NotifyStateChanged();
         }
 
     }

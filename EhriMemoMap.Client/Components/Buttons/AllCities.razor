@@ -26,7 +26,7 @@
 </div>
 
 @code {
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         MapState.OnChange += OnMyChangeHandler;
     }
@@ -46,6 +46,7 @@
 
     private async Task ShowAllCities()
     {
-        await MapState.ToggleDialog(DialogTypeEnum.AllCities);
+        await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.AllCities ? DialogTypeEnum.None : DialogTypeEnum.AllCities);
+        MapState.NotifyStateChanged();
     }
 }

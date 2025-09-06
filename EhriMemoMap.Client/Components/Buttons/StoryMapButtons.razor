@@ -38,8 +38,8 @@
     public async Task CloseNarrativeMap()
     {
         await MapState.SetMapType(MapTypeEnum.Normal);
-        await MapState.ToggleDialog(DialogTypeEnum.None);
-
+        await MapState.SetDialog(DialogTypeEnum.None);
+        MapState.NotifyStateChanged();
     }
 
     public string GetStyle()

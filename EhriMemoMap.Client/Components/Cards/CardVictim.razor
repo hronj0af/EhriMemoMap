@@ -15,7 +15,7 @@
             @if (Victim.NarrativeMapId != null)
             {
                 <RadzenColumn Size="1">
-                    <img style="cursor:pointer" title="@cl.GetString("viewStoryMap")..." onclick="@(() => MapState.ShowNarrativeMap(Victim.NarrativeMapId))" src="images/narrative.png" width="25" />
+                    <img style="cursor:pointer" title="@cl.GetString("viewStoryMap")..." onclick="@(() => ShowNarrativeMap(Victim.NarrativeMapId))" src="images/narrative.png" width="25" />
                 </RadzenColumn>
             }
         </RadzenRow>
@@ -169,9 +169,15 @@
         StateHasChanged();
     }
 
-    // public async Task OnAddressClick(long id)
-    // {
-    //     await MapState.ShowVictimInfo(Victim?.Id);
-    // }
+    private async Task ShowNarrativeMap(long? id)
+    {
+        if (id == null)
+            return;
+
+        await MapState.SetDialog(DialogTypeEnum.StoryMap, new DialogParameters { Id = id });
+        await MapState.SetMapType(MapTypeEnum.StoryMapWhole);
+
+        MapState.NotifyStateChanged();
+    }
 
 }
