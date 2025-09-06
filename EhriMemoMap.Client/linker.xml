@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<linker>
+  <!-- Zachovat všechny typy v hlavních assemblies -->
+  <assembly fullname="EhriMemoMap.Client" preserve="all" />
+  <assembly fullname="EhriMemoMap.Shared" preserve="all" />
+  
+  <!-- Zachovat Radzen komponenty -->
+  <assembly fullname="Radzen.Blazor" preserve="all" />
+  
+  <!-- Zachovat JSON serialization -->
+  <assembly fullname="Newtonsoft.Json" preserve="all" />
+  <assembly fullname="NetTopologySuite.IO.GeoJSON" preserve="all" />
+  
+  <!-- Zachovat lokalizaci -->
+  <assembly fullname="Microsoft.Extensions.Localization" preserve="all" />
+  <assembly fullname="Microsoft.Extensions.Localization.Abstractions" preserve="all" />
+  
+  <!-- Zachovat základní .NET typy -->
+  <assembly fullname="System.Globalization" preserve="all" />
+  <assembly fullname="System.Text.Json" preserve="all" />
+</linker>

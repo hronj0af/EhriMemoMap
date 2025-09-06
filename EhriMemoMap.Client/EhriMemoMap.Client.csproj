@@ -4,10 +4,14 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <!--<WasmEnableAOT>false</WasmEnableAOT>
-    <RunAOTCompilation>false</RunAOTCompilation>
-    <WasmStripILAfterAOT>false</WasmStripILAfterAOT>-->
+    <!-- Vypnutí AOT a IL Linking pro stabilnější nasazení -->
+    <WasmEnableAOT>true</WasmEnableAOT>
+    <RunAOTCompilation>true</RunAOTCompilation>
+    <WasmStripILAfterAOT>true</WasmStripILAfterAOT>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+    <!-- Vypnutí IL Linking pro publish -->
+    <PublishTrimmed>true</PublishTrimmed>
+    <BlazorEnableCompression>true</BlazorEnableCompression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -36,8 +40,13 @@
     <BlazorLinkOnBuild>false</BlazorLinkOnBuild>
   </PropertyGroup>
 
+  <!-- Rozšíření seznamu assemblies, které se nesmí trimovat -->
   <ItemGroup>
     <TrimmerRootAssembly Include="Radzen.Blazor" />
+    <TrimmerRootAssembly Include="NetTopologySuite.IO.GeoJSON" />
+    <TrimmerRootAssembly Include="Newtonsoft.Json" />
+    <TrimmerRootAssembly Include="EhriMemoMap.Shared" />
+    <TrimmerRootAssembly Include="Microsoft.Extensions.Localization" />
   </ItemGroup>
 
   <ItemGroup>
@@ -72,8 +81,9 @@
     </Content>
   </ItemGroup>
 
+  <!-- Linker descriptor pro ochranu typů -->
   <!--<ItemGroup>
-    <LinkerDescriptor Include="rd.xml" />
+    <LinkerDescriptor Include="linker.xml" />
   </ItemGroup>-->
 
 </Project>
