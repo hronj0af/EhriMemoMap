@@ -4,14 +4,6 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <!-- Vypnutí AOT a IL Linking pro stabilnější nasazení -->
-    <WasmEnableAOT>true</WasmEnableAOT>
-    <RunAOTCompilation>true</RunAOTCompilation>
-    <WasmStripILAfterAOT>true</WasmStripILAfterAOT>
-    <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
-    <!-- Vypnutí IL Linking pro publish -->
-    <PublishTrimmed>true</PublishTrimmed>
-    <BlazorEnableCompression>true</BlazorEnableCompression>
   </PropertyGroup>
 
   <ItemGroup>
@@ -81,9 +73,5 @@
     </Content>
   </ItemGroup>
 
-  <!-- Linker descriptor pro ochranu typů -->
-  <!--<ItemGroup>
-    <LinkerDescriptor Include="linker.xml" />
-  </ItemGroup>-->
 
 </Project>
