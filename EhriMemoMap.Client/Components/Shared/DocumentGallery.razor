@@ -85,7 +85,8 @@
     {
         if (Documents?.Any(a => a.Url?.Length > 1) ?? false)
             await JSRuntime.InvokeVoidAsync("initGallery", imageNumber, 0);
-        await JSRuntime.InvokeVoidAsync("initGallery", guid, documentIndex);
+        else
+            await JSRuntime.InvokeVoidAsync("initGallery", guid, documentIndex);
     }
 
     private static string GetSourcesJson(OmekaUrl? url)

@@ -126,8 +126,10 @@ namespace EhriMemoMap.Client.Services
 
                 NarrativeMap = null;
             }
-            else if (newValue == MapTypeEnum.StoryMapWhole)
-                await _js.InvokeVoidAsync("mapAPI.hideAllLayers");
+            else if (newValue == MapTypeEnum.StoryMapOneStop)
+            { 
+                await _js.InvokeVoidAsync("mapAPI.hideAllLayers"); 
+            }
 
             if (isMobileView)
                 await _js.InvokeVoidAsync("mapAPI.toggleScaleVisibility", newValue == MapTypeEnum.Normal);

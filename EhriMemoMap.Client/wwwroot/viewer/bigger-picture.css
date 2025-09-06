@@ -48,15 +48,15 @@
     }
 }
 
-    .bp-wrap > div:first-child {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.75);
-        animation: bp-fadein 0.48s cubic-bezier(0.215, 0.61, 0.355, 1);
-    }
+.bp-wrap > div:first-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #46463D;
+    animation: bp-fadein 0.48s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
 
 .bp-vid audio {
     position: absolute;

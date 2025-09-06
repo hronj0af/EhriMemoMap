@@ -262,7 +262,7 @@ namespace EhriMemoMap.Client.Services
             if (_mapState.NarrativeMap == null)
                 return;
             await ShowPlacesOnMap(_mapState.NarrativeMap?.Stops?.SelectMany(a => a.Places!).Where(a => a.Type == "main point"));
-            //await _mapState.SetMapType(MapTypeEnum.StoryMapWhole, false);
+            await _mapState.SetMapType(MapTypeEnum.StoryMapWhole);
         }
 
         public async Task ShowPlacesOnMap(IEnumerable<Place>? places)
