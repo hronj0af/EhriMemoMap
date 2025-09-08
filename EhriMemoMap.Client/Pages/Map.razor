@@ -44,7 +44,7 @@
     <ControlButtonsWrapper />
     <ZoomButtonsWrapper />
     <ContextButtonsWrapper />
-    <TimelineDialogWrapper />
+    <TimelineMapWrapper />
     <MobileTopBarWrapper />
 }
 
@@ -85,7 +85,7 @@
             // musím do javascriptu šoupnout odkaz na instanci téhle třídy Map,
             // abych pak mohl z javascriptu volat metodu RefreshObjectsOnMap a ShowPlaceInfo
             var dotNetReference = DotNetObjectReference.Create(this);
-            await JS.InvokeVoidAsync("mapAPI.initBlazorMapObject", dotNetReference);
+            await JS.InvokeVoidAsync("mapAPI.initBlazorMapObject", dotNetReference, "Map");
 
             // získám parametry z url o vrstvách, bodu na časové ose a ohraničení mapy
             string layers = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "layers");

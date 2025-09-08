@@ -680,7 +680,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     NarrativeMapId = b.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
                     BirthDate = b.Birthdate,
                     DeathDate = b.Deathdate,
-                    Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
+                    Label = b?.Firstname + " " + b?.Surname,
                     FateCs = b?.Sex == 3 ? b?.FateNavigation?.LabelCs?.Replace("/", "") : b?.FateNavigation?.LabelCs?.Replace("/a", ""),
                     FateEn = b?.FateNavigation?.LabelEn,
                     Photo = b?.PacovEntitiesXMedia.Select(a => a.Medium).FirstOrDefault()?.OmekaUrl,

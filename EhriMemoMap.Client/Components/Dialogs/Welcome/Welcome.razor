@@ -19,7 +19,7 @@
             <RadzenColumn Size="6" Style="color:var(--Grey)">
                 <div style="padding:1.5rem">
                     <h1 style="padding-bottom:10px;padding-top:15px;">@cl["city_" + MapState?.Map?.InitialVariables?.City]</h1>
-                    <WelcomeDialogStatisticsTable />
+                    <StatisticsTable />
                     <div style="font-size:12px;color:var(--Wine-Red)">@cl["useNavigation"]</div>
                 </div>
             </RadzenColumn>
@@ -37,7 +37,7 @@
                 </div>
                 </div>
                 <div style="padding:1.5rem">
-                <WelcomeDialogStatisticsTable />
+                <StatisticsTable />
                 <RadzenButton class="rz-mt-4" ButtonStyle="ButtonStyle.Primary" Click="OnClose" Variant="Variant.Outlined">@cl["goToMap"]</RadzenButton>
                 </div>
             </RadzenColumn>

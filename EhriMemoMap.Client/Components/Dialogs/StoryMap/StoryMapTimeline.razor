@@ -1,0 +1,107 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+@inject MapLogicService MapLogic
+@inject IJSRuntime JS
+
+<div class="storymap-timeline-container">
+    @{
+        var stops = MapState.NarrativeMap?.Stops?.ToList() ?? [];
+    }
+    @for (int i = 0; i < stops.Count; i++)
+    {
+        var stop = stops[i];
+        var isLastItem = i == stops.Count - 1;
+        <text>
+            <a id="narrative-stop-@stop.Id" />
+            <div class="storymap-timeline-item @(isLastItem ? "storymap-timeline-item-last" : "")">
+                <div class="storymap-timeline-line @(isLastItem && IsStopExpanded(stop.Id) ? "storymap-timeline-line-last-expanded" : isLastItem ? "storymap-timeline-line-last-collapsed" : "")"></div>
+                <div class="@(IsStopExpanded(stop.Id) ? "storymap-timeline-dot-big" : "storymap-timeline-dot-small")">
+                    <RadzenImage Path="@GetDotIcon(stop.Id)" AlternateText="@(IsStopExpanded(stop.Id) ? "Rozbaleno" : "Sbaleno")" />
+                </div>
+                <div class="storymap-timeline-content">
+                    <div style="cursor: pointer;" @onclick="() => OpenStoryMapTimelineLabel(stop.Id)">
+                        <RadzenRow AlignItems="AlignItems.Center">
+                            <RadzenColumn Size="12">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <h3 style="@(IsStopExpanded(stop.Id) ? "color:var(--Wine-Red)" : ""); margin: 0;">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.LabelCs : stop.LabelEn)</h3>
+                                    <RadzenImage Path="@GetArrowIcon(stop.Id)" AlternateText="@(IsStopExpanded(stop.Id) ? "Sbalit" : "Rozbalit")" />
+                                </div>
+                            </RadzenColumn>
+                        </RadzenRow>
+                    </div>
+                    
+                    @if (IsStopExpanded(stop.Id))
+                    {
+                        <div class="rz-mt-2">
+                            <i>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DateCs : stop.DateEn)</i>
+                        </div>
+                        <div class="rz-mt-4">
+                            @(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DescriptionCs : stop.DescriptionEn)
+                        </div>
+                        
+                        @if (stop?.Documents?.Any() ?? false)
+                        {
+                            <DocumentGallery ShowTitle="false" Documents="stop.Documents" />
+                        }
+                    }
+                </div>
+            </div>
+        </text>
+    }
+</div>
+
+@code {
+    private long? expandedStopId = null;
+
+    protected override void OnInitialized()
+    {
+        MapState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= StateHasChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var dotNetReference = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("mapAPI.initBlazorMapObject", dotNetReference, "StoryMapTimeline");
+        }
+    }
+
+    [JSInvokable("OpenStoryMapTimelineLabel")]
+    public async Task OpenStoryMapTimelineLabel(long stopId)
+    {
+        if (expandedStopId == stopId)
+        {
+            // Pokud klikneme na již otevřený bod, zavřeme ho
+            expandedStopId = null;
+            await MapLogic.ShowNarrativeMapPlaces();
+        }
+        else
+        {
+            // Otevřeme nový bod (automaticky se zavře předchozí)
+            expandedStopId = stopId;
+            await MapLogic.ShowStopPlacesOnMap(stopId);
+        }
+        StateHasChanged();
+    }
+
+    private bool IsStopExpanded(long stopId)
+    {
+        return expandedStopId == stopId;
+    }
+
+    private string GetDotIcon(long stopId)
+    {
+        return IsStopExpanded(stopId) ? "images/story-big-dot.png" : "images/story-small-dot.png";
+    }
+
+    private string GetArrowIcon(long stopId)
+    {
+        return IsStopExpanded(stopId) ? "images/arrow-down.png" : "images/arrow-right.png";
+    }
+}

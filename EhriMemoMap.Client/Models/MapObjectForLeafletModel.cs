@@ -41,7 +41,7 @@ public partial class MapObjectForLeafletModel
                 HtmlIcon = "<img src='css/images/trajectory-icon.png' />";
                 break;
             default:
-                HtmlIcon = "<img src='css/images/marker-icon-coral.png' />";
+                HtmlIcon = "<img src='css/images/marker-icon-wine-red.png' />";
                 break;
         }
     }

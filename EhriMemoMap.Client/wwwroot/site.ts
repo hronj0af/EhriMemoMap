@@ -17,7 +17,7 @@ namespace mapAPI {
     let addressIcon: L.DivIcon = null;
     let incidentIcon: L.DivIcon = null;
     let interestIcon: L.DivIcon = null;
-    let blazorMapObject = null;
+    let blazorMapObjects = [];
     let groups: L.FeatureGroup[] = [];
     let trackingInterval: number = null;
     let _isMobileView: boolean = null;
@@ -124,7 +124,7 @@ namespace mapAPI {
     export function onResizeWindow(): void {
         fitMapToWindow();
         resizePhotoHeight();
-        blazorMapObject.invokeMethodAsync("SetMobileView", isMobileView());
+        blazorMapObjects["Map"].invokeMethodAsync("SetMobileView", isMobileView());
 
     }
 
@@ -267,13 +267,13 @@ namespace mapAPI {
     //////////////////////////
 
     // připraví instanci blazor třídy Map.razor, abych ji pak mohl později odsud volat
-    export function initBlazorMapObject(dotNetObject) {
-        blazorMapObject = dotNetObject;
+    export function initBlazorMapObject(dotNetObject:any, name:string) {
+        blazorMapObjects[name] = dotNetObject;
     }
     export function callBlazor_RefreshObjectsOnMap() {
         const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
         const mapHasPolygonsYet = polygonsGroup.getLayers().length > 0;
-        blazorMapObject.invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet, map.getZoom(), getMapBoundsForMapState());
+        blazorMapObjects["Map"].invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet, map.getZoom(), getMapBoundsForMapState());
     }
 
     export function callBlazor_ShowPlaceInfo(event) {
@@ -292,7 +292,7 @@ namespace mapAPI {
 
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
-        blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox, coorx);
+        blazorMapObjects["Map"].invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox, coorx);
     }
 
     //////////////////////////
@@ -427,7 +427,7 @@ namespace mapAPI {
                 newObject = getPoint(
                     parsedObjects[i],
                     'z-index-999',
-                    parsedObjects[i].placeType == NarrativeMapStopPlaceType.Main ? scrollToStop : null)
+                    parsedObjects[i].placeType == NarrativeMapStopPlaceType.Main ? openStoryMapTimelineLabel : null)
             } else {
                 parsedObjects[i].mapPolygonModel = parsedLocation;
                 newObject = getPolygon(parsedObjects[i]);
@@ -488,15 +488,15 @@ namespace mapAPI {
 
         // Přidání zakřivené čáry jako `L.Polyline`
         const curveLine = L.polyline(curvePoints, {
-            color: '#C44527',
+            color: '#771646',
             weight: 2,
-            dashArray: '10, 10', // Střídání délky čáry a mezery
+            dashArray: '5, 5', // Střídání délky čáry a mezery
             dashOffset: '0'
         }).arrowheads({
             frequency: 'endonly',
             fill: true,
             size: '10px',
-            color: '#C44527'
+            color: '#771646'
         });
 
         return curveLine;
@@ -870,23 +870,9 @@ namespace mapAPI {
         });
     }
 
-    export function scrollToStop(event): void {
-
+    export function openStoryMapTimelineLabel(event): void {
         const point = event.target as L.Marker;
-        const targetElement = document.getElementById("narrative-stop-" + point.options.stopId);
-        const container = document.querySelector("aside");
-
-        if (container && targetElement) {
-            // Získáme pozici cílového prvku vůči kontejneru
-            const rect = targetElement.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-
-            // Vypočítáme pozici scrollu v kontejneru
-            const scrollPosition = container.scrollTop + (rect.top - containerRect.top) - 20; // Odečteme 20px
-
-            // Posuneme kontejner na vypočtenou pozici
-            container.scrollTo({ top: scrollPosition, behavior: "smooth" });
-        }
+        blazorMapObjects["StoryMapTimeline"].invokeMethodAsync("OpenStoryMapTimelineLabel", point.options.stopId);
     }
 
     //////////////////////////

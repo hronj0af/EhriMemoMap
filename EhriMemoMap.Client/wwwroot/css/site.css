@@ -18,9 +18,21 @@ h1, h2, h3, h4, h5, h6 {
     margin-block-end: 0;
 }
 
-    h1:focus {
-        outline: none;
+table.victim {
+    font-family: 'Barlow', sans-serif;
+    font-weight: 500;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    table.victim th,
+    table.victim td {
+        border: 2px solid #d9d7c0;
+        padding: 5px;
     }
+h1:focus {
+    outline: none;
+}
 
 a, .btn-link {
     color: #0071c1;
@@ -240,7 +252,7 @@ path.leaflet-interactive:focus {
 }
 
 .z-index-999 {
-    z-index: 999!important;
+    z-index: 999 !important;
 }
 
 /* CONTROL BUTTONS */
@@ -302,7 +314,7 @@ path.leaflet-interactive:focus {
 }
 
 
-.layerInfoInner{
+.layerInfoInner {
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows 200ms;
@@ -358,7 +370,7 @@ path.leaflet-interactive:focus {
 }
 
 
-/* TIMELINE */
+/* TIMELINE MAP */
 
 .timeline-baseline {
     border-bottom: 2px solid var(--Beige);
@@ -469,7 +481,7 @@ path.leaflet-interactive:focus {
 .victim-photo-small {
     width: 100%;
     object-fit: cover;
-    height:120px !important;
+    height: 120px !important;
 }
 
 .victim-label {
@@ -516,10 +528,10 @@ path.leaflet-interactive:focus {
     opacity: 1;
 }
 
-	.map-point img[src*="memory"] {
-	    height: 30px;
-	    width: 30px;
-	}
+    .map-point img[src*="memory"] {
+        height: 30px;
+        width: 30px;
+    }
 
 .map-point-selected img {
     height: 40px;
@@ -596,3 +608,67 @@ div.leaflet-overlay-pane svg > g path.statistics-polygon {
 }
 
 
+/* STORY MAP TIMELINE */
+
+.storymap-timeline-container {
+    position: relative;
+    padding-left: 30px;
+}
+
+.storymap-timeline-item {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.storymap-timeline-line {
+    position: absolute;
+    left: -20px;
+    top: 0;
+    bottom: -30px;
+    width: 4px;
+    background-color: var(--Wine-Red);
+    z-index: 1;
+}
+
+.storymap-timeline-line-last-collapsed {
+    bottom: 60px;
+}
+
+.storymap-timeline-line-last-expanded {
+    bottom: -10px;
+}
+
+.storymap-timeline-dot-small {
+    position: absolute;
+    left: -26px;
+    top: 0px;
+    z-index: 2;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.storymap-timeline-dot-big {
+    position: absolute;
+    left: -29px;
+    top: -1px;
+    z-index: 2;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+    .storymap-timeline-dot-big img, .storymap-timeline-dot-small img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+.storymap-timeline-content {
+    margin-left: 20px;
+}

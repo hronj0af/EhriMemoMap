@@ -1,0 +1,208 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+@inject MapLogicService MapLogic
+@inject IJSRuntime JSRuntime
+
+
+<div style="padding:2.5rem 2.5rem 0 2.5rem;">
+    @if (MapState.VictimLongInfo != null)
+    {
+        <RadzenRow class="rz-mb-6" JustifyContent="JustifyContent.SpaceBetween">
+            <RadzenColumn Size="9">
+                <h1>@MapState.VictimLongInfo.Label</h1>
+            </RadzenColumn>
+            @if (MapState.VictimLongInfo.NarrativeMapId != null)
+            {
+                <RadzenColumn Size="3" Style="text-align: right;">
+                    <img style="cursor:pointer" title="@cl.GetString("viewStoryMap")..." onclick="@(() => ShowNarrativeMap(MapState.VictimLongInfo.NarrativeMapId))" src="images/story_map_with_text_@(CultureInfo.CurrentCulture.Name).png" height="30" />
+                </RadzenColumn>
+            }
+        </RadzenRow>
+
+
+        <table class="victim">
+
+            @if (MapState.VictimLongInfo.Places != null)
+            {
+                <tr>
+                    <td>
+                        @cl["birthDate"] 
+                    </td>
+                    <td>
+                        @MapState.VictimLongInfo.BirthDate?.ToString("d. M. yyyy")
+                    </td>
+                </tr>
+                @* místo narození, bydliště k 13. květnu 1939, poslední bydliště před deportací *@
+                @foreach (var place in MapState.VictimLongInfo.Places.Where(a => new long?[] { 22, 24, 26 }.Contains(a.Type)) ?? [])
+                {
+                    <tr>
+                        <td>
+                            @(CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs)
+                        </td>
+                        <td>
+                            @(CultureInfo.CurrentCulture.Name == "en-US" ? place.En : place.Cs)
+                        </td>
+                    </tr>
+                }
+
+                @* deportace *@
+                @if (MapState.VictimLongInfo.Transports != null && MapState.VictimLongInfo.Transports.Count() > 0)
+                {
+                    <tr>
+                        <td>
+                            @cl["deportation"]
+
+                        </td>
+                        <td>
+                            <ul style="margin:0;list-style-type:none;padding:0">
+                                @foreach (var transport in MapState.VictimLongInfo.Transports)
+                                {
+                                    <li>
+                                        @transport.Code
+                                        (@transport.Date?.ToString("d. M. yyyy"),
+                                        @(CultureInfo.CurrentCulture.Name == "en-US" ? transport.FromEn : transport.FromCs)
+                                        →
+                                        @(CultureInfo.CurrentCulture.Name == "en-US" ? transport.ToEn : transport.ToCs))
+                                    </li>
+                                }
+                            </ul>
+
+                        </td>
+                    </tr>
+
+
+                }
+                @* místo věznění *@
+                @if (MapState.VictimLongInfo.Places.Any(a => a.Type == 28))
+                {
+                    <tr>
+                        <td>
+                            @(CultureInfo.CurrentCulture.Name == "en-US"
+                                            ? MapState.VictimLongInfo.Places.FirstOrDefault(a => a.Type == 28)?.TypeEn
+                                            : MapState.VictimLongInfo.Places.FirstOrDefault(a => a.Type == 28)?.TypeCs)
+                                                                                                          </td>
+                                                                                                          <td>
+                            @(CultureInfo.CurrentCulture.Name == "en-US"
+                                            ? MapState.VictimLongInfo.Places.Where(a => a.Type == 28).Select(a => a.En).Aggregate((x, y) => x + ", " + y)
+                                            : MapState.VictimLongInfo.Places.Where(a => a.Type == 28).Select(a => a.Cs).Aggregate((x, y) => x + ", " + y))
+            </td>
+        </tr>
+                }
+
+                @* osud úmrtí *@
+                <tr>
+                    <td>
+                        @cl["fate"]
+                    </td>
+                    <td>
+                        @(CultureInfo.CurrentCulture.Name == "en-US" ? MapState.VictimLongInfo.FateEn : MapState.VictimLongInfo.FateCs)
+
+                        @MapState.VictimLongInfo.DeathDate?.ToString("d. M. yyyy")
+                        @if (MapState.VictimLongInfo.Places.Any(a => a.Type == 23))
+                        {
+                            @(CultureInfo.CurrentCulture.Name == "en-US"
+                                            ? MapState.VictimLongInfo.Places.FirstOrDefault(a => a.Type == 30)?.TypeEn
+                                            : MapState.VictimLongInfo.Places.FirstOrDefault(a => a.Type == 30)?.TypeCs)
+                                }
+                    </td>
+                </tr>
+            }
+        </table>
+
+        @if (MapState.VictimLongInfo.RelatedPersons != null && MapState.VictimLongInfo.RelatedPersons.Count() > 0)
+        {
+            // „Nejbližší rodina“, omezeno na vztahy „manžel“ (id 5), „manželka“ (id 6), „otec“ (id 9), „matka“ (id 7), „syn“ (id 13), „dcera (id 3)“, „bratr“ (id 2), „sestra (id 10)“.
+            if (MapState.VictimLongInfo.RelatedPersons.Any(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
+            {
+                <h3 class="rz-mt-4">@cl["relatedClosestFamily"]</h3>
+                <RadzenRow class="rz-mt-8" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
+                    @foreach (var relatedPerson in MapState.VictimLongInfo.RelatedPersons.Where(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
+                    {
+                        <VictimShortInfo Victim="@relatedPerson" Small="true" Relative="true" />
+                    }
+                </RadzenRow>
+
+            }
+
+
+            // ostatní příbuzní
+            if (MapState.VictimLongInfo.RelatedPersons.Any(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
+            {
+                <div style="cursor:pointer;" onclick="@(() => ToggleRelatives())">
+                    <h4>
+                        @cl["relatedOtherRelatives"]
+                        &nbsp;&nbsp;
+                        @if (!RelativesOpen)
+                        {
+                            <RadzenImage Style="height:17px;cursor:pointer" Path="images/arrow-right.png" title="@(cl["showOtherRelatives"] + "...")"></RadzenImage>
+                        }
+                        else
+                        {
+                            <RadzenImage Style="width:17px;cursor:pointer" Path="images/arrow-down.png" title="@(cl["hideOtherRelatives"] + "...")"></RadzenImage>
+                        }
+                    </h4>
+                </div>
+
+                @if (RelativesOpen)
+                {
+                    <RadzenRow class="rz-mt-8" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
+                        @foreach (var relatedPerson in MapState.VictimLongInfo.RelatedPersons.Where(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
+                        {
+                            <VictimShortInfo Victim="@relatedPerson" Small="true" Relative="true" />
+                        }
+                    </RadzenRow>
+                }
+            }
+        }
+
+        <DocumentGallery Documents="MapState.VictimLongInfo.Documents" />
+
+    }
+</div>
+
+@code {
+
+    private bool RelativesOpen = false;
+
+    protected override void OnInitialized()
+    {
+        MapState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= StateHasChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool first)
+    {
+
+        if (MapState.DialogParameters?.Id == null)
+            return;
+
+        if (first)
+        {
+            StateHasChanged();
+        }
+    }
+
+    private void ToggleRelatives()
+    {
+        RelativesOpen = !RelativesOpen;
+        StateHasChanged();
+    }
+
+    private async Task ShowNarrativeMap(long? id)
+    {
+        if (id == null)
+            return;
+
+        await MapState.SetDialog(DialogTypeEnum.StoryMap, new DialogParameters { Id = id });
+        await MapState.SetMapType(MapTypeEnum.StoryMapWhole);
+        await MapLogic.GetNarrativeMap(MapState.DialogParameters.Id, MapState.Map.InitialVariables?.City);
+        await MapLogic.ShowNarrativeMapPlaces();
+
+        MapState.NotifyStateChanged();
+    }
+
+}

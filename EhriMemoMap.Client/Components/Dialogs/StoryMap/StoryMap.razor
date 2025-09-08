@@ -4,56 +4,36 @@
 @inject IJSRuntime JS
 
 <div style="padding:2.5rem 2.5rem 0 2.5rem;" id="card-narrative">
-    <h1 class="rz-mb-4" style="color:var(--Wine-Red)">@cl.GetString("storyMaps")</h1>
 
     @if (MapState.NarrativeMap != null)
     {
-        <RadzenRow>
-            <RadzenColumn Size="10">
-                <h3>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? MapState.NarrativeMap.LabelCs : MapState.NarrativeMap.LabelEn)</h3>
+        <RadzenRow onclick="@(() => ShowAllStoryMaps())" AlignItems="AlignItems.Center" class="rz-mb-4" Style="cursor:pointer">
+            <RadzenColumn Size="1">
+                <RadzenImage Path="images/arrow-left-grey.png" />
             </RadzenColumn>
-            <RadzenColumn Size="2">
-                <RadzenButton Icon="arrow_back" Size="ButtonSize.Small" Click="ShowAllStoryMaps" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat">
-                    @cl["allStories"]
-                </RadzenButton>
+            <RadzenColumn Size="10">
+                <h4>
+                    @cl.GetString("otherStoryMaps")
+                </h4>
+            </RadzenColumn>
+            <RadzenColumn Size="1">
+                <RadzenImage Path="images/storymap-icon.png" Style="height:30px"/>
+            </RadzenColumn>
+        </RadzenRow>
+        <RadzenRow>
+            <RadzenColumn Size="12">
+                <h1 class="rz-mb-6" style="color:var(--Wine-Red)">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? MapState.NarrativeMap.LabelCs : MapState.NarrativeMap.LabelEn)</h1>
             </RadzenColumn>
         </RadzenRow>
 
-        foreach (var stop in MapState.NarrativeMap.Stops ?? [])
-        {
-            <text>
-                <a id="narrative-stop-@stop.Id" />
-                <hr class="rz-my-4" />
-                <RadzenRow>
-                    <RadzenColumn Size="11">
-                        <h4>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.LabelCs : stop.LabelEn)</h4>
-                        <div>
-                            <i>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DateCs : stop.DateEn)</i>
-                        </div>
-                        <div class="rz-mt-4">
-                            @(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DescriptionCs : stop.DescriptionEn)
-                        </div>
-                    </RadzenColumn>
-                    <RadzenColumn Size="1">
-                        <span>
-                            <i onclick="@(() => MapLogic.ShowStopPlacesOnMap(stop.Id))" title="@cl.GetString("showOnMap")..." class="fa fa-map" style="cursor:pointer"></i>
-                        </span>
-                    </RadzenColumn>
-                </RadzenRow>
-
-                @if (stop?.Documents?.Any() ?? false)
-                {
-                    <DocumentGallery ShowTitle="false" Documents="stop.Documents" />
-                }
-            </text>
-        }
+        <StoryMapTimeline />
     }
     else if (MapState.DialogParameters.Id == null && MapState.AllNarrativeMaps != null)
     {
         @foreach (var map in MapState.AllNarrativeMaps)
         {
             <div>
-            <a style="cursor:pointer" onclick="@(() => ShowNarrativeMap(map.Id))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.LabelCs : @map.LabelEn)</a>
+                <a style="cursor:pointer" onclick="@(() => ShowNarrativeMap(map.Id))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.LabelCs : @map.LabelEn)</a>
             </div>
         }
     }

@@ -24,12 +24,12 @@
                     <RadzenColumn Size="1">
                         @if (!StatisticsIsOpen)
                         {
-                            <RadzenImage Style="height:17px;cursor:pointer" Path="images/arrow-right.png" title="@(cl["showStatistics"] + "...")"></RadzenImage>
+                            <RadzenImage Style="cursor:pointer" Path="images/arrow-right.png" title="@(cl["showStatistics"] + "...")"></RadzenImage>
 
                         }
                         else
                         {
-                            <RadzenImage Style="width:17px;cursor:pointer" Path="images/arrow-down.png" title="@(cl["hideStatistics"] + "...")"></RadzenImage>
+                            <RadzenImage Style="cursor:pointer" Path="images/arrow-down.png" title="@(cl["hideStatistics"] + "...")"></RadzenImage>
                         }
 
                     </RadzenColumn>

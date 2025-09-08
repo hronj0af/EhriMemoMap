@@ -1,4 +1,4 @@
-﻿@inject MapStateService MapState
+﻿@* @inject MapStateService MapState
 @inject MapLogicService MapLogic
 
 @inject IStringLocalizer<CommonResources> cl
@@ -7,10 +7,10 @@
 {
     <div style="@style">
         <div style="display:flex;gap:5px">
-@*             <RadzenButton Size="ButtonSize.Small" Click="CloseNarrativeMap" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat">
+             <RadzenButton Size="ButtonSize.Small" Click="CloseNarrativeMap" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat">
                 @cl["back"]
             </RadzenButton>
- *@            @if (MapState.MapType == MapTypeEnum.StoryMapOneStop)
+             @if (MapState.MapType == MapTypeEnum.StoryMapOneStop)
             {
                 <RadzenButton Size="ButtonSize.Small" Click="(() => MapLogic.ShowNarrativeMapPlaces())" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat">
                     @cl["backToStoryMapWhole"]
@@ -60,4 +60,4 @@
     }
 
 
-}
+} *@

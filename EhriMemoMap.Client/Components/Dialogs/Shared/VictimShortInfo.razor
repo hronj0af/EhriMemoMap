@@ -1,4 +1,5 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapLogicService MapLogic
 @inject MapStateService MapState
 
 @if (Victim != null)
@@ -17,14 +18,14 @@
         }
         else
         {
-            var storyMapTitle = Victim.NarrativeMapId != null ? "<br/>" + cl.GetString("storyMapExists") : "";
+            var storyMapTitle = Victim.NarrativeMapId != null ? cl.GetString("storyMapExists") : "";
 
             <RadzenCard class="@(VictimCardCss)" @onclick="OnVictimClick" Style="cursor:pointer">
                 <div style="position:relative;width:100%">
                     <RadzenImage title="@storyMapTitle" class="@VictimPhotoCss" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : VictimFace)" />
                     @if (Victim.NarrativeMapId != null)
                     {
-                        <img title="@storyMapTitle" width="15" class="document-forward-icon" src="/images/narrative.png" />
+                        <img title="@storyMapTitle" width="15" class="document-forward-icon" src="/images/storymap-icon.png" />
                     }
                 </div>
                 <div class="victim-label">
@@ -80,6 +81,7 @@
         if (Victim == null || (!Victim?.LongInfo ?? false))
             return;
 
+        MapState.VictimLongInfo = await MapLogic.GetVictimLongInfo(Victim!.Id);
         await MapState.SetDialog(DialogTypeEnum.Victim, new DialogParameters { Id = Victim!.Id });
         MapState.NotifyStateChanged();
     }

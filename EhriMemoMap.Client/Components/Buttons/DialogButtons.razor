@@ -18,6 +18,8 @@
 
     private async Task OnClose()
     {
+        if (MapState.DialogType == DialogTypeEnum.StoryMap)
+            await MapState.SetMapType(MapTypeEnum.Normal);
         MapState.IsDialogFullScreen = false;
         await MapState.SetDialog(DialogTypeEnum.None);
         MapState.NotifyStateChanged();

@@ -53,6 +53,7 @@ namespace EhriMemoMap.Client.Services
         public event Action OnChange;
         public NarrativeMap? NarrativeMap { get; set; }
         public List<NarrativeMap> AllNarrativeMaps { get; set; } = [];
+        public VictimLongInfoModel? VictimLongInfo { get; set; }
 
         public void NotifyStateChanged()
         {

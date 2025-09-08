@@ -10,7 +10,7 @@ var mapAPI;
     let addressIcon = null;
     let incidentIcon = null;
     let interestIcon = null;
-    let blazorMapObject = null;
+    let blazorMapObjects = [];
     let groups = [];
     let trackingInterval = null;
     let _isMobileView = null;
@@ -91,7 +91,7 @@ var mapAPI;
     function onResizeWindow() {
         fitMapToWindow();
         resizePhotoHeight();
-        blazorMapObject.invokeMethodAsync("SetMobileView", isMobileView());
+        blazorMapObjects["Map"].invokeMethodAsync("SetMobileView", isMobileView());
     }
     mapAPI.onResizeWindow = onResizeWindow;
     function fitMapToWindow(heightOfDialog = null, mapWidth = null) {
@@ -191,14 +191,14 @@ var mapAPI;
         return null;
     }
     mapAPI.convertMapSettingsObjectToMapLayer = convertMapSettingsObjectToMapLayer;
-    function initBlazorMapObject(dotNetObject) {
-        blazorMapObject = dotNetObject;
+    function initBlazorMapObject(dotNetObject, name) {
+        blazorMapObjects[name] = dotNetObject;
     }
     mapAPI.initBlazorMapObject = initBlazorMapObject;
     function callBlazor_RefreshObjectsOnMap() {
         const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
         const mapHasPolygonsYet = polygonsGroup.getLayers().length > 0;
-        blazorMapObject.invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet, map.getZoom(), getMapBoundsForMapState());
+        blazorMapObjects["Map"].invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet, map.getZoom(), getMapBoundsForMapState());
     }
     mapAPI.callBlazor_RefreshObjectsOnMap = callBlazor_RefreshObjectsOnMap;
     function callBlazor_ShowPlaceInfo(event) {
@@ -211,7 +211,7 @@ var mapAPI;
         }
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];
         const bbox = convertObjectPositionToBBoxParameter(point);
-        blazorMapObject.invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox, coorx);
+        blazorMapObjects["Map"].invokeMethodAsync("ShowPlaceInfo", map.getZoom(), bbox, coorx);
     }
     mapAPI.callBlazor_ShowPlaceInfo = callBlazor_ShowPlaceInfo;
     function refreshObjectsOnMap(objectJson) {
@@ -306,7 +306,7 @@ var mapAPI;
             var newObject = null;
             if (parsedLocation.type == "Point") {
                 parsedObjects[i].mapPointModel = parsedLocation;
-                newObject = getPoint(parsedObjects[i], 'z-index-999', parsedObjects[i].placeType == NarrativeMapStopPlaceType.Main ? scrollToStop : null);
+                newObject = getPoint(parsedObjects[i], 'z-index-999', parsedObjects[i].placeType == NarrativeMapStopPlaceType.Main ? openStoryMapTimelineLabel : null);
             }
             else {
                 parsedObjects[i].mapPolygonModel = parsedLocation;
@@ -359,15 +359,15 @@ var mapAPI;
         }
         const curvePoints = sampleCurve([pointA.lat, pointA.lng], controlPoint, [pointB.lat, pointB.lng]);
         const curveLine = L.polyline(curvePoints, {
-            color: '#C44527',
+            color: '#771646',
             weight: 2,
-            dashArray: '10, 10',
+            dashArray: '5, 5',
             dashOffset: '0'
         }).arrowheads({
             frequency: 'endonly',
             fill: true,
             size: '10px',
-            color: '#C44527'
+            color: '#771646'
         });
         return curveLine;
     }
@@ -679,18 +679,11 @@ var mapAPI;
         });
     }
     mapAPI.removeBluepoint = removeBluepoint;
-    function scrollToStop(event) {
+    function openStoryMapTimelineLabel(event) {
         const point = event.target;
-        const targetElement = document.getElementById("narrative-stop-" + point.options.stopId);
-        const container = document.querySelector("aside");
-        if (container && targetElement) {
-            const rect = targetElement.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
-            const scrollPosition = container.scrollTop + (rect.top - containerRect.top) - 20;
-            container.scrollTo({ top: scrollPosition, behavior: "smooth" });
-        }
+        blazorMapObjects["StoryMapTimeline"].invokeMethodAsync("OpenStoryMapTimelineLabel", point.options.stopId);
     }
-    mapAPI.scrollToStop = scrollToStop;
+    mapAPI.openStoryMapTimelineLabel = openStoryMapTimelineLabel;
     function setDialogFullScreen(value) {
         if (value) {
             if (!isFullscreen) {
