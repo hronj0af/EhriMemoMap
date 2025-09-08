@@ -1,5 +1,4 @@
-﻿using EhriMemoMap.Client.Components.Cards;
-using EhriMemoMap.Client.Components.Dialogs;
+﻿using EhriMemoMap.Client.Components.Dialogs;
 using EhriMemoMap.Models;
 using EhriMemoMap.Shared;
 using Microsoft.JSInterop;
@@ -7,7 +6,6 @@ using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Radzen;
-using System.Net.NetworkInformation;
 
 namespace EhriMemoMap.Client.Services
 {
@@ -110,7 +108,7 @@ namespace EhriMemoMap.Client.Services
             await _js.InvokeVoidAsync("mapAPI.fitMapToWindow", height, IsMobileView ? "100%" : newDialogType != DialogTypeEnum.None ? "67%" : "100%");
 
             if (DialogType == DialogTypeEnum.None && newDialogType != DialogTypeEnum.None)
-                _dialogService.OpenSide<_SideDialogContent>("", options: GetDialogOptions());
+                _dialogService.OpenSide<DialogContentRouter>("", options: GetDialogOptions());
 
             DialogType = newDialogType;
             DialogParameters = parameters ?? new DialogParameters();

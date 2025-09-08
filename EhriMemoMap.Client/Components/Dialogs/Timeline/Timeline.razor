@@ -97,6 +97,8 @@
     {
         timelineWidth = MobileVersion ? Width : Width - firstColumnWidth;
         timelineStyle = $"background-color: var(--Grey);position: relative;width:{timelineWidth}px;height:{height}px;";
+        timeline = MapState.GetTimeline();
+        MapState.OnChange += OnMyChangeHandler;
     }
 
     private async Task OnCollectionClick(TimelinePointModel point)
@@ -110,13 +112,6 @@
         await JS.InvokeVoidAsync("mapAPI.setUrlParam", "timeline", MapState.GetTimelineForUrlParameter());
     }
 
-
-    protected override async Task OnInitializedAsync()
-    {
-        timeline = MapState.GetTimeline();
-        MapState.OnChange += OnMyChangeHandler;
-        StateHasChanged();
-    }
 
     public void Dispose()
     {

@@ -4,7 +4,6 @@
 @inject MapStateService MapState
 @inject MapLogicService MapLogic
 @inject IJSRuntime JS
-<DialogButtons />
 
 <div class="rz-pt-12">
     @if (PlacesToShow != null)
@@ -16,7 +15,7 @@
                 @{
                     var placeType = Enum.Parse<PlaceType>(MapState.DialogParameters.Places.FirstOrDefault().PlaceType);
                 }
-                <PlaceDialogInner PlaceType="@placeType" PlacesToShow="PlacesToShow" FilteredName="@filteredName" />
+                <PlaceContentRouter PlaceType="@placeType" PlacesToShow="PlacesToShow" FilteredName="@filteredName" />
             </div>
         }
         else
@@ -28,7 +27,7 @@
                         {
                             <RadzenTabsItem Text="@(cl["featureType_" + placeType.ToString()])">
                                 <div style="padding:1.5rem">
-                                    <PlaceDialogInner PlaceType="@placeType" PlacesToShow="PlacesToShow" FilteredName="@filteredName" />
+                                    <PlaceContentRouter PlaceType="@placeType" PlacesToShow="PlacesToShow" FilteredName="@filteredName" />
                                 </div>
                             </RadzenTabsItem>
                         }

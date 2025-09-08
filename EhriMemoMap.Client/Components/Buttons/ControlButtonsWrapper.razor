@@ -9,33 +9,33 @@
                 <RadzenColumn Size="12">
                     @if (MapState?.Map?.InitialVariables?.AllCities != null && MapState.Map.InitialVariables.AllCities.Count() > 0)
                     {
-                        <AllCities />
+                        <AllCitiesButton />
                     }
                     else
                     {
-                        <Home />
+                        <HomeButton />
                     }
                 </RadzenColumn>
                 @if (MapState.MapType == MapTypeEnum.Normal)
                 {
                     <RadzenColumn Size="12">
-                        <Search />
+                        <SearchButton />
                     </RadzenColumn>
                     <RadzenColumn Size="12">
-                        <Layers />
+                        <LayersButton />
                     </RadzenColumn>
                 }
                 @if (MapState?.Map?.InitialVariables?.StoryMaps ?? false)
                 {
                     <RadzenColumn Size="12">
-                        <StoryMap />
+                        <StoryMapButton />
                     </RadzenColumn>
                 }
                 <RadzenColumn Size="12">
-                    <Help />
+                    <HelpButton />
                 </RadzenColumn>
                 <RadzenColumn Size="12">
-                    <Language />
+                    <LanguageButton />
                 </RadzenColumn>
             </RadzenRow>
 
@@ -46,25 +46,25 @@
                 @if (MapState.MapType == MapTypeEnum.Normal)
                 {
                     <RadzenColumn Size="size">
-                        <Search MobileVersion="true" Border="true" />
+                        <SearchButton MobileVersion="true" Border="true" />
                     </RadzenColumn>
                 }
                 @if (ShowTimelineButton())
                 {
                     <RadzenColumn Size="size">
-                        <Timeline MobileVersion="true" Border="true" />
+                        <TimelineButton MobileVersion="true" Border="true" />
                     </RadzenColumn>
                 }
                 @if (ShowStoryMapButton())
                 {
                     <RadzenColumn Size="size">
-                        <StoryMap MobileVersion="true" Border="true" />
+                        <StoryMapButton MobileVersion="true" Border="true" />
                     </RadzenColumn>
                 }
                 @if (MapState.MapType == MapTypeEnum.Normal)
                 {
                     <RadzenColumn Size="size">
-                        <Layers MobileVersion="true" />
+                        <LayersButton MobileVersion="true" />
                     </RadzenColumn>
                 }
             </RadzenRow>

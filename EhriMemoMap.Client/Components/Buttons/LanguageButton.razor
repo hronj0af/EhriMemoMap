@@ -5,7 +5,7 @@
 @inject MapStateService MapState
 @inject IStringLocalizer<CommonResources> cl
 @inject NavigationManager Navigation
-@inject ILogger<Language> logger
+@inject ILogger<LanguageButton> logger
 
 @if (MobileVersion)
 {
@@ -83,21 +83,4 @@ else
             }
         }
     }
-
-    // private CultureInfo Culture
-    // {
-    //     get => CultureInfo.CurrentCulture;
-    //     set
-    //     {
-    //         if (CultureInfo.CurrentCulture.ToString() != value.ToString())
-    //         {
-    //             var cultureEscaped = Uri.EscapeDataString(value.Name);
-    //             var uriEscaped = Uri.EscapeDataString(currentUri);
-
-    //             Navigation.NavigateTo(
-    //                 $"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}",
-    //                 forceLoad: true);
-    //         }
-    //     }
-    // }
 }

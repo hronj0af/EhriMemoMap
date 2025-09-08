@@ -35,7 +35,7 @@
         "order": 3,
         "type": "objects",
         "minZoom": 15,
-        "quickAccess": true,
+        "quickAccess": false,
         "backgroundColor": "#C5222C",
         "fontColor": "Light",
         "priorityOnMap": 3
@@ -46,7 +46,7 @@
         "order": 2,
         "type": "objects",
         "minZoom": 15,
-        "quickAccess": true,
+        "quickAccess": false,
         "backgroundColor": "#7E469B",
         "fontColor": "Light",
         "priorityOnMap": 1
@@ -78,7 +78,7 @@
         "order": 3,
         "type": "objects",
         "minZoom": 15,
-        "quickAccess": false,
+        "quickAccess": true,
         "backgroundColor": "#FF7F2A",
         "fontColor": "Light"
       }

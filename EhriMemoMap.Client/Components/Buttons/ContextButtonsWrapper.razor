@@ -2,12 +2,12 @@
 
 @if (MapState.IsMobileView == false && MapState.MapType == MapTypeEnum.Normal)
 {
-    <LayersQuickAccess />
+    <LayersQuickAccessButtons />
 }
 
 @if (MapState.MapType != MapTypeEnum.Normal)
 {
-    <StoryMapButtons/>
+    <StoryMapButtons />
 }
 
 @code {

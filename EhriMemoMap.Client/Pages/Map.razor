@@ -44,7 +44,7 @@
     <ControlButtonsWrapper />
     <ZoomButtonsWrapper />
     <ContextButtonsWrapper />
-    <TimelineWrapper />
+    <TimelineDialogWrapper />
     <MobileTopBarWrapper />
 }
 
@@ -100,7 +100,7 @@
 
             if (MapState.AppState == AppStateEnum.Shutdown)
             {
-                DialogService.Open<ErrorDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = false, Width = "720px" });
+                DialogService.Open<Error>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = false, Width = "720px" });
                 return;
             };
 
@@ -113,7 +113,7 @@
             // pokud už s mapou začal pracovat, tak ho s tímto uvítacím dialogem nebudeme otravovat
             if (string.IsNullOrEmpty(bounds) && coordinates == null)
                 if (!MapState.IsMobileView)
-                    DialogService.Open<WelcomeDialog>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "720px" });
+                    DialogService.Open<Welcome>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "720px" });
                 else
                     await MapState.SetDialog(DialogTypeEnum.Welcome);
 

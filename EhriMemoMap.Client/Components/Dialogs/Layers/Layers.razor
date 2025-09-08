@@ -6,9 +6,6 @@
 
 @inject IStringLocalizer<CommonResources> cl
 
-<DialogButtons />
-
-
 @if (layers != null && layers.Count() > 0)
 {
     <div class="rz-px-6 rz-pt-12" style="display:flex;gap:10px;flex-direction:column">
@@ -74,7 +71,7 @@
 
     IEnumerable<LayerModel>? layers;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         layers = MapState.GetNotBaseLayers().ToList();
         MapState.OnChange += OnMyChangeHandler;

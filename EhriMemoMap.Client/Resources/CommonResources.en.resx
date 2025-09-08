@@ -702,4 +702,7 @@
   <data name="featureType_Memorial" xml:space="preserve">
     <value>Commemorative Events</value>
   </data>
+  <data name="layer_memorial_title_short" xml:space="preserve">
+    <value>Memorials</value>
+  </data>
 </root>

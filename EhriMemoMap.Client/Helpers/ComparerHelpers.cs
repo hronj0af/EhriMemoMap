@@ -1,8 +1,4 @@
-﻿using EhriMemoMap.Client.Components.Cards.Address;
-using EhriMemoMap.Shared;
-using NetTopologySuite.Geometries;
-using Newtonsoft.Json;
-using System.Text.RegularExpressions;
+﻿using EhriMemoMap.Shared;
 
 namespace EhriMemoMap.Client.Helpers
 {

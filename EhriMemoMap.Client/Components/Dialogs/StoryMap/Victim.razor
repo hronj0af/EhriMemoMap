@@ -3,30 +3,28 @@
 @inject MapLogicService MapLogic
 @inject IJSRuntime JSRuntime
 
-<DialogButtons />
-
 <div style="padding:2.5rem 2.5rem 0 2.5rem;">
-    @if (Victim != null)
+    @if (VictimLongInfo != null)
     {
         <RadzenRow>
             <RadzenColumn Size="11">
-                <h3>@Victim.Label</h3>
+                <h3>@VictimLongInfo.Label</h3>
             </RadzenColumn>
-            @if (Victim.NarrativeMapId != null)
+            @if (VictimLongInfo.NarrativeMapId != null)
             {
                 <RadzenColumn Size="1">
-                    <img style="cursor:pointer" title="@cl.GetString("viewStoryMap")..." onclick="@(() => ShowNarrativeMap(Victim.NarrativeMapId))" src="images/narrative.png" width="25" />
+                    <img style="cursor:pointer" title="@cl.GetString("viewStoryMap")..." onclick="@(() => ShowNarrativeMap(VictimLongInfo.NarrativeMapId))" src="images/narrative.png" width="25" />
                 </RadzenColumn>
             }
         </RadzenRow>
 
 
 
-        @if (Victim.Places != null)
+        @if (VictimLongInfo.Places != null)
         {
             <hr />
             @* místo narození, bydliště k 13. květnu 1939, poslední bydliště před deportací *@
-            @foreach (var place in Victim.Places.Where(a => new long?[] { 22, 24, 26 }.Contains(a.Type)) ?? [])
+            @foreach (var place in VictimLongInfo.Places.Where(a => new long?[] { 22, 24, 26 }.Contains(a.Type)) ?? [])
             {
                 <div>
                     @(CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs):
@@ -35,12 +33,12 @@
             }
 
             @* deportace *@
-            @if (Victim.Transports != null && Victim.Transports.Count() > 0)
+            @if (VictimLongInfo.Transports != null && VictimLongInfo.Transports.Count() > 0)
             {
                 <div>
                     @cl["deportation"]:
                     <ul style="margin:0">
-                        @foreach (var transport in Victim.Transports)
+                        @foreach (var transport in VictimLongInfo.Transports)
                         {
                             <li>
                                 @transport.Code
@@ -55,42 +53,42 @@
 
             }
             @* místo věznění *@
-            @if (Victim.Places.Any(a => a.Type == 28))
+            @if (VictimLongInfo.Places.Any(a => a.Type == 28))
             {
                 <div>
                     @(CultureInfo.CurrentCulture.Name == "en-US"
-                            ? Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeEn
-                            : Victim.Places.FirstOrDefault(a => a.Type == 28)?.TypeCs):
+                            ? VictimLongInfo.Places.FirstOrDefault(a => a.Type == 28)?.TypeEn
+                            : VictimLongInfo.Places.FirstOrDefault(a => a.Type == 28)?.TypeCs):
 
                     @(CultureInfo.CurrentCulture.Name == "en-US"
-                            ? Victim.Places.Where(a => a.Type == 28).Select(a => a.En).Aggregate((x, y) => x + ", " + y)
-                            : Victim.Places.Where(a => a.Type == 28).Select(a => a.Cs).Aggregate((x, y) => x + ", " + y))
+                            ? VictimLongInfo.Places.Where(a => a.Type == 28).Select(a => a.En).Aggregate((x, y) => x + ", " + y)
+                            : VictimLongInfo.Places.Where(a => a.Type == 28).Select(a => a.Cs).Aggregate((x, y) => x + ", " + y))
     </div>
         }
 
             @* osud úmrtí *@
             <div>
-                @cl["fate"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Victim.FateEn : Victim.FateCs)
-                @Victim.DeathDate?.ToString("d. M. yyyy")
-                @if (Victim.Places.Any(a => a.Type == 23))
+                @cl["fate"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? VictimLongInfo.FateEn : VictimLongInfo.FateCs)
+                @VictimLongInfo.DeathDate?.ToString("d. M. yyyy")
+                @if (VictimLongInfo.Places.Any(a => a.Type == 23))
                 {
                     @(CultureInfo.CurrentCulture.Name == "en-US"
-                            ? Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeEn
-                            : Victim.Places.FirstOrDefault(a => a.Type == 30)?.TypeCs)
+                            ? VictimLongInfo.Places.FirstOrDefault(a => a.Type == 30)?.TypeEn
+                            : VictimLongInfo.Places.FirstOrDefault(a => a.Type == 30)?.TypeCs)
                 }
             </div>
         }
 
-        @if (Victim.RelatedPersons != null && Victim.RelatedPersons.Count() > 0)
+        @if (VictimLongInfo.RelatedPersons != null && VictimLongInfo.RelatedPersons.Count() > 0)
         {
             // „Nejbližší rodina“, omezeno na vztahy „manžel“ (id 5), „manželka“ (id 6), „otec“ (id 9), „matka“ (id 7), „syn“ (id 13), „dcera (id 3)“, „bratr“ (id 2), „sestra (id 10)“.
-            if (Victim.RelatedPersons.Any(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
+            if (VictimLongInfo.RelatedPersons.Any(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
             {
                 <br />
                 <h4>@cl["relatedClosestFamily"]</h4>
                 <hr />
                 <RadzenRow class="rz-mt-8" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
-                    @foreach (var relatedPerson in Victim.RelatedPersons.Where(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
+                    @foreach (var relatedPerson in VictimLongInfo.RelatedPersons.Where(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
                     {
                         <VictimShortInfo Victim="@relatedPerson" Small="true" Relative="true" />
                     }
@@ -100,7 +98,7 @@
 
 
             // ostatní příbuzní
-            if (Victim.RelatedPersons.Any(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
+            if (VictimLongInfo.RelatedPersons.Any(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
             {
                 <br />
                 <div style="cursor:pointer;" onclick="@(() => ToggleRelatives())">
@@ -123,7 +121,7 @@
                 @if (RelativesOpen)
                 {
                     <RadzenRow class="rz-mt-8" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
-                        @foreach (var relatedPerson in Victim.RelatedPersons.Where(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
+                        @foreach (var relatedPerson in VictimLongInfo.RelatedPersons.Where(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
                         {
                             <VictimShortInfo Victim="@relatedPerson" Small="true" Relative="true" />
                         }
@@ -132,14 +130,14 @@
             }
         }
 
-        <DocumentGallery Documents="Victim.Documents" />
+        <DocumentGallery Documents="VictimLongInfo.Documents" />
 
     }
 </div>
 
 @code {
 
-    private VictimLongInfoModel? Victim { get; set; }
+    private VictimLongInfoModel? VictimLongInfo { get; set; }
 
     private bool RelativesOpen = false;
 
@@ -159,7 +157,7 @@
         if (MapState.DialogParameters?.Id == null)
             return;
 
-        Victim = await MapLogic.GetVictimLongInfo(MapState.DialogParameters.Id);
+        VictimLongInfo = await MapLogic.GetVictimLongInfo(MapState.DialogParameters.Id);
         StateHasChanged();
     }
 

@@ -10,27 +10,27 @@
     {
         foreach (var place in PlacesToShow.Incidents ?? [])
         {
-            <CardIncident Place="place" />
+            <Incident Place="place" />
         }
     }
 
-    @if (PlaceType == PlaceType.Interest)
+    else if (PlaceType == PlaceType.Interest) 
     {
         foreach (var place in PlacesToShow.PlacesOfInterest ?? [])
         {
-            <CardInterest Place="place" />
+            <Interest Place="place" />
         }
     }
 
-    @if (PlaceType == PlaceType.Inaccessible)
+    else if (PlaceType == PlaceType.Inaccessible)
     {
         foreach (var place in PlacesToShow.InaccessiblePlaces ?? [])
         {
-            <CardInterest Place="place" />
+            <Interest Place="place" />
         }
     }
 
-    @if (PlaceType == PlaceType.Address)
+    else if (PlaceType == PlaceType.Address)
     {
         @if (PlacesToShow.Addresses != null)
         {
@@ -43,10 +43,11 @@
         }
         foreach (var place in PlacesToShow.Addresses ?? [])
         {
-            <CardAddress House="place" FilteredName="@FilteredName" />
+            <Address House="place" FilteredName="@FilteredName" />
         }
     }
-    @if (PlaceType == PlaceType.AddressLastResidence)
+    
+    else if (PlaceType == PlaceType.AddressLastResidence)
     {
         @if (PlacesToShow.AddressesLastResidence != null)
         {
@@ -59,29 +60,28 @@
         }
         foreach (var place in PlacesToShow.AddressesLastResidence ?? [])
         {
-            <CardAddress House="place" FilteredName="@FilteredName" />
+            <Address House="place" FilteredName="@FilteredName" />
         }
     }
-    @if (PlaceType == PlaceType.Memory)
+    
+    else if (PlaceType == PlaceType.Memory)
     {
         foreach (var place in PlacesToShow.PlacesOfMemory ?? [])
         {
-            <CardMemory Place="place" />
+            <Memory Place="place" />
         }
     }
 
-    @if (PlaceType == PlaceType.Memorial)
+    else if (PlaceType == PlaceType.Memorial)
     {
         foreach (var place in PlacesToShow.Memorials ?? [])
         {
-            <CardMemorial Place="place" />
+            <Memorial Place="place" />
         }
     }
 }
 
 @code {
-
-
     [Parameter]
     public PlacesResult? PlacesToShow { get; set; }
 
