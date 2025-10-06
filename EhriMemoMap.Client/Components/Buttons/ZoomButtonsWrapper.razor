@@ -80,7 +80,7 @@
     public bool? isMobileView;
 
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    protected override void OnAfterRender(bool firstRender)
     {
         size = MapState.IsMobileView ? 4 : 12;
         isMobileView = MapState.IsMobileView;
@@ -89,7 +89,7 @@
         style = GetStyle();
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         style = GetStyle();
         MapState.OnChange += OnMyChangeHandler;

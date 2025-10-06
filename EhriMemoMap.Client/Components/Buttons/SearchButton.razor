@@ -43,8 +43,6 @@ else
     [Parameter]
     public bool Border { get; set; } = false;
 
-    private int width;
-
     protected override void OnInitialized()
     {
         MapState.OnChange += StateHasChanged;

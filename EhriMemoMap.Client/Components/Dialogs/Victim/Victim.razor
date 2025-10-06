@@ -174,7 +174,7 @@
         MapState.OnChange -= StateHasChanged;
     }
 
-    protected override async Task OnAfterRenderAsync(bool first)
+    protected override void OnAfterRender(bool first)
     {
 
         if (MapState.DialogParameters?.Id == null)

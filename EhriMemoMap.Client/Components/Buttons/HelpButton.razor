@@ -42,7 +42,7 @@ else
     [Parameter]
     public bool MobileVersion { get; set; } = false;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         MapState.OnChange += OnMyChangeHandler;
     }

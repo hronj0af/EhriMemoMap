@@ -6,8 +6,8 @@
       "storyMaps": false,
       "zoom": 15,
       "zoomMobile": 15,
-      "lat": 49.9836291,
-      "lng": 14.6607151,
+      "lat": 49.9957522247,
+      "lng": 14.6679067612,
       "minBounds": {
         "X": -90,
         "Y": -90
@@ -28,6 +28,21 @@
         "type": "base",
         "zIndex": "50",
         "selected": true
+      },
+      {
+        "name": "MGS-ricanyHistoricalMap1935-v1-cze",
+        "url": "https://api.memomap.cz/wmsProxy?",
+        "mapParameter": "",
+        "layersParameter": "MGS-ricanyHistoricalMap1935-v1-cze",
+        "type": "wms",
+        "selected": true,
+        "opacities": "255",
+        "zIndex": "100",
+        "order": 100,
+        "backgroundColor": "#D5D2B8",
+        "fontColor": "Dark",
+        "cssClass": "customWmsLayerRicany"
+
       },
       {
         "name": "incident",

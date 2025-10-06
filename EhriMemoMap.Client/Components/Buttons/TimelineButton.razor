@@ -49,8 +49,6 @@
     [Parameter]
     public bool Border { get; set; } = false;
 
-    List<TimelinePointModel>? timeline;
-
     protected override void OnInitialized()
     {
         MapState.OnChange += StateHasChanged;

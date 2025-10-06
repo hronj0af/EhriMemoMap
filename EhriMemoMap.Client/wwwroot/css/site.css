@@ -144,6 +144,10 @@ path.leaflet-interactive:focus {
     /*filter: grayscale(40%) brightness(1);*/
 }
 
+.customWmsLayerRicany {
+    /*filter: grayscale(40%) brightness(1);*/
+}
+
 .center {
     display: flex;
     flex-direction: row;

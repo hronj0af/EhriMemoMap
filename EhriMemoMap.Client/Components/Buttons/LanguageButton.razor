@@ -53,7 +53,7 @@ else
         MapState.OnChange -= StateHasChanged;
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         MapState.OnChange += StateHasChanged;
         // style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
