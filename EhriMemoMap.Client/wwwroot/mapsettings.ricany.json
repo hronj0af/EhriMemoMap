@@ -2,12 +2,12 @@
   "map": {
     "initialVariables": {
       "city": "ricany",
-      "allCities": [ "ricany" ],
+      "allCities": [ "ricany", "prague" ],
       "storyMaps": false,
       "zoom": 15,
       "zoomMobile": 15,
-      "lat": 49.9957522247,
-      "lng": 14.6679067612,
+      "lat": 49.9925,
+      "lng": 14.6665067612,
       "minBounds": {
         "X": -90,
         "Y": -90
@@ -23,7 +23,7 @@
       {
         "name": "OSM",
         "url": "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
-        "attribution": "MÚA AVČR, ITI &copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
+        "attribution": "MÚA AVČR, Město Říčany &copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
         "attributionUrl": "https://ehri.cz/memogis_cs.html#howto_credit",
         "type": "base",
         "zIndex": "50",
@@ -43,17 +43,6 @@
         "fontColor": "Dark",
         "cssClass": "customWmsLayerRicany"
 
-      },
-      {
-        "name": "incident",
-        "placeType": "incident",
-        "order": 3,
-        "type": "objects",
-        "minZoom": 15,
-        "quickAccess": false,
-        "backgroundColor": "#C5222C",
-        "fontColor": "Light",
-        "priorityOnMap": 3
       },
       {
         "name": "interest",
@@ -94,7 +83,7 @@
         "type": "objects",
         "minZoom": 15,
         "quickAccess": true,
-        "backgroundColor": "#FF7F2A",
+        "backgroundColor": "#eb9622",
         "fontColor": "Light"
       }
 

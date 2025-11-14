@@ -9,7 +9,7 @@
     @foreach (var city in MapState.Map?.InitialVariables?.AllCities ?? [])
     {
         <div>
-            <a onclick="@(() => NavManager.NavigateTo("/" + city ?? "", true))" style="cursor:pointer;">@cl[city]</a>
+            <a onclick="@(() => NavManager.NavigateTo("/" + city ?? "", true))" style="cursor:pointer;">@cl["city_" + city]</a>
         </div>
     }
 </div>

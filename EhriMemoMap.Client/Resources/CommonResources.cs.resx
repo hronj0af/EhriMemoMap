@@ -377,6 +377,12 @@
   <data name="layer_MGS-prague_historical_map_1938-v2_abstract_prague" xml:space="preserve">
     <value>Orientační plán hlavního města Prahy s okolím (1938). Do digitální podoby zpracovala Městská knihovna v Praze, georeferencování provedl Masarykův ústav a Archiv Akademie věd České republiky. Dostupný také z WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
   </data>
+  <data name="hideStatistics" xml:space="preserve">
+    <value>Skrýt statistiku</value>
+  </data>
+  <data name="showStatistics" xml:space="preserve">
+    <value>Zobrazit statistiku</value>
+  </data>
   <data name="layer_interest_title_prague_last_residence" xml:space="preserve">
     <value>Body zájmu prostoru města Prahy</value>
   </data>
@@ -418,12 +424,6 @@
   </data>
   <data name="layer_MGS-prague_historical_map_1938-v2_abstract_prague_last_residence" xml:space="preserve">
     <value>Orientační plán hlavního města Prahy s okolím (1938). Do digitální podoby zpracovala Městská knihovna v Praze, georeferencování provedl Masarykův ústav a Archiv Akademie věd České republiky. Dostupný také z WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
-  </data>
-  <data name="showStatistics" xml:space="preserve">
-    <value>Zobrazit statistiku</value>
-  </data>
-  <data name="hideStatistics" xml:space="preserve">
-    <value>Skrýt statistiku</value>
   </data>
   <data name="countPointsOfInterest" xml:space="preserve">
     <value>Body zájmu</value>
@@ -509,6 +509,18 @@
   <data name="help_inaccessible_prague_last_residence" xml:space="preserve">
     <value>Místa, která byla Židům v době holokaustu nepřístupná.</value>
   </data>
+  <data name="help_victims_ricany" xml:space="preserve">
+    <value>Místa, kde bydleli židovští obyvatelé Říčan</value>
+  </data>
+  <data name="help_interest_ricany" xml:space="preserve">
+    <value>Místa související s každodenním životem židovských obyvatel Říčan</value>
+  </data>
+  <data name="help_memory_ricany" xml:space="preserve">
+    <value>Připomínková a pietní místa</value>
+  </data>
+  <data name="help_memorial_ricany" xml:space="preserve">
+    <value>Události připomínající oběti holokaustu</value>
+  </data>
   <data name="featureType_Memory" xml:space="preserve">
     <value>Místa paměti</value>
   </data>
@@ -548,11 +560,17 @@
   <data name="city_pacov" xml:space="preserve">
     <value>Pacov</value>
   </data>
+  <data name="city_ricany" xml:space="preserve">
+    <value>Říčany</value>
+  </data>
   <data name="helpContent_pacov" xml:space="preserve">
     <value>Lorem ipsum..</value>
   </data>
   <data name="welcomeText_pacov" xml:space="preserve">
     <value>Interaktivní mapa z doby protektorátu zobrazuje, kde v Pacově bydleli jeho židovští obyvatelé, a přináší informace o zajímavých místech spojených s židovskou historií města i interakci židovského a většinového obyvatelstva. Takzvané příběhové mapy umožňují detailně sledovat konkrétní osobní příběhy a trajektorie. Data jsou doplněna o digitalizované dokumenty a fotografie. Aplikace je přizpůsobena pro mobilní zařízení a můžete se s ní proto vydat přímo do města.</value>
+  </data>
+  <data name="welcomeText_ricany" xml:space="preserve">
+    <value>Lorem ipsum...</value>
   </data>
   <data name="layer_interest_title_pacov" xml:space="preserve">
     <value>Body zájmu</value>
@@ -560,11 +578,41 @@
   <data name="layer_interest_abstract_pacov" xml:space="preserve">
     <value>Body zájmu zahrnující místa číselně označená na historické mapě a další místa, která se váží k židovské historii Pacova.</value>
   </data>
+  <data name="layer_interest_title_ricany" xml:space="preserve">
+    <value>Body zájmu</value>
+  </data>
+  <data name="layer_interest_abstract_ricany" xml:space="preserve">
+    <value>Zajímavá místa spjatá s životem židovských obyvatel Říčan.</value>
+  </data>
   <data name="layer_address_title_pacov" xml:space="preserve">
     <value>Bydliště</value>
   </data>
   <data name="layer_address_abstract_pacov" xml:space="preserve">
     <value>Adresy, na nichž dle dochovaných zdrojů bydleli v době okupace židovští obyvatelé Pacova. Vrstva zahrnuje údaje o osobách, které na dané adrese bydlely bez ohledu na období, a informace vážící se ke dvěma konkrétním časovým údajům, konkrétně k 13. květnu 1939 (na základě Seznamu židovských obyvatel Pacova vypracovaného pacovskou četnickou stanicí k tomuto datu) a 13. listopadu 1942 (na základě údaje o posledním bydlišti před deportací uvedeném v transportních listinách).</value>
+  </data>
+  <data name="layer_address_title_ricany" xml:space="preserve">
+    <value>Bydliště Židů v době okupace</value>
+  </data>
+  <data name="layer_address_abstract_ricany" xml:space="preserve">
+    <value>Adresy, na nichž dle dochovaných zdrojů bydleli v době okupace a v období okupaci těsně předcházejícím židovští obyvatelé Říčan. Údaje jsou zpracovány s využitím volně dostupných databází obětí holokaustu a archivních zdrojů.</value>
+  </data>
+  <data name="layer_memory_title_ricany" xml:space="preserve">
+    <value>Místa paměti</value>
+  </data>
+  <data name="layer_memory_abstract_ricany" xml:space="preserve">
+    <value>Místa a objekty připomínající pronásledování a oběti holokaustu. Vrstva obsahuje informace o říčanských Stolpersteinech a dalších památnících a pamětních místech v prostoru města Říčan.</value>
+  </data>
+  <data name="layer_memorial_title_ricany" xml:space="preserve">
+    <value>Připomínkové akce</value>
+  </data>
+  <data name="layer_memorial_abstract_ricany" xml:space="preserve">
+    <value>Události v Říčanech připomínající oběti holokaustu. Pietní akce spojené s pokládáním Stolpersteinů a další vzpomínková setkání.</value>
+  </data>
+  <data name="layer_MGS-ricanyHistoricalMap1935-v1-cze_title_ricany" xml:space="preserve">
+    <value>Historická mapa Říčan (1935)</value>
+  </data>
+  <data name="layer_MGS-ricanyHistoricalMap1935-v1-cze_abstract_ricany" xml:space="preserve">
+    <value>Sken historické mapy poskytlo Muzeum Říčany, georeferencování provedl Masarykův ústav a Archiv Akademie věd České republiky.</value>
   </data>
   <data name="help_victims_pacov" xml:space="preserve">
     <value>Místa, kde v době holokaustu bydleli židovští obyvatelé.</value>
@@ -693,7 +741,7 @@
     <value>Kameny zmizelých</value>
   </data>
   <data name="commemorative event" xml:space="preserve">
-    <value>Připomínková akce</value>
+    <value>Připomínkové akce</value>
   </data>
   <data name="countMemorials" xml:space="preserve">
     <value>Připomínkové akce</value>
@@ -712,5 +760,52 @@
   </data>
   <data name="birthDate" xml:space="preserve">
     <value>Datum narození</value>
+  </data>
+  <data name="helpContent_ricany" xml:space="preserve">
+    <value>&lt;div&gt;
+  &lt;p&gt;
+  &lt;h4&gt;
+    O MemoMap Říčany
+  &lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;[Informace o projektu, doplníme později podle toho, co zašlou z Říčan, zatím nechat prázdné.]&lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Co MemoMap Říčany obsahuje?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+Aplikace zobrazuje informace o říčanských židovských rodinách, o jejich domovech, o místech spjatých s jejich každodenním životem, o pamětních místech i o svitcích Tóry, které byly kdysi v Říčanech používány a dnes se nacházejí ve Spojeném království. Součástí aplikace jsou také údaje o připomínkových akcích, například o pokládání Stolpersteinů.
+  &lt;/p&gt;
+  &lt;p&gt;Data vycházejí z dostupných databází obětí holokaustu, archivních pramenů i odborných publikací. Na přípravě dat a textů pro aplikaci se podíleli žáci místních základních škol a Město Říčany.
+  &lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Jak se aplikace ovládá?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Jednotlivé typy dat jsou rozděleny do tzv. vrstev, mezi kterými můžete přepínat. Ovládání vrstev se nachází pod ikonou&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/layers-small.svg' /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Přiblížit nebo oddálit mapu můžete pomocí tlačítek&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/zoom-in-small.svg' /&gt;
+     &lt;img src='/images/zoom-out-small.svg' /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Svoji polohu na mapě najdete pomocí tlačítka&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/location-small.svg' /&gt;
+  &lt;/p&gt;
+
+&lt;p&gt;
+  &lt;h4&gt;Kredit&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Aplikace MemoMap Říčany vznikla ve spolupráci Masarykova ústavu a Archivu AV ČR a Města Říčany. Zvláštní poděkování patří paní Věře Likešové a Markétě Žilkové z Městského úřadu Říčany.&lt;/p&gt;
+  &lt;a href="https://www.ricany.cz" target="_blank"&gt;&lt;img src='/images/ricany-logo.jpg' /&gt;&lt;/a&gt;
+  &lt;a href="https://www.mua.cas.cz/cs" target="_blank"&gt;&lt;img src='/images/mua-logo.jpg' /&gt;&lt;/a&gt;
+  &lt;p&gt;Vývoj mapové aplikace podpořil v roce 2025 Nadační fond obětem holocaustu.&lt;/p&gt;
+  &lt;a href="https://fondholocaust.cz/" target="_blank"&gt;&lt;img src='/images/nfoh-logo.jpg' /&gt;&lt;/a&gt;
+&lt;p&gt;
+  Aplikace je dlouhodobě rozvíjena a provozována v rámci českého uzlu Evropské infrastruktury pro výzkum holokaustu. Ten je součástí infrastruktury LINDAT/CLARIAH-CZ, která je podporována Ministerstvem školství, mládeže a tělovýchovy České republiky v rámci programu "velkých infrastruktur".
+  &lt;/p&gt;
+  &lt;a href="https://ehri.cz" target="_blank"&gt;&lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;&lt;/a&gt;
+  &lt;/div&gt;</value>
   </data>
 </root>

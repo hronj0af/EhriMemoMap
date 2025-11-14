@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -120,11 +120,11 @@
   <data name="search" xml:space="preserve">
     <value>Search</value>
   </data>
-  <data name="english" xml:space="preserve">
-    <value>English</value>
-  </data>
   <data name="czech" xml:space="preserve">
     <value>Czech</value>
+  </data>
+  <data name="english" xml:space="preserve">
+    <value>English</value>
   </data>
   <data name="languageSwitcher" xml:space="preserve">
     <value>Language switcher</value>
@@ -195,6 +195,54 @@
 
 &lt;/div&gt;</value>
   </data>
+  <data name="helpContent_prague_last_residence" xml:space="preserve">
+    <value>&lt;div&gt;
+  &lt;p&gt;
+  &lt;h4&gt;
+    What is MemoMap?
+  &lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Interactive map of Prague from the period of the Protectorate Bohemia and Moravia. The map shows the addresses where Prague Jews lived during Nazi occupation, places related to their persecution as well as places where Jews were not allowed. Thanks to the timeline, you can see how people gradually disappeared from their homes as they were deported to ghettos and concentration camps. The app is adapted for mobile devices and you can use it while walking in the city.&lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;What does MemoMap contain?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+  The app displays information about more than 40,000 victims of the Holocaust, about 1,700 cases of violations of anti-Jewish regulations and ordinances, about 120 places of interest related to their daily lives and persecution, about 110 places that were inaccessible to Jewish residents of Prague during the war and a growing number of places of memory.
+  &lt;/p&gt;
+  &lt;p&gt;The data on the victims of the Holocaust come from a database maintained by the Terezín Initiative Institute. The application makes available not only photographs of the victims, but also scans of the police records relating to violations of anti-Jewish regulations and orders (these scans come from the Prague Police Directorate's collection at the National Archives).
+  &lt;/p&gt; &lt;p&gt;
+ &lt;h4&gt;How to use the application?&lt;/h4&gt;
+ &lt;/p&gt;
+ &lt;p&gt;
+ Individual data types are divided into so-called layers, between which you can switch. The layer control is located under the icon&amp;nbsp;&amp;nbsp;
+ &lt;img src='/images/layers-small.svg' /&gt;
+ &lt;/p&gt;
+ &lt;p&gt;
+ You can Zoom in or out on the map using the&amp;nbsp;&amp;nbsp;
+ &lt;img src='/images/zoom-in-small.svg' /&gt;
+ &lt;img src='/images/zoom-out-small.svg' /&gt;
+ &lt;/p&gt;
+ &lt;p&gt;
+ Your location on the map can be found using the button&amp;nbsp;&amp;nbsp;
+ &lt;img src='/images/location-small.svg' /&gt;
+ &lt;/p&gt;
+
+&lt;p&gt;
+ &lt;h4&gt;Did you find an error?&lt;/h4&gt;
+ &lt;/p&gt;
+ &lt;p&gt;If you encounter a technical problem or data error, please let us know using this &lt;a href="https://docs.google.com/forms/d/15jprT8Sbc-Llt1CfAPrIzU4S8YIDjREixRADGzbA62k" target="_blank"&gt; forms&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;
+ &lt;h4&gt;Credit&lt;/h4&gt;
+ &lt;/p&gt;
+ &lt;p&gt;The MemoMap application was originally developed as part of the project Integration and Segregation in the City Space: the History of the Holocaust in Prague through a mobile web application (identifier TL01000366). The project was supported by the Technology Agency of the Czech Republic as part of the public competition ÉTA 1. MemoMap was created by the Masaryk Institute and Archives of the Czech Academy of Sciences in cooperation with the Terezín Initiative Institute and the Multicultural Centre Prague.&lt;/p&gt;
+&lt;p&gt; The application is maintained and further developed by the Czech node of the European Holocaust Research Infrastructure. It is part of the LINDAT/CLARIAH-CZ infrastructure, which is supported by the Ministry of Education, Youth and Sports of the Czech Republic under the programm of large research infrastructures.&lt;/p&gt; 
+&lt;p&gt; It has been supported by the Czech Foundation for Holocast Victims and through the Strategy AV21 program "City as a laboratory of change" financed by the Czech Academy of Sciences.&lt;/p&gt;
+
+  &lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;
+
+&lt;/div&gt;</value>
+  </data>
   <data name="layerInfo" xml:space="preserve">
     <value>Information about map layer</value>
   </data>
@@ -210,12 +258,6 @@
   <data name="myLocationOn" xml:space="preserve">
     <value>Turn on location tracking</value>
   </data>
-  <data name="featureType_Incident" xml:space="preserve">
-    <value>Incidents</value>
-  </data>
-  <data name="featureType_Interest" xml:space="preserve">
-    <value>Points of Interest</value>
-  </data>
   <data name="featureType_Inaccessible" xml:space="preserve">
     <value>Forbidden Places</value>
   </data>
@@ -224,6 +266,12 @@
   </data>
   <data name="featureType_Address" xml:space="preserve">
     <value>Jewish Homes</value>
+  </data>
+  <data name="featureType_Interest" xml:space="preserve">
+    <value>Points of Interest</value>
+  </data>
+  <data name="featureType_Incident" xml:space="preserve">
+    <value>Incidents</value>
   </data>
   <data name="title" xml:space="preserve">
     <value>Title</value>
@@ -276,6 +324,9 @@
   <data name="prague" xml:space="preserve">
     <value>Prague</value>
   </data>
+  <data name="prague_last_residence" xml:space="preserve">
+    <value>Prague</value>
+  </data>
   <data name="survivorsNotDisplayed" xml:space="preserve">
     <value>Survivors and people of unknown fate aren't displayed below.</value>
   </data>
@@ -294,11 +345,11 @@
   <data name="layer_incident_abstract_prague" xml:space="preserve">
     <value>Incidents that took place within the city limits of Prague during which Jewish residents were arrested or investigated for violating anti-Jewish ordinances. This data was extracted from the digitized documents of the Prague Police as part of the MemoMap Prague project. It includes information about non-compliance with restrictions of free movement, identification papers lacking the letter \"J\" (Jude), etc.</value>
   </data>
-  <data name="layer_inaccessible_abstract_prague" xml:space="preserve">
-    <value>Places that were forbidden to Jews during the war. Their depiction is based on a historical map from 1938. The current spaces may vary in size and shape. </value>
+  <data name="layer_address_title_prague" xml:space="preserve">
+    <value>Jewish Homes in Prague During the Occupation</value>
   </data>
-  <data name="layer_inaccessible_title_prague" xml:space="preserve">
-    <value>Forbidden Places Within the City of Prague</value>
+  <data name="layer_address_abstract_prague" xml:space="preserve">
+    <value>Addresses where Jewish residents of Prague lived during the Shoah, according to the victims' database. The data mostly come from the registration of Jews in the Protectorate, which was initiated in autumn 1941 by order of the Central Office for Jewish Emigration. Therefore, they may not correspond to the residence of Jewish families before the persecution began. The layer includes data on the number of occupants of each house, statistics on their fate and the number present on various historical dates. In some cases, where individual houses were difficult to identify, multiple addresses are grouped under the same coordinates (for example, on the same street). We are continuously working on refining the map location. Street names from the time of occupation (ca. 1941-1942) are used.</value>
   </data>
   <data name="layer_victim_title_prague" xml:space="preserve">
     <value>Holocaust victims</value>
@@ -306,11 +357,11 @@
   <data name="layer_victim_abstract_prague" xml:space="preserve">
     <value>Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz.</value>
   </data>
-  <data name="layer_address_title_prague" xml:space="preserve">
-    <value>Jewish Homes in Prague During the Occupation</value>
+  <data name="layer_inaccessible_title_prague" xml:space="preserve">
+    <value>Forbidden Places Within the City of Prague</value>
   </data>
-  <data name="layer_address_abstract_prague" xml:space="preserve">
-    <value>Addresses where Jewish residents of Prague lived during the Shoah, according to the victims' database. The data mostly come from the registration of Jews in the Protectorate, which was initiated in autumn 1941 by order of the Central Office for Jewish Emigration. Therefore, they may not correspond to the residence of Jewish families before the persecution began. The layer includes data on the number of occupants of each house, statistics on their fate and the number present on various historical dates. In some cases, where individual houses were difficult to identify, multiple addresses are grouped under the same coordinates (for example, on the same street). We are continuously working on refining the map location. Street names from the time of occupation (ca. 1941-1942) are used.</value>
+  <data name="layer_inaccessible_abstract_prague" xml:space="preserve">
+    <value>Places that were forbidden to Jews during the war. Their depiction is based on a historical map from 1938. The current spaces may vary in size and shape. </value>
   </data>
   <data name="layer_statistics_title_prague" xml:space="preserve">
     <value>Districts Statistic</value>
@@ -330,14 +381,56 @@
   <data name="showStatistics" xml:space="preserve">
     <value>Show statistics</value>
   </data>
-  <data name="countInaccessiblePlaces" xml:space="preserve">
-    <value>Forbidden places</value>
+  <data name="layer_interest_title_prague_last_residence" xml:space="preserve">
+    <value>Points of Interest in the City of Prague</value>
+  </data>
+  <data name="layer_interest_abstract_prague_last_residence" xml:space="preserve">
+    <value>Points of interest include places of persecution, Jewish buildings, warehouses full of confiscated property, or places that Jews were forbidden to enter.</value>
+  </data>
+  <data name="layer_incident_title_prague_last_residence" xml:space="preserve">
+    <value>Incidents Within the City of Prague</value>
+  </data>
+  <data name="layer_incident_abstract_prague_last_residence" xml:space="preserve">
+    <value>Incidents that took place within the city limits of Prague during which Jewish residents were arrested or investigated for violating anti-Jewish ordinances. This data was extracted from the digitized documents of the Prague Police as part of the MemoMap Prague project. It includes information about non-compliance with restrictions of free movement, identification papers lacking the letter \"J\" (Jude), etc.</value>
+  </data>
+  <data name="layer_address_title_prague_last_residence" xml:space="preserve">
+    <value>Residence by registration in the Protectorate</value>
+  </data>
+  <data name="layer_address_abstract_prague_last_residence" xml:space="preserve">
+    <value>Addresses where Jewish residents of Prague lived during the Shoah, according to the victims' database. The data mostly come from the registration of Jews in the Protectorate, which was initiated in autumn 1941 by order of the Central Office for Jewish Emigration. Therefore, they may not correspond to the residence of Jewish families before the persecution began. The layer includes data on the number of occupants of each house, statistics on their fate and the number present on various historical dates. In some cases, where individual houses were difficult to identify, multiple addresses are grouped under the same coordinates (for example, on the same street). We are continuously working on refining the map location. Street names from the time of occupation (ca. 1941-1942) are used.</value>
+  </data>
+  <data name="layer_victim_title_prague_last_residence" xml:space="preserve">
+    <value>Holocaust victims</value>
+  </data>
+  <data name="layer_victim_abstract_prague_last_residence" xml:space="preserve">
+    <value>Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz.</value>
+  </data>
+  <data name="layer_inaccessible_title_prague_last_residence" xml:space="preserve">
+    <value>Forbidden Places Within the City of Prague</value>
+  </data>
+  <data name="layer_inaccessible_abstract_prague_last_residence" xml:space="preserve">
+    <value>Places that were forbidden to Jews during the war. Their depiction is based on a historical map from 1938. The current spaces may vary in size and shape. </value>
+  </data>
+  <data name="layer_statistics_title_prague_last_residence" xml:space="preserve">
+    <value>Districts Statistic</value>
+  </data>
+  <data name="layer_statistics_abstract_prague_last_residence" xml:space="preserve">
+    <value>Outlines of historical Prague and Prague districts from 1930 supplemented with data on the number of records accessible in the application. The map is based on the output of the NAKI project "Making Historical Spatial and Statistical Data Available in a GIS Environment" (project number DF12P01OVV033) and further modified.</value>
+  </data>
+  <data name="layer_MGS-prague_historical_map_1938-v2_title_prague_last_residence" xml:space="preserve">
+    <value>Historical Map of Prague (1938)</value>
+  </data>
+  <data name="layer_MGS-prague_historical_map_1938-v2_abstract_prague_last_residence" xml:space="preserve">
+    <value>Orientation plan of the capital city of Prague and its surroundings (1938). The digital version was prepared by the Municipal Library in Prague, georeferencing was carried out by the Masaryk Institute and the Archive of the Academy of Sciences of the Czech Republic. Also available from WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
   </data>
   <data name="countPointsOfInterest" xml:space="preserve">
     <value>Points of interest</value>
   </data>
   <data name="countJews" xml:space="preserve">
     <value>Jewish residents</value>
+  </data>
+  <data name="countInaccessiblePlaces" xml:space="preserve">
+    <value>Forbidden places</value>
   </data>
   <data name="countIncidents" xml:space="preserve">
     <value>Incidents</value>
@@ -358,6 +451,9 @@
     <value>Homes</value>
   </data>
   <data name="welcomeText_prague" xml:space="preserve">
+    <value>&lt;p&gt;An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war. The timeline shows how people gradually disappeared from their homes. The app is adapted for mobile devices, so you can take it directly to the city.&lt;/p&gt;</value>
+  </data>
+  <data name="welcomeText_prague_last_residence" xml:space="preserve">
     <value>&lt;p&gt;An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war. The timeline shows how people gradually disappeared from their homes. The app is adapted for mobile devices, so you can take it directly to the city.&lt;/p&gt;</value>
   </data>
   <data name="goToMap" xml:space="preserve">
@@ -399,6 +495,30 @@
   <data name="help_inaccessible_prague" xml:space="preserve">
     <value>Places that were inaccessible to Jews during the Holocaust.</value>
   </data>
+  <data name="help_victims_prague_last_residence" xml:space="preserve">
+    <value>Places where Jewish residents lived during the Holocaust, according to the victims' database.</value>
+  </data>
+  <data name="help_incident_prague_last_residence" xml:space="preserve">
+    <value>Individual incidents of violations of anti-Jewish rules and regulations.  </value>
+  </data>
+  <data name="help_interest_prague_last_residence" xml:space="preserve">
+    <value>Places related to the daily life of Jewish residents of Prague, but also places associated with their persecution.</value>
+  </data>
+  <data name="help_inaccessible_prague_last_residence" xml:space="preserve">
+    <value>Places that were inaccessible to Jews during the Holocaust.</value>
+  </data>
+  <data name="help_victims_ricany" xml:space="preserve">
+    <value>Places where Jewish residents lived in Říčany</value>
+  </data>
+  <data name="help_interest_ricany" xml:space="preserve">
+    <value>Places related to the daily life of Jewish residents of Říčany</value>
+  </data>
+  <data name="help_memory_ricany" xml:space="preserve">
+    <value>Commemorative and memorial sites</value>
+  </data>
+  <data name="help_memorial_ricany" xml:space="preserve">
+    <value>Events commemorating Holocaust victims</value>
+  </data>
   <data name="featureType_Memory" xml:space="preserve">
     <value>Places of memory</value>
   </data>
@@ -406,6 +526,12 @@
     <value>Places of memory</value>
   </data>
   <data name="layer_memory_abstract_prague" xml:space="preserve">
+    <value>Sites and objects commemorating the persecution and victims of the Holocaust. Currently the layer contains data on Stolperstein laid in the pavement. The data is taken from the project of the Public Benefit Society for the Support of Persons Affected by the Holocaust, https://stolpersteinecz.cz/.</value>
+  </data>
+  <data name="layer_memory_title_prague_last_residence" xml:space="preserve">
+    <value>Places of memory</value>
+  </data>
+  <data name="layer_memory_abstract_prague_last_residence" xml:space="preserve">
     <value>Sites and objects commemorating the persecution and victims of the Holocaust. Currently the layer contains data on Stolperstein laid in the pavement. The data is taken from the project of the Public Benefit Society for the Support of Persons Affected by the Holocaust, https://stolpersteinecz.cz/.</value>
   </data>
   <data name="layer_memory_title_short" xml:space="preserve">
@@ -426,8 +552,14 @@
   <data name="city_prague" xml:space="preserve">
     <value>Prague</value>
   </data>
+  <data name="city_prague_last_residence" xml:space="preserve">
+    <value>Prague</value>
+  </data>
   <data name="city_pacov" xml:space="preserve">
     <value>Pacov</value>
+  </data>
+  <data name="city_ricany" xml:space="preserve">
+    <value>Říčany</value>
   </data>
   <data name="helpContent_pacov" xml:space="preserve">
     <value>Lorem ipsum..</value>
@@ -435,17 +567,50 @@
   <data name="welcomeText_pacov" xml:space="preserve">
     <value>An interactive map from the Protectorate period shows where Pacov's Jewish inhabitants lived and provides information about interesting places connected with the town's Jewish history and the interaction between the Jewish and majority population. Story maps allow specific personal stories and trajectories to be traced in detail. The data is supplemented by digitized documents and photographs. The app is adapted for mobile devices and you can therefore také it directly into the city space.</value>
   </data>
+  <data name="welcomeText_ricany" xml:space="preserve">
+    <value>Lore ipsum...</value>
+  </data>
   <data name="layer_interest_title_pacov" xml:space="preserve">
     <value>Points of Interest</value>
   </data>
   <data name="layer_interest_abstract_pacov" xml:space="preserve">
     <value>Points of interest including places marked numerically on the historical map and other places related to the Jewish history of Pacov.</value>
   </data>
+  <data name="layer_interest_title_ricany" xml:space="preserve">
+    <value>Points of interest</value>
+  </data>
+  <data name="layer_interest_abstract_ricany" xml:space="preserve">
+    <value>Sites connected to the lives of Jewish residents of Říčany.</value>
+  </data>
   <data name="layer_address_title_pacov" xml:space="preserve">
-    <value>Address</value>
+    <value>Jewish residents</value>
   </data>
   <data name="layer_address_abstract_pacov" xml:space="preserve">
-    <value>Addresses where Jewish inhabitants of Pacov lived at the time of the occupation, according to existing sources. The layer includes data on the persons who lived at the given address, regardless of the period, and information relating to two specific dates, namely 13 May 1939 (based on the List of Jewish inhabitants of Pacov prepared by the Pacov Gendarmerie on that date) and 13 November 1942 (based on the last residence before deportation given in the transport lists).</value>
+    <value>Places where Jewish residents lived in Říčany</value>
+  </data>
+  <data name="layer_address_title_ricany" xml:space="preserve">
+    <value>Jewish Homes During the Occupation</value>
+  </data>
+  <data name="layer_address_abstract_ricany" xml:space="preserve">
+    <value>Addresses where Jewish residents of Říčany lived during  the occupation and in the period immediately preceding it, based on surviving sources. The  information is compiled using publicly available Holocaust victim databases and archival materials.</value>
+  </data>
+  <data name="layer_memory_title_ricany" xml:space="preserve">
+    <value>Places of memory</value>
+  </data>
+  <data name="layer_memory_abstract_ricany" xml:space="preserve">
+    <value>Sites and objects commemorating the persecution and victims of the Holocaust. This layer includes information about the Stolpersteine (Stumble Stones) in Říčany and other memorials and commemorative sites across the town.</value>
+  </data>
+  <data name="layer_memorial_title_ricany" xml:space="preserve">
+    <value>Remembrance events</value>
+  </data>
+  <data name="layer_memorial_abstract_ricany" xml:space="preserve">
+    <value>Events in Říčany commemorating the victims of the Holocaust. Memorial events connected with the laying of Stolpersteine (Stumble Stones) and other remembrance gatherings.</value>
+  </data>
+  <data name="layer_MGS-ricanyHistoricalMap1935-v1-cze_title_ricany" xml:space="preserve">
+    <value>Historical Map of Říčany (1935)</value>
+  </data>
+  <data name="layer_MGS-ricanyHistoricalMap1935-v1-cze_abstract_ricany" xml:space="preserve">
+    <value>The scan of the historic map was provided by the Říčany Museum, and its georeferencing was carried out by the Masaryk Institute and Archives of the Czech Academy of Sciences.</value>
   </data>
   <data name="help_victims_pacov" xml:space="preserve">
     <value>Places where Jewish residents lived during the Holocaust.</value>
@@ -480,17 +645,17 @@
   <data name="allResidents_help" xml:space="preserve">
     <value>Everyone who lived at that address, regardless of the time period.</value>
   </data>
-  <data name="residents_1939-05-13_help" xml:space="preserve">
-    <value>???</value>
-  </data>
-  <data name="residents_1942-11-13_help" xml:space="preserve">
-    <value>???</value>
+  <data name="residents_1939-05-13" xml:space="preserve">
+    <value>Residents on 13 May 1939</value>
   </data>
   <data name="residents_1942-11-13" xml:space="preserve">
     <value>Residents on 13 November 1942</value>
   </data>
-  <data name="residents_1939-05-13" xml:space="preserve">
-    <value>Residents on 13 May 1939</value>
+  <data name="residents_1942-11-13_help" xml:space="preserve">
+    <value>???</value>
+  </data>
+  <data name="residents_1939-05-13_help" xml:space="preserve">
+    <value>???</value>
   </data>
   <data name="show" xml:space="preserve">
     <value>Show</value>
@@ -507,39 +672,6 @@
   <data name="refreshPage" xml:space="preserve">
     <value>Refresh page</value>
   </data>
-  <data name="welcomeText_prague_last_residence" xml:space="preserve">
-    <value>&lt;p&gt;An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war. The timeline shows how people gradually disappeared from their homes. The app is adapted for mobile devices, so you can take it directly to the city.&lt;/p&gt;</value>
-  </data>
-  <data name="layer_MGS-prague_historical_map_1938-v2_title_prague_last_residence" xml:space="preserve">
-    <value>Historical Map of Prague (1938)</value>
-  </data>
-  <data name="layer_statistics_abstract_prague_last_residence" xml:space="preserve">
-    <value>Outlines of historical Prague and Prague districts from 1930 supplemented with data on the number of records accessible in the application. The map is based on the output of the NAKI project "Making Historical Spatial and Statistical Data Available in a GIS Environment" (project number DF12P01OVV033) and further modified.</value>
-  </data>
-  <data name="layer_MGS-prague_historical_map_1938-v2_abstract_prague_last_residence" xml:space="preserve">
-    <value>Orientation plan of the capital city of Prague and its surroundings (1938). The digital version was prepared by the Municipal Library in Prague, georeferencing was carried out by the Masaryk Institute and the Archive of the Academy of Sciences of the Czech Republic. Also available from WWW: http://web2.mlp.cz/mapa1938/klad.php.</value>
-  </data>
-  <data name="help_victims_prague_last_residence" xml:space="preserve">
-    <value>Places where Jewish residents lived during the Holocaust, according to the victims' database.</value>
-  </data>
-  <data name="help_incident_prague_last_residence" xml:space="preserve">
-    <value>Individual incidents of violations of anti-Jewish rules and regulations.  </value>
-  </data>
-  <data name="help_interest_prague_last_residence" xml:space="preserve">
-    <value>Places related to the daily life of Jewish residents of Prague, but also places associated with their persecution.</value>
-  </data>
-  <data name="help_inaccessible_prague_last_residence" xml:space="preserve">
-    <value>Places that were inaccessible to Jews during the Holocaust.</value>
-  </data>
-  <data name="layer_memory_title_prague_last_residence" xml:space="preserve">
-    <value>Places of memory</value>
-  </data>
-  <data name="layer_memory_abstract_prague_last_residence" xml:space="preserve">
-    <value>Sites and objects commemorating the persecution and victims of the Holocaust. Currently the layer contains data on Stolperstein laid in the pavement. The data is taken from the project of the Public Benefit Society for the Support of Persons Affected by the Holocaust, https://stolpersteinecz.cz/.</value>
-  </data>
-  <data name="city_prague_last_residence" xml:space="preserve">
-    <value>Prague</value>
-  </data>
   <data name="featureType_AddressLastResidence" xml:space="preserve">
     <value>Jewish Homes - before deportation</value>
   </data>
@@ -549,101 +681,17 @@
   <data name="layer_address_last_residence_abstract_prague_last_residence" xml:space="preserve">
     <value> </value>
   </data>
-  <data name="layer_address_abstract_prague_last_residence" xml:space="preserve">
-    <value>Addresses where Jewish residents of Prague lived during the Shoah, according to the victims' database. The data mostly come from the registration of Jews in the Protectorate, which was initiated in autumn 1941 by order of the Central Office for Jewish Emigration. Therefore, they may not correspond to the residence of Jewish families before the persecution began. The layer includes data on the number of occupants of each house, statistics on their fate and the number present on various historical dates. In some cases, where individual houses were difficult to identify, multiple addresses are grouped under the same coordinates (for example, on the same street). We are continuously working on refining the map location. Street names from the time of occupation (ca. 1941-1942) are used.</value>
-  </data>
-  <data name="layer_address_title_prague_last_residence" xml:space="preserve">
-    <value>Residence by registration in the Protectorate</value>
-  </data>
-  <data name="layer_inaccessible_abstract_prague_last_residence" xml:space="preserve">
-    <value>Places that were forbidden to Jews during the war. Their depiction is based on a historical map from 1938. The current spaces may vary in size and shape. </value>
-  </data>
-  <data name="layer_inaccessible_title_prague_last_residence" xml:space="preserve">
-    <value>Forbidden Places Within the City of Prague</value>
-  </data>
-  <data name="layer_incident_abstract_prague_last_residence" xml:space="preserve">
-    <value>Incidents that took place within the city limits of Prague during which Jewish residents were arrested or investigated for violating anti-Jewish ordinances. This data was extracted from the digitized documents of the Prague Police as part of the MemoMap Prague project. It includes information about non-compliance with restrictions of free movement, identification papers lacking the letter \"J\" (Jude), etc.</value>
-  </data>
-  <data name="layer_incident_title_prague_last_residence" xml:space="preserve">
-    <value>Incidents Within the City of Prague</value>
-  </data>
-  <data name="layer_interest_abstract_prague_last_residence" xml:space="preserve">
-    <value>Points of interest include places of persecution, Jewish buildings, warehouses full of confiscated property, or places that Jews were forbidden to enter.</value>
-  </data>
-  <data name="layer_interest_title_prague_last_residence" xml:space="preserve">
-    <value>Points of Interest in the City of Prague</value>
-  </data>
-  <data name="layer_statistics_title_prague_last_residence" xml:space="preserve">
-    <value>Districts Statistic</value>
-  </data>
-  <data name="layer_victim_abstract_prague_last_residence" xml:space="preserve">
-    <value>Database of Jewish residents of Prague who were persecuted by the Nazis and died as a result. The records are linked to their Prague addresses. Details are accessible via links to holocaust.cz.</value>
-  </data>
-  <data name="layer_victim_title_prague_last_residence" xml:space="preserve">
-    <value>Holocaust victims</value>
-  </data>
-  <data name="prague_last_residence" xml:space="preserve">
-    <value>Prague</value>
-  </data>
-  <data name="helpContent_prague_last_residence" xml:space="preserve">
-    <value>&lt;div&gt;
-  &lt;p&gt;
-  &lt;h4&gt;
-    What is MemoMap?
-  &lt;/h4&gt;
-  &lt;/p&gt;
-  &lt;p&gt;Interactive map of Prague from the period of the Protectorate Bohemia and Moravia. The map shows the addresses where Prague Jews lived during Nazi occupation, places related to their persecution as well as places where Jews were not allowed. Thanks to the timeline, you can see how people gradually disappeared from their homes as they were deported to ghettos and concentration camps. The app is adapted for mobile devices and you can use it while walking in the city.&lt;/p&gt;
-  &lt;p&gt;
-  &lt;h4&gt;What does MemoMap contain?&lt;/h4&gt;
-  &lt;/p&gt;
-  &lt;p&gt;
-  The app displays information about more than 40,000 victims of the Holocaust, about 1,700 cases of violations of anti-Jewish regulations and ordinances, about 120 places of interest related to their daily lives and persecution, about 110 places that were inaccessible to Jewish residents of Prague during the war and a growing number of places of memory.
-  &lt;/p&gt;
-  &lt;p&gt;The data on the victims of the Holocaust come from a database maintained by the Terezín Initiative Institute. The application makes available not only photographs of the victims, but also scans of the police records relating to violations of anti-Jewish regulations and orders (these scans come from the Prague Police Directorate's collection at the National Archives).
-  &lt;/p&gt; &lt;p&gt;
- &lt;h4&gt;How to use the application?&lt;/h4&gt;
- &lt;/p&gt;
- &lt;p&gt;
- Individual data types are divided into so-called layers, between which you can switch. The layer control is located under the icon&amp;nbsp;&amp;nbsp;
- &lt;img src='/images/layers-small.svg' /&gt;
- &lt;/p&gt;
- &lt;p&gt;
- You can Zoom in or out on the map using the&amp;nbsp;&amp;nbsp;
- &lt;img src='/images/zoom-in-small.svg' /&gt;
- &lt;img src='/images/zoom-out-small.svg' /&gt;
- &lt;/p&gt;
- &lt;p&gt;
- Your location on the map can be found using the button&amp;nbsp;&amp;nbsp;
- &lt;img src='/images/location-small.svg' /&gt;
- &lt;/p&gt;
-
-&lt;p&gt;
- &lt;h4&gt;Did you find an error?&lt;/h4&gt;
- &lt;/p&gt;
- &lt;p&gt;If you encounter a technical problem or data error, please let us know using this &lt;a href="https://docs.google.com/forms/d/15jprT8Sbc-Llt1CfAPrIzU4S8YIDjREixRADGzbA62k" target="_blank"&gt; forms&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;
- &lt;h4&gt;Credit&lt;/h4&gt;
- &lt;/p&gt;
- &lt;p&gt;The MemoMap application was originally developed as part of the project Integration and Segregation in the City Space: the History of the Holocaust in Prague through a mobile web application (identifier TL01000366). The project was supported by the Technology Agency of the Czech Republic as part of the public competition ÉTA 1. MemoMap was created by the Masaryk Institute and Archives of the Czech Academy of Sciences in cooperation with the Terezín Initiative Institute and the Multicultural Centre Prague.&lt;/p&gt;
-&lt;p&gt; The application is maintained and further developed by the Czech node of the European Holocaust Research Infrastructure. It is part of the LINDAT/CLARIAH-CZ infrastructure, which is supported by the Ministry of Education, Youth and Sports of the Czech Republic under the programm of large research infrastructures.&lt;/p&gt; 
-&lt;p&gt; It has been supported by the Czech Foundation for Holocast Victims and through the Strategy AV21 program "City as a laboratory of change" financed by the Czech Academy of Sciences.&lt;/p&gt;
-
-  &lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;
-
-&lt;/div&gt;</value>
-  </data>
   <data name="layer_address_last_residence_heatmap_title_prague_last_residence" xml:space="preserve">
     <value>Last Residence before Deportation - Heatmap</value>
   </data>
   <data name="layer_address_last_residence_heatmap_abstract_prague_last_residence" xml:space="preserve">
     <value> </value>
   </data>
-  <data name="layer_address_heatmap_abstract_prague_last_residence" xml:space="preserve">
-    <value> </value>
-  </data>
   <data name="layer_address_heatmap_title_prague_last_residence" xml:space="preserve">
     <value>Residence by registration in the Protectorate - heatmap</value>
+  </data>
+  <data name="layer_address_heatmap_abstract_prague_last_residence" xml:space="preserve">
+    <value> </value>
   </data>
   <data name="showOnMap" xml:space="preserve">
     <value>Show on the map</value>
@@ -675,11 +723,11 @@
   <data name="help_incident_pacov" xml:space="preserve">
     <value>Cases of incidents during which arrests or public humiliation occurred.</value>
   </data>
-  <data name="layer_MGS-pacov_historical_map_1942-cze-v1_abstract_pacov" xml:space="preserve">
-    <value>The historical map of Pacov dates back to May 1942. The red coloured areas with house numbers mark Jewish buildings and properties. The map comes from the State District Archive in Pelhřimov, georeferencing was carried out by the Masaryk Institute and the Archive of the Czech Academy of Sciences.</value>
-  </data>
   <data name="layer_MGS-pacov_historical_map_1942-cze-v1_title_pacov" xml:space="preserve">
     <value>Historical Map of Pacov (1942)</value>
+  </data>
+  <data name="layer_MGS-pacov_historical_map_1942-cze-v1_abstract_pacov" xml:space="preserve">
+    <value>The historical map of Pacov dates back to May 1942. The red coloured areas with house numbers mark Jewish buildings and properties. The map comes from the State District Archive in Pelhřimov, georeferencing was carried out by the Masaryk Institute and the Archive of the Czech Academy of Sciences.</value>
   </data>
   <data name="date_of_laying" xml:space="preserve">
     <value>Date of laying</value>
@@ -691,24 +739,72 @@
     <value>Stolpersteins</value>
   </data>
   <data name="commemorative event" xml:space="preserve">
-    <value>Commemorative Event</value>
+    <value>Remembrance events</value>
   </data>
   <data name="countMemorials" xml:space="preserve">
-    <value>Commemorative events</value>
+    <value>Remembrance events</value>
   </data>
   <data name="help_memorials_ricany" xml:space="preserve">
-    <value>Places where commemorative events took place.</value>
+    <value>Events commemorating Holocaust victims</value>
   </data>
   <data name="featureType_Memorial" xml:space="preserve">
-    <value>Commemorative Events</value>
+    <value>Remembrance events</value>
   </data>
   <data name="layer_memorial_title_short" xml:space="preserve">
-    <value>Memorials</value>
+    <value>Remembrance events</value>
   </data>
   <data name="otherStoryMaps" xml:space="preserve">
     <value>Other story maps</value>
   </data>
   <data name="birthDate" xml:space="preserve">
     <value>Birth date</value>
+  </data>
+  <data name="helpContent_ricany" xml:space="preserve">
+    <value>&lt;div&gt;
+  &lt;p&gt;
+  &lt;h4&gt;
+About MemoMap Říčany
+  &lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;[Informace o projektu, doplníme později podle toho, co zašlou z Říčan, zatím nechat prázdné.]&lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;What does MemoMap contain?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+The application presents information about Jewish families from Říčany, their homes, and places connected to their everyday lives. It also features local sites of memory and the Torah scrolls that were once used in Říčany and are now located in the United Kingdom. The application further includes data on commemorative events, such as Stolperstein placements.
+  &lt;/p&gt;
+  &lt;p&gt;
+The data is based on available Holocaust victim databases, archival sources, and scholarly publications. The preparation of data and texts involved pupils from local primary schools and the Municipal Office of Říčany.
+  &lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;How to use the application?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Individual data types are divided into so-called layers, between which you can switch. The layer control is located under the icon&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/layers-small.svg' /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    You can Zoom in or out on the map using the&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/zoom-in-small.svg' /&gt;
+     &lt;img src='/images/zoom-out-small.svg' /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Your location on the map can be found using the button&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/location-small.svg' /&gt;
+  &lt;/p&gt;
+
+&lt;p&gt;
+  &lt;h4&gt;Credits&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;MemoMap Říčany was created through the collaboration of the Masaryk Institute and Archives of the Czech Academy of Sciences and the Municipal Office of Říčany. Special thanks go to Ms Věra Likešová and Ms Markéta Žilková from the Říčany Municipal Office.&lt;/p&gt;
+  &lt;a href="https://www.ricany.cz/en" target="_blank"&gt;&lt;img src='/images/ricany-logo.jpg' /&gt;&lt;/a&gt;
+  &lt;a href="https://www.mua.cas.cz/en" target="_blank"&gt;&lt;img src='/images/mua-logo.jpg' /&gt;&lt;/a&gt;
+  &lt;p&gt;The development of the map application was supported by the Foundation for Holocaust Victims.&lt;/p&gt;
+  &lt;a href="https://fondholocaust.cz/en/homepage-cs-english/" target="_blank"&gt;&lt;img src='/images/nfoh-logo.jpg' /&gt;&lt;/a&gt;
+&lt;p&gt;
+The application is continuously developed and maintained within the Czech node of the European Holocaust Research Infrastructure. EHRI-CZ is part of the LINDAT/CLARIAH-CZ infrastructure, which is fully supported by the Ministry of Education, Youth and Sports of the Czech Republic as part of the "large infrastructures" program.
+&lt;/p&gt;
+  &lt;a href="https://ehri.cz/en" target="_blank"&gt;&lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;&lt;/a&gt;
+  &lt;/div&gt;</value>
   </data>
 </root>
