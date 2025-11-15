@@ -8,7 +8,9 @@
         <h3>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h3>
         @if (!string.IsNullOrEmpty(Place.DescriptionCs))
         {
-            <p>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn : Place.DescriptionCs)</p>
+            <p>
+                @((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn?.Nl2Br() : Place.DescriptionCs?.Nl2Br()) ?? ""))
+            </p>
         }
     </RadzenCard>
 </RadzenRow>

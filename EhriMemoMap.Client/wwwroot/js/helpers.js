@@ -34,5 +34,7 @@ function initGallery(id, index = 0) {
 }
 
 function closeGallery() {
+    if (bp === null || bp === undefined)
+        return;
     bp.close();
 }

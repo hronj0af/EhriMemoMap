@@ -37,5 +37,10 @@ namespace EhriMemoMap.Client.Helpers
             return JsonConvert.SerializeObject(json);
         }
 
+        public static string Nl2Br(this string text)
+        {
+            return text?.Replace("\n", "<br/>") ?? string.Empty;
+        }   
+
     }
 }
