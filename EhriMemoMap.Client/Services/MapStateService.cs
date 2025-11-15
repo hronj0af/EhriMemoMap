@@ -100,6 +100,7 @@ namespace EhriMemoMap.Client.Services
             if (newDialogType == DialogTypeEnum.None)
             {
                 await _dialogService.CloseSideAsync();
+                await _js.InvokeVoidAsync("closeGallery");
                 await _js.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
                 await _js.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
             }
@@ -126,8 +127,8 @@ namespace EhriMemoMap.Client.Services
                 NarrativeMap = null;
             }
             else if (newValue == MapTypeEnum.StoryMapOneStop)
-            { 
-                await _js.InvokeVoidAsync("mapAPI.hideAllLayers"); 
+            {
+                await _js.InvokeVoidAsync("mapAPI.hideAllLayers");
             }
 
             if (isMobileView)

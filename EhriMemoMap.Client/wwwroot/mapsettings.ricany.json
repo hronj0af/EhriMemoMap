@@ -3,7 +3,7 @@
     "initialVariables": {
       "city": "ricany",
       "allCities": [ "ricany", "prague" ],
-      "storyMaps": false,
+      "storyMaps": true,
       "zoom": 15,
       "zoomMobile": 15,
       "lat": 49.9925,

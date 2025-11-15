@@ -32,3 +32,7 @@ function initGallery(id, index = 0) {
         console.error('initGallery error', err);
     }
 }
+
+function closeGallery() {
+    bp.close();
+}

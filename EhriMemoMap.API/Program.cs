@@ -16,6 +16,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 builder.Services.AddScoped<MapLogicService>();
 builder.Services.AddScoped<SolrService>();
+builder.Services.AddScoped<SolrUpdateService>();
 builder.Services.AddHttpClient();
 
 // you must set the MEMOMAP_DB environment variable to the connection string
@@ -82,6 +83,8 @@ app.MapGet("/getvictimlonginfo", (string city, long id, MapLogicService service)
 app.MapPost("/getplaces", (PlacesParameters parameters, MapLogicService service) => service.GetPlaces(parameters));
 
 app.MapPost("/getsolrplaces", (SolrQueryParameters parameters, SolrService service) => service.SolrExecuteDocument(parameters));
+
+app.MapGet("/updatesolrindex", (SolrUpdateService service) => service.UpdateAllPlacesAsync());
 
 app.MapGet("/wmsProxy", async (HttpContext context) =>
 {

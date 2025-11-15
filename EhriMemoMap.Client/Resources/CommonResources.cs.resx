@@ -473,9 +473,6 @@
   <data name="all" xml:space="preserve">
     <value>Všechno</value>
   </data>
-  <data name="help_search" xml:space="preserve">
-    <value>Hledání jmen obětí, adres, incidentů, bodů zájmu, zakázaných míst či míst paměti.</value>
-  </data>
   <data name="filterNames" xml:space="preserve">
     <value>Filtrovat podle jména...</value>
   </data>
@@ -807,5 +804,18 @@ Aplikace zobrazuje informace o říčanských židovských rodinách, o jejich d
   &lt;/p&gt;
   &lt;a href="https://ehri.cz" target="_blank"&gt;&lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;&lt;/a&gt;
   &lt;/div&gt;</value>
+  </data>
+  <data name="help_search_prague" xml:space="preserve">
+    <value>Hledání jmen obětí, adres, incidentů, bodů zájmu, zakázaných míst či míst paměti.</value>
+  </data>
+  <data name="help_search_pacov" xml:space="preserve">
+    <value>Hledání jmen obětí, adres, incidentů, bodů zájmu, zakázaných míst či míst paměti.</value>
+  </data>
+  <data name="help_search_ricany" xml:space="preserve">
+    <value>Hledání jmen obětí, adres, bodů 
+zájmu, míst paměti nebo připomínkových akcí</value>
+  </data>
+  <data name="help_search_prague_last_residence" xml:space="preserve">
+    <value>Hledání jmen obětí, adres, incidentů, bodů zájmu, zakázaných míst či míst paměti.</value>
   </data>
 </root>

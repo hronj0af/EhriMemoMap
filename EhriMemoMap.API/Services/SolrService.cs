@@ -1,8 +1,11 @@
 ﻿using EhriMemoMap.Shared;
 using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace EhriMemoMap.API.Services
 {
+
     public partial class SolrService(IConfiguration configuration, IHttpClientFactory clientFactory)
     {
         private readonly string _solrUrl = configuration.GetSection("App")["SolrUrl"] ?? "";
@@ -77,6 +80,31 @@ namespace EhriMemoMap.API.Services
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Deletes all documents from the Solr core.
+        /// </summary>
+        /// <returns>A Task representing the asynchronous operation.</returns>
+        public async Task DeleteAllDocumentsAsync()
+        {
+            string deleteUrl = $"{_solrUrl}update?commit=true";
+            string jsonPayload = "{\"delete\": {\"query\":\"*:*\"}}";
+
+            try
+            {
+                var client = clientFactory.CreateClient();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                
+                var content = new StringContent(jsonPayload, Encoding.UTF8, new MediaTypeHeaderValue("application/json"));
+                HttpResponseMessage response = await client.PostAsync(deleteUrl, content);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting documents from Solr: {ex.Message}");
+                throw;
+            }
         }
     }
 }

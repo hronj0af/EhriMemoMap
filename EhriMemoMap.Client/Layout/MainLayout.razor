@@ -3,7 +3,7 @@
 @inject IStringLocalizer<CommonResources> cl
 @inject MapStateService MapState
 
-<PageTitle>MemoMap @cl[MapState?.Map?.InitialVariables?.City ?? ""]</PageTitle>
+<PageTitle>MemoMap @cl["city_" + MapState?.Map?.InitialVariables?.City ?? ""]</PageTitle>
 
 <div class="page">
     <main>

@@ -119,8 +119,8 @@ namespace EhriMemoMap.Client.Services
                     var grouppedObject = grouppedAddress.First();
                     grouppedObject.Citizens = grouppedAddress.Sum(a => a.Citizens);
                     grouppedObject.CitizensTotal = grouppedAddress.Sum(a => a.CitizensTotal);
-                    grouppedObject.LabelCs = grouppedAddress.Select(a => a.LabelCs).Aggregate((x, y) => x + " <br/> " + y);
-                    grouppedObject.LabelEn = grouppedAddress.Select(a => a.LabelEn).Aggregate((x, y) => x + " <br/> " + y);
+                    grouppedObject.LabelCs = grouppedAddress.Select(a => a.LabelCs).Distinct().Aggregate((x, y) => x + " <br/> " + y);
+                    grouppedObject.LabelEn = grouppedAddress.Select(a => a.LabelEn).Distinct().Aggregate((x, y) => x + " <br/> " + y);
 
                     result.Add(grouppedObject);
 

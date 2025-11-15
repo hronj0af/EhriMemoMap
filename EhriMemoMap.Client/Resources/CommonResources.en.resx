@@ -471,9 +471,6 @@
   <data name="all" xml:space="preserve">
     <value>All</value>
   </data>
-  <data name="help_search" xml:space="preserve">
-    <value>Search for victims' names, addresses, incidents, points of interest, restricted areas or memory locations.</value>
-  </data>
   <data name="filterNames" xml:space="preserve">
     <value>Filter by name...</value>
   </data>
@@ -667,7 +664,7 @@
     <value>Pacov</value>
   </data>
   <data name="cities" xml:space="preserve">
-    <value>Cities</value>
+    <value>Locations</value>
   </data>
   <data name="refreshPage" xml:space="preserve">
     <value>Refresh page</value>
@@ -806,5 +803,18 @@ The application is continuously developed and maintained within the Czech node o
 &lt;/p&gt;
   &lt;a href="https://ehri.cz/en" target="_blank"&gt;&lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;&lt;/a&gt;
   &lt;/div&gt;</value>
+  </data>
+  <data name="help_search_prague" xml:space="preserve">
+    <value>Search for victims' names, addresses, incidents, points of interest, restricted areas or memory locations.</value>
+  </data>
+  <data name="help_search_pacov" xml:space="preserve">
+    <value>Search for victims' names, addresses, incidents, points of interest, restricted areas or memory locations.</value>
+  </data>
+  <data name="help_search_ricany" xml:space="preserve">
+    <value>Searching for victims’ names, 
+addresses, points of interest, memorial sites, or remembrance events</value>
+  </data>
+  <data name="help_search_prague_last_residence" xml:space="preserve">
+    <value>Search for victims' names, addresses, incidents, points of interest, restricted areas or memory locations.</value>
   </data>
 </root>

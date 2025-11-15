@@ -37,7 +37,7 @@
                             <div id="documents_@actIndex" style="display:none;">
                                 @if (doc.Url != null)
                                 {
-                                    if (doc.Type == "image")
+                                    if (doc.Type == "image" || doc.Type == "text")
                                     {
                                         foreach (var url in doc.Url)
                                         {

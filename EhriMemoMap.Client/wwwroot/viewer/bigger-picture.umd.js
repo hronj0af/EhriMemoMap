@@ -1823,7 +1823,8 @@
     					mediaElement = document.createElement((obj.type?.includes('audio')) ? 'audio' : 'video');
 
     					addAttributes(mediaElement, {
-    						controls: true,
+                            controls: true,
+                            class: "video-js",
     						autoplay: true,
     						playsinline: true,
     						tabindex: '0'
@@ -2439,7 +2440,8 @@
 
     	component_subscribe($$self, zoomed, value => $$invalidate(10, $zoomed = value));
 
-    	const open = options => {
+        const open = options => {
+            closing.set(false);
     		$$invalidate(5, opts = options);
     		$$invalidate(8, inline = opts.inline);
 
