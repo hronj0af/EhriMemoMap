@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>5f9321a9-6697-4b52-b9a1-79c5b12d1fe0</UserSecretsId>
@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EhriMemoMap.Data\EhriMemoMap.Data.csproj" />
-    <ProjectReference Include="..\EhriMemoMap.Shared\EhriMemoMap.Shared.csproj" />
+    <ProjectReference Include="..\EhriMemoMap.Shared9\EhriMemoMap.Shared9.csproj" />
   </ItemGroup>
 
 </Project>

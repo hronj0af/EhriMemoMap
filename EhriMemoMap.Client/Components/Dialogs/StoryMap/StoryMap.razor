@@ -1,13 +1,14 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
 @inject MapStateService MapState
 @inject MapLogicService MapLogic
+@inject StoryMapService StoryMapService
 @inject IJSRuntime JS
 
 <div style="padding:2.5rem 2.5rem 0 2.5rem;" id="card-narrative">
 
     @if (MapState.NarrativeMap != null)
     {
-        <RadzenRow onclick="@(() => ShowAllStoryMaps())" AlignItems="AlignItems.Center" class="rz-mb-4" Style="cursor:pointer">
+        <RadzenRow onclick="@(() => StoryMapService.ShowAllStoryMaps())" AlignItems="AlignItems.Center" class="rz-mb-4" Style="cursor:pointer">
             <RadzenColumn Size="1">
                 <RadzenImage Path="images/arrow-left-grey.png" />
             </RadzenColumn>
@@ -34,7 +35,7 @@
         @foreach (var map in MapState.AllNarrativeMaps)
         {
             <div>
-                <h4 class="rz-mb-6" style="cursor:pointer" onclick="@(() => ShowNarrativeMap(map.Id))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.LabelCs : @map.LabelEn)</h4>
+                <h4 class="rz-mb-6" style="cursor:pointer" onclick="@(() => StoryMapService.ShowNarrativeMap(map.Id))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.LabelCs : @map.LabelEn)</h4>
             </div>
         }
     }
@@ -42,27 +43,6 @@
 </div>
 
 @code {
-    private async Task ShowAllStoryMaps()
-    {
-        await MapLogic.GetAllNarrativeMaps();
-        MapState.DialogParameters.Id = null;
-        MapState.NarrativeMap = null;
-        await MapState.SetMapType(MapTypeEnum.Normal);
-        MapState.NotifyStateChanged();
-
-    }
-
-    private async Task ShowNarrativeMap(long? id)
-    {
-        if (id == null)
-            return;
-        await MapState.SetDialog(DialogTypeEnum.StoryMap, new DialogParameters { Id = id });
-        await MapState.SetMapType(MapTypeEnum.StoryMapWhole);
-        await MapLogic.GetNarrativeMap(MapState.DialogParameters.Id, MapState.Map.InitialVariables?.City);
-        await MapLogic.ShowNarrativeMapPlaces();
-        MapState.NotifyStateChanged();
-    }
-
 
     protected override async Task OnInitializedAsync()
     {

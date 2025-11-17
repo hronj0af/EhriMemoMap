@@ -18,7 +18,8 @@ public partial class RicanyContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     => optionsBuilder.UseNpgsql(x => x
             .UseNodaTime()
-            .UseNetTopologySuite());
+            .UseNetTopologySuite())
+        .EnableSensitiveDataLogging();
 
     public virtual DbSet<MapObject> MapObjects { get; set; }
 
@@ -67,6 +68,8 @@ public partial class RicanyContext : DbContext
     public virtual DbSet<NarrativeMapStopsXPlace> NarrativeMapStopsXPlaces { get; set; }
 
     public virtual DbSet<NarrativeMapsXNarrativeMapStop> NarrativeMapsXNarrativeMapStops { get; set; }
+
+    public virtual DbSet<NarrativeMapsXPoi> NarrativeMapsXPois { get; set; }
 
     public virtual DbSet<Place> Places { get; set; }
 
@@ -703,6 +706,29 @@ public partial class RicanyContext : DbContext
                 .HasForeignKey(d => d.NarrativeMapStopId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("narrative_map_stop_fkey");
+        });
+
+        modelBuilder.Entity<NarrativeMapsXPoi>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("narrative_maps_x_pois_pkey");
+
+            entity.ToTable("narrative_maps_x_pois");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.NarrativeMapId).HasColumnName("narrative_map_id");
+            entity.Property(e => e.PoiId).HasColumnName("poi_id");
+
+            entity.HasOne(d => d.NarrativeMap).WithMany(p => p.NarrativeMapsXPois)
+                .HasForeignKey(d => d.NarrativeMapId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("narrative_map_id_fkey");
+
+            entity.HasOne(d => d.Poi).WithMany(p => p.NarrativeMapsXPois)
+                .HasForeignKey(d => d.PoiId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("poi_id_fkey");
         });
 
         modelBuilder.Entity<Place>(entity =>

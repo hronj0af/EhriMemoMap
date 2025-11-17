@@ -4,13 +4,46 @@
 
 <RadzenRow class="rz-mb-4">
     <RadzenCard Style="width:100%">
-        <h2>@cl["memoryType_" + Place.Type]</h2>
-        <h3>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h3>
+        @if (Place.City == "ricany")
+        {
+            if (Place.Type == "stolpersteine_set")
+            {
+                <h3>@cl["memoryType_" + Place.Type]</h3>
+            }
+            else
+            {
+                <h3>
+                    @((CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs) ?? "")
+                </h3>
+            }
+        }
+        else
+        {
+            <h3>@cl["memoryType_" + Place.Type]</h3>
+        }
+        <h5 class="rz-mb-4">@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h5>
         @if (!string.IsNullOrEmpty(Place.DescriptionCs))
         {
-            <p>
+            <p class="rz-mb-4">
                 @((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn?.Nl2Br() : Place.DescriptionCs?.Nl2Br()) ?? ""))
             </p>
+        }
+        @if (Place.City == "ricany") 
+        {
+            <ul class="no-bullets">
+                @if (Place.CreationDate != null)
+                {
+                    <li>
+                        <b>@cl["date_of_laying"]:</b> @Place.CreationDate?.ToString("d. M. yyyy", CultureInfo.CurrentCulture)
+                    </li>
+                }
+                @if (!string.IsNullOrEmpty(Place.InscriptionCs))
+                {
+                    <li>
+                        <b>@cl["inscription"]:</b> @((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.InscriptionEn?.Nl2Br() : Place.InscriptionCs?.Nl2Br()) ?? ""))
+                    </li>
+                }
+            </ul>
         }
     </RadzenCard>
 </RadzenRow>
@@ -40,10 +73,10 @@
             {
                 <ul class="no-bullets">
                     <li>
-                        <b>@cl["date_of_laying"]:</b> @item.CreationDate?.ToString("d", CultureInfo.CurrentCulture)
+                        <b>@cl["date_of_laying"]:</b> @item.CreationDate?.ToString("d. M. yyyy", CultureInfo.CurrentCulture)
                     </li>
                     <li>
-                        <b>@cl["text_on_stolperstein"]:</b> @(CultureInfo.CurrentCulture.Name == "en-US" ? item.InscriptionEn : item.InscriptionCs)
+                        <b>@cl["inscription"]:</b> @((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? item.InscriptionEn?.Nl2Br() : item.InscriptionCs?.Nl2Br()) ?? ""))
                     </li>
                 </ul>
             }

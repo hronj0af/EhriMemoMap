@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -20,11 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Ricany\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\EhriMemoMap.Shared\EhriMemoMap.Shared.csproj" />
+    <ProjectReference Include="..\EhriMemoMap.Shared9\EhriMemoMap.Shared9.csproj" />
   </ItemGroup>
 
 </Project>

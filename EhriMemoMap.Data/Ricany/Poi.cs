@@ -19,5 +19,7 @@ public partial class Poi
 
     public virtual ICollection<DocumentsXPoi> DocumentsXPois { get; set; } = new List<DocumentsXPoi>();
 
+    public virtual ICollection<NarrativeMapsXPoi> NarrativeMapsXPois { get; set; } = new List<NarrativeMapsXPoi>();
+
     public virtual Place Place { get; set; } = null!;
 }

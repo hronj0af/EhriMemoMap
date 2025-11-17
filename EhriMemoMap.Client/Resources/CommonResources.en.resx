@@ -699,7 +699,7 @@
   <data name="viewStoryMap" xml:space="preserve">
     <value>View Story Map</value>
   </data>
-  <data name="storyMapExists" xml:space="preserve">
+  <data name="storyMapExistsForPerson" xml:space="preserve">
     <value>There is a story map for a given person.</value>
   </data>
   <data name="back" xml:space="preserve">
@@ -727,10 +727,10 @@
     <value>The historical map of Pacov dates back to May 1942. The red coloured areas with house numbers mark Jewish buildings and properties. The map comes from the State District Archive in Pelhřimov, georeferencing was carried out by the Masaryk Institute and the Archive of the Czech Academy of Sciences.</value>
   </data>
   <data name="date_of_laying" xml:space="preserve">
-    <value>Date of laying</value>
+    <value>Installation date</value>
   </data>
-  <data name="text_on_stolperstein" xml:space="preserve">
-    <value>Text on stolperstein</value>
+  <data name="inscription" xml:space="preserve">
+    <value>Inscription</value>
   </data>
   <data name="memoryType_stolpersteine_set" xml:space="preserve">
     <value>Stolpersteins</value>
@@ -816,5 +816,8 @@ addresses, points of interest, memorial sites, or remembrance events</value>
   </data>
   <data name="help_search_prague_last_residence" xml:space="preserve">
     <value>Search for victims' names, addresses, incidents, points of interest, restricted areas or memory locations.</value>
+  </data>
+  <data name="storyMapExistsForPlace" xml:space="preserve">
+    <value>There is a story map for a given place.</value>
   </data>
 </root>

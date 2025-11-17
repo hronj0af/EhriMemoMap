@@ -11,6 +11,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<TooltipService>();
+builder.Services.AddScoped<StoryMapService>();
 builder.Services.AddScoped<MapStateService>();
 builder.Services.AddScoped<MapLogicService>();
 builder.Services.AddLocalization();

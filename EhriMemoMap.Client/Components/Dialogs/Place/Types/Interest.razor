@@ -1,15 +1,31 @@
 ﻿@using System.Xml;
 @using System.Xml.Linq;
 @inject IStringLocalizer<CommonResources> cl
+@inject StoryMapService StoryMapService
 
 <RadzenRow class="rz-mb-4">
     <RadzenCard Style="width:100%">
 
-        <h3>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</h3>
-        <h5>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h5>
-        <ul class="no-bullets">
-            <li>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn : Place.DescriptionCs)</li>
-        </ul>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="flex: 1;">
+                <h3 style="margin-bottom: 4px;">@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</h3>
+                <h5 class="rz-mb-4" style="margin-top: 0;">@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h5>
+            </div>
+            @if (Place.NarrativeMapId != null)
+            {
+                <div style="flex-shrink: 0; margin-left: 12px;">
+                    <img src="images/storymap-icon.png" 
+                         alt="Story Map" 
+                         title="@cl["storyMapExistsForPlace"]"
+                         style="width: 15px; cursor: pointer;" 
+                         @onclick="() => StoryMapService.ShowNarrativeMap(Place.NarrativeMapId)" />
+                </div>
+            }
+        </div>
+
+        <p class="rz-mb-4">
+            @((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn?.Nl2Br() : Place.DescriptionCs?.Nl2Br()) ?? ""))
+        </p>
 
         <DocumentGallery Documents="Place.Documents" />
 

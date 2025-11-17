@@ -1,8 +1,6 @@
 ﻿using EhriMemoMap.Data;
 using EhriMemoMap.Data.Ricany;
-using EhriMemoMap.Shared;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using NetTopologySuite.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -286,40 +284,32 @@ namespace EhriMemoMap.API.Services
             var places = new List<SolrPlaceForUpdate>();
 
             // Ricany places of memory (stolpersteine)
-            var ricanyMemories = _ricanyContext.PlacesOfMemories
-                .Include(pm => pm.PlacesOfMemoryXPlacesOfMemoryPlaceOfMemory1s)
-                    .ThenInclude(x => x.PlaceOfMemory2)
-                        .ThenInclude(pm2 => pm2!.PlacesXPlacesOfMemories)
-                            .ThenInclude(px => px.Place)
-                .Where(pm => pm.Type == "stolperstein")
-                .AsEnumerable();
+            var ricanyMemories = _ricanyContext.PlacesOfMemories.
+                Where(a=>a.Type != "stolperstein").
+                Include(px => px.PlacesXPlacesOfMemories).ThenInclude(a => a.Place).AsEnumerable();
 
             foreach (var memory in ricanyMemories)
             {
-                var relatedMemory = memory.PlacesOfMemoryXPlacesOfMemoryPlaceOfMemory1s.FirstOrDefault()?.PlaceOfMemory2;
-                var place = relatedMemory?.PlacesXPlacesOfMemories.FirstOrDefault()?.Place;
+                var place = memory.PlacesXPlacesOfMemories.FirstOrDefault()?.Place;
 
-                if (place != null)
+                places.Add(new SolrPlaceForUpdate
                 {
-                    places.Add(new SolrPlaceForUpdate
-                    {
-                        City = "ricany",
-                        Id = $"{memory.Id}.memory.ricany",
-                        LabelCs = memory.LabelCs,
-                        LabelEn = memory.LabelEn,
-                        PlaceCs = place.LabelCs,
-                        PlaceEn = place.LabelEn,
-                        PlaceDe = "",
-                        PlaceCurrentCs = "",
-                        PlaceCurrentEn = "",
-                        PlaceCurrentDe = "",
-                        All = $"{memory.LabelCs ?? ""} {place.LabelCs ?? ""}",
-                        MapLocation = place.Geography != null ? _geoJsonWriter.Write(place.Geography.Copy()) : null,
-                        MapObject = place.Geography != null ? _geoJsonWriter.Write(place.Geography.Copy()) : null,
-                        PlaceDate = null,
-                        Type = "memory"
-                    });
-                }
+                    City = "ricany",
+                    Id = $"{memory.Id}.memory.ricany",
+                    LabelCs = memory.LabelCs,
+                    LabelEn = memory.LabelEn,
+                    PlaceCs = place?.LabelCs,
+                    PlaceEn = place?.LabelEn,
+                    PlaceDe = "",
+                    PlaceCurrentCs = "",
+                    PlaceCurrentEn = "",
+                    PlaceCurrentDe = "",
+                    All = $"{memory.LabelCs ?? ""} {place?.LabelCs ?? ""}",
+                    MapLocation = place?.Geography != null ? _geoJsonWriter.Write(place.Geography.Copy()) : null,
+                    MapObject = place?.Geography != null ? _geoJsonWriter.Write(place.Geography.Copy()) : null,
+                    PlaceDate = null,
+                    Type = "memory"
+                });
             }
 
             // Ricany POIs
@@ -400,7 +390,7 @@ namespace EhriMemoMap.API.Services
         public async Task<int> UpdateAllPlacesAsync()
         {
             var allPlaces = new List<SolrPlaceForUpdate>();
-            
+
             allPlaces.AddRange(GetPraguePlaces());
             allPlaces.AddRange(GetPragueLastResidencePlaces());
             allPlaces.AddRange(GetPacovPlaces());
@@ -409,13 +399,13 @@ namespace EhriMemoMap.API.Services
             // Přidávání dokumentů do Solr v dávkách po 100
             const int batchSize = 1000;
             var totalCount = allPlaces.Count;
-            
+
             for (int i = 0; i < totalCount; i += batchSize)
             {
                 var batch = allPlaces.Skip(i).Take(batchSize).ToList();
                 await AddOrUpdateDocumentsAsync(batch);
             }
-            
+
             return totalCount;
         }
 

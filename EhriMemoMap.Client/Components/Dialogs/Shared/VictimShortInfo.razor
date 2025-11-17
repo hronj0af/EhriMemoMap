@@ -18,7 +18,7 @@
         }
         else
         {
-            var storyMapTitle = Victim.NarrativeMapId != null ? cl.GetString("storyMapExists") : "";
+            var storyMapTitle = Victim.NarrativeMapId != null ? cl.GetString("storyMapExistsForPerson") : "";
 
             <RadzenCard class="@(VictimCardCss)" @onclick="OnVictimClick" Style="cursor:pointer">
                 <div style="position:relative;width:100%">

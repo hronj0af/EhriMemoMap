@@ -21,5 +21,7 @@ public partial class NarrativeMap
 
     public virtual ICollection<NarrativeMapsXNarrativeMapStop> NarrativeMapsXNarrativeMapStops { get; set; } = new List<NarrativeMapsXNarrativeMapStop>();
 
+    public virtual ICollection<NarrativeMapsXPoi> NarrativeMapsXPois { get; set; } = new List<NarrativeMapsXPoi>();
+
     public virtual ListItem TypeNavigation { get; set; } = null!;
 }

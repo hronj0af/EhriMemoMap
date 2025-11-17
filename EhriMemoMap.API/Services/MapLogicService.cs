@@ -248,19 +248,24 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
             return null;
 
         var result = ricanyContext.PlacesOfMemories.
-            Where(a => a.Type == "stolpersteine_set").
-            Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).
+            Where(a => a.Type != "stolperstein").
             Include(a => a.PlacesXPlacesOfMemories).
             Include(a => a.PlacesOfMemoryXPlacesOfMemoryPlaceOfMemory2s).ThenInclude(a => a.PlaceOfMemory1).
             AsEnumerable().
+            Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).
             Select(a => new PlaceMemory
             {
                 Type = a.Type,
+                LabelCs = a.LabelCs,
+                LabelEn = a.LabelEn,
                 City = "ricany",
                 AddressCs = a.PlacesXPlacesOfMemories.FirstOrDefault(b => b.RelationshipType == 38)?.Place?.LabelCs,
                 AddressEn = a.PlacesXPlacesOfMemories.FirstOrDefault(b => b.RelationshipType == 38)?.Place?.LabelEn,
                 DescriptionCs = a.DescriptionCs,
                 DescriptionEn = a.DescriptionEn,
+                InscriptionCs = a.InscriptionCs,
+                InscriptionEn = a.InscriptionEn,
+                CreationDate = a.CreationDate,
                 Items = a.PlacesOfMemoryXPlacesOfMemoryPlaceOfMemory2s.Select(b => b.PlaceOfMemory1).Select(b => new PlaceMemoryItem
                 {
                     Id = b.Id,
@@ -413,9 +418,10 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
             return ricanyContext.Pois.
                 Include(a => a.Place).
                 Include(a => a.DocumentsXPois).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
+                Include(a=>a.NarrativeMapsXPois).
                 AsNoTracking().
-                AsEnumerable().
                 Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
+                AsEnumerable().
                 Select(a => new PlaceInterest
                 {
                     AddressCs = a.Place.LabelCs,
@@ -424,6 +430,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     LabelEn = a.LabelEn,
                     DescriptionCs = a.DescriptionCs,
                     DescriptionEn = a.DescriptionEn,
+                    NarrativeMapId = a.NarrativeMapsXPois.FirstOrDefault()?.NarrativeMapId,
                     Documents = a.DocumentsXPois.Select(b => b.Document).Select(c => new Shared.Document
                     {
                         CreationDateCs = c.CreationDateCs,

@@ -701,7 +701,7 @@
   <data name="viewStoryMap" xml:space="preserve">
     <value>Zobrazit příběhovou mapu</value>
   </data>
-  <data name="storyMapExists" xml:space="preserve">
+  <data name="storyMapExistsForPerson" xml:space="preserve">
     <value>K danému člověku existuje příběhová mapa.</value>
   </data>
   <data name="back" xml:space="preserve">
@@ -731,8 +731,8 @@
   <data name="date_of_laying" xml:space="preserve">
     <value>Datum položení</value>
   </data>
-  <data name="text_on_stolperstein" xml:space="preserve">
-    <value>Text na kameni</value>
+  <data name="inscription" xml:space="preserve">
+    <value>Nápis</value>
   </data>
   <data name="memoryType_stolpersteine_set" xml:space="preserve">
     <value>Kameny zmizelých</value>
@@ -817,5 +817,8 @@ zájmu, míst paměti nebo připomínkových akcí</value>
   </data>
   <data name="help_search_prague_last_residence" xml:space="preserve">
     <value>Hledání jmen obětí, adres, incidentů, bodů zájmu, zakázaných míst či míst paměti.</value>
+  </data>
+  <data name="storyMapExistsForPlace" xml:space="preserve">
+    <value>K danému místu existuje příběhová mapa.</value>
   </data>
 </root>
