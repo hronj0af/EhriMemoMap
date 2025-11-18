@@ -6,12 +6,20 @@
     var buttonStyle = "z-index:2000;position:fixed;background-color:var(--Beige-LIGHT);width:" + (MapState.IsMobileView ? "100%" : MapState.WidthOfDialogPercent);
 }
 
-<RadzenRow JustifyContent="JustifyContent.End" Style="@buttonStyle">
-    @if (MapState.IsMobileView && MapState.DialogType != DialogTypeEnum.Help)
-    {
-        <RadzenButton Click=OnFullscreen Icon="fullscreen" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" />
-    }
-    <RadzenButton Click=OnClose Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" />
+<RadzenRow JustifyContent="JustifyContent.SpaceBetween" Style="@buttonStyle">
+    <RadzenStack Orientation="Orientation.Horizontal">
+        @if (MapState.DialogParametersHistory.Count > 1)
+        {
+            <RadzenButton Click=OnBack Icon="arrow_back" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" />
+        }
+    </RadzenStack>
+    <RadzenStack Orientation="Orientation.Horizontal">
+        @if (MapState.IsMobileView && MapState.DialogType != DialogTypeEnum.Help)
+        {
+            <RadzenButton Click=OnFullscreen Icon="fullscreen" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" />
+        }
+        <RadzenButton Click=OnClose Icon="close" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" />
+    </RadzenStack>
 </RadzenRow>
 
 @code {
@@ -30,5 +38,21 @@
         MapState.IsDialogFullScreen = !MapState.IsDialogFullScreen;
         await JS.InvokeVoidAsync("mapAPI.setDialogFullScreen", MapState.IsDialogFullScreen);
         MapState.NotifyStateChanged();
+    }
+
+    private async Task OnBack()
+    {
+        await MapState.SetLastDialog();
+        MapState.NotifyStateChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        MapState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        MapState.OnChange -= StateHasChanged;
     }
 }

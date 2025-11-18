@@ -2,6 +2,7 @@
 {
     public class Transport
     {
+        public long Id { get; set; }
         public DateTime? Date { get; set; }
         public string? Code { get; set; }
         public string? FromCs { get; set; }

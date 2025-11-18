@@ -821,4 +821,19 @@ zájmu, míst paměti nebo připomínkových akcí</value>
   <data name="storyMapExistsForPlace" xml:space="preserve">
     <value>K danému místu existuje příběhová mapa.</value>
   </data>
+  <data name="maidenname" xml:space="preserve">
+    <value>Rodné příjmení</value>
+  </data>
+  <data name="personTitle" xml:space="preserve">
+    <value>Titul</value>
+  </data>
+  <data name="otherInfo" xml:space="preserve">
+    <value>Další informace</value>
+  </data>
+  <data name="more" xml:space="preserve">
+    <value>více</value>
+  </data>
+  <data name="less" xml:space="preserve">
+    <value>méně</value>
+  </data>
 </root>

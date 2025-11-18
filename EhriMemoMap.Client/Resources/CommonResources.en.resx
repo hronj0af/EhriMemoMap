@@ -820,4 +820,19 @@ addresses, points of interest, memorial sites, or remembrance events</value>
   <data name="storyMapExistsForPlace" xml:space="preserve">
     <value>There is a story map for a given place.</value>
   </data>
+  <data name="maidenname" xml:space="preserve">
+    <value>Maiden name</value>
+  </data>
+  <data name="personTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="otherInfo" xml:space="preserve">
+    <value>More information</value>
+  </data>
+  <data name="more" xml:space="preserve">
+    <value>more</value>
+  </data>
+  <data name="less" xml:space="preserve">
+    <value>less</value>
+  </data>
 </root>

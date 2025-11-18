@@ -19,7 +19,7 @@
                 </h4>
             </RadzenColumn>
         }
-        foreach (var victim in Victims.Where(a => (!string.IsNullOrEmpty(FilteredName) ? a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower()) : true)).Distinct(new VictimComparer()))
+        foreach (var victim in Victims.Where(a => (!string.IsNullOrEmpty(FilteredName) ? a.Label != null && a.Label.ToLower().Contains(FilteredName.ToLower()) : true)).Distinct(new VictimComparer()).OrderBy(a=>a.Label))
         {
             <VictimShortInfo Victim="@victim" Relative="false" Small="false" />
         }

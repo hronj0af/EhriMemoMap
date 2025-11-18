@@ -6,21 +6,24 @@
 
 <div style="padding:2.5rem 2.5rem 0 2.5rem;" id="card-narrative">
 
-    @if (MapState.NarrativeMap != null)
+    @if (MapState.AllNarrativeMaps != null)
     {
-        <RadzenRow onclick="@(() => StoryMapService.ShowAllStoryMaps())" AlignItems="AlignItems.Center" class="rz-mb-4" Style="cursor:pointer">
-            <RadzenColumn Size="1">
-                <RadzenImage Path="images/arrow-left-grey.png" />
-            </RadzenColumn>
-            <RadzenColumn Size="10">
-                <h4>
-                    @cl.GetString("otherStoryMaps")
-                </h4>
-            </RadzenColumn>
-            <RadzenColumn Size="1">
-                <RadzenImage Path="images/storymap-icon.png" Style="height:30px"/>
-            </RadzenColumn>
-        </RadzenRow>
+        if (MapState.AllNarrativeMaps?.Count > 1)
+        {
+            <RadzenRow onclick="@(() => StoryMapService.ShowAllStoryMaps())" AlignItems="AlignItems.Center" class="rz-mb-4" Style="cursor:pointer">
+                <RadzenColumn Size="1">
+                    <RadzenImage Path="images/arrow-left-grey.png" />
+                </RadzenColumn>
+                <RadzenColumn Size="10">
+                    <h4>
+                        @cl.GetString("otherStoryMaps")
+                    </h4>
+                </RadzenColumn>
+                <RadzenColumn Size="1">
+                    <RadzenImage Path="images/storymap-icon.png" Style="height:30px" />
+                </RadzenColumn>
+            </RadzenRow>
+        }
         <RadzenRow>
             <RadzenColumn Size="12">
                 <h1 class="rz-mb-6" style="color:var(--Wine-Red)">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? MapState.NarrativeMap.LabelCs : MapState.NarrativeMap.LabelEn)</h1>

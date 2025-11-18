@@ -1,0 +1,47 @@
+﻿@inject IStringLocalizer<CommonResources> cl
+@inject MapStateService MapState
+@inject StoryMapService StoryMapService
+@inject IJSRuntime JSRuntime
+
+
+@if (Places != null && Places.Count() > 0)
+{
+    var place = Places[0];
+    if (Places.Count() == 1)
+    {
+        <tr>
+            <td>
+                @(CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs)
+            </td>
+            <td>
+                @place.GetAddressWithDates(CultureInfo.CurrentCulture.Name)
+            </td>
+        </tr>
+    }
+    else if (Places.Count() > 1)
+    {
+        <tr>
+            <td>
+                @(CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs)
+            </td>
+            <td>
+                @Places.OrderBy(a => a.Id).Select(a => a.GetAddressWithDates(CultureInfo.CurrentCulture.Name)).Aggregate((a, b) => a + ", " + b)
+            </td>
+        </tr>
+
+    }
+}
+
+
+@code {
+    [Parameter]
+    public long Type { get; set; }
+
+    private AddressInfo[]? Places { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Places = MapState.VictimLongInfo?.Places?.Where(a => a.Type == Type).ToArray();
+    }
+
+}

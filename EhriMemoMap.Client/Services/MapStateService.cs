@@ -1,4 +1,5 @@
 ﻿using EhriMemoMap.Client.Components.Dialogs;
+using EhriMemoMap.Client.Helpers;
 using EhriMemoMap.Models;
 using EhriMemoMap.Shared;
 using Microsoft.JSInterop;
@@ -93,7 +94,19 @@ namespace EhriMemoMap.Client.Services
 
         public DialogParameters DialogParameters { get; set; } = new DialogParameters();
 
+        public List<DialogParametersHistoryItem> DialogParametersHistory { get; set; } = [];
+
         public DialogTypeEnum DialogType = DialogTypeEnum.None;
+
+        public async Task SetLastDialog()
+        {
+            if (DialogParametersHistory.Count <= 1)
+                return;
+            // odeber poslední položku historie
+            DialogParametersHistory.RemoveAt(DialogParametersHistory.Count - 1);
+            var lastItem = DialogParametersHistory.Last();
+            await SetDialog(lastItem.DialogType, lastItem.Parameters);
+        }
 
         public async Task SetDialog(DialogTypeEnum newDialogType, DialogParameters? parameters = null)
         {
@@ -103,6 +116,15 @@ namespace EhriMemoMap.Client.Services
                 await _js.InvokeVoidAsync("closeGallery");
                 await _js.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
                 await _js.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
+                DialogParametersHistory.Clear();
+            }
+            else if (DialogParametersHistory.Count == 0 || DialogParametersHistory.Count > 0 && DialogParametersHistory.Last().DialogType != newDialogType)
+            {
+                DialogParametersHistory.Add(new DialogParametersHistoryItem
+                {
+                    DialogType = newDialogType,
+                    Parameters = parameters ?? new DialogParameters()
+                });
             }
 
             int? height = newDialogType == DialogTypeEnum.Welcome || newDialogType == DialogTypeEnum.None ? 0 : HeightOfDialog;
@@ -209,7 +231,7 @@ namespace EhriMemoMap.Client.Services
             if (settings == null)
                 return;
             Map = settings.Map;
-            Map.InitialVariables.HeightOfDialog = HeightOfDialog;
+            Map.InitialVariables?.HeightOfDialog = HeightOfDialog;
 
             if (!string.IsNullOrEmpty(layers))
                 InitInfoAboutLayersSelection(layers.Split(','));
@@ -281,7 +303,7 @@ namespace EhriMemoMap.Client.Services
 
             result.AddRange(Map.Timeline.
                 Where(a => a.Selected && a.AdditionalLayers != null).
-                SelectMany(a => a.AdditionalLayers.Where(b => !onlySelected || b.Selected)));
+                SelectMany(a => a.AdditionalLayers!.Where(b => !onlySelected || b.Selected)));
 
             return result;
         }

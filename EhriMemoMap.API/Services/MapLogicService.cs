@@ -685,19 +685,26 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                 {
                     Id = b.Id,
                     NarrativeMapId = b.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                    Maidenname = b.Maidenname,
+                    Title = b.Title,
                     BirthDate = b.Birthdate,
                     DeathDate = b.Deathdate,
+                    DescriptionCs = b?.DescriptionCs,
+                    DescriptionEn = b?.DescriptionEn,
                     Label = b?.Firstname + " " + b?.Surname,
                     FateCs = b?.Sex == 3 ? b?.FateNavigation?.LabelCs?.Replace("/", "") : b?.FateNavigation?.LabelCs?.Replace("/a", ""),
                     FateEn = b?.FateNavigation?.LabelEn,
                     Photo = b?.PacovEntitiesXMedia.Select(a => a.Medium).FirstOrDefault()?.OmekaUrl,
                     Places = b?.PacovEntitiesXPlaces.Select(a => new AddressInfo
                     {
+                        Id = a.Place.Id,
                         Cs = a.Place.LabelCs,
                         En = a.Place.LabelEn ?? a.Place.LabelCs,
                         Type = a.RelationshipType,
                         TypeCs = a.RelationshipTypeNavigation.LabelCs,
-                        TypeEn = a.RelationshipTypeNavigation.LabelEn
+                        TypeEn = a.RelationshipTypeNavigation.LabelEn,
+                        DateFrom = a.DateFrom,
+                        DateTo = a.DateTo,
                     }).ToArray(),
                     Documents = b?.PacovDocumentsXEntities.Select(c => c.Document).Select(c => new Shared.Document
                     {
@@ -757,19 +764,26 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                 {
                     Id = b.Id,
                     NarrativeMapId = b.EntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                    Maidenname = b.Maidenname,
+                    Title = b.Title,
                     BirthDate = b.Birthdate,
                     DeathDate = b.Deathdate,
+                    DescriptionCs = b?.DescriptionCs,
+                    DescriptionEn = b?.DescriptionEn,
                     Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
                     FateCs = b?.Sex == 3 ? b?.FateNavigation?.LabelCs?.Replace("/", "") : b?.FateNavigation?.LabelCs?.Replace("/a", ""),
                     FateEn = b?.FateNavigation?.LabelEn,
                     Photo = b?.EntitiesXMedia.Select(a => a.Media).FirstOrDefault()?.OmekaUrl,
                     Places = b?.EntitiesXPlaces.Select(a => new AddressInfo
                     {
+                        Id = a.Place.Id,
                         Cs = a.Place.LabelCs,
                         En = a.Place.LabelEn ?? a.Place.LabelCs,
                         Type = a.RelationshipType,
                         TypeCs = a.RelationshipTypeNavigation.LabelCs,
-                        TypeEn = a.RelationshipTypeNavigation.LabelEn
+                        TypeEn = a.RelationshipTypeNavigation.LabelEn,
+                        DateFrom = a.DateFrom,
+                        DateTo = a.DateTo,
                     }).ToArray(),
                     Documents = b?.DocumentsXEntities.Select(c => c.Document).Select(c => new Shared.Document
                     {

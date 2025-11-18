@@ -2,6 +2,7 @@
 {
     public class AddressInfo
     {
+        public long Id { get; set; }
         public string? Cs { get; set; }
         public string? En { get; set; }
         public string? De { get; set; }
@@ -10,6 +11,8 @@
         public long? Type { get; set; }
         public string? TypeCs { get; set; }
         public string? TypeEn { get; set; }
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
 
     }
 }
