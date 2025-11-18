@@ -43,6 +43,32 @@
                         {
                             <DocumentGallery ShowTitle="false" Documents="stop.Documents" />
                         }
+                        
+                        var sections = CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop?.DescriptionSectionsCs : stop?.DescriptionSectionsEn;
+                        @if (sections?.Any() ?? false)
+                        {
+                            <div class="rz-mt-4">
+                                @for (int sectionIndex = 0; sectionIndex < sections.Length; sectionIndex++)
+                                {
+                                    var descSection = sections[sectionIndex];
+                                    var sectionKey = $"{stop.Id}_{sectionIndex}";
+                                    <div class="rz-mb-4">
+                                        <div style="cursor: pointer;" @onclick="() => ToggleSection(sectionKey)">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <h4 style="color:var(--Wine-Red); margin: 0;">@descSection.Title</h4>
+                                                <RadzenImage Path="@GetSectionArrowIcon(sectionKey)" AlternateText="@(IsSectionExpanded(sectionKey) ? "Sbalit" : "Rozbalit")" />
+                                            </div>
+                                        </div>
+                                        @if (IsSectionExpanded(sectionKey))
+                                        {
+                                            <div class="rz-mt-2">
+                                                @descSection.Text
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
                     }
                 </div>
             </div>
@@ -52,6 +78,7 @@
 
 @code {
     private long? expandedStopId = null;
+    private HashSet<string> expandedSections = new HashSet<string>();
 
     protected override void OnInitialized()
     {
@@ -77,15 +104,30 @@
     {
         if (expandedStopId == stopId)
         {
-            // Pokud klikneme na již otevřený bod, zavřeme ho
+            // Jika mengklik titik yang sudah terbuka, tutup titik tersebut
             expandedStopId = null;
+            expandedSections.Clear(); // Tutup semua bagian saat menghentikan pembicaraan
             await MapLogic.ShowNarrativeMapPlaces();
         }
         else
         {
-            // Otevřeme nový bod (automaticky se zavře předchozí)
+            // Buka titik baru (titik sebelumnya akan tertutup secara otomatis)
             expandedStopId = stopId;
+            expandedSections.Clear(); // Tutup semua bagian saat membuka titik pemberhentian baru
             await MapLogic.ShowStopPlacesOnMap(stopId);
+        }
+        StateHasChanged();
+    }
+
+    private void ToggleSection(string sectionKey)
+    {
+        if (expandedSections.Contains(sectionKey))
+        {
+            expandedSections.Remove(sectionKey);
+        }
+        else
+        {
+            expandedSections.Add(sectionKey);
         }
         StateHasChanged();
     }
@@ -93,6 +135,11 @@
     private bool IsStopExpanded(long stopId)
     {
         return expandedStopId == stopId;
+    }
+
+    private bool IsSectionExpanded(string sectionKey)
+    {
+        return expandedSections.Contains(sectionKey);
     }
 
     private string GetDotIcon(long stopId)
@@ -103,5 +150,10 @@
     private string GetArrowIcon(long stopId)
     {
         return IsStopExpanded(stopId) ? "images/arrow-down.png" : "images/arrow-right.png";
+    }
+
+    private string GetSectionArrowIcon(string sectionKey)
+    {
+        return IsSectionExpanded(sectionKey) ? "images/arrow-down.png" : "images/arrow-right.png";
     }
 }

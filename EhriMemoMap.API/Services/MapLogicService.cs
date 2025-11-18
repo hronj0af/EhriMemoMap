@@ -926,44 +926,51 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                 Include(a => a.DocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
                 Where(a => a.NarrativeMapsXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
                 AsEnumerable().
-                Select(a => new Shared.NarrativeMapStop
+                Select(a =>
                 {
-                    Id = a.Id,
-                    LabelCs = a.LabelCs,
-                    LabelEn = a.LabelEn,
-                    DescriptionCs = a.DescriptionCs,
-                    DescriptionEn = a.DescriptionEn,
-                    Places = a.NarrativeMapStopsXPlaces.Select(b => new Shared.Place
+                    StringHelpers.ParseDescriptionSections(a.DescriptionCs, out var descriptionCs, out var descriptionSectionsCs);
+                    StringHelpers.ParseDescriptionSections(a.DescriptionEn, out var descriptionEn, out var descriptionSectionsEn);
+                    return new Shared.NarrativeMapStop
                     {
-                        Id = b.Id,
-                        LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
-                        LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelEn + "<br/>" + b.Place.LabelEn : b.Place.LabelEn,
-                        TownCs = b.Place.TownCs,
-                        TownEn = b.Place.TownEn,
-                        StreetCs = b.Place.StreetCs,
-                        StreetEn = b.Place.StreetEn,
-                        HouseNr = b.Place.HouseNr,
-                        RemarkCs = b.Place.RemarkCs,
-                        RemarkEn = b.Place.RemarkEn,
-                        MapPoint = b.Place.Geography.AsJson(),
-                        Type = b.RelationshipTypeNavigation.LabelEn,
-                        StopId = b.NarrativeMapStopId
-                    }).ToArray(),
-                    Documents = a.DocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Shared.Document
-                    {
-                        CreationDateCs = b.CreationDateCs,
-                        CreationDateEn = b.CreationDateEn,
-                        DescriptionCs = b.DescriptionCs,
-                        DescriptionEn = b.DescriptionEn,
-                        LabelCs = b.LabelCs,
-                        LabelEn = b.LabelEn,
-                        CreationPlaceCs = b!.CreationPlaceNavigation?.LabelCs,
-                        CreationPlaceEn = b!.CreationPlaceNavigation?.LabelEn,
-                        Id = b!.Id,
-                        Owner = b.Owner,
-                        Type = b.Type,
-                        Url = b?.DocumentsXMedia?.Select(c => new OmekaUrl(c?.Media?.OmekaUrl, c?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
-                    }).ToArray()
+                        Id = a.Id,
+                        LabelCs = a.LabelCs,
+                        LabelEn = a.LabelEn,
+                        DescriptionCs = descriptionCs,
+                        DescriptionEn = descriptionEn,
+                        DescriptionSectionsCs = descriptionSectionsCs,
+                        DescriptionSectionsEn = descriptionSectionsEn,
+                        Places = a.NarrativeMapStopsXPlaces.Select(b => new Shared.Place
+                        {
+                            Id = b.Id,
+                            LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
+                            LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelEn + "<br/>" + b.Place.LabelEn : b.Place.LabelEn,
+                            TownCs = b.Place.TownCs,
+                            TownEn = b.Place.TownEn,
+                            StreetCs = b.Place.StreetCs,
+                            StreetEn = b.Place.StreetEn,
+                            HouseNr = b.Place.HouseNr,
+                            RemarkCs = b.Place.RemarkCs,
+                            RemarkEn = b.Place.RemarkEn,
+                            MapPoint = b.Place.Geography.AsJson(),
+                            Type = b.RelationshipTypeNavigation.LabelEn,
+                            StopId = b.NarrativeMapStopId
+                        }).ToArray(),
+                        Documents = a.DocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Shared.Document
+                        {
+                            CreationDateCs = b.CreationDateCs,
+                            CreationDateEn = b.CreationDateEn,
+                            DescriptionCs = b.DescriptionCs,
+                            DescriptionEn = b.DescriptionEn,
+                            LabelCs = b.LabelCs,
+                            LabelEn = b.LabelEn,
+                            CreationPlaceCs = b!.CreationPlaceNavigation?.LabelCs,
+                            CreationPlaceEn = b!.CreationPlaceNavigation?.LabelEn,
+                            Id = b!.Id,
+                            Owner = b.Owner,
+                            Type = b.Type,
+                            Url = b?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, d?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
+                        }).ToArray()
+                    };
                 }).ToArray();
 
         map.Stops = stops;

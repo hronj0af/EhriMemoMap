@@ -17,7 +17,16 @@ public class NarrativeMapStop
     public string? DescriptionCs { get; set; }
 
     public string? DescriptionEn { get; set; }
+
+    public DescriptionSection[]? DescriptionSectionsCs { get; set; } = [];
+    public DescriptionSection[]? DescriptionSectionsEn { get; set; } = [];
     public Document[]? Documents { get; set; } = [];
     public Place[]? Places { get; set; } = [];
 
+}
+
+public class DescriptionSection
+{
+    public string? Title { get; set; }
+    public string? Text { get; set; }
 }

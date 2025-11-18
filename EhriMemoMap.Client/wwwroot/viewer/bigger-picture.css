@@ -144,8 +144,8 @@
 
 .bp-controls {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 2px;
+    left: -4px;
     width: 100%;
     height: 100%;
     pointer-events: none;
@@ -159,8 +159,8 @@
         cursor: pointer;
         position: absolute;
         border: 0;
-        background: rgba(0, 0, 0, 0.15);
-        opacity: 0.9;
+        background: #46463d;
+        opacity: 1;
         transition: all 0.1s;
         contain: content;
     }
@@ -215,19 +215,31 @@
 }
 
 .bp-x {
+    /* Zmenšíme rozmìry kontejneru tlaèítka, aby odpovídaly 24x24 nebo byly jen o nìco vìtší */
     top: 0;
     right: 0;
-    height: 55px;
-    width: 58px;
+    height: 24px; /* Zmìnìno z 55px */
+    width: 24px; /* Zmìnìno z 58px */
     border-radius: 0 0 0 3px;
+    /* Pøidáme 'position: relative;' pro správné pozicování pseudo-elementu uvnitø */
+    position: relative;
 }
 
     .bp-x:before {
         content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='%23fff'%3E%3Cpath d='M24 10l-2-2-6 6-6-6-2 2 6 6-6 6 2 2 6-6 6 6 2-2-6-6z'/%3E%3C/svg%3E");
         position: absolute;
-        width: 37px;
-        top: 8px;
-        right: 10px;
+        /* Nastavíme pøesnou velikost ikony na 24px */
+        width: 24px; /* Zmìnìno z 37px */
+        height: 24px; /* Nová vlastnost pro výšku obrázku, aby se správnì škáloval */
+        /* Centrování ikony uvnitø 24x24 tlaèítka (pokud by kontejner .bp-x byl vìtší) */
+        /* top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto; */
+        /* Pokud chceme, aby ikona vyplnila celý prostor 24x24: */
+        top: 0;
+        right: 0;
     }
 
 .bp-if,
