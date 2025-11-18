@@ -31,7 +31,7 @@
                 {
                     <tr>
                         <td>
-                            @cl["maidenname"]
+                            @cl["maidenname"].Value.FirstLetterToUpper()
                         </td>
                         <td>
                             @MapState.VictimLongInfo.Maidenname
@@ -43,7 +43,7 @@
                 {
                     <tr>
                         <td>
-                            @cl["personTitle"]
+                            @cl["personTitle"].Value.FirstLetterToUpper()
                         </td>
                         <td>
                             @MapState.VictimLongInfo.Title
@@ -55,7 +55,7 @@
                 {
                     <tr>
                         <td>
-                            @cl["birthDate"]
+                            @cl["birthDate"].Value.FirstLetterToUpper()
                         </td>
                         <td>
                             @MapState.VictimLongInfo.BirthDate?.ToString("d. M. yyyy")
@@ -82,7 +82,7 @@
                 {
                     <tr>
                         <td>
-                            @cl["deportation"]
+                            @cl["deportation"].Value.FirstLetterToUpper()
 
                         </td>
                         <td>
@@ -109,7 +109,7 @@
                 @* osud úmrtí *@
                 <tr>
                     <td>
-                        @cl["fate"]
+                        @cl["fate"].Value.FirstLetterToUpper()
                     </td>
                     <td>
                         @(CultureInfo.CurrentCulture.Name == "en-US" ? MapState.VictimLongInfo.FateEn : MapState.VictimLongInfo.FateCs)
@@ -124,7 +124,7 @@
                 {
                     <tr>
                         <td>
-                            @cl["deathDate"]
+                            @cl["deathDate"].Value.FirstLetterToUpper()
                         </td>
                         <td>
                             @MapState.VictimLongInfo.DeathDate?.ToString("d. M. yyyy")
@@ -141,7 +141,7 @@
                 {
                     <tr>
                         <td>
-                            @cl["otherInfo"]
+                            @cl["otherInfo"].Value.FirstLetterToUpper()
                         </td>
                         <td>
                             @if (otherInfo.Length > 200)

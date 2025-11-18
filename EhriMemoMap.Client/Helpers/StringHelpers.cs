@@ -40,7 +40,14 @@ namespace EhriMemoMap.Client.Helpers
         public static string Nl2Br(this string text)
         {
             return text?.Replace("\n", "<br/>") ?? string.Empty;
-        }   
+        }
+        
+        public static string FirstLetterToUpper(this string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return text;
+            return char.ToUpper(text[0]) + text.Substring(1);
+        }
 
     }
 }

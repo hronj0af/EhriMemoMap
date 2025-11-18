@@ -36,7 +36,7 @@
                             <i>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DateCs : stop.DateEn)</i>
                         </div>
                         <div class="rz-mt-4">
-                            @(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DescriptionCs : stop.DescriptionEn)
+                            @((MarkupString)((CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DescriptionCs : stop.DescriptionEn) ?? ""))
                         </div>
                         
                         @if (stop?.Documents?.Any() ?? false)
@@ -62,7 +62,7 @@
                                         @if (IsSectionExpanded(sectionKey))
                                         {
                                             <div class="rz-mt-2">
-                                                @descSection.Text
+                                                @((MarkupString)(descSection.Text?.Nl2Br() ?? ""))
                                             </div>
                                         }
                                     </div>

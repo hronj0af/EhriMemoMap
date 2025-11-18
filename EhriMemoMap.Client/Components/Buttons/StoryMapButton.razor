@@ -2,6 +2,7 @@
 @inject IStringLocalizer<CommonResources> cl
 @inject NavigationManager NavManager
 @inject DialogService DialogService
+@inject StoryMapService StoryMapService
 
 @if (!MobileVersion)
 {
@@ -25,6 +26,7 @@ else
 
 
 @code {
+
     [Parameter]
     public bool MobileVersion { get; set; } = false;
 
@@ -46,7 +48,17 @@ else
     {
         if (MapState.DialogType == DialogTypeEnum.StoryMap)
             await MapState.SetMapType(MapTypeEnum.Normal);
-        await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.StoryMap ? DialogTypeEnum.None : DialogTypeEnum.StoryMap);
+
+        var newDialogType = MapState.DialogType == DialogTypeEnum.StoryMap ? DialogTypeEnum.None : DialogTypeEnum.StoryMap;
+        
+        await MapState.SetDialog(newDialogType);
+
+        if (newDialogType == DialogTypeEnum.StoryMap && MapState.AllNarrativeMaps != null && MapState.AllNarrativeMaps.Count == 1)
+        {
+            MapState.DialogParameters.Id = MapState.AllNarrativeMaps.FirstOrDefault()?.Id;
+            await StoryMapService.ShowNarrativeMap(MapState.DialogParameters.Id);
+        }
+
         MapState.NotifyStateChanged();
     }
 }

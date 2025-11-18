@@ -241,6 +241,9 @@ namespace EhriMemoMap.Client.Services
 
         public async Task GetAllNarrativeMaps()
         {
+            if ((_mapState.Map.InitialVariables?.StoryMaps ?? false) == false)
+                return;
+            
             if (_mapState.AllNarrativeMaps != null && _mapState.AllNarrativeMaps.Count > 0)
                 return;
 

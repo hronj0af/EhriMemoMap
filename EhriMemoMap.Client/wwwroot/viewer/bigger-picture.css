@@ -159,7 +159,7 @@
         cursor: pointer;
         position: absolute;
         border: 0;
-        background: #46463d;
+        background: inherit;
         opacity: 1;
         transition: all 0.1s;
         contain: content;

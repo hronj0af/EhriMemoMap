@@ -11,7 +11,7 @@
     {
         <tr>
             <td>
-                @(CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs)
+                @((CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs)?.FirstLetterToUpper())
             </td>
             <td>
                 @place.GetAddressWithDates(CultureInfo.CurrentCulture.Name)
@@ -22,7 +22,7 @@
     {
         <tr>
             <td>
-                @(CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs)
+                @((CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs)?.FirstLetterToUpper())
             </td>
             <td>
                 @Places.OrderBy(a => a.Id).Select(a => a.GetAddressWithDates(CultureInfo.CurrentCulture.Name)).Aggregate((a, b) => a + ", " + b)
