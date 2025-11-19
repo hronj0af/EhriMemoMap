@@ -98,6 +98,26 @@ namespace EhriMemoMap.Client.Services
 
         public DialogTypeEnum DialogType = DialogTypeEnum.None;
 
+        public void AddToDialogHistory(DialogTypeEnum dialogType, DialogParameters? parameters = null)
+        {
+            if (dialogType == DialogTypeEnum.None)
+            {
+                DialogParametersHistory.Clear();
+                return;
+            }
+
+            if (dialogType == DialogParametersHistory.LastOrDefault()?.DialogType && DialogParametersHistory.LastOrDefault()?.Parameters.Id == parameters?.Id)
+                return;
+
+            DialogParametersHistory.Add(new DialogParametersHistoryItem
+            {
+                DialogType = dialogType,
+                MapType = MapType,
+                VictimInfo = VictimLongInfo,
+                Parameters = parameters ?? new DialogParameters()
+            });
+        }
+
         public async Task SetLastDialog()
         {
             if (DialogParametersHistory.Count <= 1)
@@ -105,7 +125,9 @@ namespace EhriMemoMap.Client.Services
             // odeber poslední položku historie
             DialogParametersHistory.RemoveAt(DialogParametersHistory.Count - 1);
             var lastItem = DialogParametersHistory.Last();
+            VictimLongInfo = lastItem.VictimInfo;
             await SetDialog(lastItem.DialogType, lastItem.Parameters);
+            await SetMapType(lastItem.MapType);
         }
 
         public async Task SetDialog(DialogTypeEnum newDialogType, DialogParameters? parameters = null)
@@ -116,15 +138,6 @@ namespace EhriMemoMap.Client.Services
                 await _js.InvokeVoidAsync("closeGallery");
                 await _js.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
                 await _js.InvokeVoidAsync("mapAPI.unselectAllSelectedPoints");
-                DialogParametersHistory.Clear();
-            }
-            else if (DialogParametersHistory.Count == 0 || DialogParametersHistory.Count > 0 && DialogParametersHistory.Last().DialogType != newDialogType)
-            {
-                DialogParametersHistory.Add(new DialogParametersHistoryItem
-                {
-                    DialogType = newDialogType,
-                    Parameters = parameters ?? new DialogParameters()
-                });
             }
 
             int? height = newDialogType == DialogTypeEnum.Welcome || newDialogType == DialogTypeEnum.None ? 0 : HeightOfDialog;
@@ -136,11 +149,16 @@ namespace EhriMemoMap.Client.Services
 
             DialogType = newDialogType;
             DialogParameters = parameters ?? new DialogParameters();
+
+            AddToDialogHistory(newDialogType, parameters);
         }
 
         public MapTypeEnum MapType = MapTypeEnum.Normal;
         public async Task SetMapType(MapTypeEnum newValue)
         {
+            if (newValue == MapType)
+                return;
+
             if (newValue == MapTypeEnum.Normal)
             {
                 await _js.InvokeVoidAsync("mapAPI.resetMapViewToInitialState");

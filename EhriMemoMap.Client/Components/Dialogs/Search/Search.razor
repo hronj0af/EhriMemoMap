@@ -36,7 +36,7 @@
             @cl["resultsFor"]: "@(MapState.SearchedPlaceString)"
         </div>
 
-        @foreach (var placeGroup in MapState.SearchedPlaces.GroupBy(a => a.Type).OrderBy(a => a.Key))
+        @foreach (var placeGroup in MapState.SearchedPlaces.Where(a=>!string.IsNullOrEmpty(a.MapLocation)).GroupBy(a => a.Type).OrderBy(a => a.Key))
         {
             <h2 class="rz-py-5" style="cursor:pointer;color:var(--Wine-Red)" onclick="@(() => TogglePlaceType(placeGroup.Key))">
                 @cl["featureType_" + placeGroup.Key]
