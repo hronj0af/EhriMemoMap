@@ -29,6 +29,7 @@ namespace EhriMemoMap.Shared
                     address.Append((cultureName == "en-US" ? "until " : "do ") + DateTo.Value.Year);
                 else if (DateFrom.HasValue)
                     address.Append((cultureName == "en-US" ? "after " : "po ") + DateFrom.Value.Year);
+                address.Append(')');
             }
             return address.ToString();
         }

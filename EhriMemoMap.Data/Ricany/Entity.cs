@@ -26,6 +26,9 @@ public partial class Entity
 
     public DateTime? Deathdate { get; set; }
 
+    public string? BirthdateText { get; set; }
+
+    public string? DeathdateText { get; set; }
     public long? Fate { get; set; }
 
     public string? DescriptionCs { get; set; }

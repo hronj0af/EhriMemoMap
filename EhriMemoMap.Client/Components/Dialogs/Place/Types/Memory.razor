@@ -12,9 +12,9 @@
             }
             else
             {
-                <h3>
+                <h4>
                     @((CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs) ?? "")
-                </h3>
+                </h4>
             }
         }
         else
@@ -40,11 +40,12 @@
                 @if (!string.IsNullOrEmpty(Place.InscriptionCs))
                 {
                     <li>
-                        <b>@cl["inscription"]:</b> @((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.InscriptionEn?.Nl2Br() : Place.InscriptionCs?.Nl2Br()) ?? ""))
+                        <b>@cl["inscription"]:</b><br/>@((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.InscriptionEn?.Nl2Br() : Place.InscriptionCs?.Nl2Br()) ?? ""))
                     </li>
                 }
             </ul>
         }
+
     </RadzenCard>
 </RadzenRow>
 
@@ -76,13 +77,15 @@
                         <b>@cl["date_of_laying"]:</b> @item.CreationDate?.ToString("d. M. yyyy", CultureInfo.CurrentCulture)
                     </li>
                     <li>
-                        <b>@cl["inscription"]:</b> @((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? item.InscriptionEn?.Nl2Br() : item.InscriptionCs?.Nl2Br()) ?? ""))
+                        <b>@cl["inscription"]:</b><br />@((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? item.InscriptionEn?.Nl2Br() : item.InscriptionCs?.Nl2Br()) ?? ""))
                     </li>
                 </ul>
             }
         </RadzenCard>
     </RadzenRow>
 }
+
+<DocumentGallery Documents="Place.Documents" />
 
 @code {
     [Parameter]

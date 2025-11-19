@@ -11,6 +11,8 @@ public partial class Place
     public string? LabelCs { get; set; }
 
     public string? LabelEn { get; set; }
+    public string? AddressCs { get; set; }
+    public string? AddressEn { get; set; }
 
     public string? TownCs { get; set; }
 

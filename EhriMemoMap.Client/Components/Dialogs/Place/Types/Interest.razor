@@ -3,13 +3,12 @@
 @inject IStringLocalizer<CommonResources> cl
 @inject StoryMapService StoryMapService
 
-<RadzenRow class="rz-mb-4">
+<RadzenRow>
     <RadzenCard Style="width:100%">
 
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
             <div style="flex: 1;">
                 <h3 style="margin-bottom: 4px;">@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</h3>
-                <h5 class="rz-mb-4" style="margin-top: 0;">@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h5>
             </div>
             @if (Place.NarrativeMapId != null)
             {
@@ -17,11 +16,13 @@
                     <img src="images/storymap-icon.png" 
                          alt="Story Map" 
                          title="@cl["storyMapExistsForPlace"]"
-                         style="width: 15px; cursor: pointer;" 
+                         style="width: 30px; cursor: pointer;" 
                          @onclick="() => StoryMapService.ShowNarrativeMap(Place.NarrativeMapId)" />
                 </div>
             }
         </div>
+        <h5 class="rz-mb-4" style="margin-top: 0;">@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h5>
+
 
         <p class="rz-mb-4">
             @((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn?.Nl2Br() : Place.DescriptionCs?.Nl2Br()) ?? ""))

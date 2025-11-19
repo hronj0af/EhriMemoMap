@@ -183,13 +183,13 @@ path.leaflet-interactive:focus {
 }
 
 .secondCell {
-    width: 70%;
+    width: 75%;
     color: var(--Grey);
     font-weight: 700;
 }
 
 .thirdCell {
-    width: 25%;
+    width: 20%;
     color: var(--Wine-Red);
     text-align: right;
     font-weight: 700;
@@ -304,6 +304,37 @@ path.leaflet-interactive:focus {
     .mobile-menu-icon-stroke-selected path {
         stroke: var(--Wine-Red);
     }
+
+.language-btn-wrapper {
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    width: 39px;
+    height: 41px;
+}
+
+.language-text {
+    color: white;
+    position: absolute;
+    top: 53%;
+    left: 53%;
+    transform: translate(-50%, -65%);
+    pointer-events: none;
+    transition: color 0.2s ease;
+}
+
+.language-btn-wrapper .background {
+    transition: fill 0.2s ease;
+    fill: #771646;
+}
+
+.language-btn-wrapper:hover .background {
+    fill: var(--Beige-LIGHT);
+}
+
+.language-btn-wrapper:hover .language-text {
+    color: var(--Wine-Red);
+}
 
 /* LAYERS */
 

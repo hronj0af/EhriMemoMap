@@ -341,12 +341,22 @@ var mapAPI;
     }
     mapAPI.drawCurveBettwenPoints = drawCurveBettwenPoints;
     function getCurve(pointA, pointB) {
+        const distance = map.distance(pointA, pointB);
         const midLat = (pointA.lat + pointB.lat) / 2;
         const midLng = (pointA.lng + pointB.lng) / 2;
-        const controlPoint = [midLat + 0.15, midLng];
+        const minDistance = 50;
+        const maxDistance = 50000;
+        const normalizedDistance = Math.min(Math.max((distance - minDistance) / (maxDistance - minDistance), 0), 1);
+        const curveFactor = Math.pow(normalizedDistance, 3);
+        const latDiff = Math.abs(pointB.lat - pointA.lat);
+        const lngDiff = Math.abs(pointB.lng - pointA.lng);
+        const maxDiff = Math.max(latDiff, lngDiff);
+        const offsetPercent = 0.02 + 0.06 * curveFactor;
+        const offset = maxDiff * offsetPercent;
+        const controlPoint = [midLat + offset, midLng];
         function sampleCurve(start, control, end, segments = 50) {
             const points = [];
-            for (let t = 0; t <= 1; t += 1 / segments) {
+            for (let t = 0; t < 1; t += 1 / segments) {
                 const x = (1 - t) * (1 - t) * start[1] +
                     2 * (1 - t) * t * control[1] +
                     t * t * end[1];
@@ -355,18 +365,19 @@ var mapAPI;
                     t * t * end[0];
                 points.push([y, x]);
             }
+            points.push([end[0], end[1]]);
             return points;
         }
         const curvePoints = sampleCurve([pointA.lat, pointA.lng], controlPoint, [pointB.lat, pointB.lng]);
         const curveLine = L.polyline(curvePoints, {
             color: '#771646',
-            weight: 2,
+            weight: 1,
             dashArray: '5, 5',
             dashOffset: '0'
         }).arrowheads({
             frequency: 'endonly',
             fill: true,
-            size: '10px',
+            size: '15px',
             color: '#771646'
         });
         return curveLine;
@@ -387,7 +398,15 @@ var mapAPI;
         var _a;
         let iconOptions = null;
         if (markerObject.htmlIcon != undefined && markerObject.htmlIcon != null)
-            iconOptions = { stopId: markerObject.stopId, type: markerObject.placeType, icon: new L.DivIcon({ className: className, html: markerObject.htmlIcon }) };
+            iconOptions = {
+                stopId: markerObject.stopId,
+                type: markerObject.placeType,
+                icon: new L.DivIcon({
+                    className: className,
+                    html: markerObject.htmlIcon,
+                    iconAnchor: markerObject.iconAnchor,
+                })
+            };
         const result = new L.Marker([markerObject.mapPointModel.coordinates[1], markerObject.mapPointModel.coordinates[0]], iconOptions);
         var pos = map.latLngToLayerPoint(result.getLatLng()).round();
         var zIndex = ((_a = markerObject.priorityOnMap) !== null && _a !== void 0 ? _a : 0);

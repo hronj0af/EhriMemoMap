@@ -461,15 +461,33 @@ namespace mapAPI {
     }
 
     export function getCurve(pointA: L.LatLng, pointB: L.LatLng) {
+        // Vypočítání vzdálenosti mezi body
+        const distance = map.distance(pointA, pointB);
 
         // Vypočítání kontrolního bodu pro Bezierovu křivku
         const midLat = (pointA.lat + pointB.lat) / 2;
         const midLng = (pointA.lng + pointB.lng) / 2;
-        const controlPoint = [midLat + 0.15, midLng]; // Kontrolní bod trochu posunutý nahoru
+
+        // Offset jako procento ze vzdálenosti (v stupních)
+        const minDistance = 50;
+        const maxDistance = 50000;
+
+        const normalizedDistance = Math.min(Math.max((distance - minDistance) / (maxDistance - minDistance), 0), 1);
+        const curveFactor = Math.pow(normalizedDistance, 3);
+
+        const latDiff = Math.abs(pointB.lat - pointA.lat);
+        const lngDiff = Math.abs(pointB.lng - pointA.lng);
+        const maxDiff = Math.max(latDiff, lngDiff);
+
+        const offsetPercent = 0.02 + 0.06 * curveFactor;
+        const offset = maxDiff * offsetPercent;
+
+        const controlPoint = [midLat + offset, midLng];
 
         function sampleCurve(start: number[], control: number[], end: number[], segments = 50) {
             const points = [];
-            for (let t = 0; t <= 1; t += 1 / segments) {
+            // Vzorkování od 0 do 1 (bez poslední hodnoty)
+            for (let t = 0; t < 1; t += 1 / segments) {
                 const x =
                     (1 - t) * (1 - t) * start[1] +
                     2 * (1 - t) * t * control[1] +
@@ -480,30 +498,27 @@ namespace mapAPI {
                     t * t * end[0];
                 points.push([y, x]);
             }
+            // Explicitně přidat poslední bod (t = 1) pro přesnost
+            points.push([end[0], end[1]]);
             return points;
         }
 
-        // Vygenerování bodů pro křivku
         const curvePoints = sampleCurve([pointA.lat, pointA.lng], controlPoint, [pointB.lat, pointB.lng]);
 
-        // Přidání zakřivené čáry jako `L.Polyline`
         const curveLine = L.polyline(curvePoints, {
             color: '#771646',
-            weight: 2,
-            dashArray: '5, 5', // Střídání délky čáry a mezery
+            weight: 1,
+            dashArray: '5, 5',
             dashOffset: '0'
         }).arrowheads({
             frequency: 'endonly',
             fill: true,
-            size: '10px',
+            size: '15px',
             color: '#771646'
         });
 
         return curveLine;
-
     }
-
-
     export function fitMapToGroup(groupName) {
         const objectsGroup = groups.find(a => a.options.id == groupName);
 
@@ -526,7 +541,15 @@ namespace mapAPI {
     export function getPoint(markerObject: MapObjectForLeafletModel, className?: string, clickFunction?: L.LayersControlEventHandlerFn) {
         let iconOptions = null as L.MarkerOptions;
         if (markerObject.htmlIcon != undefined && markerObject.htmlIcon != null)
-            iconOptions = { stopId: markerObject.stopId, type: markerObject.placeType, icon: new L.DivIcon({ className: className, html: markerObject.htmlIcon }) }
+            iconOptions = {
+                stopId: markerObject.stopId,
+                type: markerObject.placeType,
+                icon: new L.DivIcon({
+                    className: className,
+                    html: markerObject.htmlIcon,
+                    iconAnchor: markerObject.iconAnchor,
+                })
+            }
 
         const result = new L.Marker([markerObject.mapPointModel.coordinates[1], markerObject.mapPointModel.coordinates[0]], iconOptions);
 
@@ -966,6 +989,7 @@ interface MapObjectForLeafletModel {
     mapPolygon: string | null;
     mapPolygonModel: PolygonModel | null;
     htmlIcon: string | null;
+    iconAnchor: L.PointExpression | null;
     customTooltipClass: string | null;
     customPolygonClass: string | null;
     stopId: number | null;

@@ -26,7 +26,7 @@
             @if (MapState.VictimLongInfo.Places != null)
             {
 
-                @* datum narození *@
+                @* maiden name *@
                 @if (!string.IsNullOrEmpty(MapState.VictimLongInfo.Maidenname))
                 {
                     <tr>
@@ -38,7 +38,7 @@
                         </td>
                     </tr>
                 }
-                @* datum narození *@
+                @* titul *@
                 @if (!string.IsNullOrEmpty(MapState.VictimLongInfo.Title))
                 {
                     <tr>
@@ -58,7 +58,7 @@
                             @cl["birthDate"].Value.FirstLetterToUpper()
                         </td>
                         <td>
-                            @MapState.VictimLongInfo.BirthDate?.ToString("d. M. yyyy")
+                            @(MapState.VictimLongInfo.BirthDate?.ToString("d. M. yyyy") ?? MapState.VictimLongInfo.BirthDateText)
                         </td>
                     </tr>
                 }
@@ -75,7 +75,7 @@
                 <VictimPlace Type="27" />
 
                 @* další bydliště *@
-                <VictimPlace Type="36" />
+                <VictimPlace Type="36" ResourceNameType="OtherResidence" />
 
                 @* deportace *@
                 @if (MapState.VictimLongInfo.Transports != null && MapState.VictimLongInfo.Transports.Count() > 0)
@@ -106,15 +106,18 @@
                 @* místo věznění *@
                 <VictimPlace Type="28" />
 
-                @* osud úmrtí *@
-                <tr>
-                    <td>
-                        @cl["fate"].Value.FirstLetterToUpper()
-                    </td>
-                    <td>
-                        @(CultureInfo.CurrentCulture.Name == "en-US" ? MapState.VictimLongInfo.FateEn : MapState.VictimLongInfo.FateCs)
-                    </td>
-                </tr>
+                @if (!string.IsNullOrEmpty(MapState.VictimLongInfo.FateCs))
+                {
+                    @* osud úmrtí *@
+                    <tr>
+                        <td>
+                            @cl["fate"].Value.FirstLetterToUpper()
+                        </td>
+                        <td>
+                            @(CultureInfo.CurrentCulture.Name == "en-US" ? MapState.VictimLongInfo.FateEn : MapState.VictimLongInfo.FateCs)
+                        </td>
+                    </tr>
+                }
 
                 @* místo osvobození *@
                 <VictimPlace Type="29" />
@@ -127,7 +130,7 @@
                             @cl["deathDate"].Value.FirstLetterToUpper()
                         </td>
                         <td>
-                            @MapState.VictimLongInfo.DeathDate?.ToString("d. M. yyyy")
+                            @(MapState.VictimLongInfo.DeathDate?.ToString("d. M. yyyy") ?? MapState.VictimLongInfo.DeathDateText)
                         </td>
                     </tr>
                 }

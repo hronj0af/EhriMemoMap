@@ -836,4 +836,10 @@ zájmu, míst paměti nebo připomínkových akcí</value>
   <data name="less" xml:space="preserve">
     <value>méně</value>
   </data>
+  <data name="otherResidence" xml:space="preserve">
+    <value>Další bydliště</value>
+  </data>
+  <data name="deathDate" xml:space="preserve">
+    <value>Datum úmrtí</value>
+  </data>
 </root>

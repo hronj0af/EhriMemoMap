@@ -32,6 +32,9 @@
                     
                     @if (IsStopExpanded(stop.Id))
                     {
+                        <h4 class="rz-mt-2">
+                            @(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.Places?[0]?.AddressCs : @stop.Places?[0]?.AddressEn)
+                        </h4>
                         <div class="rz-mt-2">
                             <i>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DateCs : stop.DateEn)</i>
                         </div>

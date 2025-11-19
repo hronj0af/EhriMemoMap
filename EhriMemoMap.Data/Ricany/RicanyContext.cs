@@ -458,6 +458,8 @@ public partial class RicanyContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.Birthdate).HasColumnName("birthdate");
             entity.Property(e => e.Deathdate).HasColumnName("deathdate");
+            entity.Property(e => e.BirthdateText).HasColumnName("birthdate_text");
+            entity.Property(e => e.DeathdateText).HasColumnName("deathdate_text");
             entity.Property(e => e.DescriptionCs).HasColumnName("description_cs");
             entity.Property(e => e.DescriptionEn).HasColumnName("description_en");
             entity.Property(e => e.Fate).HasColumnName("fate");

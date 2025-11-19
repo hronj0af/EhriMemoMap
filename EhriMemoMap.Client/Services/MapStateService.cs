@@ -106,7 +106,10 @@ namespace EhriMemoMap.Client.Services
                 return;
             }
 
-            if (dialogType == DialogParametersHistory.LastOrDefault()?.DialogType && DialogParametersHistory.LastOrDefault()?.Parameters.Id == parameters?.Id)
+            var lastHistoryItem = DialogParametersHistory.LastOrDefault();
+            if (dialogType == lastHistoryItem?.DialogType && 
+                lastHistoryItem?.Parameters.Id == parameters?.Id &&
+                ArePlacesEqual(lastHistoryItem?.Parameters.Places, parameters?.Places))
                 return;
 
             DialogParametersHistory.Add(new DialogParametersHistoryItem
@@ -116,6 +119,20 @@ namespace EhriMemoMap.Client.Services
                 VictimInfo = VictimLongInfo,
                 Parameters = parameters ?? new DialogParameters()
             });
+        }
+
+        private bool ArePlacesEqual(List<MapObjectForLeafletModel>? places1, List<MapObjectForLeafletModel>? places2)
+        {
+            if (places1 == null && places2 == null)
+                return true;
+            
+            if (places1 == null || places2 == null)
+                return false;
+            
+            if (places1.Count != places2.Count)
+                return false;
+            
+            return places1.Select(p => p.Id).SequenceEqual(places2.Select(p => p.Id));
         }
 
         public async Task SetLastDialog()

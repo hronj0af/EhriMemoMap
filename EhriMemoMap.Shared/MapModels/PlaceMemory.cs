@@ -15,7 +15,9 @@ namespace EhriMemoMap.Shared
         public string? InscriptionCs { get; set; }
         public string? InscriptionEn { get; set; }
         public DateTime? CreationDate { get; set; }
-        public List<PlaceMemoryItem> Items { get; set; } = [];
+        public PlaceMemoryItem[]? Items { get; set; }
+        public Document[]? Documents { get; set; }
+
 
     }
 

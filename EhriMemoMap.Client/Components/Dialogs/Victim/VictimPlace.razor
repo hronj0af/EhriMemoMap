@@ -11,7 +11,7 @@
     {
         <tr>
             <td>
-                @((CultureInfo.CurrentCulture.Name == "en-US" ? place.TypeEn : place.TypeCs)?.FirstLetterToUpper())
+                @nameType
             </td>
             <td>
                 @place.GetAddressWithDates(CultureInfo.CurrentCulture.Name)
@@ -37,11 +37,22 @@
     [Parameter]
     public long Type { get; set; }
 
+    [Parameter]
+    public string? ResourceNameType { get; set; }
+
+    private string? nameType;
+
     private AddressInfo[]? Places { get; set; }
 
     protected override void OnInitialized()
     {
         Places = MapState.VictimLongInfo?.Places?.Where(a => a.Type == Type).ToArray();
+        if (Places == null || Places.Count() == 0)
+            return;
+
+        nameType = !string.IsNullOrEmpty(ResourceNameType)
+            ? cl[ResourceNameType]
+            : (CultureInfo.CurrentCulture.Name == "en-US" ? Places?[0]?.TypeEn : Places?[0]?.TypeCs)?.FirstLetterToUpper();
     }
 
 }

@@ -15,30 +15,18 @@
 }
 else
 {
-    <div style="cursor:pointer;position:absolute;right:0" onclick="@(() => ChangeLanguage())">
-        @* <div class="icon-small icon-language" title="@(cl["otherLanguageTitle"] + "...")"></div> *@
+    <div class="language-btn-wrapper" title="@(cl[otherLanguageTitle])" onclick="@(() => ChangeLanguage())">
 
-        <RadzenImage Style="width:39px" Path="images/language.png" title="@(cl[otherLanguageTitle])"></RadzenImage>
-        <div style="color:white; position: absolute;top: 50%;left: 55%;transform: translate(-50%, -65%);"><h3><b>@otherLanguage</b></h3></div>
+        <svg width="39" height="41" viewBox="0 0 47 49" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path class="background" d="M0 3.99999C0 1.79086 1.79086 0 4 0H47.1795V48.7521H4C1.79086 48.7521 0 46.9613 0 44.7521V3.99999Z" fill="#771646" />
+        </svg>
+
+        <div class="language-text">
+            <h3><b>@otherLanguage</b></h3>
+        </div>
     </div>
-
 }
 
-<style>
-    #btn-language-topbar {
-        background-color: var(--Beige-LIGHT);
-        color: var(--Wine-Red);
-        font-family: Barlow Regular;
-        font-weight: 700;
-    }
-
-        #btn-language-topbar:hover {
-            color: var(--Beige-LIGHT);
-            background-color: var(--Wine-Red);
-            font-family: Barlow Regular;
-            font-weight: 700;
-        }
-</style>
 @code {
     [Parameter]
     public bool MobileVersion { get; set; } = false;
@@ -46,7 +34,6 @@ else
     string otherLanguage;
     string otherLanguageTitle;
     string currentUri;
-    string imagePath;
 
     public void Dispose()
     {
@@ -56,10 +43,8 @@ else
     protected override void OnInitialized()
     {
         MapState.OnChange += StateHasChanged;
-        // style = await MapState.GetStyleOfMapComponent(VerticalPosition, HorizontalPosition, Order);
         otherLanguage = Culture.ToString() == "cs-CZ" ? "EN" : "CS";
         otherLanguageTitle = Culture.ToString() == "cs-CZ" ? "english" : "czech";
-        imagePath = $"images/{otherLanguage.ToLower()}.png";
     }
 
     async Task ChangeLanguage()
@@ -67,7 +52,6 @@ else
         currentUri = "~/" + await JS.InvokeAsync<string>("mapAPI.getWindowLocationSearch");
         Culture = Culture.ToString() == "cs-CZ" ? new CultureInfo("en-US") : new CultureInfo("cs-CZ");
     }
-
 
     private CultureInfo Culture
     {
@@ -78,7 +62,6 @@ else
             {
                 var js = (IJSInProcessRuntime)JS;
                 js.InvokeVoid("mapAPI.setBlazorCulture", value.Name);
-
                 Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
             }
         }

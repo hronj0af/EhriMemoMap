@@ -835,4 +835,10 @@ addresses, points of interest, memorial sites, or remembrance events</value>
   <data name="less" xml:space="preserve">
     <value>less</value>
   </data>
+  <data name="otherResidence" xml:space="preserve">
+    <value>Other residence</value>
+  </data>
+  <data name="deathDate" xml:space="preserve">
+    <value>Death date</value>
+  </data>
 </root>

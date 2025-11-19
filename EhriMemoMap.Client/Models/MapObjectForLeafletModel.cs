@@ -36,12 +36,15 @@ public partial class MapObjectForLeafletModel
             case "main point":
                 HtmlIcon = "<img src='css/images/narrative-icon.png' />";
                 Clickable = true;
+                IconAnchor = [22, 55];
                 break;
             case "trajectory point":
                 HtmlIcon = "<img src='css/images/trajectory-icon.png' />";
+                IconAnchor = [10, 10];
                 break;
             default:
                 HtmlIcon = "<img src='css/images/marker-icon-wine-red.png' />";
+                IconAnchor = [22, 41];
                 break;
         }
     }
@@ -65,21 +68,31 @@ public partial class MapObjectForLeafletModel
         MapPolygon = mapObject.MapPolygon;
 
         if (PlaceType == Shared.PlaceType.Incident.ToString())
+        {
             HtmlIcon = "<img src='images/incident-map.png' />";
-
+            IconAnchor = [12, 12];
+        }
         else if (PlaceType == Shared.PlaceType.Interest.ToString())
+        {
             HtmlIcon = "<img src='images/interest-map.png' />";
-
+            IconAnchor = [12, 12];
+        }
         else if (PlaceType == Shared.PlaceType.Memory.ToString())
+        {
             HtmlIcon = "<img src='images/memory-map.png' />";
-
+            IconAnchor = [20, 20];
+        }
         else if (PlaceType == Shared.PlaceType.Memorial.ToString())
+        {
             HtmlIcon = "<img src='images/memorial-map.png' />";
-
+            IconAnchor = [12, 12];
+        }
         else if (PlaceType == Shared.PlaceType.Address.ToString() || PlaceType == Shared.PlaceType.AddressLastResidence.ToString())
         {
             if (Citizens == null)
+            {
                 HtmlIcon = $"<div style='{(PlaceType == Shared.PlaceType.AddressLastResidence.ToString() ? "filter:invert(1);" : "")}position:relative'><img src='images/addresses/victims_100.png' /></div>";
+            }
             else
             {
                 var percents = (decimal)Citizens / CitizensTotal;
@@ -94,6 +107,7 @@ public partial class MapObjectForLeafletModel
 
                 HtmlIcon = $"<div style='{(PlaceType == Shared.PlaceType.AddressLastResidence.ToString() ? "filter:invert(1);" : "")}position:relative'><img src='images/addresses/{iconFile}_{Citizens}.png' /></div>";
             }
+            IconAnchor = [12, 12];
         }
     }
 
@@ -185,6 +199,9 @@ public partial class MapObjectForLeafletModel
 
     public string? MapPolygon { get; set; }
     public string? HtmlIcon { get; set; }
+    public string? IconUrl { get; set; }
+    public int[] IconAnchor { get; set; } 
+    public int[] IconSize { get; set; }
 
     public bool? Heatmap { get; set; }
     public long? StopId { get; set; }

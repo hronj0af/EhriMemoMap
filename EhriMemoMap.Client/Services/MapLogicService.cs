@@ -279,6 +279,7 @@ namespace EhriMemoMap.Client.Services
             if (transformedPlaces.Any(a => a.PlaceType == "trajectory point"))
             {
                 transformedPlaces.LastOrDefault(a => a.PlaceType == "trajectory point").HtmlIcon = "<img src='css/images/narrative-icon.png' />";
+                transformedPlaces.LastOrDefault(a => a.PlaceType == "trajectory point").IconAnchor = [22,55];
                 transformedPlaces.LastOrDefault(a => a.PlaceType == "trajectory point").Clickable = true;
 
             }

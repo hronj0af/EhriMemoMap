@@ -5,6 +5,8 @@
         public long Id { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime? DeathDate { get; set; }
+        public string? BirthDateText { get; set; }
+        public string? DeathDateText { get; set; }
         public string? Label { get; set; }
         public string? Maidenname { get; set; }
         public string? Title { get; set; }

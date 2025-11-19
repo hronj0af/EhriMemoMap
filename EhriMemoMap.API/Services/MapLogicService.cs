@@ -236,7 +236,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     LinkStolpersteineEn = b.LinkStolpersteineEn,
                     LinkHolocaustCs = b.LinkHolocaustCs,
                     LinkHolocaustEn = b.LinkHolocaustEn
-                }).ToList()
+                }).ToArray()
             });
 
         return [.. result];
@@ -249,10 +249,11 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
 
         var result = ricanyContext.PlacesOfMemories.
             Where(a => a.Type != "stolperstein").
-            Include(a => a.PlacesXPlacesOfMemories).
+            Include(a => a.PlacesXPlacesOfMemories).ThenInclude(a => a.Place).
             Include(a => a.PlacesOfMemoryXPlacesOfMemoryPlaceOfMemory2s).ThenInclude(a => a.PlaceOfMemory1).
-            AsEnumerable().
+            Include(a => a.DocumentsXPlacesOfMemories).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
             Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).
+            AsEnumerable().
             Select(a => new PlaceMemory
             {
                 Type = a.Type,
@@ -274,7 +275,22 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     InscriptionCs = b.InscriptionCs,
                     InscriptionEn = b.InscriptionEn,
                     CreationDate = b.CreationDate,
-                }).ToList()
+                }).ToArray(),
+                Documents = a.DocumentsXPlacesOfMemories.Select(b => b.Document).Select(c => new Shared.Document
+                {
+                    CreationDateCs = c.CreationDateCs,
+                    CreationDateEn = c.CreationDateEn,
+                    DescriptionCs = c.DescriptionCs,
+                    DescriptionEn = c.DescriptionEn,
+                    LabelCs = c.LabelCs,
+                    LabelEn = c.LabelEn,
+                    CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
+                    CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
+                    Id = c.Id,
+                    Owner = c.Owner,
+                    Type = c.Type,
+                    Url = c?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, null)).ToArray() ?? []
+                }).ToArray()
             });
 
         return [.. result];
@@ -418,7 +434,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
             return ricanyContext.Pois.
                 Include(a => a.Place).
                 Include(a => a.DocumentsXPois).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
-                Include(a=>a.NarrativeMapsXPois).
+                Include(a => a.NarrativeMapsXPois).
                 AsNoTracking().
                 Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
                 AsEnumerable().
@@ -774,7 +790,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     FateCs = b?.Sex == 3 ? b?.FateNavigation?.LabelCs?.Replace("/", "") : b?.FateNavigation?.LabelCs?.Replace("/a", ""),
                     FateEn = b?.FateNavigation?.LabelEn,
                     Photo = b?.EntitiesXMedia.Select(a => a.Media).FirstOrDefault()?.OmekaUrl,
-                    Places = b?.EntitiesXPlaces.Select(a => new AddressInfo
+                    Places = b?.EntitiesXPlaces.OrderBy(a => a.Id).Select(a => new AddressInfo
                     {
                         Id = a.Place.Id,
                         Cs = a.Place.LabelCs,
@@ -785,7 +801,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         DateFrom = a.DateFrom,
                         DateTo = a.DateTo,
                     }).ToArray(),
-                    Documents = b?.DocumentsXEntities.Select(c => c.Document).Select(c => new Shared.Document
+                    Documents = b?.DocumentsXEntities.OrderBy(a => a.Id).Select(c => c.Document).Select(c => new Shared.Document
                     {
                         CreationDateCs = c.CreationDateCs,
                         CreationDateEn = c.CreationDateEn,
@@ -812,7 +828,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         LongInfo = true,
                         NarrativeMapId = a?.Entity1.EntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
                     }).ToArray(),
-                    Transports = b?.EntitiesXTransports.Select(a => new Shared.Transport
+                    Transports = b?.EntitiesXTransports.OrderBy(a => a.Id).Select(a => new Shared.Transport
                     {
                         Date = a.Transport.Date,
                         FromCs = a.Transport?.PlaceFromNavigation?.LabelCs,
@@ -935,6 +951,8 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         Id = a.Id,
                         LabelCs = a.LabelCs,
                         LabelEn = a.LabelEn,
+                        DateCs = a.DateCs,
+                        DateEn = a.DateEn,
                         DescriptionCs = descriptionCs,
                         DescriptionEn = descriptionEn,
                         DescriptionSectionsCs = descriptionSectionsCs,
@@ -944,6 +962,8 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                             Id = b.Id,
                             LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
                             LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelEn + "<br/>" + b.Place.LabelEn : b.Place.LabelEn,
+                            AddressCs = b.Place.LabelCs,
+                            AddressEn = b.Place.LabelEn,
                             TownCs = b.Place.TownCs,
                             TownEn = b.Place.TownEn,
                             StreetCs = b.Place.StreetCs,
