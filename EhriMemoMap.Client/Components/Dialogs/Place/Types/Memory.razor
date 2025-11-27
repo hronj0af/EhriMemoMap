@@ -2,24 +2,24 @@
 @using System.Xml.Linq;
 @inject IStringLocalizer<CommonResources> cl
 
-<RadzenRow class="rz-mb-4">
+<RadzenRow>
     <RadzenCard Style="width:100%">
         @if (Place.City == "ricany")
         {
             if (Place.Type == "stolpersteine_set")
             {
-                <h3>@cl["memoryType_" + Place.Type]</h3>
+                <h2>@cl["memoryType_" + Place.Type]</h2>
             }
             else
             {
-                <h4>
+                <h2>
                     @((CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs) ?? "")
-                </h4>
+                </h2>
             }
         }
         else
         {
-            <h3>@cl["memoryType_" + Place.Type]</h3>
+            <h2>@cl["memoryType_" + Place.Type]</h2>
         }
         <h5 class="rz-mb-4">@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h5>
         @if (!string.IsNullOrEmpty(Place.DescriptionCs))
@@ -28,30 +28,30 @@
                 @((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn?.Nl2Br() : Place.DescriptionCs?.Nl2Br()) ?? ""))
             </p>
         }
-        @if (Place.City == "ricany") 
+        @if (Place.City == "ricany")
         {
-            <ul class="no-bullets">
-                @if (Place.CreationDate != null)
-                {
-                    <li>
-                        <b>@cl["date_of_laying"]:</b> @Place.CreationDate?.ToString("d. M. yyyy", CultureInfo.CurrentCulture)
-                    </li>
-                }
-                @if (!string.IsNullOrEmpty(Place.InscriptionCs))
-                {
-                    <li>
-                        <b>@cl["inscription"]:</b><br/>@((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.InscriptionEn?.Nl2Br() : Place.InscriptionCs?.Nl2Br()) ?? ""))
-                    </li>
-                }
-            </ul>
+            @if (Place.CreationDate != null)
+            {
+                var className = !string.IsNullOrEmpty(Place.InscriptionCs) ? "rz-mb-4" : "";
+                <p class="@className">
+                    <b>@cl["date_of_laying"]:</b> @Place.CreationDate?.ToString("d. M. yyyy", CultureInfo.CurrentCulture)
+                </p>
+            }
+            @if (!string.IsNullOrEmpty(Place.InscriptionCs))
+            {
+                <p>
+                    <b>@cl["inscription"]</b>:<br />@((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.InscriptionEn?.Nl2Br() : Place.InscriptionCs?.Nl2Br()) ?? ""))
+                </p>
+            }
         }
 
     </RadzenCard>
 </RadzenRow>
 
-@foreach (var item in Place.Items)
+@for (var i = 0; i < (Place?.Items?.Count() ?? 0); i++)
 {
-    <RadzenRow class="rz-mb-4">
+    var item = Place?.Items?[i];
+    <RadzenRow class="rz-mb-2 rz-mt-2">
         <RadzenCard Style="width:100%">
             <h3>@item.LabelCs</h3>
             @if (Place.City == "prague")
@@ -72,21 +72,32 @@
 
             @if (Place.City == "ricany")
             {
-                <ul class="no-bullets">
-                    <li>
+                @if (item.CreationDate != null)
+                {
+                    var className = !string.IsNullOrEmpty(item.InscriptionCs) ? "rz-mb-4" : "";
+                    <p class="@className">
                         <b>@cl["date_of_laying"]:</b> @item.CreationDate?.ToString("d. M. yyyy", CultureInfo.CurrentCulture)
-                    </li>
-                    <li>
-                        <b>@cl["inscription"]:</b><br />@((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? item.InscriptionEn?.Nl2Br() : item.InscriptionCs?.Nl2Br()) ?? ""))
-                    </li>
-                </ul>
+                    </p>
+                }
+                @if (!string.IsNullOrEmpty(item.InscriptionCs))
+                {
+                    <p>
+                        <b>@cl["inscription"]</b>:<br />@((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? item.InscriptionEn?.Nl2Br() : item.InscriptionCs?.Nl2Br()) ?? ""))
+                    </p>
+                }
             }
         </RadzenCard>
     </RadzenRow>
+    @if (i < (Place?.Items?.Count() ?? 0) - 1)
+    { 
+        <div class="rz-my-2">&nbsp;</div>
+    }
+
 }
 
+<div class="rz-mb-4">
 <DocumentGallery Documents="Place.Documents" />
-
+</div>
 @code {
     [Parameter]
     public PlaceMemory Place { get; set; }

@@ -437,80 +437,231 @@ namespace mapAPI {
         }
         toggleLayerGroup(group, false);
         toggleLayerGroup(group, true);
-        drawCurveBettwenPoints(groupName);
         fitMapToGroup(groupName);
+        drawCurveBettwenPoints(groupName);
+
     }
 
-    export function drawCurveBettwenPoints(groupName) {
+    // Předpokládáme, že 'map', 'groups' a 'NarrativeMapStopPlaceType' jsou dostupné v kontextu
+    // Pokud ne, doplňte příslušné importy.
+
+    /**
+     * Vykreslí křivky se šipkami mezi body ve skupině.
+     * @param groupName ID skupiny
+     * @param shortenEndPixels (Volitelné) O kolik pixelů zkrátit konec čáry, aby šipka nepřekrývala cílový marker. Default: 25.
+     */
+    export function drawCurveBettwenPoints(groupName: string, shortenEndPixels: number = 10) {
         const objectsGroup = groups.find(a => a.options.id == groupName);
-        const layers = objectsGroup.getLayers() as L.Marker[];
-        var pointA = null;
-        var pointB = null;
-        for (let i = 0; i < layers.length; i++) {
-            if (layers[i].options.type == NarrativeMapStopPlaceType.Trajectory) {
-                if (pointA == null) {
-                    pointA = layers[i];
-                } else if (pointB == null) {
-                    pointB = layers[i];
-                    getCurve(pointA.getLatLng(), pointB.getLatLng()).addTo(objectsGroup);
-                    pointA = pointB;
-                    pointB = null;
-                }
+        if (!objectsGroup) return;
+
+        // 1. CLEANUP: Odstranění starých křivek před vykreslením nových
+        const allLayers = objectsGroup.getLayers();
+        allLayers.forEach(layer => {
+            // Kontrola, zda jde o námi vytvořenou křivku
+            if ((layer as any).options && (layer as any).options.isTrajectoryLine) {
+                objectsGroup.removeLayer(layer);
+            }
+        });
+
+        // 2. Získáme pouze relevantní markery
+        const validMarkers: L.Marker[] = [];
+
+        // Filtrace markerů správného typu
+        for (const layer of objectsGroup.getLayers()) {
+            if (layer instanceof L.Marker && (layer as any).options.type == NarrativeMapStopPlaceType.Trajectory) {
+                validMarkers.push(layer);
+            }
+        }
+
+        // 3. Procházíme seřazené pole a spojujeme vždy i a i+1
+        for (let i = 0; i < validMarkers.length - 1; i++) {
+            const startMarker = validMarkers[i];
+            const endMarker = validMarkers[i + 1];
+            const startLatLng = startMarker.getLatLng();
+            const endLatLng = endMarker.getLatLng();
+
+            let currentShortenPixels = shortenEndPixels;
+
+            // SPECIFICKÁ LOGIKA PRO POSLEDNÍ ŠIPKU MÍŘÍCÍ DOLŮ
+            // 1. Je to poslední segment? (i je předposlední index)
+            const isLastSegment = (i === validMarkers.length - 2);
+
+            // 2. Míří šipka dolů? (Cílová latitude je menší než startovní = směr na jih)
+            const isPointingSouth = endLatLng.lat < startLatLng.lat;
+
+            if (isLastSegment && isPointingSouth) {
+                // Pokud míříme na poslední marker shora, potřebujeme větší mezeru,
+                // protože marker je pravděpodobně vysoký (pin) a překryl by šipku.
+                // Zvětšíme zkrácení např. 2.2x (z 25px na 55px).
+                currentShortenPixels = shortenEndPixels * 3.5;
+            }
+
+            // Předáváme vypočítané zkrácení do funkce getCurve
+            const curve = getCurve(startLatLng, endLatLng, currentShortenPixels);
+            if (curve) {
+                curve.addTo(objectsGroup);
             }
         }
     }
 
-    export function getCurve(pointA: L.LatLng, pointB: L.LatLng) {
-        // Vypočítání vzdálenosti mezi body
-        const distance = map.distance(pointA, pointB);
+    /**
+     * Vypočítá a vrátí křivku (polyline) mezi dvěma body.
+     * @param pointA Startovní bod
+     * @param pointB Cílový bod
+     * @param shortenEndPixels Počet pixelů pro zkrácení konce (kvůli šipce)
+     */
+    export function getCurve(pointA: L.LatLng, pointB: L.LatLng, shortenEndPixels: number) {
+        // Převedeme body na pixely pro výpočet vizuální vzdálenosti na obrazovce
+        const p1Pix = map.latLngToContainerPoint(pointA);
+        const p2Pix = map.latLngToContainerPoint(pointB);
+        const pixDist = p1Pix.distanceTo(p2Pix);
 
-        // Vypočítání kontrolního bodu pro Bezierovu křivku
-        const midLat = (pointA.lat + pointB.lat) / 2;
-        const midLng = (pointA.lng + pointB.lng) / 2;
+        let controlPoint: number[];
 
-        // Offset jako procento ze vzdálenosti (v stupních)
-        const minDistance = 50;
-        const maxDistance = 50000;
+        // --- LOGIKA PRO BLÍZKÉ BODY ---
+        // Pokud jsou body na obrazovce blízko sebe (méně než 300px), vynutíme vizuální oblouk.
+        // Původní logika totiž při malých vzdálenostech dělala téměř rovnou čáru, což při zkrácení
+        // způsobilo, že čára zmizela nebo nebyla vidět šipka.
+        if (pixDist < 200) {
+            if (pixDist < 1) return null; // Totožné body - nekreslíme nic
 
-        const normalizedDistance = Math.min(Math.max((distance - minDistance) / (maxDistance - minDistance), 0), 1);
-        const curveFactor = Math.pow(normalizedDistance, 3);
+            // Najdeme střed v pixelech
+            const midPix = p1Pix.add(p2Pix).divideBy(2);
 
-        const latDiff = Math.abs(pointB.lat - pointA.lat);
-        const lngDiff = Math.abs(pointB.lng - pointA.lng);
-        const maxDiff = Math.max(latDiff, lngDiff);
+            // Vektor spojnice
+            const vec = p2Pix.subtract(p1Pix);
 
-        const offsetPercent = 0.02 + 0.06 * curveFactor;
-        const offset = maxDiff * offsetPercent;
+            // Vytvoříme kolmici (-y, x) pro určení směru oblouku
+            const perpX = -vec.y;
+            const perpY = vec.x;
+            const len = Math.sqrt(perpX * perpX + perpY * perpY);
 
-        const controlPoint = [midLat + offset, midLng];
+            // Výška oblouku (bulge)
+            // Musí být dostatečná, aby po zkrácení o 'shortenEndPixels' zbylo dost čáry pro šipku.
+            // Základ 40px + dynamicky podle zkrácení.
+            const arcHeight = Math.max(0, shortenEndPixels + 0);
 
-        function sampleCurve(start: number[], control: number[], end: number[], segments = 50) {
+            // Normalizovaný vektor oblouku
+            const normX = (perpX / len) * arcHeight;
+            const normY = (perpY / len) * arcHeight;
+
+            // Kontrolní bod v pixelech
+            const ctrlPix = L.point(midPix.x + normX, midPix.y + normY);
+
+            // Převedeme zpět na LatLng
+            const ctrlLatLng = map.containerPointToLatLng(ctrlPix);
+            controlPoint = [ctrlLatLng.lat, ctrlLatLng.lng];
+
+        } else {
+            // --- PŮVODNÍ LOGIKA PRO VĚTŠÍ VZDÁLENOSTI ---
+            const distance = map.distance(pointA, pointB);
+
+            // Vypočítání kontrolního bodu pro Bezierovu křivku
+            const midLat = (pointA.lat + pointB.lat) / 2;
+            const midLng = (pointA.lng + pointB.lng) / 2;
+
+            // Logika zakřivení
+            const minDistance = 50;
+            const maxDistance = 50000;
+            const normalizedDistance = Math.min(Math.max((distance - minDistance) / (maxDistance - minDistance), 0), 1);
+            const curveFactor = Math.pow(normalizedDistance, 3);
+
+            const latDiff = Math.abs(pointB.lat - pointA.lat);
+            const lngDiff = Math.abs(pointB.lng - pointA.lng);
+            const maxDiff = Math.max(latDiff, lngDiff);
+
+            const offsetPercent = 0.02 + 0.06 * curveFactor;
+            const offset = maxDiff * offsetPercent;
+
+            controlPoint = [midLat + offset, midLng];
+        }
+
+        // Funkce pro vzorkování křivky
+        function sampleCurve(start: number[], control: number[], end: number[], segments = 60) {
             const points = [];
-            // Vzorkování od 0 do 1 (bez poslední hodnoty)
-            for (let t = 0; t < 1; t += 1 / segments) {
-                const x =
-                    (1 - t) * (1 - t) * start[1] +
-                    2 * (1 - t) * t * control[1] +
-                    t * t * end[1];
-                const y =
-                    (1 - t) * (1 - t) * start[0] +
-                    2 * (1 - t) * t * control[0] +
-                    t * t * end[0];
+            for (let t = 0; t <= 1; t += 1 / segments) {
+                const x = (1 - t) * (1 - t) * start[1] + 2 * (1 - t) * t * control[1] + t * t * end[1];
+                const y = (1 - t) * (1 - t) * start[0] + 2 * (1 - t) * t * control[0] + t * t * end[0];
                 points.push([y, x]);
             }
-            // Explicitně přidat poslední bod (t = 1) pro přesnost
-            points.push([end[0], end[1]]);
             return points;
         }
 
-        const curvePoints = sampleCurve([pointA.lat, pointA.lng], controlPoint, [pointB.lat, pointB.lng]);
+        let curvePoints = sampleCurve([pointA.lat, pointA.lng], controlPoint, [pointB.lat, pointB.lng]);
 
-        const curveLine = L.polyline(curvePoints, {
+        // Pomocná funkce pro zkrácení pole bodů z jedné strany
+        // 'direction' true = zkracujeme začátek, false = zkracujeme konec
+        function shortenPolylinePoints(points: number[][], pixelsToShorten: number, fromStart: boolean): number[][] {
+            if (points.length < 2 || pixelsToShorten <= 0) return points;
+
+            let cumulativeDistance = 0;
+            let cutIndex = -1;
+            let modifiedPoint: number[] | null = null;
+
+            const startIndex = fromStart ? 0 : points.length - 1;
+            const endIndex = fromStart ? points.length - 1 : 0;
+            const step = fromStart ? 1 : -1;
+
+            for (let i = startIndex; fromStart ? i < endIndex : i > endIndex; i += step) {
+                const currentIdx = i;
+                const nextIdx = i + step;
+
+                const p1 = L.latLng(points[currentIdx][0], points[currentIdx][1]);
+                const p2 = L.latLng(points[nextIdx][0], points[nextIdx][1]);
+
+                const pix1 = map.latLngToContainerPoint(p1);
+                const pix2 = map.latLngToContainerPoint(p2);
+
+                const segDist = pix1.distanceTo(pix2);
+                cumulativeDistance += segDist;
+
+                if (cumulativeDistance >= pixelsToShorten) {
+                    // Našli jsme segment, kde musíme řezat
+                    const overflow = cumulativeDistance - pixelsToShorten;
+                    const ratio = 1 - (overflow / segDist);
+
+                    // Interpolace pixelů
+                    const newPixX = pix1.x + (pix2.x - pix1.x) * ratio;
+                    const newPixY = pix1.y + (pix2.y - pix1.y) * ratio;
+
+                    // Zpět na LatLng
+                    const newLatLng = map.containerPointToLatLng([newPixX, newPixY]);
+                    modifiedPoint = [newLatLng.lat, newLatLng.lng];
+
+                    cutIndex = currentIdx;
+                    break;
+                }
+            }
+
+            if (cutIndex !== -1 && modifiedPoint) {
+                if (fromStart) {
+                    points[cutIndex] = modifiedPoint;
+                    return points.slice(cutIndex);
+                } else {
+                    points[cutIndex] = modifiedPoint;
+                    return points.slice(0, cutIndex + 1);
+                }
+            }
+
+            return [];
+        }
+
+        // Aplikace zkrácení - POUZE KONEC
+        // Začátek nezkracujeme (aby vycházel z bodu A)
+        curvePoints = shortenPolylinePoints(curvePoints, shortenEndPixels, false);
+
+        if (curvePoints.length < 2) {
+            return null; // Čára zmizela po zkrácení
+        }
+
+        // Vykreslení
+        const curveLine = L.polyline(curvePoints as L.LatLngExpression[], {
             color: '#771646',
             weight: 1,
             dashArray: '5, 5',
-            dashOffset: '0'
-        }).arrowheads({
+            dashOffset: '0',
+            isTrajectoryLine: true // VLASTNÍ VLAJKA pro identifikaci při čištění
+        } as any).arrowheads({
             frequency: 'endonly',
             fill: true,
             size: '15px',
@@ -520,6 +671,7 @@ namespace mapAPI {
         return curveLine;
     }
     export function fitMapToGroup(groupName) {
+
         const objectsGroup = groups.find(a => a.options.id == groupName);
 
         // Předpokládejme, že `objectsGroup` obsahuje všechny markery, které chcete zobrazit

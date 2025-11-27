@@ -66,16 +66,18 @@
     
     else if (PlaceType == PlaceType.Memory)
     {
-        foreach (var place in PlacesToShow.PlacesOfMemory ?? [])
+        for (var i = 0; i < (PlacesToShow?.PlacesOfMemory?.Count ?? 0); i++)
         {
+            var place = PlacesToShow?.PlacesOfMemory?[i];
             <Memory Place="place" />
         }
     }
 
     else if (PlaceType == PlaceType.Memorial)
     {
-        foreach (var place in PlacesToShow.Memorials ?? [])
+        for (var i = 0; i < (PlacesToShow?.Memorials?.Count ?? 0); i++)
         {
+            var place = PlacesToShow?.Memorials?[i];
             <Memorial Place="place" />
         }
     }

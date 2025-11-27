@@ -51,14 +51,14 @@
                     </tr>
                 }
                 @* datum narození *@
-                @if (MapState.VictimLongInfo.BirthDate != null)
+                @if (MapState.VictimLongInfo.BirthDate != null || !string.IsNullOrEmpty(MapState.VictimLongInfo.BirthDateText))
                 {
                     <tr>
                         <td>
                             @cl["birthDate"].Value.FirstLetterToUpper()
                         </td>
                         <td>
-                            @(MapState.VictimLongInfo.BirthDate?.ToString("d. M. yyyy") ?? MapState.VictimLongInfo.BirthDateText)
+                            @(MapState.VictimLongInfo.BirthDateText ?? MapState.VictimLongInfo.BirthDate?.ToString("d. M. yyyy"))
                         </td>
                     </tr>
                 }
@@ -75,7 +75,7 @@
                 <VictimPlace Type="27" />
 
                 @* další bydliště *@
-                <VictimPlace Type="36" ResourceNameType="OtherResidence" />
+                <VictimPlace Type="36" ResourceNameType="otherResidence" />
 
                 @* deportace *@
                 @if (MapState.VictimLongInfo.Transports != null && MapState.VictimLongInfo.Transports.Count() > 0)
@@ -123,14 +123,14 @@
                 <VictimPlace Type="29" />
 
                 @* datum úmrtí *@
-                @if (MapState.VictimLongInfo.DeathDate != null)
+                @if (MapState.VictimLongInfo.DeathDate != null || !string.IsNullOrEmpty(MapState.VictimLongInfo.DeathDateText))
                 {
                     <tr>
                         <td>
                             @cl["deathDate"].Value.FirstLetterToUpper()
                         </td>
                         <td>
-                            @(MapState.VictimLongInfo.DeathDate?.ToString("d. M. yyyy") ?? MapState.VictimLongInfo.DeathDateText)
+                            @(MapState.VictimLongInfo.DeathDateText ?? MapState.VictimLongInfo.DeathDate?.ToString("d. M. yyyy"))
                         </td>
                     </tr>
                 }

@@ -567,7 +567,10 @@
     <value>Interaktivní mapa z doby protektorátu zobrazuje, kde v Pacově bydleli jeho židovští obyvatelé, a přináší informace o zajímavých místech spojených s židovskou historií města i interakci židovského a většinového obyvatelstva. Takzvané příběhové mapy umožňují detailně sledovat konkrétní osobní příběhy a trajektorie. Data jsou doplněna o digitalizované dokumenty a fotografie. Aplikace je přizpůsobena pro mobilní zařízení a můžete se s ní proto vydat přímo do města.</value>
   </data>
   <data name="welcomeText_ricany" xml:space="preserve">
-    <value>Lorem ipsum...</value>
+    <value>O někdejší židovské komunitě se v Říčanech začalo znovu veřejně mluvit až po sametové revoluci. 
+V roce 2012 byla na Staré radnici odhalena pamětní deska obětem holocaustu, roku 2017 přibyly 
+první Stolpersteiny a vznikl i infostánek. V roce 2025 jsme navázali vytvořením interaktivní 
+MemoMapy, která ukazuje osudy místních obětí a místa spojená s jejich životy.</value>
   </data>
   <data name="layer_interest_title_pacov" xml:space="preserve">
     <value>Body zájmu</value>
@@ -765,7 +768,25 @@
     O MemoMap Říčany
   &lt;/h4&gt;
   &lt;/p&gt;
-  &lt;p&gt;[Informace o projektu, doplníme později podle toho, co zašlou z Říčan, zatím nechat prázdné.]&lt;/p&gt;
+  &lt;p&gt;O někdejší židovské komunitě se v Říčanech začalo znovu veřejně mluvit až po sametové revoluci. 
+V roce 2012 byla na říčanské Staré radnici odhalena pamětní deska obětem holocaustu. Roku 2017 
+byly na Masarykově náměstí vsazeny první Stolpersteiny, kameny zmizelých. O tři roky později 
+vznikl ve staré trafice na náměstí infostánek ke kamenům zmizelých. Kameny, o které máme 
+každodenně škobrtnout, abychom nezapomínali na minulost, stále přibývají. V roce 2025 je jich už 
+31 a zdaleka to není konečné číslo.
+&lt;/p&gt;
+  &lt;p&gt;
+Památku říčanských obětí si v posledních letech připomínáme také společně se zástupci Finchley 
+Reform Synagogue z Londýna. Právě tam doputovala říčanská Tóra poté, co opustila naše město a 
+následně v roce 1962 i Prahu a Československo.
+&lt;/p&gt;
+  &lt;p&gt;
+V roce 2025 jsme připomínání místní židovské historie rozšířili o vytvoření interaktivní 
+MemoMapy. Využívá historickou mapu Říčan z roku 1935 a nabízí několik tematických vrstev, 
+které zachycují osudy místních obětí holokaustu, místa spojená s jejich životy i další stopy židovské
+historie ve městě. MemoMapa umožňuje zkoumat historii přímo v terénu a přibližuje ji současným 
+návštěvníkům i obyvatelům.
+&lt;/p&gt;
   &lt;p&gt;
   &lt;h4&gt;Co MemoMap Říčany obsahuje?&lt;/h4&gt;
   &lt;/p&gt;
@@ -803,7 +824,25 @@ Aplikace zobrazuje informace o říčanských židovských rodinách, o jejich d
   Aplikace je dlouhodobě rozvíjena a provozována v rámci českého uzlu Evropské infrastruktury pro výzkum holokaustu. Ten je součástí infrastruktury LINDAT/CLARIAH-CZ, která je podporována Ministerstvem školství, mládeže a tělovýchovy České republiky v rámci programu "velkých infrastruktur".
   &lt;/p&gt;
   &lt;a href="https://ehri.cz" target="_blank"&gt;&lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;&lt;/a&gt;
-  &lt;/div&gt;</value>
+  &lt;/div&gt;
+
+
+AJ:
+The former Jewish community in Říčany only began to be openly addressed again after the Velvet 
+Revolution. In 2012, a memorial plaque to the victims of the Holocaust was unveiled at the Old Town 
+Hall in Říčany. In 2017, the first Stolpersteine, or "stumbling stones," were laid on Masaryk Square. 
+Three years later, an information stand about the stones of the disappeared was set up in the old tobacco 
+shop on the square. The stones, which we are meant to stumble over every day so that we do not forget 
+the past, are still increasing in number. In 2025, there will be 31 of them, and that is far from the final 
+number.
+In recent years, we have also been commemorating the victims of Říčany together with representatives 
+of the Finchley Reform Synagogue in London. That is where the Říčany Torah ended up after leaving 
+our town and then Prague and Czechoslovakia in 1962.
+In 2025, we expanded our commemoration of local Jewish history by creating an interactive MemoMap.
+It uses a historical map of Říčany from 1935 and offers several thematic layers that capture the fates of 
+local Holocaust victims, places associated with their lives, and other traces of Jewish history in the 
+town. MemoMap allows visitors to explore history directly in the field and brings it closer to current 
+visitors and residents.</value>
   </data>
   <data name="help_search_prague" xml:space="preserve">
     <value>Hledání jmen obětí, adres, incidentů, bodů zájmu, zakázaných míst či míst paměti.</value>

@@ -565,7 +565,11 @@
     <value>An interactive map from the Protectorate period shows where Pacov's Jewish inhabitants lived and provides information about interesting places connected with the town's Jewish history and the interaction between the Jewish and majority population. Story maps allow specific personal stories and trajectories to be traced in detail. The data is supplemented by digitized documents and photographs. The app is adapted for mobile devices and you can therefore také it directly into the city space.</value>
   </data>
   <data name="welcomeText_ricany" xml:space="preserve">
-    <value>Lore ipsum...</value>
+    <value>The former Jewish community in Říčany only began to be openly addressed again after the Velvet 
+Revolution. In 2012, a memorial plaque to the victims of the Holocaust was unveiled at the Old Town 
+Hall, and in 2017, the first Stolpersteine were added and an information stand was created. In 2025, we 
+followed up with the creation of an interactive MemoMap, which shows the fates of local victims and 
+places associated with their lives.</value>
   </data>
   <data name="layer_interest_title_pacov" xml:space="preserve">
     <value>Points of Interest</value>
@@ -763,7 +767,26 @@
 About MemoMap Říčany
   &lt;/h4&gt;
   &lt;/p&gt;
-  &lt;p&gt;[Informace o projektu, doplníme později podle toho, co zašlou z Říčan, zatím nechat prázdné.]&lt;/p&gt;
+  &lt;p&gt;The former Jewish community in Říčany only began to be openly addressed again after the Velvet 
+Revolution. In 2012, a memorial plaque to the victims of the Holocaust was unveiled at the Old Town 
+Hall in Říčany. In 2017, the first Stolpersteine, or "stumbling stones," were laid on Masaryk Square. 
+Three years later, an information stand about the stones of the disappeared was set up in the old tobacco 
+shop on the square. The stones, which we are meant to stumble over every day so that we do not forget 
+the past, are still increasing in number. In 2025, there will be 31 of them, and that is far from the final 
+number.
+&lt;/p&gt;
+  &lt;p&gt;
+In recent years, we have also been commemorating the victims of Říčany together with representatives 
+of the Finchley Reform Synagogue in London. That is where the Říčany Torah ended up after leaving 
+our town and then Prague and Czechoslovakia in 1962.
+&lt;/p&gt;
+  &lt;p&gt;
+In 2025, we expanded our commemoration of local Jewish history by creating an interactive MemoMap.
+It uses a historical map of Říčany from 1935 and offers several thematic layers that capture the fates of 
+local Holocaust victims, places associated with their lives, and other traces of Jewish history in the 
+town. MemoMap allows visitors to explore history directly in the field and brings it closer to current 
+visitors and residents.
+&lt;/p&gt;
   &lt;p&gt;
   &lt;h4&gt;What does MemoMap contain?&lt;/h4&gt;
   &lt;/p&gt;

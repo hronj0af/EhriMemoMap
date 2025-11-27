@@ -784,6 +784,8 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     Title = b.Title,
                     BirthDate = b.Birthdate,
                     DeathDate = b.Deathdate,
+                    DeathDateText = b.DeathdateText,
+                    BirthDateText = b.BirthdateText,
                     DescriptionCs = b?.DescriptionCs,
                     DescriptionEn = b?.DescriptionEn,
                     Label = b?.Surname + ", " + b?.Firstname + (b?.Birthdate != null ? " (*" + b?.Birthdate?.ToString("d.M.yyyy") + ")" : ""),

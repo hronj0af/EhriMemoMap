@@ -316,64 +316,140 @@ var mapAPI;
         }
         toggleLayerGroup(group, false);
         toggleLayerGroup(group, true);
-        drawCurveBettwenPoints(groupName);
         fitMapToGroup(groupName);
+        drawCurveBettwenPoints(groupName);
     }
     mapAPI.addObjectsFromJsonString = addObjectsFromJsonString;
-    function drawCurveBettwenPoints(groupName) {
+    function drawCurveBettwenPoints(groupName, shortenEndPixels = 10) {
         const objectsGroup = groups.find(a => a.options.id == groupName);
-        const layers = objectsGroup.getLayers();
-        var pointA = null;
-        var pointB = null;
-        for (let i = 0; i < layers.length; i++) {
-            if (layers[i].options.type == NarrativeMapStopPlaceType.Trajectory) {
-                if (pointA == null) {
-                    pointA = layers[i];
-                }
-                else if (pointB == null) {
-                    pointB = layers[i];
-                    getCurve(pointA.getLatLng(), pointB.getLatLng()).addTo(objectsGroup);
-                    pointA = pointB;
-                    pointB = null;
-                }
+        if (!objectsGroup)
+            return;
+        const allLayers = objectsGroup.getLayers();
+        allLayers.forEach(layer => {
+            if (layer.options && layer.options.isTrajectoryLine) {
+                objectsGroup.removeLayer(layer);
+            }
+        });
+        const validMarkers = [];
+        for (const layer of objectsGroup.getLayers()) {
+            if (layer instanceof L.Marker && layer.options.type == NarrativeMapStopPlaceType.Trajectory) {
+                validMarkers.push(layer);
+            }
+        }
+        for (let i = 0; i < validMarkers.length - 1; i++) {
+            const startMarker = validMarkers[i];
+            const endMarker = validMarkers[i + 1];
+            const startLatLng = startMarker.getLatLng();
+            const endLatLng = endMarker.getLatLng();
+            let currentShortenPixels = shortenEndPixels;
+            const isLastSegment = (i === validMarkers.length - 2);
+            const isPointingSouth = endLatLng.lat < startLatLng.lat;
+            if (isLastSegment && isPointingSouth) {
+                currentShortenPixels = shortenEndPixels * 3.5;
+            }
+            const curve = getCurve(startLatLng, endLatLng, currentShortenPixels);
+            if (curve) {
+                curve.addTo(objectsGroup);
             }
         }
     }
     mapAPI.drawCurveBettwenPoints = drawCurveBettwenPoints;
-    function getCurve(pointA, pointB) {
-        const distance = map.distance(pointA, pointB);
-        const midLat = (pointA.lat + pointB.lat) / 2;
-        const midLng = (pointA.lng + pointB.lng) / 2;
-        const minDistance = 50;
-        const maxDistance = 50000;
-        const normalizedDistance = Math.min(Math.max((distance - minDistance) / (maxDistance - minDistance), 0), 1);
-        const curveFactor = Math.pow(normalizedDistance, 3);
-        const latDiff = Math.abs(pointB.lat - pointA.lat);
-        const lngDiff = Math.abs(pointB.lng - pointA.lng);
-        const maxDiff = Math.max(latDiff, lngDiff);
-        const offsetPercent = 0.02 + 0.06 * curveFactor;
-        const offset = maxDiff * offsetPercent;
-        const controlPoint = [midLat + offset, midLng];
-        function sampleCurve(start, control, end, segments = 50) {
+    function getCurve(pointA, pointB, shortenEndPixels) {
+        const p1Pix = map.latLngToContainerPoint(pointA);
+        const p2Pix = map.latLngToContainerPoint(pointB);
+        const pixDist = p1Pix.distanceTo(p2Pix);
+        let controlPoint;
+        if (pixDist < 200) {
+            if (pixDist < 1)
+                return null;
+            const midPix = p1Pix.add(p2Pix).divideBy(2);
+            const vec = p2Pix.subtract(p1Pix);
+            const perpX = -vec.y;
+            const perpY = vec.x;
+            const len = Math.sqrt(perpX * perpX + perpY * perpY);
+            const arcHeight = Math.max(0, shortenEndPixels + 0);
+            const normX = (perpX / len) * arcHeight;
+            const normY = (perpY / len) * arcHeight;
+            const ctrlPix = L.point(midPix.x + normX, midPix.y + normY);
+            const ctrlLatLng = map.containerPointToLatLng(ctrlPix);
+            controlPoint = [ctrlLatLng.lat, ctrlLatLng.lng];
+        }
+        else {
+            const distance = map.distance(pointA, pointB);
+            const midLat = (pointA.lat + pointB.lat) / 2;
+            const midLng = (pointA.lng + pointB.lng) / 2;
+            const minDistance = 50;
+            const maxDistance = 50000;
+            const normalizedDistance = Math.min(Math.max((distance - minDistance) / (maxDistance - minDistance), 0), 1);
+            const curveFactor = Math.pow(normalizedDistance, 3);
+            const latDiff = Math.abs(pointB.lat - pointA.lat);
+            const lngDiff = Math.abs(pointB.lng - pointA.lng);
+            const maxDiff = Math.max(latDiff, lngDiff);
+            const offsetPercent = 0.02 + 0.06 * curveFactor;
+            const offset = maxDiff * offsetPercent;
+            controlPoint = [midLat + offset, midLng];
+        }
+        function sampleCurve(start, control, end, segments = 60) {
             const points = [];
-            for (let t = 0; t < 1; t += 1 / segments) {
-                const x = (1 - t) * (1 - t) * start[1] +
-                    2 * (1 - t) * t * control[1] +
-                    t * t * end[1];
-                const y = (1 - t) * (1 - t) * start[0] +
-                    2 * (1 - t) * t * control[0] +
-                    t * t * end[0];
+            for (let t = 0; t <= 1; t += 1 / segments) {
+                const x = (1 - t) * (1 - t) * start[1] + 2 * (1 - t) * t * control[1] + t * t * end[1];
+                const y = (1 - t) * (1 - t) * start[0] + 2 * (1 - t) * t * control[0] + t * t * end[0];
                 points.push([y, x]);
             }
-            points.push([end[0], end[1]]);
             return points;
         }
-        const curvePoints = sampleCurve([pointA.lat, pointA.lng], controlPoint, [pointB.lat, pointB.lng]);
+        let curvePoints = sampleCurve([pointA.lat, pointA.lng], controlPoint, [pointB.lat, pointB.lng]);
+        function shortenPolylinePoints(points, pixelsToShorten, fromStart) {
+            if (points.length < 2 || pixelsToShorten <= 0)
+                return points;
+            let cumulativeDistance = 0;
+            let cutIndex = -1;
+            let modifiedPoint = null;
+            const startIndex = fromStart ? 0 : points.length - 1;
+            const endIndex = fromStart ? points.length - 1 : 0;
+            const step = fromStart ? 1 : -1;
+            for (let i = startIndex; fromStart ? i < endIndex : i > endIndex; i += step) {
+                const currentIdx = i;
+                const nextIdx = i + step;
+                const p1 = L.latLng(points[currentIdx][0], points[currentIdx][1]);
+                const p2 = L.latLng(points[nextIdx][0], points[nextIdx][1]);
+                const pix1 = map.latLngToContainerPoint(p1);
+                const pix2 = map.latLngToContainerPoint(p2);
+                const segDist = pix1.distanceTo(pix2);
+                cumulativeDistance += segDist;
+                if (cumulativeDistance >= pixelsToShorten) {
+                    const overflow = cumulativeDistance - pixelsToShorten;
+                    const ratio = 1 - (overflow / segDist);
+                    const newPixX = pix1.x + (pix2.x - pix1.x) * ratio;
+                    const newPixY = pix1.y + (pix2.y - pix1.y) * ratio;
+                    const newLatLng = map.containerPointToLatLng([newPixX, newPixY]);
+                    modifiedPoint = [newLatLng.lat, newLatLng.lng];
+                    cutIndex = currentIdx;
+                    break;
+                }
+            }
+            if (cutIndex !== -1 && modifiedPoint) {
+                if (fromStart) {
+                    points[cutIndex] = modifiedPoint;
+                    return points.slice(cutIndex);
+                }
+                else {
+                    points[cutIndex] = modifiedPoint;
+                    return points.slice(0, cutIndex + 1);
+                }
+            }
+            return [];
+        }
+        curvePoints = shortenPolylinePoints(curvePoints, shortenEndPixels, false);
+        if (curvePoints.length < 2) {
+            return null;
+        }
         const curveLine = L.polyline(curvePoints, {
             color: '#771646',
             weight: 1,
             dashArray: '5, 5',
-            dashOffset: '0'
+            dashOffset: '0',
+            isTrajectoryLine: true
         }).arrowheads({
             frequency: 'endonly',
             fill: true,
