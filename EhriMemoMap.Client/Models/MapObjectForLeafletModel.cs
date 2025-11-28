@@ -17,7 +17,7 @@ public partial class MapObjectForLeafletModel
         Id = place.Id;
         Label = place.PlaceCs;
         MapPoint = place.MapLocation;
-
+        Clickable = true;
         HtmlIcon = Id.Contains("victim_last_residence") 
             ? "<img src='css/images/marker-icon-red.png' />" 
             : "<img src='css/images/marker-icon.png' />";

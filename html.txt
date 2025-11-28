@@ -1,0 +1,141 @@
+<div class="rz-stack rz-display-flex rz-flex-row rz-align-items-flex-start rz-justify-content-normal timeline-inner-wrapper" style="--rz-gap:0px;flex-wrap:nowrap;" id="eZvixBQbt0" _bl_24=""><div class="timeline-firstcolumn" style="height:62px;width:0px;"><h4 class="rz-mb-2">Èasová osa</h4><!--!--><button tabindex="0" type="button" class="rz-button rz-button-xs rz-variant-outlined rz-secondary rz-shade-default" id="ZjwMlJbVOU" _bl_25=""><span class="rz-button-box">Všechno</span></button></div><!--!--><div class="rz-card rz-variant-filled timeline" style="background-color: var(--Grey);position: relative;width:0px;height:72px;" id="Qbw6XI12Ek" _bl_26=""><!--!--><div class="timeline-baseline"></div><div class="timeline-point" style="left:26px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-year-point"></div></div></div><!--!-->
+
+                    <div style="position:absolute;left:-9px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 1. 1942</div></div><!--!-->
+
+                    <div class="timeline-year-label" style="left:13px">1942</div><div class="timeline-point" style="left:23px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:-12px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 4. 1942</div></div><div class="timeline-point" style="left:20px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:-15px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 7. 1942</div></div><div class="timeline-point" style="left:17px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:-18px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 10. 1942</div></div><div class="timeline-point" style="left:14px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-year-point"></div></div></div><!--!-->
+
+                    <div style="position:absolute;left:-21px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 1. 1943</div></div><!--!-->
+
+                    <div class="timeline-year-label" style="left:1px">1943</div><div class="timeline-point" style="left:11px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:-24px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 4. 1943</div></div><div class="timeline-point" style="left:8px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:-27px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 7. 1943</div></div><div class="timeline-point" style="left:5px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:-30px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 10. 1943</div></div><div class="timeline-point" style="left:2px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-year-point"></div></div></div><!--!-->
+
+                    <div style="position:absolute;left:-33px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 1. 1944</div></div><!--!-->
+
+                    <div class="timeline-year-label" style="left:-11px">1944</div><div class="timeline-point" style="left:-1px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:-36px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 4. 1944</div></div><div class="timeline-point" style="left:-4px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:-39px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 7. 1944</div></div><div class="timeline-point" style="left:-7px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:-42px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 10. 1944</div></div><div class="timeline-point" style="left:-10px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-year-point"></div></div></div><!--!-->
+
+                    <div style="position:absolute;left:-45px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 1. 1945</div></div><!--!-->
+
+                    <div class="timeline-year-label" style="left:-23px">1945</div><div class="timeline-point" style="left:-13px;width:-3px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:-48px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 4. 1945</div></div></div></div>
+
+
+
+---
+
+
+
+tady je pro info èasová osa, která se zobrazuje na desktopu
+
+
+
+<div class="timeline-wrapper"><!--!--><!--!--><div class="rz-stack rz-display-flex rz-flex-row rz-align-items-flex-start rz-justify-content-normal timeline-inner-wrapper" style="--rz-gap:0px;flex-wrap:nowrap;" id="ym-lTitwWk" _bl_49=""><div class="timeline-firstcolumn" style="height:62px;width:100px;"><h4 class="rz-mb-2">Èasová osa</h4><!--!--><button tabindex="0" type="button" class="rz-button rz-button-xs rz-variant-outlined rz-secondary rz-shade-default" id="s1Tm7zx9PE" _bl_50=""><span class="rz-button-box">Všechno</span></button></div><!--!--><div class="rz-card rz-variant-filled timeline" style="background-color: var(--Grey);position: relative;width:450px;height:72px;" id="5ixXVnGAME" _bl_51=""><!--!--><div class="timeline-baseline"></div><div class="timeline-point" style="left:10px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-year-point"></div></div></div><!--!-->
+
+                    <div style="position:absolute;left:-9px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 1. 1942</div></div><!--!-->
+
+                    <div class="timeline-year-label" style="left:13px">1942</div><div class="timeline-point" style="left:40px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:21px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 4. 1942</div></div><div class="timeline-point" style="left:70px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:51px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 7. 1942</div></div><div class="timeline-point" style="left:100px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:81px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 10. 1942</div></div><div class="timeline-point" style="left:130px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-year-point"></div></div></div><!--!-->
+
+                    <div style="position:absolute;left:111px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 1. 1943</div></div><!--!-->
+
+                    <div class="timeline-year-label" style="left:133px">1943</div><div class="timeline-point" style="left:160px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:141px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 4. 1943</div></div><div class="timeline-point" style="left:190px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:171px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 7. 1943</div></div><div class="timeline-point" style="left:220px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:201px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 10. 1943</div></div><div class="timeline-point" style="left:250px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-year-point"></div></div></div><!--!-->
+
+                    <div style="position:absolute;left:231px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 1. 1944</div></div><!--!-->
+
+                    <div class="timeline-year-label" style="left:253px">1944</div><div class="timeline-point" style="left:280px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:261px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 4. 1944</div></div><div class="timeline-point" style="left:310px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:291px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 7. 1944</div></div><div class="timeline-point" style="left:340px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:321px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 10. 1944</div></div><div class="timeline-point" style="left:370px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-year-point"></div></div></div><!--!-->
+
+                    <div style="position:absolute;left:351px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 1. 1945</div></div><!--!-->
+
+                    <div class="timeline-year-label" style="left:373px">1945</div><div class="timeline-point" style="left:400px;width:30px"><!--!--><div style="position:relative;width:100%"><div class="timeline-quarter-point"></div></div></div><!--!-->
+
+                    <div style="left:381px" class="timeline-tooltip"><!--!--><img src="/images/tooltip.svg">
+
+                        <div class="timeline-tooltip-text">1. 4. 1945</div></div></div></div></div>

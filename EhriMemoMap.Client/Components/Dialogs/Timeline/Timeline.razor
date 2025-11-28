@@ -72,7 +72,7 @@
     @if (MobileVersion && timeline.Any(a => a.From == null && a.To == null))
     {
         <div>
-            <RadzenButton Click="(() => OnCollectionClick(timeline.FirstOrDefault(a => a.From == null && a.To == null)))" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" class="rz-mt-4" Style="@("width:" + timelineWidth + "px")">
+            <RadzenButton Click="(() => OnCollectionClick(timeline.FirstOrDefault(a => a.From == null && a.To == null)))" ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" class="rz-mt-4" Style="width:100%">
                 @cl["all"]
             </RadzenButton>
         </div>

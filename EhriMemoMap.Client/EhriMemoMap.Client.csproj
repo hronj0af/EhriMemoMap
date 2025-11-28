@@ -47,7 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Components\Buttons\ContextButtonsWrapper.razor">
+    <Content Update="Components\ButtonWrappers\ContextButtonsWrapper.razor">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </Content>
     <Content Update="wwwroot\appsettings.Development.json">
