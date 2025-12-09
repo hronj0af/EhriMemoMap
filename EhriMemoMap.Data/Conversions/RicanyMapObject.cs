@@ -1,4 +1,4 @@
-﻿namespace EhriMemoMap.Data.Ricany;
+﻿namespace EhriMemoMap.Data.MemoMap;
 
 public partial class MapObject
 {

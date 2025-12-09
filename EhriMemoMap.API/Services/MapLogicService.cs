@@ -4,14 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using EhriMemoMap.API.Helpers;
 using Newtonsoft.Json;
-using EhriMemoMap.Data.Ricany;
+using EhriMemoMap.Data.MemoMap;
+using EhriMemoMap.API.Services;
 
 namespace EhriMemoMap.Services;
 
 /// <summary>
 /// Logika nad mapou
 /// </summary>
-public class MapLogicService(MemogisContext context, RicanyContext ricanyContext)
+public class MapLogicService(MemogisContext context, MemoMapContextFactory factory)
 {
     public IQueryable<Data.MapObject> PrepareMapObjectsQuery(MapObjectParameters parameters)
     {
@@ -54,10 +55,11 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
         return query;
     }
 
-    public IQueryable<Data.Ricany.MapObject> PrepareMapObjectsQueryRicany(MapObjectParameters parameters)
+    public List<Data.MemoMap.MapObject> PrepareMapObjectsQueryMemoMap(MapObjectParameters parameters)
     {
+        using var context = factory.GetContext(parameters.City);
         // nejdriv si pripravim mapove objekty pro dalsi dotazy
-        var query = ricanyContext.MapObjects.AsQueryable();
+        var query = context.MapObjects.AsQueryable();
 
         // vyfiltruju objekty podle toho, na jakem bode casove ose lezi
         if (parameters.SelectedTimeLinePoint != null)
@@ -92,7 +94,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
             query = query.Where(a => !string.IsNullOrEmpty(a.MapPolygon) || (a.GeographyMapPoint != null && a.GeographyMapPoint.Intersects(bbox)));
         }
 
-        return query;
+        return query.ToList();
     }
 
     private static void NormalizeCustomCoordinate(MapObjectParameters? parameters)
@@ -126,10 +128,10 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
     {
         Console.WriteLine(JsonConvert.SerializeObject(parameters));
 
-        if (parameters.City == "ricany")
+        if (parameters.City.IsMemoMapCity())
         {
-            var resultRicany = PrepareMapObjectsQueryRicany(parameters);
-            return [.. resultRicany.Select(a => a.ConvertToMapObjectShared())];
+            var resultMemoMap = PrepareMapObjectsQueryMemoMap(parameters);
+            return [.. resultMemoMap.Select(a => a.ConvertToMapObjectShared())];
         }
 
         var result = PrepareMapObjectsQuery(parameters);
@@ -149,11 +151,12 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
 
     public List<Shared.MapStatistic> GetDistrictStatistics(DistrictStatisticsParameters parameters)
     {
-        if (parameters.City == "ricany")
+        if (parameters.City.IsMemoMapCity())
         {
-            var resultRicany = ricanyContext.MapStatistics.
+            var context = factory.GetContext(parameters.City);
+            var resultMemoMap = context.MapStatistics.
                 Where(a => (parameters.Total ? a.Type.Contains("total") : !a.Type.Contains("total")) && a.DateFrom == parameters.TimeLinePoint).ToList();
-            return resultRicany.Select(a => a.ConvertToSharedStatistic()).ToList();
+            return resultMemoMap.Select(a => a.ConvertToSharedStatistic()).ToList();
         }
 
         var result = context.MapStatistics.
@@ -163,17 +166,18 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
 
     public WelcomeDialogStatistics GetWelcomeDialogStatistics(string city)
     {
-        if (city == "ricany")
+        if (city.IsMemoMapCity())
         {
-            var statisticsRicany = ricanyContext.MapStatistics.Where(a => a.Type.Contains("total") && a.DateFrom == null && a.DateTo == null).ToList();
+            var context = factory.GetContext(city);
+            var statisticsMemoMap = context.MapStatistics.Where(a => a.Type.Contains("total") && a.DateFrom == null && a.DateTo == null).ToList();
             return new WelcomeDialogStatistics
             {
-                Victims = statisticsRicany.FirstOrDefault(a => a.Type.Contains("victims"))?.Count,
-                Incidents = statisticsRicany.FirstOrDefault(a => a.Type.Contains("incidents"))?.Count,
-                Interests = statisticsRicany.FirstOrDefault(a => a.Type.Contains("pois_points"))?.Count,
-                Inaccessibles = statisticsRicany.FirstOrDefault(a => a.Type.Contains("pois_polygons"))?.Count,
-                PlacesOfMemory = statisticsRicany.FirstOrDefault(a => a.Type.Contains("places_of_memory"))?.Count,
-                Memorials = statisticsRicany.FirstOrDefault(a => a.Type.Contains("memorials"))?.Count,
+                Victims = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("victims"))?.Count,
+                Incidents = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("incidents"))?.Count,
+                Interests = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("pois_points"))?.Count,
+                Inaccessibles = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("pois_polygons"))?.Count,
+                PlacesOfMemory = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("places_of_memory"))?.Count,
+                Memorials = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("memorials"))?.Count,
             };
         }
 
@@ -208,8 +212,8 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
     {
         if (parameters.City == "prague")
             return GetPlacesOfMemoriesPrague(parameters);
-        else if (parameters.City == "ricany")
-            return GetPlacesOfMemoriesRicany(parameters);
+        else if (parameters.City.IsMemoMapCity())
+            return GetPlacesOfMemoriesMemoMap(parameters);
         else
             return null;
     }
@@ -242,12 +246,13 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
         return [.. result];
     }
 
-    public List<PlaceMemory>? GetPlacesOfMemoriesRicany(PlacesParameters parameters)
+    public List<PlaceMemory>? GetPlacesOfMemoriesMemoMap(PlacesParameters parameters)
     {
         if (parameters.PlacesOfMemoryIds == null)
             return null;
 
-        var result = ricanyContext.PlacesOfMemories.
+        using var context = factory.GetContext(parameters.City);
+        var result = context.PlacesOfMemories.
             Where(a => a.Type != "stolperstein").
             Include(a => a.PlacesXPlacesOfMemories).ThenInclude(a => a.Place).
             Include(a => a.PlacesOfMemoryXPlacesOfMemoryPlaceOfMemory2s).ThenInclude(a => a.PlaceOfMemory1).
@@ -259,7 +264,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                 Type = a.Type,
                 LabelCs = a.LabelCs,
                 LabelEn = a.LabelEn,
-                City = "ricany",
+                City = parameters.City,
                 AddressCs = a.PlacesXPlacesOfMemories.FirstOrDefault(b => b.RelationshipType == 38)?.Place?.LabelCs,
                 AddressEn = a.PlacesXPlacesOfMemories.FirstOrDefault(b => b.RelationshipType == 38)?.Place?.LabelEn,
                 DescriptionCs = a.DescriptionCs,
@@ -338,9 +343,10 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     }).
                     ToArray();
         }
-        else if (parameters.City?.Contains("pacov") ?? false)
+        else if (parameters.City.IsMemoMapCity())
         {
-            result = context.PacovIncidents.
+            using var context = factory.GetContext(parameters.City);
+            result = context.Incidents.
                 Include(a => a.Place).
                 Where(p => parameters.IncidentsIds.Contains(p.Id)).
                 AsEnumerable().
@@ -356,25 +362,6 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     AddressEn = a.Place?.LabelEn,
                 }).ToList();
         }
-        else if (parameters.City?.Contains("ricany") ?? false)
-        {
-            result = ricanyContext.Incidents.
-                Include(a => a.Place).
-                Where(p => parameters.IncidentsIds.Contains(p.Id)).
-                AsEnumerable().
-                Select(a => new PlaceIncident
-                {
-                    DateCs = a.DateCs,
-                    DateEn = a.DateEn,
-                    DescriptionCs = a.DescriptionCs,
-                    DescriptionEn = a.DescriptionEn,
-                    LabelCs = a.LabelCs,
-                    LabelEn = a.LabelEn,
-                    AddressCs = a.Place?.LabelCs,
-                    AddressEn = a.Place?.LabelEn,
-                }).ToList();
-        }
-
 
         return result;
     }
@@ -398,40 +385,10 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                 }).
                 ToList();
 
-        else if (parameters.City == "pacov")
-            return context.PacovPois.
-                Include(a => a.Place).
-                Include(a => a.PacovDocumentsXPois).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
-                AsNoTracking().
-                AsEnumerable().
-                Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
-                Select(a => new PlaceInterest
-                {
-                    AddressCs = a.Place.LabelCs,
-                    AddressEn = a.Place.LabelEn,
-                    LabelCs = a.LabelCs,
-                    LabelEn = a.LabelEn,
-                    DescriptionCs = a.DescriptionCs,
-                    DescriptionEn = a.DescriptionEn,
-                    Documents = a.PacovDocumentsXPois.Select(b => b.Document).Select(c => new Shared.Document
-                    {
-                        CreationDateCs = c.CreationDateCs,
-                        CreationDateEn = c.CreationDateEn,
-                        DescriptionCs = c.DescriptionCs,
-                        DescriptionEn = c.DescriptionEn,
-                        LabelCs = c.LabelCs,
-                        LabelEn = c.LabelEn,
-                        CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
-                        CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
-                        Id = c.Id,
-                        Owner = c.Owner,
-                        Type = c.Type,
-                        Url = c?.PacovDocumentsXMedia?.Select(d => new OmekaUrl(d?.Medium?.OmekaUrl, null)).ToArray() ?? []
-                    }).ToArray()
-                }).
-                ToList();
-        else if (parameters.City == "ricany")
-            return ricanyContext.Pois.
+        else if (parameters.City.IsMemoMapCity())
+        {
+            using var context = factory.GetContext(parameters.City);
+            return context.Pois.
                 Include(a => a.Place).
                 Include(a => a.DocumentsXPois).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
                 Include(a => a.NarrativeMapsXPois).
@@ -464,6 +421,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     }).ToArray()
                 }).
                 ToList();
+        }
         return null;
 
     }
@@ -473,8 +431,10 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
         if (parameters.MemorialsIds == null)
             return null;
 
-        if (parameters.City == "ricany")
-            return ricanyContext.Events.
+        if (parameters.City.IsMemoMapCity())
+        {
+            using var context = factory.GetContext(parameters.City);
+            return context.Events.
                 Include(a => a.EventsXPlaces).ThenInclude(a => a.Place).
                 Include(a => a.DocumentsXEvents).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
                 AsNoTracking().
@@ -505,6 +465,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     }).ToArray()
                 }).
                 ToList();
+        }
         return null;
 
     }
@@ -527,8 +488,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                 DescriptionEn = a.DescriptionEn,
             }).
             ToList();
-        else if (parameters.City == "pacov" || parameters.City == "ricany")
-        { }
+
         return null;
 
     }
@@ -566,35 +526,10 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                 }).
                 ToList();
         }
-        else if (parameters.City == "pacov")
+        else if (parameters.City.IsMemoMapCity())
         {
-            return [.. context.PacovPlaces.
-                Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
-                Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
-                Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.PacovEntitiesXNarrativeMaps).
-                Where(p => parameters.AddressesIds.Contains(p.Id)).
-                AsEnumerable().
-                Select(a => new AddressWithVictims
-                {
-                    Address = new AddressInfo
-                    {
-                        Cs = a.LabelCs,
-                        En = a.LabelEn,
-                    },
-                    Victims = [.. a.PacovEntitiesXPlaces.Select(b => new VictimShortInfoModel
-                    {
-                        Id = b?.Entity.Id ?? 0,
-                        LongInfo = true,
-                        Photo = b?.Entity.PacovEntitiesXMedia?.Select(c => c.Medium)?.FirstOrDefault()?.OmekaUrl,
-                        Label = b?.Entity.Surname + ", " + b?.Entity.Firstname + (b?.Entity.Birthdate != null ? " (*" + b?.Entity.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
-                        RelationshipToAddressType = b?.RelationshipType,
-                        NarrativeMapId = b?.Entity.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
-                    })]
-                })];
-        }
-        else if (parameters.City == "ricany")
-        {
-            return [.. ricanyContext.Places.
+            using var context = factory.GetContext(parameters.City);
+            return [.. context.Places.
                 Include(a => a.EntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.EntitiesXMedia).ThenInclude(a => a.Media).
                 Include(a => a.EntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
                 Include(a => a.EntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.EntitiesXNarrativeMaps).
@@ -681,87 +616,10 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
 
         var result = new VictimLongInfoModel();
 
-        if (city == "pacov")
-            result = context.PacovEntities.
-                Include(a => a.FateNavigation).
-                Include(a => a.PacovEntitiesXNarrativeMaps).
-                Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceFromNavigation).
-                Include(a => a.PacovEntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceToNavigation).
-                Include(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
-                Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.Place).
-                Include(a => a.PacovEntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
-                Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
-                Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.PacovEntitiesXNarrativeMaps).
-                Include(a => a.PacovEntitiesXEntityEntity2s).ThenInclude(a => a.RelationshipTypeNavigation).
-                Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
-                Include(a => a.PacovDocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.CreationPlaceNavigation).
-                Where(a => a.Id == id).
-                AsEnumerable().
-                Select(b => new VictimLongInfoModel
-                {
-                    Id = b.Id,
-                    NarrativeMapId = b.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
-                    Maidenname = b.Maidenname,
-                    Title = b.Title,
-                    BirthDate = b.Birthdate,
-                    DeathDate = b.Deathdate,
-                    DescriptionCs = b?.DescriptionCs,
-                    DescriptionEn = b?.DescriptionEn,
-                    Label = b?.Firstname + " " + b?.Surname,
-                    FateCs = b?.Sex == 3 ? b?.FateNavigation?.LabelCs?.Replace("/", "") : b?.FateNavigation?.LabelCs?.Replace("/a", ""),
-                    FateEn = b?.FateNavigation?.LabelEn,
-                    Photo = b?.PacovEntitiesXMedia.Select(a => a.Medium).FirstOrDefault()?.OmekaUrl,
-                    Places = b?.PacovEntitiesXPlaces.Select(a => new AddressInfo
-                    {
-                        Id = a.Place.Id,
-                        Cs = a.Place.LabelCs,
-                        En = a.Place.LabelEn ?? a.Place.LabelCs,
-                        Type = a.RelationshipType,
-                        TypeCs = a.RelationshipTypeNavigation.LabelCs,
-                        TypeEn = a.RelationshipTypeNavigation.LabelEn,
-                        DateFrom = a.DateFrom,
-                        DateTo = a.DateTo,
-                    }).ToArray(),
-                    Documents = b?.PacovDocumentsXEntities.Select(c => c.Document).Select(c => new Shared.Document
-                    {
-                        CreationDateCs = c.CreationDateCs,
-                        CreationDateEn = c.CreationDateEn,
-                        DescriptionCs = c.DescriptionCs,
-                        DescriptionEn = c.DescriptionEn,
-                        LabelCs = c.LabelCs,
-                        LabelEn = c.LabelEn,
-                        CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
-                        CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
-                        Id = c.Id,
-                        Owner = c.Owner,
-                        Type = c.Type,
-                        Url = c?.PacovDocumentsXMedia?.Select(d => new OmekaUrl(d?.Medium?.OmekaUrl, null))?.ToArray() ?? []
-                    }).ToArray(),
-                    RelatedPersons = b?.PacovEntitiesXEntityEntity2s.Select(a => new VictimShortInfoModel
-                    {
-                        Id = a.Entity1.Id,
-                        Name = a.Entity1.Surname + ", " + a.Entity1.Firstname,
-                        Birthdate = a.Entity1.Birthdate?.ToString("d.M.yyyy"),
-                        Photo = a.Entity1.PacovEntitiesXMedia.Select(c => c.Medium).FirstOrDefault()?.OmekaUrl,
-                        RelationshipToPersonCs = a.RelationshipTypeNavigation.LabelCs,
-                        RelationshipToPersonEn = a.RelationshipTypeNavigation.LabelEn,
-                        RelationshipToPersonType = a.RelationshipType,
-                        LongInfo = true,
-                        NarrativeMapId = a?.Entity1.PacovEntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
-                    }).ToArray(),
-                    Transports = b?.PacovEntitiesXTransports.Select(a => new Shared.Transport
-                    {
-                        Date = a.Transport.Date,
-                        FromCs = a.Transport?.PlaceFromNavigation?.LabelCs,
-                        FromEn = a.Transport?.PlaceFromNavigation?.LabelEn,
-                        ToCs = a.Transport?.PlaceToNavigation?.LabelCs,
-                        ToEn = a.Transport?.PlaceToNavigation?.LabelEn,
-                        Code = a.Transport?.TransportCode,
-                    }).ToArray(),
-                }).
-                FirstOrDefault();
-        else if (city == "ricany")
-            result = ricanyContext.Entities.
+        if (city.IsMemoMapCity())
+        {
+            using var context = factory.GetContext(city);
+            result = context.Entities.
                 Include(a => a.FateNavigation).
                 Include(a => a.EntitiesXNarrativeMaps).
                 Include(a => a.EntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceFromNavigation).
@@ -841,75 +699,73 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                     }).ToArray(),
                 }).
                 FirstOrDefault();
+        }
         return result;
     }
 
     public List<Shared.NarrativeMap> GetAllNarrativeMaps(string city)
     {
         var result = new List<Shared.NarrativeMap>();
-        if (city == "pacov")
-            result = context.PacovNarrativeMaps.
+        if (city.IsMemoMapCity())
+        {
+            using var MemoMapContext = factory.GetContext(city);
+            result = MemoMapContext.NarrativeMaps.
                 Select(a => new Shared.NarrativeMap { Id = a.Id, LabelCs = a.LabelCs, LabelEn = a.LabelEn }).ToList();
-        else if (city == "ricany")
-            result = ricanyContext.NarrativeMaps.
-                Select(a => new Shared.NarrativeMap { Id = a.Id, LabelCs = a.LabelCs, LabelEn = a.LabelEn }).ToList();
+
+        }
         return result;
     }
     public Shared.NarrativeMap? GetNarrativeMap(long id, string city)
     {
         var map = new Shared.NarrativeMap();
-        if (city == "pacov")
-            map = context.PacovNarrativeMaps.
-                Include(a => a.PacovEntitiesXNarrativeMaps).ThenInclude(a => a.Entity).ThenInclude(a => a.PacovEntitiesXMedia).ThenInclude(a => a.Medium).
-                Include(a => a.PacovNarrativeMapsXNarrativeMapStops).
-                Select(a => new Shared.NarrativeMap
-                {
-                    Id = a.Id,
-                    LabelCs = a.LabelCs,
-                    LabelEn = a.LabelEn,
-                    DescriptionCs = a.DescriptionCs,
-                    DescriptionEn = a.DescriptionEn,
-                    Type = a.Type
-                }).
-                FirstOrDefault(a => a.Id == id);
-        else if (city == "ricany")
-            map = ricanyContext.NarrativeMaps.
-                Include(a => a.EntitiesXNarrativeMaps).ThenInclude(a => a.Entity).ThenInclude(a => a.EntitiesXMedia).ThenInclude(a => a.Media).
-                Include(a => a.NarrativeMapsXNarrativeMapStops).
-                Select(a => new Shared.NarrativeMap
-                {
-                    Id = a.Id,
-                    LabelCs = a.LabelCs,
-                    LabelEn = a.LabelEn,
-                    DescriptionCs = a.DescriptionCs,
-                    DescriptionEn = a.DescriptionEn,
-                    Type = a.Type
-                }).
-                FirstOrDefault(a => a.Id == id);
-        else
+        if (!city.IsMemoMapCity())
             return null;
+
+        using var MemoMapContext = factory.GetContext(city);
+        map = MemoMapContext.NarrativeMaps.
+            Include(a => a.EntitiesXNarrativeMaps).ThenInclude(a => a.Entity).ThenInclude(a => a.EntitiesXMedia).ThenInclude(a => a.Media).
+            Include(a => a.NarrativeMapsXNarrativeMapStops).
+            Select(a => new Shared.NarrativeMap
+            {
+                Id = a.Id,
+                LabelCs = a.LabelCs,
+                LabelEn = a.LabelEn,
+                DescriptionCs = a.DescriptionCs,
+                DescriptionEn = a.DescriptionEn,
+                Type = a.Type
+            }).
+            FirstOrDefault(a => a.Id == id);
 
         var stops = Array.Empty<Shared.NarrativeMapStop>();
 
-        if (city == "pacov")
-            stops = context.PacovNarrativeMapStops.
-                Include(a => a.PacovNarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
-                Include(a => a.PacovNarrativeMapStopsXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
-                Include(a => a.PacovDocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.PacovDocumentsXMedia).ThenInclude(a => a.Medium).
-                Where(a => a.PacovNarrativeMapXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
-                AsEnumerable().
-                Select(a => new Shared.NarrativeMapStop
+        stops = MemoMapContext.NarrativeMapStops.
+            Include(a => a.NarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
+            Include(a => a.NarrativeMapStopsXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
+            Include(a => a.DocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
+            Where(a => a.NarrativeMapsXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
+            AsEnumerable().
+            Select(a =>
+            {
+                StringHelpers.ParseDescriptionSections(a.DescriptionCs, out var descriptionCs, out var descriptionSectionsCs);
+                StringHelpers.ParseDescriptionSections(a.DescriptionEn, out var descriptionEn, out var descriptionSectionsEn);
+                return new Shared.NarrativeMapStop
                 {
                     Id = a.Id,
                     LabelCs = a.LabelCs,
                     LabelEn = a.LabelEn,
-                    DescriptionCs = a.DescriptionCs,
-                    DescriptionEn = a.DescriptionEn,
-                    Places = a.PacovNarrativeMapStopsXPlaces.Select(b => new Shared.Place
+                    DateCs = a.DateCs,
+                    DateEn = a.DateEn,
+                    DescriptionCs = descriptionCs,
+                    DescriptionEn = descriptionEn,
+                    DescriptionSectionsCs = descriptionSectionsCs,
+                    DescriptionSectionsEn = descriptionSectionsEn,
+                    Places = a.NarrativeMapStopsXPlaces.Select(b => new Shared.Place
                     {
                         Id = b.Id,
                         LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
                         LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelEn + "<br/>" + b.Place.LabelEn : b.Place.LabelEn,
+                        AddressCs = b.Place.LabelCs,
+                        AddressEn = b.Place.LabelEn,
                         TownCs = b.Place.TownCs,
                         TownEn = b.Place.TownEn,
                         StreetCs = b.Place.StreetCs,
@@ -921,7 +777,7 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         Type = b.RelationshipTypeNavigation.LabelEn,
                         StopId = b.NarrativeMapStopId
                     }).ToArray(),
-                    Documents = a.PacovDocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Shared.Document
+                    Documents = a.DocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Shared.Document
                     {
                         CreationDateCs = b.CreationDateCs,
                         CreationDateEn = b.CreationDateEn,
@@ -934,66 +790,10 @@ public class MapLogicService(MemogisContext context, RicanyContext ricanyContext
                         Id = b!.Id,
                         Owner = b.Owner,
                         Type = b.Type,
-                        Url = b?.PacovDocumentsXMedia?.Select(c => new OmekaUrl(c?.Medium?.OmekaUrl, null))?.ToArray() ?? []
+                        Url = b?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, d?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
                     }).ToArray()
-                }).ToArray();
-        else if (city == "ricany")
-            stops = ricanyContext.NarrativeMapStops.
-                Include(a => a.NarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
-                Include(a => a.NarrativeMapStopsXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
-                Include(a => a.DocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
-                Where(a => a.NarrativeMapsXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
-                AsEnumerable().
-                Select(a =>
-                {
-                    StringHelpers.ParseDescriptionSections(a.DescriptionCs, out var descriptionCs, out var descriptionSectionsCs);
-                    StringHelpers.ParseDescriptionSections(a.DescriptionEn, out var descriptionEn, out var descriptionSectionsEn);
-                    return new Shared.NarrativeMapStop
-                    {
-                        Id = a.Id,
-                        LabelCs = a.LabelCs,
-                        LabelEn = a.LabelEn,
-                        DateCs = a.DateCs,
-                        DateEn = a.DateEn,
-                        DescriptionCs = descriptionCs,
-                        DescriptionEn = descriptionEn,
-                        DescriptionSectionsCs = descriptionSectionsCs,
-                        DescriptionSectionsEn = descriptionSectionsEn,
-                        Places = a.NarrativeMapStopsXPlaces.Select(b => new Shared.Place
-                        {
-                            Id = b.Id,
-                            LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
-                            LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelEn + "<br/>" + b.Place.LabelEn : b.Place.LabelEn,
-                            AddressCs = b.Place.LabelCs,
-                            AddressEn = b.Place.LabelEn,
-                            TownCs = b.Place.TownCs,
-                            TownEn = b.Place.TownEn,
-                            StreetCs = b.Place.StreetCs,
-                            StreetEn = b.Place.StreetEn,
-                            HouseNr = b.Place.HouseNr,
-                            RemarkCs = b.Place.RemarkCs,
-                            RemarkEn = b.Place.RemarkEn,
-                            MapPoint = b.Place.Geography.AsJson(),
-                            Type = b.RelationshipTypeNavigation.LabelEn,
-                            StopId = b.NarrativeMapStopId
-                        }).ToArray(),
-                        Documents = a.DocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Shared.Document
-                        {
-                            CreationDateCs = b.CreationDateCs,
-                            CreationDateEn = b.CreationDateEn,
-                            DescriptionCs = b.DescriptionCs,
-                            DescriptionEn = b.DescriptionEn,
-                            LabelCs = b.LabelCs,
-                            LabelEn = b.LabelEn,
-                            CreationPlaceCs = b!.CreationPlaceNavigation?.LabelCs,
-                            CreationPlaceEn = b!.CreationPlaceNavigation?.LabelEn,
-                            Id = b!.Id,
-                            Owner = b.Owner,
-                            Type = b.Type,
-                            Url = b?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, d?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
-                        }).ToArray()
-                    };
-                }).ToArray();
+                };
+            }).ToArray();
 
         map.Stops = stops;
 

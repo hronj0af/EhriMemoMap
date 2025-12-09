@@ -8,6 +8,34 @@ namespace EhriMemoMap.API.Helpers
 {
     public static class StringHelpers
     {
+
+        public static bool IsMemoMapCity(this string? city)
+        {
+            if (string.IsNullOrWhiteSpace(city))
+                return false;
+            var lowerCity = city.Trim().ToLowerInvariant();
+            return lowerCity switch
+            {
+                "ricany" or "pacov" => true,
+                _ => false
+            };
+        }
+
+        public static string GetCityName(this string? city)
+        {
+            if (string.IsNullOrWhiteSpace(city))
+                return "Unknown";
+            var lowerCity = city.Trim().ToLowerInvariant();
+            return lowerCity switch
+            {
+                "ricany" => "Říčany",
+                "pacov" => "Pacov",
+                "praha" => "Praha",
+                _ => "Unknown"
+            };
+
+        }
+
         public static string? AsJson(this Geometry? geometry)
         {
             if (geometry == null)

@@ -1,6 +1,6 @@
 using EhriMemoMap.API.Services;
 using EhriMemoMap.Data;
-using EhriMemoMap.Data.Ricany;
+using EhriMemoMap.Data.MemoMap ;
 using EhriMemoMap.Services;
 using EhriMemoMap.Shared;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +17,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddScoped<MapLogicService>();
 builder.Services.AddScoped<SolrService>();
 builder.Services.AddScoped<SolrUpdateService>();
+builder.Services.AddScoped<MemoMapContextFactory>();
 builder.Services.AddHttpClient();
 
 // you must set the MEMOMAP_DB environment variable to the connection string
@@ -27,7 +28,7 @@ builder.Services.AddHttpClient();
 var dbConnectionString = builder.Configuration["MEMOMAP_DB"];
 var ricanyDbConnectionString = builder.Configuration["RICANY_DB"];
 builder.Services.AddDbContext<MemogisContext>(options => options.UseNpgsql(builder.Configuration["MEMOMAP_DB"]));
-builder.Services.AddDbContext<RicanyContext>(options => options.UseNpgsql(builder.Configuration["RICANY_DB"]));
+builder.Services.AddDbContext<MemoMapContext>(options => options.UseNpgsql(builder.Configuration["RICANY_DB"]));
 
 var cors = "_myAllowSpecificOrigins";
 

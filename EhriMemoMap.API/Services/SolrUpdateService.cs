@@ -1,5 +1,5 @@
-﻿using EhriMemoMap.Data;
-using EhriMemoMap.Data.Ricany;
+﻿using EhriMemoMap.API.Helpers;
+using EhriMemoMap.Data;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.IO;
 using Newtonsoft.Json;
@@ -10,11 +10,10 @@ using System.Text;
 namespace EhriMemoMap.API.Services
 {
 
-    public partial class SolrUpdateService(MemogisContext context, RicanyContext ricanyContext, IHttpClientFactory clientFactory, IConfiguration configuration)
+    public partial class SolrUpdateService(MemogisContext context, MemoMapContextFactory factory, IHttpClientFactory clientFactory, IConfiguration configuration)
     {
         private readonly string _solrUrl = configuration.GetSection("App")["SolrUrl"] ?? "";
         private readonly MemogisContext _context = context;
-        private readonly RicanyContext _ricanyContext = ricanyContext;
         private readonly GeoJsonWriter _geoJsonWriter = new();
 
         public List<SolrPlaceForUpdate> GetPraguePlaces()
@@ -224,102 +223,65 @@ namespace EhriMemoMap.API.Services
             return places;
         }
 
-        public List<SolrPlaceForUpdate> GetPacovPlaces()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="city"></param>
+        /// <param name="mapObjectTypes">memory | interest | address | memorial</param>
+        /// <returns></returns>
+        public List<SolrPlaceForUpdate> GetMemoMapPlaces(string city, string[] mapObjectTypes)
         {
             var places = new List<SolrPlaceForUpdate>();
 
-            // Pacov POIs
-            places.AddRange(_context.PacovPois
-                .Include(p => p.Place)
-                .AsEnumerable()
-                .Select(p => new SolrPlaceForUpdate
-                {
-                    City = "pacov",
-                    Id = $"{p.Id}.interest.pacov",
-                    LabelCs = p.LabelCs,
-                    LabelEn = p.LabelEn,
-                    PlaceCs = p.Place?.LabelCs,
-                    PlaceEn = p.Place?.LabelEn,
-                    PlaceDe = "",
-                    PlaceCurrentCs = "",
-                    PlaceCurrentEn = "",
-                    PlaceCurrentDe = "",
-                    All = $"{p.LabelCs ?? ""} {p.LabelEn ?? ""} {p.Place?.LabelCs ?? ""} {p.Place?.LabelEn ?? ""}",
-                    MapLocation = p.Place?.Geography != null ? _geoJsonWriter.Write(p.Place.Geography.Copy()) : null,
-                    MapObject = null,
-                    PlaceDate = null,
-                    Type = "interest"
-                }));
+            if (!city.IsMemoMapCity())
+                return places;
 
-            // Pacov entities/victims at places
-            places.AddRange(_context.PacovPlaces
-                .Include(p => p.PacovEntitiesXPlaces)
-                    .ThenInclude(ep => ep.Entity)
-                .Where(p => p.Type == "house" && p.TownCs == "Pacov")
-                .AsEnumerable()
-                .SelectMany(p => p.PacovEntitiesXPlaces.Select(ep => new SolrPlaceForUpdate
-                {
-                    City = "pacov",
-                    Id = $"{p.Id}.address_{ep.EntityId}.victim.pacov",
-                    LabelCs = $"{ep.Entity.Surname}, {ep.Entity.Firstname} (* {ep.Entity.Birthdate?.ToString("d.M.yyyy")})",
-                    LabelEn = $"{ep.Entity.Surname}, {ep.Entity.Firstname} (* {ep.Entity.Birthdate?.ToString("d.M.yyyy")})",
-                    PlaceCs = p.LabelCs,
-                    PlaceEn = p.LabelEn,
-                    PlaceDe = "",
-                    PlaceCurrentCs = "",
-                    PlaceCurrentEn = "",
-                    PlaceCurrentDe = "",
-                    All = $"{p.LabelCs ?? ""} {p.LabelEn ?? ""} {ep.Entity.Firstname ?? ""} {ep.Entity.Surname ?? ""}",
-                    MapLocation = p.Geography != null ? _geoJsonWriter.Write(p.Geography.Copy()) : null,
-                    MapObject = null,
-                    PlaceDate = null,
-                    Type = "address"
-                })));
+            using var context = factory.GetContext(city);
 
-            return places;
-        }
-
-        public List<SolrPlaceForUpdate> GetRicanyPlaces()
-        {
-            var places = new List<SolrPlaceForUpdate>();
-
-            // Ricany places of memory (stolpersteine)
-            var ricanyMemories = _ricanyContext.PlacesOfMemories.
-                Where(a=>a.Type != "stolperstein").
-                Include(px => px.PlacesXPlacesOfMemories).ThenInclude(a => a.Place).AsEnumerable();
-
-            foreach (var memory in ricanyMemories)
+            if (mapObjectTypes.Contains("memory"))
             {
-                var place = memory.PlacesXPlacesOfMemories.FirstOrDefault()?.Place;
 
-                places.Add(new SolrPlaceForUpdate
+                // Ricany places of memory (stolpersteine)
+                var memories = context.PlacesOfMemories.
+                    Where(a => a.Type != "stolperstein").
+                    Include(px => px.PlacesXPlacesOfMemories).ThenInclude(a => a.Place).AsEnumerable();
+
+                foreach (var memory in memories)
                 {
-                    City = "ricany",
-                    Id = $"{memory.Id}.memory.ricany",
-                    LabelCs = memory.LabelCs,
-                    LabelEn = memory.LabelEn,
-                    PlaceCs = place?.LabelCs,
-                    PlaceEn = place?.LabelEn,
-                    PlaceDe = "",
-                    PlaceCurrentCs = "",
-                    PlaceCurrentEn = "",
-                    PlaceCurrentDe = "",
-                    All = $"{memory.LabelCs ?? ""} {place?.LabelCs ?? ""}",
-                    MapLocation = place?.Geography != null ? _geoJsonWriter.Write(place.Geography.Copy()) : null,
-                    MapObject = place?.Geography != null ? _geoJsonWriter.Write(place.Geography.Copy()) : null,
-                    PlaceDate = null,
-                    Type = "memory"
-                });
+                    var place = memory.PlacesXPlacesOfMemories.FirstOrDefault()?.Place;
+
+                    places.Add(new SolrPlaceForUpdate
+                    {
+                        City = city,
+                        Id = $"{memory.Id}.memory.{city}",
+                        LabelCs = memory.LabelCs,
+                        LabelEn = memory.LabelEn,
+                        PlaceCs = place?.LabelCs,
+                        PlaceEn = place?.LabelEn,
+                        PlaceDe = "",
+                        PlaceCurrentCs = "",
+                        PlaceCurrentEn = "",
+                        PlaceCurrentDe = "",
+                        All = $"{memory.LabelCs ?? ""} {place?.LabelCs ?? ""}",
+                        MapLocation = place?.Geography != null ? _geoJsonWriter.Write(place.Geography.Copy()) : null,
+                        MapObject = place?.Geography != null ? _geoJsonWriter.Write(place.Geography.Copy()) : null,
+                        PlaceDate = null,
+                        Type = "memory"
+                    });
+                }
             }
 
-            // Ricany POIs
-            places.AddRange(_ricanyContext.Pois
+            if (mapObjectTypes.Contains("interest"))
+            {
+
+                // Ricany POIs
+                places.AddRange(context.Pois
                 .Include(p => p.Place)
                 .AsEnumerable()
                 .Select(p => new SolrPlaceForUpdate
                 {
-                    City = "ricany",
-                    Id = $"{p.Id}.interest.ricany",
+                    City = city,
+                    Id = $"{p.Id}.interest.{city}",
                     LabelCs = p.LabelCs,
                     LabelEn = p.LabelEn,
                     PlaceCs = p.Place?.LabelCs,
@@ -334,41 +296,48 @@ namespace EhriMemoMap.API.Services
                     PlaceDate = null,
                     Type = "interest"
                 }));
+            }
 
-            // Ricany entities/victims at places
-            places.AddRange(_ricanyContext.Places
-                .Include(p => p.EntitiesXPlaces)
-                    .ThenInclude(ep => ep.Entity)
-                .Where(p => p.Type == "house" && p.TownCs == "Říčany")
-                .AsEnumerable()
-                .SelectMany(p => p.EntitiesXPlaces.Select(ep => new SolrPlaceForUpdate
-                {
-                    City = "ricany",
-                    Id = $"{p.Id}.address_{ep.EntityId}.victim.ricany",
-                    LabelCs = $"{ep.Entity.Surname}, {ep.Entity.Firstname} (* {ep.Entity.Birthdate?.ToString("d.M.yyyy")})",
-                    LabelEn = $"{ep.Entity.Surname}, {ep.Entity.Firstname} (* {ep.Entity.Birthdate?.ToString("d.M.yyyy")})",
-                    PlaceCs = p.LabelCs,
-                    PlaceEn = p.LabelEn,
-                    PlaceDe = "",
-                    PlaceCurrentCs = "",
-                    PlaceCurrentEn = "",
-                    PlaceCurrentDe = "",
-                    All = $"{p.LabelCs ?? ""} {p.LabelEn ?? ""} {ep.Entity.Firstname ?? ""} {ep.Entity.Surname ?? ""}",
-                    MapLocation = p.Geography != null ? _geoJsonWriter.Write(p.Geography.Copy()) : null,
-                    MapObject = null,
-                    PlaceDate = null,
-                    Type = "address"
-                })));
+            if (mapObjectTypes.Contains("address"))
+            {
+                // Ricany entities/victims at places
+                places.AddRange(context.Places
+                    .Include(p => p.EntitiesXPlaces)
+                        .ThenInclude(ep => ep.Entity)
+                    .Where(p => p.Type == "house" && p.TownCs == city.GetCityName())
+                    .AsEnumerable()
+                    .SelectMany(p => p.EntitiesXPlaces.Select(ep => new SolrPlaceForUpdate
+                    {
+                        City = city,
+                        Id = $"{p.Id}.address_{ep.EntityId}.victim.{city}",
+                        LabelCs = $"{ep.Entity.Surname}, {ep.Entity.Firstname} (* {ep.Entity.Birthdate?.ToString("d.M.yyyy")})",
+                        LabelEn = $"{ep.Entity.Surname}, {ep.Entity.Firstname} (* {ep.Entity.Birthdate?.ToString("d.M.yyyy")})",
+                        PlaceCs = p.LabelCs,
+                        PlaceEn = p.LabelEn,
+                        PlaceDe = "",
+                        PlaceCurrentCs = "",
+                        PlaceCurrentEn = "",
+                        PlaceCurrentDe = "",
+                        All = $"{p.LabelCs ?? ""} {p.LabelEn ?? ""} {ep.Entity.Firstname ?? ""} {ep.Entity.Surname ?? ""}",
+                        MapLocation = p.Geography != null ? _geoJsonWriter.Write(p.Geography.Copy()) : null,
+                        MapObject = null,
+                        PlaceDate = null,
+                        Type = "address"
+                    })));
+            }
 
-            // Ricany memorials
-            places.AddRange(_ricanyContext.Events
+            if (mapObjectTypes.Contains("memorial"))
+            {
+
+                // Ricany memorials
+                places.AddRange(context.Events
                 .Include(p => p.EventsXPlaces)
                     .ThenInclude(ep => ep.Place)
                 .AsEnumerable()
                 .SelectMany(p => p.EventsXPlaces.Select(ep => new SolrPlaceForUpdate
                 {
-                    City = "ricany",
-                    Id = $"{p.Id}.event_{ep.EventId}.ricany",
+                    City = city,
+                    Id = $"{p.Id}.event_{ep.EventId}.{city}",
                     LabelCs = $"{p.LabelCs}",
                     LabelEn = $"{p.LabelEn}",
                     PlaceCs = ep.Place?.LabelCs,
@@ -383,9 +352,10 @@ namespace EhriMemoMap.API.Services
                     PlaceDate = null,
                     Type = "memorial"
                 })));
-
+            }
             return places;
         }
+
 
         public async Task<int> UpdateAllPlacesAsync()
         {
@@ -393,8 +363,8 @@ namespace EhriMemoMap.API.Services
 
             allPlaces.AddRange(GetPraguePlaces());
             allPlaces.AddRange(GetPragueLastResidencePlaces());
-            allPlaces.AddRange(GetPacovPlaces());
-            allPlaces.AddRange(GetRicanyPlaces());
+            allPlaces.AddRange(GetMemoMapPlaces("pacov", ["interest", "address"]));
+            allPlaces.AddRange(GetMemoMapPlaces("ricany", ["memory", "interest", "address", "memorial"]));
 
             // Přidávání dokumentů do Solr v dávkách po 100
             const int batchSize = 1000;

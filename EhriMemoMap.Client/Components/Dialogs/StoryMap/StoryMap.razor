@@ -8,7 +8,17 @@
 
     @if (MapState.AllNarrativeMaps != null)
     {
-        if (MapState.AllNarrativeMaps.Count > 1)
+        if (MapState.DialogParameters.Id == null)
+        {
+            <h1 class="rz-mb-8" style="color:var(--Wine-Red)">@cl.GetString("storyMaps")</h1>
+            @foreach (var map in MapState.AllNarrativeMaps)
+            {
+                <div>
+                    <h4 class="rz-mb-6" style="cursor:pointer" onclick="@(() => StoryMapService.ShowNarrativeMap(map.Id))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.LabelCs : @map.LabelEn)</h4>
+                </div>
+            }
+        }
+        else if (MapState.DialogParameters.Id != null && MapState.AllNarrativeMaps.Count > 1)
         {
             <RadzenRow onclick="@(() => StoryMapService.ShowAllStoryMaps())" AlignItems="AlignItems.Center" class="rz-mb-4" Style="cursor:pointer">
                 <RadzenColumn Size="1">
@@ -24,22 +34,15 @@
                 </RadzenColumn>
             </RadzenRow>
         }
-        <RadzenRow>
-            <RadzenColumn Size="12">
-                <h1 class="rz-mb-6" style="color:var(--Wine-Red)">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? MapState.NarrativeMap?.LabelCs : MapState.NarrativeMap?.LabelEn)</h1>
-            </RadzenColumn>
-        </RadzenRow>
-
-        <StoryMapTimeline />
-    }
-    else if (MapState.DialogParameters.Id == null && MapState.AllNarrativeMaps != null)
-    {
-        <h1 class="rz-mb-8" style="color:var(--Wine-Red)">@cl.GetString("storyMaps")</h1>
-        @foreach (var map in MapState.AllNarrativeMaps)
+        if (MapState.DialogParameters.Id != null || MapState.AllNarrativeMaps.Count == 1)
         {
-            <div>
-                <h4 class="rz-mb-6" style="cursor:pointer" onclick="@(() => StoryMapService.ShowNarrativeMap(map.Id))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.LabelCs : @map.LabelEn)</h4>
-            </div>
+            <RadzenRow>
+                <RadzenColumn Size="12">
+                    <h1 class="rz-mb-6" style="color:var(--Wine-Red)">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? MapState.NarrativeMap?.LabelCs : MapState.NarrativeMap?.LabelEn)</h1>
+                </RadzenColumn>
+            </RadzenRow>
+
+            <StoryMapTimeline />
         }
     }
 
