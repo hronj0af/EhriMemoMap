@@ -8,14 +8,19 @@
 
     @if (MapState.VictimLongInfo != null)
     {
-        <RadzenRow class="rz-mb-6" JustifyContent="JustifyContent.SpaceBetween">
+
+        <RadzenRow class="rz-mb-6" AlignItems="AlignItems.End" JustifyContent="JustifyContent.SpaceBetween">
             <RadzenColumn Size="9">
                 <h1>@MapState.VictimLongInfo.Label</h1>
             </RadzenColumn>
             @if (MapState.VictimLongInfo.NarrativeMapId != null)
             {
                 <RadzenColumn Size="3" Style="text-align: right;">
-                    <img style="cursor:pointer" title="@cl.GetString("viewStoryMap")..." onclick="@(() => StoryMapService.ShowNarrativeMap(MapState.VictimLongInfo.NarrativeMapId))" src="images/story_map_with_text_@(CultureInfo.CurrentCulture.Name).png" height="30" />
+                    <img 
+                        style="width: 30px; cursor: pointer;" 
+                        title="@cl.GetString("viewStoryMap")..." 
+                        onclick="@(() => StoryMapService.ShowNarrativeMap(MapState.VictimLongInfo.NarrativeMapId))" 
+                        src="images/storymap-icon.png" />
                 </RadzenColumn>
             }
         </RadzenRow>
@@ -66,10 +71,10 @@
                 <VictimPlace Type="22" />
 
                 @* bydliště k 13. květnu 1939 *@
-                <VictimPlace Type="24" />
+                <VictimPlace Type="24" ShowDates="false" />
 
                 @* poslední bydliště před deportací *@
-                <VictimPlace Type="26" />
+                <VictimPlace Type="26" ShowDates="false" />
 
                 @* poslední bydliště *@
                 <VictimPlace Type="27" />

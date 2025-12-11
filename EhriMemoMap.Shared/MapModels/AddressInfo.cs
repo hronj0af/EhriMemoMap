@@ -23,8 +23,10 @@ namespace EhriMemoMap.Shared
             if (DateFrom.HasValue || DateTo.HasValue)
             {
                 address.Append(" (");
-                if (DateFrom.HasValue && DateTo.HasValue)
+                if (DateFrom.HasValue && DateTo.HasValue && DateFrom.Value.Year != DateTo.Value.Year)
                     address.Append(DateFrom.Value.Year + "-" + DateTo.Value.Year);
+                else if (DateFrom.HasValue && DateTo.HasValue && DateFrom.Value.Year == DateTo.Value.Year)
+                    address.Append(DateFrom.Value.Year);
                 else if (DateTo.HasValue)
                     address.Append((cultureName == "en-US" ? "until " : "do ") + DateTo.Value.Year);
                 else if (DateFrom.HasValue)
@@ -32,6 +34,10 @@ namespace EhriMemoMap.Shared
                 address.Append(')');
             }
             return address.ToString();
+        }
+        public string? GetAddress(string cultureName)
+        {
+            return cultureName == "en-US" ? En : Cs;
         }
 
     }
