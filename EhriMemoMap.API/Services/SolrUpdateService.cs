@@ -238,6 +238,38 @@ namespace EhriMemoMap.API.Services
 
             using var context = factory.GetContext(city);
 
+            if (mapObjectTypes.Contains("incident"))
+            {
+
+                places.AddRange(context.Incidents.Include(a => a.Place).AsEnumerable().Select(p =>
+                {
+                    var placeDate = new List<string>();
+                    if (!string.IsNullOrEmpty(p.DateCs))
+                        placeDate.Add(p.DateCs);
+                    if (!string.IsNullOrEmpty(p.DateEn))
+                        placeDate.Add(p.DateEn);
+
+                    return new SolrPlaceForUpdate
+                    {
+                        City = city,
+                        Id = $"{p.Id}.incident.{city}",
+                        LabelCs = p.LabelCs,
+                        LabelEn = p.LabelEn,
+                        PlaceCs = p.Place.LabelCs,
+                        PlaceEn = p.Place.LabelEn,
+                        PlaceDe = "",
+                        PlaceCurrentCs = "",
+                        PlaceCurrentEn = "",
+                        PlaceCurrentDe = "",
+                        All = $"{p.LabelCs ?? ""} {p.LabelEn ?? ""} {p.Place.LabelCs ?? ""} {p.Place.LabelEn ?? ""}",
+                        MapLocation = p.Place.Geography != null ? _geoJsonWriter.Write(p.Place.Geography.Copy()) : null,
+                        MapObject = p.Place.Geography != null ? _geoJsonWriter.Write(p.Place.Geography.Copy()) : null,
+                        PlaceDate = placeDate,
+                        Type = "incident"
+                    };
+                }));
+            }
+
             if (mapObjectTypes.Contains("memory"))
             {
 
@@ -363,7 +395,7 @@ namespace EhriMemoMap.API.Services
 
             allPlaces.AddRange(GetPraguePlaces());
             allPlaces.AddRange(GetPragueLastResidencePlaces());
-            allPlaces.AddRange(GetMemoMapPlaces("pacov", ["interest", "address"]));
+            allPlaces.AddRange(GetMemoMapPlaces("pacov", ["interest", "address", "incident"]));
             allPlaces.AddRange(GetMemoMapPlaces("ricany", ["memory", "interest", "address", "memorial"]));
 
             // Přidávání dokumentů do Solr v dávkách po 100

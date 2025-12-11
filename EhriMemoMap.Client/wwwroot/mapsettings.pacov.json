@@ -2,7 +2,7 @@
   "map": {
     "initialVariables": {
       "city": "pacov",
-      "allCities": [ "prague", "pacov" ],
+      "allCities": [ "prague", "ricany", "pacov" ],
       "storyMaps": true,
       "zoom": 15,
       "zoomMobile": 15,
@@ -23,7 +23,7 @@
       {
         "name": "OSM",
         "url": "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
-        "attribution": "MÚA AVČR, ITI &copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
+        "attribution": "MÚA AVČR, Tikkun Pacov, z. s. &copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
         "attributionUrl": "https://ehri.cz/memogis_cs.html#howto_credit",
         "type": "base",
         "zIndex": "50",

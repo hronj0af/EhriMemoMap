@@ -9,7 +9,7 @@
 else
 {
     <table style="padding-bottom:15px">
-        @if (statistics.Victims != null)
+        @if (statistics.Victims != null && statistics.Victims > 0)
         {
             <tr>
                 <td class='cell firstCell'>
@@ -47,7 +47,7 @@ else
             </tr>
         }
 
-        @if (statistics.Interests != null)
+        @if (statistics.Interests != null && statistics.Interests > 0)
         {
             <tr>
                 <td class='cell firstCell'>
@@ -67,7 +67,7 @@ else
 
         }
 
-        @if (statistics.Inaccessibles != null)
+        @if (statistics.Inaccessibles != null && statistics.Inaccessibles > 0)
         {
             <tr>
                 <td class='cell firstCell'>
@@ -87,7 +87,7 @@ else
 
         }
 
-        @if (statistics.PlacesOfMemory != null)
+        @if (statistics.PlacesOfMemory != null && statistics.PlacesOfMemory > 0)
         {
             <tr>
                 <td class='cell firstCell'>
@@ -106,7 +106,7 @@ else
             </tr>
         }
 
-        @if (statistics.Memorials != null)
+        @if (statistics.Memorials != null && statistics.Memorials > 0)
         {
             <tr>
                 <td class='cell firstCell'>

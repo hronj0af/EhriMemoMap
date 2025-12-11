@@ -2,7 +2,7 @@
   "map": {
     "initialVariables": {
       "city": "ricany",
-      "allCities": [ "ricany", "prague" ],
+      "allCities": [ "prague", "ricany", "pacov" ],
       "storyMaps": true,
       "zoom": 15,
       "zoomMobile": 15,

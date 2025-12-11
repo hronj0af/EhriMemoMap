@@ -561,7 +561,48 @@
     <value>Říčany</value>
   </data>
   <data name="helpContent_pacov" xml:space="preserve">
-    <value>Lorem ipsum..</value>
+    <value>&lt;div&gt;
+  &lt;p&gt;
+  &lt;h4&gt;
+    O MemoMap Pacov
+  &lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Co MemoMap Pacov obsahuje?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+Interaktivní mapa z doby protektorátu ukazuje, kde v Pacově žili jeho židovští obyvatelé, a zároveň představuje místa spojená s místní židovskou historií i každodenními kontakty židovského a většinového obyvatelstva. Takzvané příběhové mapy umožňují podrobně sledovat vybrané osobní příběhy a trajektorie pacovských obyvatel. Součástí prezentovaných dat jsou také digitalizované dokumenty a fotografie, které příběhy lidí a míst dále dokreslují.
+  &lt;/p&gt;
+  &lt;p&gt;
+  &lt;h4&gt;Jak se aplikace ovládá?&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Jednotlivé typy dat jsou rozděleny do tzv. vrstev, mezi kterými můžete přepínat. Ovládání vrstev se nachází pod ikonou&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/layers-small.svg' /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Přiblížit nebo oddálit mapu můžete pomocí tlačítek&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/zoom-in-small.svg' /&gt;
+     &lt;img src='/images/zoom-out-small.svg' /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    Svoji polohu na mapě najdete pomocí tlačítka&amp;nbsp;&amp;nbsp;
+     &lt;img src='/images/location-small.svg' /&gt;
+  &lt;/p&gt;
+
+&lt;p&gt;
+  &lt;h4&gt;Kredit&lt;/h4&gt;
+  &lt;/p&gt;
+  &lt;p&gt;Aplikace MemoMap Pacov vznikla ve spolupráci s neziskovou organizací Tikkun Pacov. Zvláštní poděkování patří panu Pavlu Tychtlovi, který pro aplikaci zpřístupnil svou rozsáhlou sbírku dokumentů a fotografií a poskytl řadu cenných informací.&lt;/p&gt;
+  &lt;a href="https://www.tikkun.cz" target="_blank"&gt;&lt;img src='/images/tikkun-logo.jpg' /&gt;&lt;/a&gt;
+  &lt;a href="https://www.mua.cas.cz/cs" target="_blank"&gt;&lt;img src='/images/mua-logo.jpg' /&gt;&lt;/a&gt;
+  &lt;p&gt;Vývoj mapové aplikace podpořil v roce 2025 Nadační fond obětem holocaustu.&lt;/p&gt;
+  &lt;a href="https://fondholocaust.cz/" target="_blank"&gt;&lt;img src='/images/nfoh-logo.jpg' /&gt;&lt;/a&gt;
+&lt;p&gt;
+  Aplikace je dlouhodobě rozvíjena a provozována v rámci českého uzlu Evropské infrastruktury pro výzkum holokaustu. Ten je součástí infrastruktury LINDAT/CLARIAH-CZ, která je podporována Ministerstvem školství, mládeže a tělovýchovy České republiky v rámci programu "velkých infrastruktur".
+  &lt;/p&gt;
+  &lt;a href="https://ehri.cz" target="_blank"&gt;&lt;img src='https://ehri.cz/images/ehri-logo.svg' /&gt;&lt;/a&gt;
+  &lt;/div&gt;</value>
   </data>
   <data name="welcomeText_pacov" xml:space="preserve">
     <value>Interaktivní mapa z doby protektorátu zobrazuje, kde v Pacově bydleli jeho židovští obyvatelé, a přináší informace o zajímavých místech spojených s židovskou historií města i interakci židovského a většinového obyvatelstva. Takzvané příběhové mapy umožňují detailně sledovat konkrétní osobní příběhy a trajektorie. Data jsou doplněna o digitalizované dokumenty a fotografie. Aplikace je přizpůsobena pro mobilní zařízení a můžete se s ní proto vydat přímo do města.</value>
@@ -779,7 +820,7 @@ každodenně škobrtnout, abychom nezapomínali na minulost, stále přibývají
 Památku říčanských obětí si v posledních letech připomínáme také společně se zástupci Finchley 
 Reform Synagogue z Londýna. Právě tam doputovala říčanská Tóra poté, co opustila naše město a 
 následně v roce 1962 i Prahu a Československo.
-&lt;/p&gt;
+  &lt;/p&gt;
   &lt;p&gt;
 V roce 2025 jsme připomínání místní židovské historie rozšířili o vytvoření interaktivní 
 MemoMapy. Využívá historickou mapu Říčan z roku 1935 a nabízí několik tematických vrstev, 
