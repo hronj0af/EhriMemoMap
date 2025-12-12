@@ -285,7 +285,7 @@ namespace mapAPI {
         // a pak obarvíme vybraný polygon, respektive přidáme špendlík
         if (event.target._latlng == undefined)
             (event.target as L.Polygon).setStyle({ fillColor: polygonColorSelected });
-        else {
+        else if (event.target._icon != null) {
             event.target._icon.className = event.target._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
             //event.target._icon.style.zIndex = '200';
         }

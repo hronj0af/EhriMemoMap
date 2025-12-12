@@ -20,8 +20,7 @@
 
     </h1>
     <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.End">
-        <RadzenTextBox Change="LoadData" @bind-Value=@MapState.SearchedPlaceString Style="width:100%;box-sizing: border-box;">
-        </RadzenTextBox>
+        <RadzenTextBox Change="LoadData" @bind-Value=@MapState.SearchedPlaceString Style="width:100%;box-sizing: border-box;"/>
         <RadzenButton ButtonStyle="ButtonStyle.Primary" Variant="Variant.Outlined" Click="LoadData">
             @cl["search"]
         </RadzenButton>

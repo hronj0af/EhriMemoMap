@@ -206,7 +206,7 @@ var mapAPI;
         unselectAllSelectedPoints();
         if (event.target._latlng == undefined)
             event.target.setStyle({ fillColor: polygonColorSelected });
-        else {
+        else if (event.target._icon != null) {
             event.target._icon.className = event.target._icon.className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
         }
         const point = event.target._latlng != undefined ? event.target._latlng : [lat, lng];

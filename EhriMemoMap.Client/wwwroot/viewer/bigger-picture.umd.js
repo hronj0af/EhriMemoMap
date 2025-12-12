@@ -1366,7 +1366,7 @@
     		e.preventDefault();
 
     		// change zoom on wheel
-    		changeZoom(e.deltaY / -300, e);
+    		changeZoom(e.deltaY / -100, e);
     	};
 
     	/** on drag start, store initial position and image translate values */
@@ -1454,7 +1454,7 @@
     		};
 
     		// scale image
-    		changeZoom(((prevDiff || curDiff) - curDiff) / -35, pinchDetails);
+    		changeZoom(((prevDiff || curDiff) - curDiff) / -10, pinchDetails);
 
     		// Cache the distance for the next move event
     		prevDiff = curDiff;

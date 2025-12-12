@@ -18,6 +18,8 @@ public partial class MapObjectForLeafletModel
         Label = place.PlaceCs;
         MapPoint = place.MapLocation;
         Clickable = true;
+        IconAnchor = [13,45];
+
         HtmlIcon = Id.Contains("victim_last_residence") 
             ? "<img src='css/images/marker-icon-red.png' />" 
             : "<img src='css/images/marker-icon.png' />";
