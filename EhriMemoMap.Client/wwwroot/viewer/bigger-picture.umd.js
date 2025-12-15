@@ -1499,7 +1499,10 @@
     				]));
     			}
     		} else if (!opts.onImageClick?.(container.el, activeItem)) {
-    			changeZoom($zoomed ? -maxZoom : maxZoom, e);
+                // Vypoèítáme pøesný faktor pro zvìtšení na 1:1 (pøirozená šíøka / aktuální zobrazená šíøka - 1)
+                const zoomFactor = (+activeItem.width / calculatedDimensions[0]) - 1;
+                // Použijeme tento faktor místo maxZoom
+                changeZoom($zoomed ? -maxZoom : zoomFactor, e);
     		}
 
     		// reset pointer states

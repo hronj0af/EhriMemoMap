@@ -5,6 +5,7 @@
         public string? All { get; set; }
         public string? City { get; set; }
         public string Id { get; set; } = string.Empty;
+        public long? DetailId { get; set; }
         public string? LabelCs { get; set; }
         public string? LabelEn { get; set; }
         public string? MapLocation { get; set; }

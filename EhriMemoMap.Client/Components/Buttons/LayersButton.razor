@@ -9,8 +9,10 @@
 @if (!MobileVersion)
 {
 
-    <div class="icon @(MapState.DialogType == DialogTypeEnum.Layers ? "icon-selected" : "")" title="@(cl["layers"] + "...")" onclick="@(() => ShowLayersList())">
-        <svg width="47" height="50" viewBox="0 0 47 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div class="icon @(MapState.DialogType == DialogTypeEnum.Layers ? "icon-selected" : "") @(Disabled ? "icon-disabled" : "")" 
+         title="@(Disabled ? "" : cl["layers"] + "...")" 
+         onclick="@(Disabled ? null : () => ShowLayersList())">
+        <svg width="47" height="50" viewBox="0 0 47 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="@(Disabled ? "opacity: 0.4;" : "")">
             <g id="Group 57">
                 <path id="Rectangle 23" d="M0 4.50427C0 2.29513 1.79086 0.504272 4 0.504272H47.1795V49.2564H4C1.79086 49.2564 0 47.4655 0 45.2564V4.50427Z" fill="#46463D" class="background"/>
                 <g id="layers">
@@ -31,8 +33,11 @@
 }
 else
 {
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" class="@((MapState.DialogType == DialogTypeEnum.Layers ? "mobile-menu-icon-selected" : "mobile-menu-icon") + " " + (Border ? "mobile-menu-icon-border" : ""))" title="@(cl["layers"] + "...")" onclick="@(() => ShowLayersList())">
-        <svg width="26" height="28" viewBox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" 
+                 class="@((MapState.DialogType == DialogTypeEnum.Layers ? "mobile-menu-icon-selected" : "mobile-menu-icon") + " " + (Border ? "mobile-menu-icon-border" : "") + " " + (Disabled ? "mobile-menu-icon-disabled" : ""))" 
+                 title="@(Disabled ? "" : cl["layers"] + "...")" 
+                 onclick="@(Disabled ? null : () => ShowLayersList())">
+        <svg width="26" height="28" viewBox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="@(Disabled ? "opacity: 0.4;" : "")">
             <path d="M13.1966 27.532L0.51709 17.6701L2.84166 15.9091L13.1966 23.9394L23.5515 15.9091L25.8761 17.6701L13.1966 27.532ZM13.1966 20.4174L0.51709 10.5555L13.1966 0.69372L25.8761 10.5555L13.1966 20.4174ZM13.1966 16.8248L21.2974 10.5555L13.1966 4.28624L5.09579 10.5555L13.1966 16.8248Z" fill="white" class="foreground"/>
             <path d="M13.1966 27.532L0.51709 17.6701L2.84166 15.9091L13.1966 23.9394L23.5515 15.9091L25.8761 17.6701L13.1966 27.532ZM13.1966 20.4174L0.51709 10.5555L13.1966 0.69372L25.8761 10.5555L13.1966 20.4174ZM13.1966 16.8248L21.2974 10.5555L13.1966 4.28624L5.09579 10.5555L13.1966 16.8248Z" fill="#D5D2B8" fill-opacity="0.2" />
         </svg>
@@ -46,6 +51,9 @@ else
 
     [Parameter]
     public bool Border { get; set; } = false;
+
+    [Parameter]
+    public bool Disabled { get; set; } = false;
 
     private int width;
 
@@ -74,6 +82,8 @@ else
 
     private async Task ShowLayersList()
     {
+        if (Disabled) return;
+        
         await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.Layers ? DialogTypeEnum.None : DialogTypeEnum.Layers);
         MapState.NotifyStateChanged();
     }

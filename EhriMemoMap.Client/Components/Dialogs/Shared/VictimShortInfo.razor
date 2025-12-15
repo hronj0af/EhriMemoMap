@@ -81,8 +81,6 @@
         if (Victim == null || (!Victim?.LongInfo ?? false))
             return;
 
-        MapState.VictimLongInfo = await MapLogic.GetVictimLongInfo(Victim!.Id);
-        await MapState.SetDialog(DialogTypeEnum.Victim, new DialogParameters { Id = Victim!.Id, Places = MapState.DialogParameters.Places });
-        MapState.NotifyStateChanged();
+        await MapLogic.ShowVictim(Victim!.Id);
     }
 }

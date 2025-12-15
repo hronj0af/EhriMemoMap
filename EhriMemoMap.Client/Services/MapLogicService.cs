@@ -1,13 +1,15 @@
-﻿using EhriMemoMap.Models;
-using NetTopologySuite.Geometries;
-using Newtonsoft.Json.Serialization;
-using Newtonsoft.Json;
-using Radzen;
-using Microsoft.JSInterop;
-using Microsoft.Extensions.Localization;
+﻿using EhriMemoMap.Client.Components.Dialogs.Victim;
+using EhriMemoMap.Models;
 using EhriMemoMap.Resources;
-using NetTopologySuite.IO;
 using EhriMemoMap.Shared;
+using Microsoft.Extensions.Localization;
+using Microsoft.JSInterop;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Radzen;
+using System.Net.NetworkInformation;
 using System.Text;
 
 namespace EhriMemoMap.Client.Services
@@ -302,5 +304,14 @@ namespace EhriMemoMap.Client.Services
             await ShowPlacesOnMap(stop.Places);
             _mapState.NotifyStateChanged();
         }
+
+        public async Task ShowVictim(long? id)
+        {
+            _mapState.VictimLongInfo = await GetVictimLongInfo(id);
+            await _mapState.SetDialog(DialogTypeEnum.Victim, new DialogParameters { Id = _mapState.VictimLongInfo?.Id, Places = _mapState.DialogParameters.Places });
+            _mapState.NotifyStateChanged();
+
+        }
+
     }
 }

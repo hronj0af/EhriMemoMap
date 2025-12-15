@@ -27,8 +27,18 @@ builder.Services.AddHttpClient();
 // Environment=MEMOMAP_DB='Host=[host];Port=[port];Database=[db_name];User ID=[user_id];Password=[password]'
 var dbConnectionString = builder.Configuration["MEMOMAP_DB"];
 var ricanyDbConnectionString = builder.Configuration["RICANY_DB"];
-builder.Services.AddDbContext<MemogisContext>(options => options.UseNpgsql(builder.Configuration["MEMOMAP_DB"]));
-builder.Services.AddDbContext<MemoMapContext>(options => options.UseNpgsql(builder.Configuration["RICANY_DB"]));
+builder.Services.AddDbContext<MemogisContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration["MEMOMAP_DB"],
+        // Pøidání nastavení providera pro CommandTimeout (v sekundách)
+        npgsqlOptions => npgsqlOptions.CommandTimeout(600)
+    ));
+
+builder.Services.AddDbContext<MemoMapContext>(options =>
+    options.UseNpgsql(
+        builder.Configuration["RICANY_DB"],
+        npgsqlOptions => npgsqlOptions.CommandTimeout(600)
+    ));
 
 var cors = "_myAllowSpecificOrigins";
 
@@ -53,7 +63,10 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 app.UseCors(cors);
 
-var proxyClient = new HttpClient();
+var proxyClient = new HttpClient
+{
+    Timeout = TimeSpan.FromMinutes(10)
+};
 
 app.MapGet("/", () => "Hello World...");
 

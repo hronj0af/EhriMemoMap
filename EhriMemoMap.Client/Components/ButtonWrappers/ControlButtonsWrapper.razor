@@ -16,15 +16,12 @@
                         <HomeButton />
                     }
                 </RadzenColumn>
-                @if (MapState.MapType == MapTypeEnum.Normal)
-                {
-                    <RadzenColumn Size="12">
-                        <SearchButton />
-                    </RadzenColumn>
-                    <RadzenColumn Size="12">
-                        <LayersButton />
-                    </RadzenColumn>
-                }
+                <RadzenColumn Size="12">
+                    <SearchButton Disabled="MapState.MapType != MapTypeEnum.Normal" />
+                </RadzenColumn>
+                <RadzenColumn Size="12">
+                    <LayersButton Disabled="MapState.MapType != MapTypeEnum.Normal" />
+                </RadzenColumn>
                 @if (MapState?.Map?.InitialVariables?.StoryMaps ?? false)
                 {
                     <RadzenColumn Size="12">
@@ -43,12 +40,9 @@
         else
         {
             <RadzenRow Gap="0" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
-                @if (MapState.MapType == MapTypeEnum.Normal)
-                {
-                    <RadzenColumn Size="size">
-                        <SearchButton MobileVersion="true" Border="true" />
-                    </RadzenColumn>
-                }
+                <RadzenColumn Size="size">
+                    <SearchButton MobileVersion="true" Border="true" Disabled="MapState.MapType != MapTypeEnum.Normal" />
+                </RadzenColumn>
                 @if (ShowTimelineButton())
                 {
                     <RadzenColumn Size="size">
@@ -61,12 +55,9 @@
                         <StoryMapButton MobileVersion="true" Border="true" />
                     </RadzenColumn>
                 }
-                @if (MapState.MapType == MapTypeEnum.Normal)
-                {
-                    <RadzenColumn Size="size">
-                        <LayersButton MobileVersion="true" />
-                    </RadzenColumn>
-                }
+                <RadzenColumn Size="size">
+                    <LayersButton MobileVersion="true" Disabled="MapState.MapType != MapTypeEnum.Normal" />
+                </RadzenColumn>
             </RadzenRow>
 
         }

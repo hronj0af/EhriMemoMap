@@ -123,6 +123,10 @@
         else
             await JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
 
+        var detailId = places != null && places.Count() >= 1 ? places[0]?.DetailId : null;
+        var placeType = places != null && places.Count() >= 1 ? places[0]?.Type : null;
+        if (placeType == "Address" && detailId != null)
+            await MapLogic.ShowVictim(detailId);
     }
 
     async Task LoadData()
@@ -139,12 +143,6 @@
                 openedTypes.Add(placeGroup.Key);
 
         await InvokeAsync(StateHasChanged);
-    }
-
-    public async Task ShowPlace()
-    {
-        var place = MapState.SearchedPlaces?.FirstOrDefault(a => CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? a.DropDownInfoCs == MapState.SearchedPlaceString : a.DropDownInfoEn == MapState.SearchedPlaceString);
-        await ShowPlace(new SolrPlace?[] { place });
     }
 
     private async void OnMyChangeHandler()

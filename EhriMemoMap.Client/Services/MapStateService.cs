@@ -1,4 +1,5 @@
 ﻿using EhriMemoMap.Client.Components.Dialogs;
+using EhriMemoMap.Client.Components.Dialogs.Victim;
 using EhriMemoMap.Client.Helpers;
 using EhriMemoMap.Models;
 using EhriMemoMap.Shared;
@@ -7,6 +8,7 @@ using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Radzen;
+using System.Net.NetworkInformation;
 
 namespace EhriMemoMap.Client.Services
 {
@@ -169,6 +171,7 @@ namespace EhriMemoMap.Client.Services
 
             AddToDialogHistory(newDialogType, parameters);
         }
+
 
         public MapTypeEnum MapType = MapTypeEnum.Normal;
         public async Task SetMapType(MapTypeEnum newValue)

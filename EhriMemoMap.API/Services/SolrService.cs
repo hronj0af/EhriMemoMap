@@ -34,7 +34,7 @@ namespace EhriMemoMap.API.Services
                 new("indent", "true" ),
                 new("q.op", "OR" ),
                 new("fq", @$"city:""{queryParameters.City}"""),
-                new("fl", "id label_cs, label_en, place_cs, place_en, place_de, place_current_cs, place_current_en, place_current_de, map_location, map_object, type, place_date"),
+                new("fl", "id label_cs, label_en, place_cs, place_en, place_de, place_current_cs, place_current_en, place_current_de, map_location, map_object, type, place_date, detail_id"),
                 new("q", GetNormalizedQuery(queryParameters.Query)),
                 new("qf", "all"),
                 new("wt", "json"),
@@ -67,6 +67,7 @@ namespace EhriMemoMap.API.Services
                     PlaceCurrentDe = item["place_current_de"]?.ToString(),
                     MapLocation = item["map_location"]?.ToString(),
                     MapObject = item["map_object"]?.ToString(),
+                    DetailId = item["detail_id"] != null ? long.Parse(item["detail_id"]?.ToString() ?? "0") : null,
                 };
 
                 if (!string.IsNullOrEmpty(item["place_date"]?[0].ToString()) && DateTime.TryParse(item["place_date"]?[0].ToString(), out DateTime newPlaceDate))

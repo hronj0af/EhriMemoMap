@@ -354,7 +354,8 @@ namespace EhriMemoMap.API.Services
                         MapLocation = p.Geography != null ? _geoJsonWriter.Write(p.Geography.Copy()) : null,
                         MapObject = null,
                         PlaceDate = null,
-                        Type = "address"
+                        Type = "address",
+                        DetailId = ep.EntityId
                     })));
             }
 
@@ -499,6 +500,9 @@ namespace EhriMemoMap.API.Services
 
         [JsonProperty("id")]
         public string Id { get; set; } = string.Empty;
+
+        [JsonProperty("detail_id")]
+        public long? DetailId { get; set; } 
 
         [JsonProperty("label_cs")]
         public string? LabelCs { get; set; }

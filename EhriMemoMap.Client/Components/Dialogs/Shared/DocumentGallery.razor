@@ -22,14 +22,12 @@
                 long actIndex = doc.Id;
                 var currentDocumentIndex = documentIndex; // Lokální kopie pro tento iteration
                 documentIndex += 1;
+                var docTb = doc.Url?.FirstOrDefault()?.ThumbnailUrl ?? doc.Url?.FirstOrDefault()?.Url;
 
                 <RadzenColumn Size="MapState.IsMobileView ? 3 : 2">
                     <RadzenCard class="document-card" title="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.LabelCs : doc.LabelEn)">
                         <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
                             <div style="position:relative;width:100%">
-                                @{
-                                    var docTb = @doc.Url?.FirstOrDefault()?.ThumbnailUrl ?? @doc.Url?.FirstOrDefault()?.Url;
-                                }
                                 <RadzenImage style="cursor:pointer" class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@docTb" onclick="@(() => ShowImage(actIndex, currentDocumentIndex))" />
                             </div>
 
@@ -45,7 +43,6 @@
                                                data-img="@url.Url"
                                                data-caption="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())"
                                                data-alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())">
-                                                @* <img src="@url.Url" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" /> *@
                                             </a>
                                         }
                                     }
@@ -55,8 +52,10 @@
                                         foreach (var url in doc.Url)
                                         {
                                             var sourcesJson = GetSourcesJson(url);
-                                            <a href="@url.Url"
-                                               data-sources="@sourcesJson">
+                                            var thumb = url.ThumbnailUrl ?? docTb;
+                                             <a href="@url.Url"
+                                               data-sources="@sourcesJson"
+                                               data-thumb="@thumb">
                                             </a>
                                         }
                                     }
