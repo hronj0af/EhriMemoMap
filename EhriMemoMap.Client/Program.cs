@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
 using System.Globalization;
 using EhriMemoMap.Client.Services;
+using Microsoft.Extensions.Localization;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -14,7 +15,10 @@ builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<StoryMapService>();
 builder.Services.AddScoped<MapStateService>();
 builder.Services.AddScoped<MapLogicService>();
-builder.Services.AddLocalization();
+// builder.Services.AddLocalization();
+builder.Services.AddOptions();
+builder.Services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
+builder.Services.AddTransient(typeof(IStringLocalizer<>), typeof(StringLocalizer<>));
 
 
 builder.RootComponents.Add<App>("#app");

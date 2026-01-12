@@ -6,7 +6,9 @@
     <RadzenCard Style="width:100%">
 
         <h3>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</h3>
-        <h5 class="rz-mb-4">@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)</h5>
+        <h5 class="rz-mb-4">
+            @Place.Date?.ToString("d. M. yyyy"), @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn : Place.AddressCs)
+        </h5>
         <p>
             @((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn?.Nl2Br() : Place.DescriptionCs?.Nl2Br()) ?? ""))
         </p>

@@ -594,7 +594,7 @@ Interaktivní mapa z doby protektorátu ukazuje, kde v Pacově žili jeho židov
   &lt;h4&gt;Kredit&lt;/h4&gt;
   &lt;/p&gt;
   &lt;p&gt;Aplikace MemoMap Pacov vznikla ve spolupráci s neziskovou organizací Tikkun Pacov. Zvláštní poděkování patří panu Pavlu Tychtlovi, který pro aplikaci zpřístupnil svou rozsáhlou sbírku dokumentů a fotografií a poskytl řadu cenných informací.&lt;/p&gt;
-  &lt;a href="https://www.tikkun.cz" target="_blank"&gt;&lt;img src='/images/tikkun-logo.jpg' /&gt;&lt;/a&gt;
+  &lt;a href="https://www.tikkun.cz" target="_blank"&gt;&lt;img style='width:50%' src='/images/tikkun-logo.jpg' /&gt;&lt;/a&gt;
   &lt;a href="https://www.mua.cas.cz/cs" target="_blank"&gt;&lt;img src='/images/mua-logo.jpg' /&gt;&lt;/a&gt;
   &lt;p&gt;Vývoj mapové aplikace podpořil v roce 2025 Nadační fond obětem holocaustu.&lt;/p&gt;
   &lt;a href="https://fondholocaust.cz/" target="_blank"&gt;&lt;img src='/images/nfoh-logo.jpg' /&gt;&lt;/a&gt;
@@ -605,13 +605,10 @@ Interaktivní mapa z doby protektorátu ukazuje, kde v Pacově žili jeho židov
   &lt;/div&gt;</value>
   </data>
   <data name="welcomeText_pacov" xml:space="preserve">
-    <value>Interaktivní mapa z doby protektorátu zobrazuje, kde v Pacově bydleli jeho židovští obyvatelé, a přináší informace o zajímavých místech spojených s židovskou historií města, ale i o střetávání židovského a většinového obyvatelstva. Takzvané příběhové mapy umožňují detailně sledovat konkrétní osobní příběhy a trajektorie. Data jsou doplněna o digitalizované dokumenty a fotografie. Aplikace je přizpůsobena pro mobilní zařízení a můžete se s ní vydat přímo do města.</value>
+    <value>Interaktivní mapa z doby protektorátu zobrazuje, kde v Pacově bydleli jeho židovští obyvatelé, a přináší informace o zajímavých místech spojených s židovskou historií města, ale i o střetávání židovského a většinového obyvatelstva. Takzvané příběhové mapy umožňují detailně sledovat konkrétní osobní příběhy a trajektorie. Data jsou doplněna o digitalizované dokumenty a fotografie. Aplikace vznikla ve spolupráci s neziskovou organizací Tikkun Pacov. Zvláštní poděkování patří panu Pavlu Tychtlovi.</value>
   </data>
   <data name="welcomeText_ricany" xml:space="preserve">
-    <value>O někdejší židovské komunitě se v Říčanech začalo znovu veřejně mluvit až po sametové revoluci. 
-V roce 2012 byla na Staré radnici odhalena pamětní deska obětem holocaustu, roku 2017 přibyly 
-první Stolpersteiny a vznikl i infostánek. V roce 2025 jsme navázali vytvořením interaktivní 
-MemoMapy, která ukazuje osudy místních obětí a místa spojená s jejich životy.</value>
+    <value>Interaktivní MemoMapa Říčan ukazuje osudy místních obětí a místa spojená s jejich životy; využívá zároveň historickou mapu Říčan z roku 1935. Aplikace vznikla ve spolupráci Masarykova ústavu a Archivu AV ČR a Města Říčany. Zvláštní poděkování patří paní Věře Likešové a Markétě Žilkové z Městského úřadu Říčany.</value>
   </data>
   <data name="layer_interest_title_pacov" xml:space="preserve">
     <value>Body zájmu</value>

@@ -124,7 +124,8 @@ namespace mapAPI {
     export function onResizeWindow(): void {
         fitMapToWindow();
         resizePhotoHeight();
-        blazorMapObjects["Map"].invokeMethodAsync("SetMobileView", isMobileView());
+        if (blazorMapObjects["Map"] != null)
+            blazorMapObjects["Map"].invokeMethodAsync("SetMobileView", isMobileView());
 
     }
 

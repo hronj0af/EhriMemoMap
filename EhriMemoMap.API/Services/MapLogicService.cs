@@ -448,6 +448,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                     LabelEn = a.LabelEn,
                     DescriptionCs = a.DescriptionCs,
                     DescriptionEn = a.DescriptionEn,
+                    Date = a.Date,
                     Documents = a.DocumentsXEvents.Select(b => b.Document).Select(c => new Shared.Document
                     {
                         CreationDateCs = c.CreationDateCs,

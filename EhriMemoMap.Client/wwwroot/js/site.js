@@ -91,7 +91,8 @@ var mapAPI;
     function onResizeWindow() {
         fitMapToWindow();
         resizePhotoHeight();
-        blazorMapObjects["Map"].invokeMethodAsync("SetMobileView", isMobileView());
+        if (blazorMapObjects["Map"] != null)
+            blazorMapObjects["Map"].invokeMethodAsync("SetMobileView", isMobileView());
     }
     mapAPI.onResizeWindow = onResizeWindow;
     function fitMapToWindow(heightOfDialog = null, mapWidth = null) {

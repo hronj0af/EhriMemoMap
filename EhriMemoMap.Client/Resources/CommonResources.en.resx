@@ -597,7 +597,7 @@ The data is based on available Holocaust victim databases, archival sources, and
   &lt;p&gt;
 The MemoMap Pacov application was created in cooperation with the non-profit organization Tikkun Pacov. Special thanks go to Mr. Pavel Tychtl, who made his extensive collection of documents and photographs available for the application and provided a wealth of valuable information.
 &lt;/p&gt;
-  &lt;a href="https://www.tikkun.cz/en/" target="_blank"&gt;&lt;img src='/images/tikkun-logo.jpg' /&gt;&lt;/a&gt;
+  &lt;a href="https://www.tikkun.cz/en/" target="_blank"&gt;&lt;img style='width:50%' src='/images/tikkun-logo.jpg' /&gt;&lt;/a&gt;
   &lt;a href="https://www.mua.cas.cz/en" target="_blank"&gt;&lt;img src='/images/mua-logo.jpg' /&gt;&lt;/a&gt;
   &lt;p&gt;The development of the map application was supported by the Foundation for Holocaust Victims.&lt;/p&gt;
   &lt;a href="https://fondholocaust.cz/en/homepage-cs-english/" target="_blank"&gt;&lt;img src='/images/nfoh-logo.jpg' /&gt;&lt;/a&gt;
@@ -608,14 +608,10 @@ The application is continuously developed and maintained within the Czech node o
   &lt;/div&gt;</value>
   </data>
   <data name="welcomeText_pacov" xml:space="preserve">
-    <value>An interactive map from the Protectorate period shows where Pacov's Jewish inhabitants lived and provides information about interesting places connected with the town's Jewish history and the interaction between the Jewish and majority population. Story maps allow specific personal stories and trajectories to be traced in detail. The data is supplemented by digitized documents and photographs. The app is adapted for mobile devices and you can therefore take it directly into the city space.</value>
+    <value>An interactive map from the Protectorate period shows where Pacov's Jewish inhabitants lived and provides information about interesting places connected with the town's Jewish history and the interaction between the Jewish and majority population. Story maps allow specific personal stories and trajectories to be traced in detail. The data is supplemented by digitized documents and photographs. The application was created in cooperation with the non-profit organization Tikkun Pacov. Special thanks go to Mr. Pavel Tychtl.</value>
   </data>
   <data name="welcomeText_ricany" xml:space="preserve">
-    <value>The former Jewish community in Říčany only began to be openly addressed again after the Velvet 
-Revolution. In 2012, a memorial plaque to the victims of the Holocaust was unveiled at the Old Town 
-Hall, and in 2017, the first Stolpersteine were added and an information stand was created. In 2025, we 
-followed up with the creation of an interactive MemoMap, which shows the fates of local victims and 
-places associated with their lives.</value>
+    <value>Interactive MemoMap shows the fates of local victims and places associated with their lives; it also uses a historical map of Říčany from 1935. The Application was created through the collaboration of the Masaryk Institute and Archives of the Czech Academy of Sciences and the Municipal Office of Říčany. Special thanks go to Ms Věra Likešová and Ms Markéta Žilková from the Říčany Municipal Office.</value>
   </data>
   <data name="layer_interest_title_pacov" xml:space="preserve">
     <value>Points of Interest</value>
