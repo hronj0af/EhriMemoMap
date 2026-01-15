@@ -3,7 +3,7 @@
 @inject IStringLocalizer<CommonResources> cl
 @inject MapStateService MapState
 
-<PageTitle>MemoMap @cl["city_" + MapState?.Map?.InitialVariables?.City ?? ""]</PageTitle>
+<PageTitle>MemoMap @cityName</PageTitle>
 
 <div class="page">
     <main>
@@ -14,9 +14,13 @@
 <RadzenDialog />
 @code {
 
+    private string? cityName;
+
     protected override void OnInitialized()
     {
         MapState.OnChange += StateHasChanged;
+        cityName = !string.IsNullOrEmpty(MapState?.Map?.InitialVariables?.City) ? cl["city_" + MapState?.Map?.InitialVariables?.City] : "";
+
     }
 
     public void Dispose()

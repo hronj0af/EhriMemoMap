@@ -7,7 +7,7 @@
     <RadzenCard Style="width:100%">
 
         <h3>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs)</h3>
-        <h5>@Place.Date?.ToString("d. M. yyyy")</h5>
+        <h5>@(CultureInfo.CurrentCulture.Name == "en-US" ? Place.DateEn : Place.DateCs)</h5>
         <ul class="no-bullets rz-mt-4">
             <li>@cl["place"]: @(CultureInfo.CurrentCulture.Name == "en-US" ? Place.AddressEn: Place.AddressCs)</li>
             @if (!string.IsNullOrEmpty(Place.DescriptionCs))

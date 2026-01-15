@@ -1,0 +1,163 @@
+@page "/"
+@inject NavigationManager NavigationManager
+@inject IConfiguration configuration
+@inject IStringLocalizer<CommonResources> cl
+@inject IJSRuntime JS
+@using Microsoft.Extensions.Configuration
+@using System.Globalization
+
+<div class="home-container">
+    <RadzenButton Text="@TargetLanguage" Click="@ChangeLanguage" class="lang-switch-btn" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Secondary" />
+
+    <h1 class="main-title">@cl["memoMaps"]</h1>
+
+    <div class="intro-text">
+        @((MarkupString)cl["welcomeText"].ToString())
+    </div>
+
+    <RadzenRow Gap="1rem" class="rz-mb-4">
+        @foreach (var city in Cities)
+        {
+            <RadzenColumn SizeLG="4" SizeSM="12" SizeMD="6">
+                <RadzenCard Style="height:600px;" class="rz-mb-12 rz-mt-4">
+                    <div class="city-card" style="@($"background-image: linear-gradient(rgba(255, 255, 255, 0.85) 75%, rgba(255, 255, 255, 0.4) 100%), url('images/welcome_image_{city.ToLower()}.jpg'); background-size: cover; background-position: center;")">
+                        <h2 class="city-title">@cl["city_" + city]</h2>
+                        <p class="city-description">@((MarkupString)cl["welcomeText_" + city].ToString())</p>
+                        <RadzenButton Text="@cl["openMap"]" Click="@(() => NavigationManager.NavigateTo("/" + city, true))" class="open-map-btn rz-mt-4" />
+                    </div>
+                </RadzenCard>
+            </RadzenColumn>
+        }
+    </RadzenRow>
+</div>
+
+<style>
+    .home-container {
+        position: relative;
+        padding: 4rem 2rem;
+        /* Matches site.css body background usually, but ensuring it here or using transparent */
+        /* background-color: var(--Beige); */
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .main-title {
+        color: var(--Wine-Red);
+        font-family: 'Barlow', sans-serif;
+        font-weight: 700;
+        font-size: 3rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .intro-text {
+        max-width: 800px;
+        color: var(--Grey);
+        font-family: 'Noto Serif', serif;
+        font-size: 1.2rem;
+        text-align: center;
+        margin-bottom: 4rem;
+        line-height: 1.6;
+    }
+
+    .cities-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        width: 100%;
+        max-width: 90%;
+        margin-bottom: 2rem;
+    }
+
+    .city-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 2rem;
+        height: 100%;
+        border-radius: 8px; /* Soften edges */
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .city-title {
+        color: var(--Wine-Red);
+        font-family: 'Barlow', sans-serif;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        font-size: 2rem;
+    }
+
+    .city-description {
+        color: var(--Grey);
+        font-family: 'Noto Serif', serif;
+        margin-bottom: 2rem;
+        flex-grow: 1;
+        font-size: 1.1rem;
+    }
+
+    .open-map-btn {
+        background-color: var(--Wine-Red) !important;
+        color: var(--Beige-LIGHT) !important;
+        width: 100%;
+        text-transform: uppercase;
+        font-weight: bold;
+        border: none;
+    }
+
+        .open-map-btn:hover {
+            background-color: #5a1035 !important; /* Darker wine red for hover */
+        }
+
+    .lang-switch-btn {
+        position: absolute !important;
+        top: 2rem;
+        right: 2rem;
+        border-color: var(--Wine-Red) !important;
+        color: var(--Wine-Red) !important;
+        font-weight: 700 !important;
+        font-family: 'Barlow', sans-serif !important;
+        border-radius: 4px !important;
+        background-color: transparent !important;
+        text-transform: uppercase;
+        width: auto !important;
+        min-width: 60px;
+    }
+
+        .lang-switch-btn:hover {
+            background-color: var(--Wine-Red) !important;
+            color: var(--Beige-LIGHT) !important;
+        }
+
+    @@media (max-width: 768px) {
+        .cities-grid {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .city-card {
+            margin-bottom: 2rem;
+        }
+    }
+</style>
+
+@code {
+    private string[] Cities = Array.Empty<string>();
+
+    protected override void OnInitialized()
+    {
+        Cities = configuration.GetSection("App:Cities").Get<string[]>() ?? Array.Empty<string>();
+    }
+
+    private string TargetLanguage => CultureInfo.CurrentCulture.Name == "cs-CZ" ? "EN" : "CS";
+
+    private async Task ChangeLanguage()
+    {
+        var targetCulture = CultureInfo.CurrentCulture.Name == "cs-CZ" ? "en-US" : "cs-CZ";
+        await JS.InvokeVoidAsync("mapAPI.setBlazorCulture", targetCulture);
+        NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+}

@@ -740,10 +740,11 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
         var stops = Array.Empty<Shared.NarrativeMapStop>();
 
         stops = MemoMapContext.NarrativeMapStops.
+            Include(a => a.NarrativeMapsXNarrativeMapStops).
             Include(a => a.NarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
             Include(a => a.NarrativeMapStopsXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
             Include(a => a.DocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
-            Where(a => a.NarrativeMapsXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
+            //Where(a => a.NarrativeMapsXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
             AsEnumerable().
             Select(a =>
             {
@@ -763,6 +764,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                     Places = a.NarrativeMapStopsXPlaces.Select(b => new Shared.Place
                     {
                         Id = b.Id,
+                        NarrativeMapId = a.NarrativeMapsXNarrativeMapStops.FirstOrDefault()?.NarrativeMapId ?? 0,
                         LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
                         LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelEn + "<br/>" + b.Place.LabelEn : b.Place.LabelEn,
                         AddressCs = b.Place.LabelCs,

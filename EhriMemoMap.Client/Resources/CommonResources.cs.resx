@@ -901,4 +901,24 @@ zájmu, míst paměti nebo připomínkových akcí</value>
   <data name="deathDate" xml:space="preserve">
     <value>Datum úmrtí</value>
   </data>
+  <data name="welcomeText" xml:space="preserve">
+    <value>        &lt;p&gt;
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        &lt;/p&gt;</value>
+  </data>
+  <data name="memoMaps" xml:space="preserve">
+    <value>MemoMapy</value>
+  </data>
+  <data name="openMap" xml:space="preserve">
+    <value>Otevřít mapu</value>
+  </data>
+  <data name="layer_HGC-borders_protectorate_b_m-v1_title_pacov" xml:space="preserve">
+    <value>Hranice Protektorátu Čech a Moravy</value>
+  </data>
+  <data name="layer_HGC-borders_protectorate_b_m-v1_abstract_pacov" xml:space="preserve">
+    <value>Původní hranice Protektorátu Čechy a Morava byly převzaty z datového souboru vytvořeného v rámci projektu, který dokumentuje měsíční změny evropských hranic v letech 1938–1945. Data jsou mnohem lépe prezentována s přesnými vojenskými frontovými liniemi, která nebyla dosud plně digitalizována, ale představují cenný přínos pro výzkum.</value>
+  </data>
 </root>

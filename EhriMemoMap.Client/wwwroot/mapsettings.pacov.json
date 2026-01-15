@@ -45,6 +45,20 @@
 
       },
       {
+        "name": "HGC-borders_protectorate_b_m-v1",
+        "url": "https://geodata.ehri-project.eu/geoserver/wms?",
+        "mapParameter": "",
+        "layersParameter": "HGC-borders_protectorate_b_m-v1",
+        "type": "wms",
+        "selected": true,
+        "opacities": "255",
+        "zIndex": "100",
+        "order": 100,
+        "backgroundColor": "#D5D2B8",
+        "fontColor": "Dark",
+        "cssClass": "customWmsLayerPacov"
+      },
+      {
         "name": "incident",
         "placeType": "incident",
         "order": 3,

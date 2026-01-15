@@ -36,7 +36,8 @@ public partial class MapObjectForLeafletModel
         switch (place.Type)
         {
             case "main point":
-                HtmlIcon = "<img src='css/images/narrative-icon.png' />";
+                var iconNumber = place.NarrativeMapId % 7;
+                HtmlIcon = $"<img src='css/images/narrative-icon{iconNumber}.png' />";
                 Clickable = true;
                 IconAnchor = [22, 55];
                 break;

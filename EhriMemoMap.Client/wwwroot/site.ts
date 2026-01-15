@@ -845,7 +845,7 @@ namespace mapAPI {
 
     export function hideAllLayers() {
         groups.forEach(group => {
-            if (group.options.type == "Base")
+            if (group.options.type == "Base" || group.options.type == "WMS")
                 return;
             map.eachLayer(function (layer) {
                 if (layer.options.id == group.options.id)

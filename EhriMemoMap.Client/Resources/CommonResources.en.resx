@@ -906,4 +906,24 @@ addresses, points of interest, memorial sites, or remembrance events</value>
   <data name="deathDate" xml:space="preserve">
     <value>Death date</value>
   </data>
+  <data name="welcomeText" xml:space="preserve">
+    <value>        &lt;p&gt;
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
+            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        &lt;/p&gt;</value>
+  </data>
+  <data name="memoMaps" xml:space="preserve">
+    <value>MemoMaps</value>
+  </data>
+  <data name="openMap" xml:space="preserve">
+    <value>Open map</value>
+  </data>
+  <data name="layer_HGC-borders_protectorate_b_m-v1_title_pacov" xml:space="preserve">
+    <value>Border of the Protectorate Bohemia and Moravia</value>
+  </data>
+  <data name="layer_HGC-borders_protectorate_b_m-v1_abstract_pacov" xml:space="preserve">
+    <value>The original borders of the Protectorate Bohemia and Moravia were taken from a dataset created as a part of a project which documents monthly European border changes from 1938-1945. The data are much better presented with accurate military front lines, data which has not been fully digitized but would constitute a valuable addition to the research.</value>
+  </data>
 </root>

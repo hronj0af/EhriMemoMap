@@ -30,6 +30,7 @@ public partial class Place
 
     public string? MapPoint { get; set; }
     public long? StopId { get; set; }
+    public long? NarrativeMapId { get; set; }
 
     public Document[]? Documents { get; set; } = [];
 }

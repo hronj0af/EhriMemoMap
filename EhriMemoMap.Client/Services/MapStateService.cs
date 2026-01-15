@@ -188,7 +188,7 @@ namespace EhriMemoMap.Client.Services
             }
             else if (newValue == MapTypeEnum.StoryMapOneStop)
             {
-                await _js.InvokeVoidAsync("mapAPI.hideAllLayers");
+                //await _js.InvokeVoidAsync("mapAPI.hideAllLayers");
             }
 
             if (isMobileView)
