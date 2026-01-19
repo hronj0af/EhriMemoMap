@@ -7,40 +7,72 @@
 @using Microsoft.Extensions.Configuration
 @using System.Globalization
 
-<div class="home-container">
-    <RadzenButton Text="@TargetLanguage" Click="@ChangeLanguage" class="lang-switch-btn" Variant="Variant.Outlined" ButtonStyle="ButtonStyle.Secondary" />
-
-    <h1 class="main-title">@cl["memoMaps"]</h1>
-
-    <div class="intro-text">
-        @((MarkupString)cl["welcomeText"].ToString())
-    </div>
-
-    <RadzenRow Gap="1rem" class="rz-mb-4">
-        @foreach (var city in Cities)
-        {
-            <RadzenColumn SizeLG="4" SizeSM="12" SizeMD="6">
-                <RadzenCard Style="height:600px;" class="rz-mb-12 rz-mt-4">
-                    <div class="city-card" style="@($"background-image: linear-gradient(rgba(255, 255, 255, 0.85) 75%, rgba(255, 255, 255, 0.4) 100%), url('images/welcome_image_{city.ToLower()}.jpg'); background-size: cover; background-position: center;")">
-                        <h2 class="city-title">
-                            @cl["city_" + city]
-                            <RadzenButton Icon="arrow_forward" Click="@(() => NavigationManager.NavigateTo("/" + city, false))" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Style="vertical-align: middle; margin-left: 0.5rem;" />
-                        </h2>
-                        <p class="city-description">@((MarkupString)cl["welcomeText_" + city].ToString())</p>
-                        <RadzenButton Text="@cl["openMap"]" Click="@(() => NavigationManager.NavigateTo("/" + city, false))" class="open-map-btn rz-mt-4" />
-                    </div>
-                </RadzenCard>
-            </RadzenColumn>
-        }
-    </RadzenRow>
+<div style="position:fixed; top:20px; right: 0px; width: 30px; z-index: 1000;">
+    <LanguageButton />
 </div>
+@if (ShowingDetail)
+{
+    <div class="detail-container">
+        
+        <h1 class="main-title">@cl["memoMaps"]</h1>
+
+        <RadzenButton Icon="arrow_back" Text="@cl["back"]" Click="@HideDetail" class="back-btn" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" />
+
+        @if (!string.IsNullOrEmpty(DetailTitle))
+        {
+            <h2 class="detail-subtitle">@DetailTitle</h2>
+        }
+        <div class="detail-content">
+            @((MarkupString)DetailContent)
+        </div>
+
+        <RadzenButton Icon="arrow_back" Text="@cl["back"]" Click="@HideDetail" class="back-btn" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" />
+    </div>
+}
+else
+{
+    <div class="home-container">
+
+        <h1 class="main-title">@cl["memoMaps"]</h1>
+
+        <div class="intro-text">
+            @((MarkupString)cl["welcomeText_short"].ToString())
+            <div class="read-more-container">
+                <RadzenButton Text="@cl["moreInfo"]" Click="@ShowWelcomeTextLong" class="info-btn" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Icon="info" />
+            </div>
+        </div>
+
+        <RadzenRow Gap="1rem">
+            @foreach (var city in Cities)
+            {
+                <RadzenColumn SizeLG="4" SizeSM="12" SizeMD="6">
+                    <RadzenCard Style="height:240px;" class="rz-mb-12 rz-mt-4">
+                        <div class="city-card" style="@($"background-image: linear-gradient(rgba(255, 255, 255, 0.85) 75%, rgba(255, 255, 255, 0.4) 100%), url('images/welcome_image_{city.ToLower()}.jpg'); background-size: cover; background-position: center;")">
+                            <h2 class="city-title">
+                                @cl["city_" + city]
+                                <RadzenButton Icon="arrow_forward" Click="@(() => NavigationManager.NavigateTo("/" + city, false))" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Style="vertical-align: middle; margin-left: 0.5rem;" />
+                            </h2>
+                            <p class="city-description">@((MarkupString)cl["welcomeText_" + city + "_short"].ToString())</p>
+                            <div class="city-buttons">
+                                <RadzenButton Text="@cl["moreInfo"]" Click="@(() => ShowCityInfo(city))" class="info-btn" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Icon="info" />
+                                @* <RadzenButton Text="@cl["openMap"]" Click="@(() => NavigationManager.NavigateTo("/" + city, false))" class="open-map-btn rz-mt-4" /> *@
+                                </div>
+                        </div>
+                    </RadzenCard>
+                </RadzenColumn>
+            }
+        </RadzenRow>
+    </div>
+}
 
 <style>
+    body {
+        border-top: 0.625rem solid var(--Wine-Red);
+    }
+
     .home-container {
         position: relative;
         padding: 4rem 2rem;
-        /* Matches site.css body background usually, but ensuring it here or using transparent */
-        /* background-color: var(--Beige); */
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -62,9 +94,24 @@
         font-family: 'Noto Serif', serif;
         font-size: 1.2rem;
         text-align: center;
-        margin-bottom: 4rem;
+        margin-bottom: 2rem;
         line-height: 1.6;
     }
+
+    .read-more-container {
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    .read-more-btn {
+        color: var(--Wine-Red) !important;
+        font-family: 'Barlow', sans-serif !important;
+        font-weight: 600 !important;
+    }
+
+        .read-more-btn:hover {
+            background-color: rgba(131, 24, 67, 0.1) !important;
+        }
 
     .cities-grid {
         display: grid;
@@ -97,10 +144,27 @@
     .city-description {
         color: var(--Grey);
         font-family: 'Noto Serif', serif;
-        margin-bottom: 2rem;
         flex-grow: 1;
         font-size: 1.1rem;
     }
+
+    .city-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .info-btn {
+        color: var(--Wine-Red) !important;
+        font-family: 'Barlow', sans-serif !important;
+        font-weight: 600 !important;
+        align-self: flex-start;
+    }
+
+        .info-btn:hover {
+            background-color: rgba(131, 24, 67, 0.1) !important;
+        }
 
     .open-map-btn {
         background-color: var(--Wine-Red) !important;
@@ -146,10 +210,62 @@
             margin-bottom: 2rem;
         }
     }
+
+    .detail-container {
+        position: relative;
+        padding: 4rem 2rem;
+        min-height: 100vh;
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .back-btn {
+        color: var(--Wine-Red) !important;
+        font-family: 'Barlow', sans-serif !important;
+        font-weight: 600 !important;
+        margin-bottom: 2rem;
+        align-self: flex-start;
+    }
+
+        .back-btn:hover {
+            background-color: rgba(131, 24, 67, 0.1) !important;
+        }
+
+    .detail-subtitle {
+        color: var(--Wine-Red);
+        font-family: 'Barlow', sans-serif;
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .detail-content {
+        color: var(--Grey);
+        font-family: 'Noto Serif', serif;
+        font-size: 1.1rem;
+        line-height: 1.8;
+        width: 100%;
+        max-width: 800px;
+    }
+
+        .detail-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-content strong {
+            color: var(--Wine-Red);
+        }
 </style>
 
 @code {
     private string[] Cities = Array.Empty<string>();
+    private bool ShowingDetail = false;
+    private string DetailTitle = "";
+    private string DetailContent = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -164,5 +280,26 @@
         var targetCulture = CultureInfo.CurrentCulture.Name == "cs-CZ" ? "en-US" : "cs-CZ";
         await JS.InvokeVoidAsync("mapAPI.setBlazorCulture", targetCulture);
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
+    }
+
+    private void ShowWelcomeTextLong()
+    {
+        DetailTitle = "";
+        DetailContent = cl["welcomeText_long"].ToString();
+        ShowingDetail = true;
+    }
+
+    private void ShowCityInfo(string city)
+    {
+        DetailTitle = cl["city_" + city].ToString();
+        DetailContent = cl["welcomeText_" + city + "_long"].ToString();
+        ShowingDetail = true;
+    }
+
+    private void HideDetail()
+    {
+        ShowingDetail = false;
+        DetailTitle = "";
+        DetailContent = "";
     }
 }
