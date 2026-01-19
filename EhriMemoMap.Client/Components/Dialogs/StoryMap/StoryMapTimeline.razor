@@ -18,7 +18,7 @@
                     <RadzenImage Path="@GetDotIcon(stop.Id)" AlternateText="@(IsStopExpanded(stop.Id) ? "Rozbaleno" : "Sbaleno")" />
                 </div>
                 <div class="storymap-timeline-content">
-                    <div style="cursor: pointer;" @onclick="() => OpenStoryMapTimelineLabel(stop.Id, MapService.NarrativeMap?.Id)">
+                    <div style="cursor: pointer;" @onclick="() => MapService.OpenStoryMapTimelineLabel(stop.Id, MapService.NarrativeMap?.Id)">
                         <RadzenRow AlignItems="AlignItems.Center">
                             <RadzenColumn Size="12">
                                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -79,8 +79,6 @@
 </div>
 
 @code {
-    private long? expandedStopId = null;
-    private HashSet<string> expandedSections = new HashSet<string>();
 
     protected override void OnInitialized()
     {
@@ -92,57 +90,28 @@
         MapService.OnChange -= StateHasChanged;
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            var dotNetReference = DotNetObjectReference.Create(this);
-            await JS.InvokeVoidAsync("mapAPI.initBlazorMapObject", dotNetReference, "StoryMapTimeline");
-        }
-    }
-
-    [JSInvokable("OpenStoryMapTimelineLabel")]
-    public async Task OpenStoryMapTimelineLabel(long stopId, long? narrativeMapId)
-    {
-        // TODO: JE POTŘEBA DOPLNIT FUNKCIONALITU PRO OTEVŘENÍ BODŮ Z RŮZNÝCH MAP (PŘI KLIKNUTÍ NA ŠPENDLÍK NEMUSÍ BÝT OTEVŘENÁ ŽÁDNÁ MAPA)
-        if (expandedStopId == stopId)
-        {
-            // Pokud kliknete na již otevřený bod, bod se uzavře.
-            expandedStopId = null;
-            expandedSections.Clear(); // Zavřít všechny sekce 
-            await MapService.ShowNarrativeMapPlaces();
-        }
-        else
-        {
-            // Otevření nového bodu (předchozí bod se automaticky uzavře)
-            expandedStopId = stopId;
-            expandedSections.Clear(); // Zavřít všechny sekce
-            await MapService.ShowStopPlacesOnMap(stopId);
-        }
-        StateHasChanged();
-    }
 
     private void ToggleSection(string sectionKey)
     {
-        if (expandedSections.Contains(sectionKey))
+        if (MapService.ExpandedSections.Contains(sectionKey))
         {
-            expandedSections.Remove(sectionKey);
+            MapService.ExpandedSections.Remove(sectionKey);
         }
         else
         {
-            expandedSections.Add(sectionKey);
+            MapService.ExpandedSections.Add(sectionKey);
         }
         StateHasChanged();
     }
 
     private bool IsStopExpanded(long stopId)
     {
-        return expandedStopId == stopId;
+        return MapService.ExpandedStopId == stopId;
     }
 
     private bool IsSectionExpanded(string sectionKey)
     {
-        return expandedSections.Contains(sectionKey);
+        return MapService.ExpandedSections.Contains(sectionKey);
     }
 
     private string GetDotIcon(long stopId)

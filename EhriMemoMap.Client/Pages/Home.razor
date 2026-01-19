@@ -22,7 +22,10 @@
             <RadzenColumn SizeLG="4" SizeSM="12" SizeMD="6">
                 <RadzenCard Style="height:600px;" class="rz-mb-12 rz-mt-4">
                     <div class="city-card" style="@($"background-image: linear-gradient(rgba(255, 255, 255, 0.85) 75%, rgba(255, 255, 255, 0.4) 100%), url('images/welcome_image_{city.ToLower()}.jpg'); background-size: cover; background-position: center;")">
-                        <h2 class="city-title">@cl["city_" + city]</h2>
+                        <h2 class="city-title">
+                            @cl["city_" + city]
+                            <RadzenButton Icon="arrow_forward" Click="@(() => NavigationManager.NavigateTo("/" + city, false))" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Style="vertical-align: middle; margin-left: 0.5rem;" />
+                        </h2>
                         <p class="city-description">@((MarkupString)cl["welcomeText_" + city].ToString())</p>
                         <RadzenButton Text="@cl["openMap"]" Click="@(() => NavigationManager.NavigateTo("/" + city, false))" class="open-map-btn rz-mt-4" />
                     </div>

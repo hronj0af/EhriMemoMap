@@ -180,10 +180,17 @@
             { 
                 new { coordinates[0].Y, coordinates[0].X }, 
                 new { coordinates[0].Y, coordinates[0].X } 
-            } ));
+            }));
 
         MapService.NotifyStateChanged();
     }
+
+    [JSInvokable("OpenStoryMapTimelineLabel")]
+    public async Task OpenStoryMapTimelineLabel(long stopId, long? narrativeMapId)
+    {
+        await MapService.OpenStoryMapTimelineLabel(stopId, narrativeMapId);
+    }
+
 
     private async Task<Coordinate[]?> GetCoordinatesFromUrl()
     {

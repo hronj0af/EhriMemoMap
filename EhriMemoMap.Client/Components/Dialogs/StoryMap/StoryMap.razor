@@ -51,9 +51,9 @@
     protected override async Task OnInitializedAsync()
     {
         MapService.OnChange += StateHasChanged;
-        // await StoryMapService.GetAllNarrativeMaps();
     }
 
+    
     public void Dispose()
     {
         MapService.OnChange -= StateHasChanged;

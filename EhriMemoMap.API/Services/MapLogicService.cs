@@ -728,6 +728,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                 {
                     a.NarrativeMapStop.NarrativeMapsXNarrativeMapStops.FirstOrDefault()?.NarrativeMapId,
                     a.NarrativeMapStopId,
+                    a.NarrativeMapStop.LabelCs,
+                    a.NarrativeMapStop.LabelEn,
                     a.Place
                 }).ToArray();
 
@@ -738,8 +740,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                     Select(a => new Shared.Place
                     {
                         Id = a.Place.Id,
-                        LabelCs = map.LabelCs + "<br/>" + a.Place.LabelCs,
-                        LabelEn = map.LabelEn + "<br/>" + a.Place.LabelEn,
+                        LabelCs = map.LabelCs + "<br/>" + a.LabelCs,
+                        LabelEn = map.LabelEn + "<br/>" + a.LabelEn,
                         MapPoint = a.Place.Geography.AsJson(),
                         NarrativeMapId = a.NarrativeMapId,
                         StopId = a.NarrativeMapStopId,
@@ -799,8 +801,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                     {
                         Id = b.Id,
                         NarrativeMapId = a.NarrativeMapsXNarrativeMapStops.FirstOrDefault()?.NarrativeMapId ?? 0,
-                        LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelCs + "<br/>" + b.Place.LabelCs : b.Place.LabelCs,
-                        LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? a.LabelEn + "<br/>" + b.Place.LabelEn : b.Place.LabelEn,
+                        LabelCs = b.RelationshipTypeNavigation.LabelEn == "main point" ? (a.LabelCs == b.Place.LabelCs ? a.LabelCs : a.LabelCs + "<br/>" + b.Place.LabelCs) : b.Place.LabelCs,
+                        LabelEn = b.RelationshipTypeNavigation.LabelEn == "main point" ? (a.LabelEn == b.Place.LabelEn ? a.LabelEn : a.LabelEn + "<br/>" + b.Place.LabelEn) : b.Place.LabelEn,
                         AddressCs = b.Place.LabelCs,
                         AddressEn = b.Place.LabelEn,
                         TownCs = b.Place.TownCs,

@@ -114,10 +114,46 @@ namespace mapAPI {
     }
 
     export function destroyMap(): void {
+        // Zastavit tracking interval
+        if (trackingInterval != null) {
+            clearInterval(trackingInterval);
+            trackingInterval = null;
+        }
+
+        // Odstranit heatmap layer
+        if (heatmapLayer != null && map != null) {
+            map.removeLayer(heatmapLayer);
+            heatmapLayer = null;
+        }
+
+        // Vyčistit heatmap data
+        heatmapData = null;
+
+        // Odstranit všechny groups a jejich layers
+        if (groups != null && groups.length > 0) {
+            groups.forEach(group => {
+                if (group != null) {
+                    group.clearLayers();
+                    if (map != null) {
+                        map.removeLayer(group);
+                    }
+                }
+            });
+            groups = [];
+        }
+
+        // Odstranit mapu
         if (map != null) {
+            map.off(); // Odstranit všechny event listenery
             map.remove();
             map = null;
         }
+
+        // Vyčistit další proměnné
+        applicationIsTrackingLocation = null;
+        actualLocation = null;
+        blazorMapObjects = [];
+        initialVariables = null;
     }
 
     export function resetMapViewToInitialState() {
@@ -273,10 +309,10 @@ namespace mapAPI {
     /// BLAZOR
     //////////////////////////
 
-    // připraví instanci blazor třídy Map.razor, abych ji pak mohl později odsud volat
-    export function initBlazorMapObject(dotNetObject:any, name:string) {
+    export function initBlazorMapObject(dotNetObject: any, name: string) {
         blazorMapObjects[name] = dotNetObject;
     }
+
     export function callBlazor_RefreshObjectsOnMap() {
         const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
         const mapHasPolygonsYet = polygonsGroup.getLayers().length > 0;
@@ -511,6 +547,120 @@ namespace mapAPI {
         }
     }
 
+    // --- KONFIGURACE PRO KŘIVKY (Magická čísla) ---
+    const CURVE_CFG = {
+        minArrowDist: 15,          // Minimální vzdálenost konce šipky od cílového bodu (px)
+        maxArrowDist: 25,          // Maximální vzdálenost konce šipky od cílového bodu (px)
+        maxShortenRatio: 0.4,      // Max zkrácení jako poměr celkové délky
+        shortDistThreshold: 100,   // Práh pro přepnutí na vizuální oblouk (px)
+        arcHeightMin: 10,          // Minimální výška oblouku (px)
+        arcHeightRatio: 0.15,      // Poměr výšky oblouku k vzdálenosti
+        curveSegments: 100,        // Počet segmentů pro vzorkování křivky
+        fallbackShortenRatio: 0.3  // Max zkrácení pro fallback
+    };
+
+    // --- POMOCNÉ FUNKCE PRO KŘIVKY ---
+
+    /** Vypočítá kontrolní bod pro krátké vzdálenosti (vizuální oblouk v pixelech) */
+    function getVisualArcControlPoint(p1Pix: L.Point, p2Pix: L.Point, pixDist: number): number[] {
+        const midPix = p1Pix.add(p2Pix).divideBy(2);
+        const vec = p2Pix.subtract(p1Pix);
+
+        // Kolmice (-y, x) pro určení směru oblouku
+        const perpX = -vec.y;
+        const perpY = vec.x;
+        const len = Math.sqrt(perpX * perpX + perpY * perpY);
+
+        // Výška oblouku - úměrná vzdálenosti, ale s minimem pro viditelnost
+        const arcHeight = Math.max(CURVE_CFG.arcHeightMin, pixDist * CURVE_CFG.arcHeightRatio);
+
+        // Normalizace a posun
+        const normX = (perpX / len) * arcHeight;
+        const normY = (perpY / len) * arcHeight;
+
+        const ctrlPix = L.point(midPix.x + normX, midPix.y + normY);
+        const ctrlLatLng = map.containerPointToLatLng(ctrlPix);
+
+        return [ctrlLatLng.lat, ctrlLatLng.lng];
+    }
+
+    /** Vypočítá kontrolní bod pro dlouhé vzdálenosti (geografické zakřivení) */
+    function getGeoCurveControlPoint(pointA: L.LatLng, pointB: L.LatLng): number[] {
+        const distance = map.distance(pointA, pointB);
+        const midLat = (pointA.lat + pointB.lat) / 2;
+        const midLng = (pointA.lng + pointB.lng) / 2;
+
+        const minDistance = 50;
+        const maxDistance = 50000;
+        const normalizedDistance = Math.min(Math.max((distance - minDistance) / (maxDistance - minDistance), 0), 1);
+        const curveFactor = Math.pow(normalizedDistance, 3);
+
+        const latDiff = Math.abs(pointB.lat - pointA.lat);
+        const lngDiff = Math.abs(pointB.lng - pointA.lng);
+        const maxDiff = Math.max(latDiff, lngDiff);
+
+        const offsetPercent = 0.02 + 0.06 * curveFactor;
+        const offset = maxDiff * offsetPercent;
+
+        return [midLat + offset, midLng];
+    }
+
+    /** Vzorkování kvadratické Bézierovy křivky */
+    function sampleQuadraticBezier(start: number[], control: number[], end: number[], segments: number): number[][] {
+        const points: number[][] = [];
+        for (let t = 0; t <= 1; t += 1 / segments) {
+            const invT = 1 - t;
+            const x = invT * invT * start[1] + 2 * invT * t * control[1] + t * t * end[1];
+            const y = invT * invT * start[0] + 2 * invT * t * control[0] + t * t * end[0];
+            points.push([y, x]);
+        }
+        return points;
+    }
+
+    /** Oříznutí křivky od konce o definovanou pixelovou vzdálenost (podél křivky) */
+    function shortenCurveFromEndByPixels(points: number[][], targetPx: number): number[][] {
+        if (points.length < 2 || targetPx <= 0) return points;
+
+        let cumulativeDist = 0;
+
+        // Iterace od konce směrem k začátku
+        for (let i = points.length - 1; i > 0; i--) {
+            const curr = map.latLngToContainerPoint(L.latLng(points[i][0], points[i][1]));
+            const prev = map.latLngToContainerPoint(L.latLng(points[i - 1][0], points[i - 1][1]));
+            const segDist = curr.distanceTo(prev);
+
+            cumulativeDist += segDist;
+
+            if (cumulativeDist >= targetPx) {
+                // Našli jsme segment k oříznutí - interpolujeme přesnou pozici
+                const overflow = cumulativeDist - targetPx;
+                if (segDist > 0) {
+                    const ratio = overflow / segDist;
+                    const interpX = prev.x + (curr.x - prev.x) * ratio;
+                    const interpY = prev.y + (curr.y - prev.y) * ratio;
+
+                    const newPt = map.containerPointToLatLng(L.point(interpX, interpY));
+
+                    const result = points.slice(0, i);
+                    result.push([newPt.lat, newPt.lng]);
+                    return result;
+                }
+                return points.slice(0, i);
+            }
+        }
+
+        // Fallback: křivka je kratší než targetPx - zkrátíme max o 30%
+        if (points.length >= 2 && cumulativeDist > 0) {
+            const actualRatio = Math.min(targetPx / cumulativeDist, CURVE_CFG.fallbackShortenRatio);
+            const keepCount = Math.max(2, Math.ceil(points.length * (1 - actualRatio)));
+            return points.slice(0, keepCount);
+        }
+
+        return points;
+    }
+
+    // --- HLAVNÍ FUNKCE ---
+
     /**
      * Vypočítá a vrátí křivku (polyline) mezi dvěma body.
      * @param pointA Startovní bod
@@ -518,164 +668,50 @@ namespace mapAPI {
      * @param shortenEndPixels Počet pixelů pro zkrácení konce (kvůli šipce)
      */
     export function getCurve(pointA: L.LatLng, pointB: L.LatLng, shortenEndPixels: number) {
-        // Převedeme body na pixely pro výpočet vizuální vzdálenosti na obrazovce
         const p1Pix = map.latLngToContainerPoint(pointA);
         const p2Pix = map.latLngToContainerPoint(pointB);
         const pixDist = p1Pix.distanceTo(p2Pix);
 
-        let controlPoint: number[];
+        // 1. Early return pro totožné body
+        if (pixDist < 1) return null;
 
-        // --- LOGIKA PRO BLÍZKÉ BODY ---
-        // Pokud jsou body na obrazovce blízko sebe (méně než 300px), vynutíme vizuální oblouk.
-        // Původní logika totiž při malých vzdálenostech dělala téměř rovnou čáru, což při zkrácení
-        // způsobilo, že čára zmizela nebo nebyla vidět šipka.
-        if (pixDist < 200) {
-            if (pixDist < 1) return null; // Totožné body - nekreslíme nic
-
-            // Najdeme střed v pixelech
-            const midPix = p1Pix.add(p2Pix).divideBy(2);
-
-            // Vektor spojnice
-            const vec = p2Pix.subtract(p1Pix);
-
-            // Vytvoříme kolmici (-y, x) pro určení směru oblouku
-            const perpX = -vec.y;
-            const perpY = vec.x;
-            const len = Math.sqrt(perpX * perpX + perpY * perpY);
-
-            // Výška oblouku (bulge)
-            // Musí být dostatečná, aby po zkrácení o 'shortenEndPixels' zbylo dost čáry pro šipku.
-            // Základ 40px + dynamicky podle zkrácení.
-            const arcHeight = Math.max(0, shortenEndPixels + 0);
-
-            // Normalizovaný vektor oblouku
-            const normX = (perpX / len) * arcHeight;
-            const normY = (perpY / len) * arcHeight;
-
-            // Kontrolní bod v pixelech
-            const ctrlPix = L.point(midPix.x + normX, midPix.y + normY);
-
-            // Převedeme zpět na LatLng
-            const ctrlLatLng = map.containerPointToLatLng(ctrlPix);
-            controlPoint = [ctrlLatLng.lat, ctrlLatLng.lng];
-
-        } else {
-            // --- PŮVODNÍ LOGIKA PRO VĚTŠÍ VZDÁLENOSTI ---
-            const distance = map.distance(pointA, pointB);
-
-            // Vypočítání kontrolního bodu pro Bezierovu křivku
-            const midLat = (pointA.lat + pointB.lat) / 2;
-            const midLng = (pointA.lng + pointB.lng) / 2;
-
-            // Logika zakřivení
-            const minDistance = 50;
-            const maxDistance = 50000;
-            const normalizedDistance = Math.min(Math.max((distance - minDistance) / (maxDistance - minDistance), 0), 1);
-            const curveFactor = Math.pow(normalizedDistance, 3);
-
-            const latDiff = Math.abs(pointB.lat - pointA.lat);
-            const lngDiff = Math.abs(pointB.lng - pointA.lng);
-            const maxDiff = Math.max(latDiff, lngDiff);
-
-            const offsetPercent = 0.02 + 0.06 * curveFactor;
-            const offset = maxDiff * offsetPercent;
-
-            controlPoint = [midLat + offset, midLng];
+        // 2. Normalizace parametru zkrácení
+        let finalShortenPx = Math.max(CURVE_CFG.minArrowDist, Math.min(CURVE_CFG.maxArrowDist, shortenEndPixels));
+        if (finalShortenPx > pixDist * CURVE_CFG.maxShortenRatio) {
+            finalShortenPx = pixDist * CURVE_CFG.maxShortenRatio;
         }
 
-        // Funkce pro vzorkování křivky
-        function sampleCurve(start: number[], control: number[], end: number[], segments = 60) {
-            const points = [];
-            for (let t = 0; t <= 1; t += 1 / segments) {
-                const x = (1 - t) * (1 - t) * start[1] + 2 * (1 - t) * t * control[1] + t * t * end[1];
-                const y = (1 - t) * (1 - t) * start[0] + 2 * (1 - t) * t * control[0] + t * t * end[0];
-                points.push([y, x]);
-            }
-            return points;
-        }
+        // 3. Výpočet kontrolního bodu (rozcestník logiky podle vzdálenosti)
+        const controlPoint = pixDist < CURVE_CFG.shortDistThreshold
+            ? getVisualArcControlPoint(p1Pix, p2Pix, pixDist)
+            : getGeoCurveControlPoint(pointA, pointB);
 
-        let curvePoints = sampleCurve([pointA.lat, pointA.lng], controlPoint, [pointB.lat, pointB.lng]);
+        // 4. Generování bodů křivky
+        let curvePoints = sampleQuadraticBezier(
+            [pointA.lat, pointA.lng],
+            controlPoint,
+            [pointB.lat, pointB.lng],
+            CURVE_CFG.curveSegments
+        );
 
-        // Pomocná funkce pro zkrácení pole bodů z jedné strany
-        // 'direction' true = zkracujeme začátek, false = zkracujeme konec
-        function shortenPolylinePoints(points: number[][], pixelsToShorten: number, fromStart: boolean): number[][] {
-            if (points.length < 2 || pixelsToShorten <= 0) return points;
+        // 5. Zkrácení konce pro šipku
+        curvePoints = shortenCurveFromEndByPixels(curvePoints, finalShortenPx);
 
-            let cumulativeDistance = 0;
-            let cutIndex = -1;
-            let modifiedPoint: number[] | null = null;
+        if (curvePoints.length < 2) return null;
 
-            const startIndex = fromStart ? 0 : points.length - 1;
-            const endIndex = fromStart ? points.length - 1 : 0;
-            const step = fromStart ? 1 : -1;
-
-            for (let i = startIndex; fromStart ? i < endIndex : i > endIndex; i += step) {
-                const currentIdx = i;
-                const nextIdx = i + step;
-
-                const p1 = L.latLng(points[currentIdx][0], points[currentIdx][1]);
-                const p2 = L.latLng(points[nextIdx][0], points[nextIdx][1]);
-
-                const pix1 = map.latLngToContainerPoint(p1);
-                const pix2 = map.latLngToContainerPoint(p2);
-
-                const segDist = pix1.distanceTo(pix2);
-                cumulativeDistance += segDist;
-
-                if (cumulativeDistance >= pixelsToShorten) {
-                    // Našli jsme segment, kde musíme řezat
-                    const overflow = cumulativeDistance - pixelsToShorten;
-                    const ratio = 1 - (overflow / segDist);
-
-                    // Interpolace pixelů
-                    const newPixX = pix1.x + (pix2.x - pix1.x) * ratio;
-                    const newPixY = pix1.y + (pix2.y - pix1.y) * ratio;
-
-                    // Zpět na LatLng
-                    const newLatLng = map.containerPointToLatLng([newPixX, newPixY]);
-                    modifiedPoint = [newLatLng.lat, newLatLng.lng];
-
-                    cutIndex = currentIdx;
-                    break;
-                }
-            }
-
-            if (cutIndex !== -1 && modifiedPoint) {
-                if (fromStart) {
-                    points[cutIndex] = modifiedPoint;
-                    return points.slice(cutIndex);
-                } else {
-                    points[cutIndex] = modifiedPoint;
-                    return points.slice(0, cutIndex + 1);
-                }
-            }
-
-            return [];
-        }
-
-        // Aplikace zkrácení - POUZE KONEC
-        // Začátek nezkracujeme (aby vycházel z bodu A)
-        curvePoints = shortenPolylinePoints(curvePoints, shortenEndPixels, false);
-
-        if (curvePoints.length < 2) {
-            return null; // Čára zmizela po zkrácení
-        }
-
-        // Vykreslení
-        const curveLine = L.polyline(curvePoints as L.LatLngExpression[], {
+        // 6. Vykreslení
+        return L.polyline(curvePoints as L.LatLngExpression[], {
             color: '#771646',
             weight: 1,
             dashArray: '5, 5',
             dashOffset: '0',
-            isTrajectoryLine: true // VLASTNÍ VLAJKA pro identifikaci při čištění
+            isTrajectoryLine: true
         } as any).arrowheads({
             frequency: 'endonly',
             fill: true,
             size: '15px',
             color: '#771646'
         });
-
-        return curveLine;
     }
     export function fitMapToGroup(groupName) {
 
@@ -1055,7 +1091,7 @@ namespace mapAPI {
 
     export function openStoryMapTimelineLabel(event): void {
         const point = event.target as L.Marker;
-        blazorMapObjects["StoryMapTimeline"].invokeMethodAsync("OpenStoryMapTimelineLabel", point.options.stopId, point.options.narrativeMapId);
+        blazorMapObjects["Map"].invokeMethodAsync("OpenStoryMapTimelineLabel", point.options.stopId, point.options.narrativeMapId);
     }
 
     //////////////////////////

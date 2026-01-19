@@ -9,6 +9,9 @@ namespace EhriMemoMap.Client.Services
     /// </summary>
     public partial class MapService
     {
+        public long? ExpandedStopId = null;
+        public HashSet<string> ExpandedSections = [];
+
         public async Task ShowNarrativeMap(long? id)
         {
             if (id == null)
@@ -102,6 +105,33 @@ namespace EhriMemoMap.Client.Services
                 await SetDialog(DialogTypeEnum.StoryMap);
             }
 
+            NotifyStateChanged();
+        }
+
+
+        public async Task OpenStoryMapTimelineLabel(long stopId, long? narrativeMapId)
+        {
+            if (NarrativeMap == null || NarrativeMap.Id != narrativeMapId)
+            {
+                // Pokud není otevřená správná mapa, otevřeme ji.
+                await GetNarrativeMap(narrativeMapId, Map.InitialVariables?.City);
+                await ShowNarrativeMap(narrativeMapId);
+            }
+
+            if (ExpandedStopId == stopId)
+            {
+                // Pokud kliknete na již otevřený bod, bod se uzavře.
+                ExpandedStopId = null;
+                ExpandedSections.Clear(); // Zavřít všechny sekce
+                await ShowNarrativeMapPlaces();
+            }
+            else
+            {
+                // Otevření nového bodu (předchozí bod se automaticky uzavře)
+                ExpandedStopId = stopId;
+                ExpandedSections.Clear(); // Zavřít všechny sekce
+                await ShowStopPlacesOnMap(stopId);
+            }
             NotifyStateChanged();
         }
 
