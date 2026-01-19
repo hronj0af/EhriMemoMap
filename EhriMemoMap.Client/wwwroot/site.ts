@@ -702,6 +702,7 @@ namespace mapAPI {
         if (markerObject.htmlIcon != undefined && markerObject.htmlIcon != null)
             iconOptions = {
                 stopId: markerObject.stopId,
+                narrativeMapId: markerObject.narrativeMapId,
                 type: markerObject.placeType,
                 icon: new L.DivIcon({
                     className: className,
@@ -1054,7 +1055,7 @@ namespace mapAPI {
 
     export function openStoryMapTimelineLabel(event): void {
         const point = event.target as L.Marker;
-        blazorMapObjects["StoryMapTimeline"].invokeMethodAsync("OpenStoryMapTimelineLabel", point.options.stopId);
+        blazorMapObjects["StoryMapTimeline"].invokeMethodAsync("OpenStoryMapTimelineLabel", point.options.stopId, point.options.narrativeMapId);
     }
 
     //////////////////////////
@@ -1152,6 +1153,7 @@ interface MapObjectForLeafletModel {
     customTooltipClass: string | null;
     customPolygonClass: string | null;
     stopId: number | null;
+    narrativeMapId: number | null;
     priorityOnMap: number | null;
 
 

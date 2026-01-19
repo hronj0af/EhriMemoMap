@@ -32,6 +32,7 @@ public partial class MapObjectForLeafletModel
         MapPoint = place.MapPoint;
         PlaceType = place.Type;
         StopId = place.StopId;
+        NarrativeMapId = place.NarrativeMapId;
 
         switch (place.Type)
         {
@@ -208,6 +209,7 @@ public partial class MapObjectForLeafletModel
 
     public bool? Heatmap { get; set; }
     public long? StopId { get; set; }
+    public long? NarrativeMapId { get; set; }
     public int? PriorityOnMap { get; set; }
 
 }

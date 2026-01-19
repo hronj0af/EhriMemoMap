@@ -3077,6 +3077,7 @@ export interface MarkerOptions extends InteractiveLayerOptions {
     autoPanSpeed?: number | undefined;
     autoPanOnFocus?: boolean | undefined;
     stopId?: number | undefined;
+    narrativeMapId?: number | undefined;
 }
 
 export class Marker<P = any> extends Layer {

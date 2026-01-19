@@ -18,7 +18,7 @@
                     <RadzenImage Path="@GetDotIcon(stop.Id)" AlternateText="@(IsStopExpanded(stop.Id) ? "Rozbaleno" : "Sbaleno")" />
                 </div>
                 <div class="storymap-timeline-content">
-                    <div style="cursor: pointer;" @onclick="() => OpenStoryMapTimelineLabel(stop.Id)">
+                    <div style="cursor: pointer;" @onclick="() => OpenStoryMapTimelineLabel(stop.Id, MapService.NarrativeMap?.Id)">
                         <RadzenRow AlignItems="AlignItems.Center">
                             <RadzenColumn Size="12">
                                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -102,20 +102,21 @@
     }
 
     [JSInvokable("OpenStoryMapTimelineLabel")]
-    public async Task OpenStoryMapTimelineLabel(long stopId)
+    public async Task OpenStoryMapTimelineLabel(long stopId, long? narrativeMapId)
     {
+        // TODO: JE POTŘEBA DOPLNIT FUNKCIONALITU PRO OTEVŘENÍ BODŮ Z RŮZNÝCH MAP (PŘI KLIKNUTÍ NA ŠPENDLÍK NEMUSÍ BÝT OTEVŘENÁ ŽÁDNÁ MAPA)
         if (expandedStopId == stopId)
         {
-            // Jika mengklik titik yang sudah terbuka, tutup titik tersebut
+            // Pokud kliknete na již otevřený bod, bod se uzavře.
             expandedStopId = null;
-            expandedSections.Clear(); // Tutup semua bagian saat menghentikan pembicaraan
+            expandedSections.Clear(); // Zavřít všechny sekce 
             await MapService.ShowNarrativeMapPlaces();
         }
         else
         {
-            // Buka titik baru (titik sebelumnya akan tertutup secara otomatis)
+            // Otevření nového bodu (předchozí bod se automaticky uzavře)
             expandedStopId = stopId;
-            expandedSections.Clear(); // Tutup semua bagian saat membuka titik pemberhentian baru
+            expandedSections.Clear(); // Zavřít všechny sekce
             await MapService.ShowStopPlacesOnMap(stopId);
         }
         StateHasChanged();

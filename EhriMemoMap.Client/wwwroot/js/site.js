@@ -484,6 +484,7 @@ var mapAPI;
         if (markerObject.htmlIcon != undefined && markerObject.htmlIcon != null)
             iconOptions = {
                 stopId: markerObject.stopId,
+                narrativeMapId: markerObject.narrativeMapId,
                 type: markerObject.placeType,
                 icon: new L.DivIcon({
                     className: className,
@@ -784,7 +785,7 @@ var mapAPI;
     mapAPI.removeBluepoint = removeBluepoint;
     function openStoryMapTimelineLabel(event) {
         const point = event.target;
-        blazorMapObjects["StoryMapTimeline"].invokeMethodAsync("OpenStoryMapTimelineLabel", point.options.stopId);
+        blazorMapObjects["StoryMapTimeline"].invokeMethodAsync("OpenStoryMapTimelineLabel", point.options.stopId, point.options.narrativeMapId);
     }
     mapAPI.openStoryMapTimelineLabel = openStoryMapTimelineLabel;
     function setDialogFullScreen(value) {
