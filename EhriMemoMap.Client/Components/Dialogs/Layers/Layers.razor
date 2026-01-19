@@ -1,8 +1,7 @@
 ﻿@inject IJSRuntime JS
 @inject IHttpClientFactory clientFactory
 @inject DialogService DialogService
-@inject MapStateService MapState
-@inject MapLogicService MapLogic
+@inject MapService MapService
 
 @inject IStringLocalizer<CommonResources> cl
 
@@ -13,10 +12,10 @@
         <h1 class="rz-pb-4" style="color:var(--Wine-Red)">@cl["layers"]</h1>
         <p>@cl["layerHelp"]</p>
 
-        @if (MapState.AppState == AppStateEnum.Development)
+        @if (MapService.AppState == AppStateEnum.Development)
         {
-            <RadzenButton ButtonStyle="ButtonStyle.Secondary" Click="@(() => MapState.ShowLayersForce = !MapState.ShowLayersForce)" Style="margin-bottom:10px;">
-                @if (MapState.ShowLayersForce)
+            <RadzenButton ButtonStyle="ButtonStyle.Secondary" Click="@(() => MapService.ShowLayersForce = !MapService.ShowLayersForce)" Style="margin-bottom:10px;">
+                @if (MapService.ShowLayersForce)
                 {
                     <text>
                         Skrýt vrstvy bez ohledu na zoom mapy
@@ -46,7 +45,7 @@
                     <RadzenColumn Size="11" >
                         <RadzenStack JustifyContent="JustifyContent.SpaceBetween" Orientation="Orientation.Horizontal" >
                             <div style="font-size: 14px; font-family: 'Barlow'; font-weight:700;">
-                                @cl["layer_" + item.Name + "_title_" + MapState?.Map?.InitialVariables?.City]
+                                @cl["layer_" + item.Name + "_title_" + MapService?.Map?.InitialVariables?.City]
                             </div>
                             <RadzenImage onerror="this.onerror=null; this.remove();" Style="@iconFilter" Path="@("images/" + item.Name + ".svg")"></RadzenImage>
                         </RadzenStack>
@@ -55,7 +54,7 @@
                 <RadzenRow JustifyContent="JustifyContent.Start" RowGap="0">
                     <RadzenColumn Size="11" Offset="1">
                         <div class="layerInfoInner">
-                            <div style="font-size:12px;font-family: 'Noto Serif'">@cl["layer_" + item.Name + "_abstract_" + MapState?.Map?.InitialVariables?.City]</div>
+                            <div style="font-size:12px;font-family: 'Noto Serif'">@cl["layer_" + item.Name + "_abstract_" + MapService?.Map?.InitialVariables?.City]</div>
                         </div>
                     </RadzenColumn>
                 </RadzenRow>
@@ -73,13 +72,13 @@
 
     protected override void OnInitialized()
     {
-        layers = MapState.GetNotBaseLayers().ToList();
-        MapState.OnChange += OnMyChangeHandler;
+        layers = MapService.GetNotBaseLayers().ToList();
+        MapService.OnChange += OnMyChangeHandler;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMyChangeHandler;
+        MapService.OnChange -= OnMyChangeHandler;
     }
 
 
@@ -87,7 +86,7 @@
     {
         await InvokeAsync(() =>
         {
-            layers = MapState.GetNotBaseLayers().ToList();
+            layers = MapService.GetNotBaseLayers().ToList();
             StateHasChanged();
         });
     }
@@ -107,10 +106,10 @@
             await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", LayerType.Polygons.ToString(), layer.Selected);
 
         else if (layer.Type == LayerType.Objects || layer.Type == LayerType.Heatmap)
-            await MapLogic.RefreshObjectsOnMap(false);
+            await MapService.RefreshObjectsOnMap(false);
 
-        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapState.GetLayersForUrlParameter());
-        MapState.NotifyStateChanged();
+        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapService.GetLayersForUrlParameter());
+        MapService.NotifyStateChanged();
     }
 
 }

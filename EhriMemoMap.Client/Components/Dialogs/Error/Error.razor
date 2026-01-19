@@ -1,9 +1,9 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
 @inject DialogService DialogService
 @inject IJSRuntime JS
-@inject MapStateService MapState
+@inject MapService MapService
 @inject IConfiguration configuration
-@if (!MapState.IsMobileView)
+@if (!MapService.IsMobileView)
 {
     <RadzenRow>
 

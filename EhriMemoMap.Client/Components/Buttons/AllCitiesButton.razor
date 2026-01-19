@@ -1,4 +1,4 @@
-﻿@inject MapStateService MapState
+﻿@inject MapService MapService
 @inject IStringLocalizer<CommonResources> cl
 @inject IJSRuntime JS
 @inject NavigationManager NavManager
@@ -29,12 +29,12 @@
 @code {
     protected override void OnInitialized()
     {
-        MapState.OnChange += OnMyChangeHandler;
+        MapService.OnChange += OnMyChangeHandler;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMyChangeHandler;
+        MapService.OnChange -= OnMyChangeHandler;
     }
 
     private async void OnMyChangeHandler()
@@ -47,7 +47,7 @@
 
     private async Task ShowAllCities()
     {
-        await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.AllCities ? DialogTypeEnum.None : DialogTypeEnum.AllCities);
-        MapState.NotifyStateChanged();
+        await MapService.SetDialog(MapService.DialogType == DialogTypeEnum.AllCities ? DialogTypeEnum.None : DialogTypeEnum.AllCities);
+        MapService.NotifyStateChanged();
     }
 }

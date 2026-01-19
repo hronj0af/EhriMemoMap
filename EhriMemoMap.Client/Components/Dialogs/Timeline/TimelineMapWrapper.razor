@@ -1,6 +1,6 @@
-﻿@inject MapStateService MapState
+﻿@inject MapService MapService
 
-@if (MapState.IsMobileView == false && MapState.MapType == MapTypeEnum.Normal)
+@if (MapService.IsMobileView == false && MapService.MapType == MapTypeEnum.Normal)
 {
     <div class="timeline-wrapper">
         <Timeline Width="550" MobileVersion="false" />
@@ -11,12 +11,12 @@
 
     protected override void OnInitialized()
     {
-        MapState.OnChange += StateHasChanged;
+        MapService.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= StateHasChanged;
+        MapService.OnChange -= StateHasChanged;
     }
 
 }

@@ -1,15 +1,14 @@
 ﻿@inject IJSRuntime JS
 @inject IHttpClientFactory clientFactory
 @inject DialogService DialogService
-@inject MapStateService MapState
-@inject MapLogicService MapLogic
+@inject MapService MapService
 
 @inject IStringLocalizer<CommonResources> cl
 
 @if (!MobileVersion)
 {
 
-    <div class="icon @(MapState.DialogType == DialogTypeEnum.Layers ? "icon-selected" : "") @(Disabled ? "icon-disabled" : "")" 
+    <div class="icon @(MapService.DialogType == DialogTypeEnum.Layers ? "icon-selected" : "") @(Disabled ? "icon-disabled" : "")" 
          title="@(Disabled ? "" : cl["layers"] + "...")" 
          onclick="@(Disabled ? null : () => ShowLayersList())">
         <svg width="47" height="50" viewBox="0 0 47 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="@(Disabled ? "opacity: 0.4;" : "")">
@@ -34,7 +33,7 @@
 else
 {
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" 
-                 class="@((MapState.DialogType == DialogTypeEnum.Layers ? "mobile-menu-icon-selected" : "mobile-menu-icon") + " " + (Border ? "mobile-menu-icon-border" : "") + " " + (Disabled ? "mobile-menu-icon-disabled" : ""))" 
+                 class="@((MapService.DialogType == DialogTypeEnum.Layers ? "mobile-menu-icon-selected" : "mobile-menu-icon") + " " + (Border ? "mobile-menu-icon-border" : "") + " " + (Disabled ? "mobile-menu-icon-disabled" : ""))" 
                  title="@(Disabled ? "" : cl["layers"] + "...")" 
                  onclick="@(Disabled ? null : () => ShowLayersList())">
         <svg width="26" height="28" viewBox="0 0 26 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="@(Disabled ? "opacity: 0.4;" : "")">
@@ -62,12 +61,12 @@ else
     protected override async Task OnInitializedAsync()
     {
         width = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
-        MapState.OnChange += OnMyChangeHandler;
+        MapService.OnChange += OnMyChangeHandler;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMyChangeHandler;
+        MapService.OnChange -= OnMyChangeHandler;
     }
 
 
@@ -75,7 +74,7 @@ else
     {
         await InvokeAsync(() =>
         {
-            layers = MapState.GetNotBaseLayers().ToList();
+            layers = MapService.GetNotBaseLayers().ToList();
             StateHasChanged();
         });
     }
@@ -84,7 +83,7 @@ else
     {
         if (Disabled) return;
         
-        await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.Layers ? DialogTypeEnum.None : DialogTypeEnum.Layers);
-        MapState.NotifyStateChanged();
+        await MapService.SetDialog(MapService.DialogType == DialogTypeEnum.Layers ? DialogTypeEnum.None : DialogTypeEnum.Layers);
+        MapService.NotifyStateChanged();
     }
 }

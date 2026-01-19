@@ -1,5 +1,5 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
-@inject MapStateService MapState
+@inject MapService MapService
 
 @if (House != null && House.PragueAddress != null)
 {
@@ -42,7 +42,7 @@
                     {
                         <table class="rz-grid-table rz-grid-table-fixed" style="width:100%">
                             <tr>
-                                <th style="@(MapState.IsMobileView ? "width:30%" : "width:50%")"></th>
+                                <th style="@(MapService.IsMobileView ? "width:30%" : "width:50%")"></th>
                                 @if (House.Statistics.Any(a => a.NumberPresent != null))
                                 {
                                     <th style="text-align:left;font-family:'Barlow';font-size:14px">@cl["present"]</th>
@@ -54,7 +54,7 @@
                                 }
                             </tr>
 
-                            @foreach (var statistic in House.Statistics.Where(a => MapState.GetTimelinePoint() != null ? (a.Date == new DateTime(1941, 10, 01) || a.Date == MapState.GetTimelinePoint()) : 1 == 1))
+                            @foreach (var statistic in House.Statistics.Where(a => MapService.GetTimelinePoint() != null ? (a.Date == new DateTime(1941, 10, 01) || a.Date == MapService.GetTimelinePoint()) : 1 == 1))
                             {
                                 <tr>
                                     <td>@statistic.Date.ToString("d. M. yyyy")</td>

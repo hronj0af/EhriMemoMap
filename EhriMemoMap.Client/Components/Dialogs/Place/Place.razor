@@ -1,19 +1,18 @@
 ﻿@using System.Xml;
 @using System.Xml.Linq;
 @inject IStringLocalizer<CommonResources> cl
-@inject MapStateService MapState
-@inject MapLogicService MapLogic
+@inject MapService MapService
 @inject IJSRuntime JS
 
 <div class="rz-pt-12">
     @if (PlacesToShow != null)
     {
-        @if (MapState.DialogParameters?.Places?.GroupBy(a => a.PlaceType).Count() == 1)
+        @if (MapService.DialogParameters?.Places?.GroupBy(a => a.PlaceType).Count() == 1)
         {
             <div style="padding: 0 2.5rem 0 2.5rem">
-                <h2 class="rz-mb-6" style="color:var(--Wine-Red);">@cl["featureType_" + MapState.DialogParameters.Places.FirstOrDefault()?.PlaceType]</h2>
+                <h2 class="rz-mb-6" style="color:var(--Wine-Red);">@cl["featureType_" + MapService.DialogParameters.Places.FirstOrDefault()?.PlaceType]</h2>
                 @{
-                    var placeType = Enum.Parse<PlaceType>(MapState.DialogParameters.Places.FirstOrDefault().PlaceType);
+                    var placeType = Enum.Parse<PlaceType>(MapService.DialogParameters.Places.FirstOrDefault().PlaceType);
                 }
                 <PlaceContentRouter PlaceType="@placeType" PlacesToShow="PlacesToShow" FilteredName="@filteredName" />
             </div>
@@ -23,7 +22,7 @@
             <div class="rz-pt-6">
                 <RadzenTabs RenderMode="TabRenderMode.Client">
                     <Tabs>
-                        @foreach (var placeType in MapState.DialogParameters?.Places?.Where(a => !string.IsNullOrEmpty(a.PlaceType)).GroupBy(a => a.PlaceType).Select(a => Enum.Parse<PlaceType>(a.Key)) ?? [])
+                        @foreach (var placeType in MapService.DialogParameters?.Places?.Where(a => !string.IsNullOrEmpty(a.PlaceType)).GroupBy(a => a.PlaceType).Select(a => Enum.Parse<PlaceType>(a.Key)) ?? [])
                         {
                             <RadzenTabsItem Text="@(cl["featureType_" + placeType.ToString()])">
                                 <div style="padding:1.5rem">
@@ -48,13 +47,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        MapState.OnChange += OnMapStateChanged;
+        MapService.OnChange += OnMapStateChanged;
         await FetchData();
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMapStateChanged;
+        MapService.OnChange -= OnMapStateChanged;
     }
 
     private async void OnMapStateChanged()
@@ -65,35 +64,35 @@
 
     private async Task FetchData()
     {
-        if (MapState.DialogType != DialogTypeEnum.Place || MapState.DialogParameters?.Places == null)
+        if (MapService.DialogType != DialogTypeEnum.Place || MapService.DialogParameters?.Places == null)
             return;
 
         PlacesToShow = null;
 
-        var parameters = new PlacesParameters { City = MapState.Map.InitialVariables?.City };
+        var parameters = new PlacesParameters { City = MapService.Map.InitialVariables?.City };
 
-        if (MapState.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.AddressLastResidence.ToString()))
-            parameters.AddressesLastResidenceIds = MapState.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.AddressLastResidence.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
+        if (MapService.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.AddressLastResidence.ToString()))
+            parameters.AddressesLastResidenceIds = MapService.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.AddressLastResidence.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
-        if (MapState.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Incident.ToString()))
-            parameters.IncidentsIds = MapState.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Incident.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
+        if (MapService.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Incident.ToString()))
+            parameters.IncidentsIds = MapService.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Incident.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
-        if (MapState.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Interest.ToString()))
-            parameters.PlacesOfInterestIds = MapState.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Interest.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
+        if (MapService.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Interest.ToString()))
+            parameters.PlacesOfInterestIds = MapService.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Interest.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
-        if (MapState.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Inaccessible.ToString()))
-            parameters.InaccessiblePlacesIds = MapState.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Inaccessible.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
+        if (MapService.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Inaccessible.ToString()))
+            parameters.InaccessiblePlacesIds = MapService.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Inaccessible.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
-        if (MapState.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Address.ToString()))
-            parameters.AddressesIds = MapState.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Address.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
+        if (MapService.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Address.ToString()))
+            parameters.AddressesIds = MapService.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Address.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
-        if (MapState.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Memory.ToString()))
-            parameters.PlacesOfMemoryIds = MapState.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Memory.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
+        if (MapService.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Memory.ToString()))
+            parameters.PlacesOfMemoryIds = MapService.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Memory.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
-        if (MapState.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Memorial.ToString()))
-            parameters.MemorialsIds = MapState.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Memorial.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
+        if (MapService.DialogParameters.Places.Any(a => a.PlaceType == PlaceType.Memorial.ToString()))
+            parameters.MemorialsIds = MapService.DialogParameters.Places.Where(a => a.PlaceType == PlaceType.Memorial.ToString()).Select(a => (long?)long.Parse(a.Id ?? "0")).ToArray();
 
-        PlacesToShow = await MapLogic.GetPlaces(parameters);
+        PlacesToShow = await MapService.GetPlaces(parameters);
 
     }
 

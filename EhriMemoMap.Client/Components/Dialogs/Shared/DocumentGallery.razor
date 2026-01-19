@@ -1,6 +1,5 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
-@inject MapStateService MapState
-@inject MapLogicService MapLogic
+@inject MapService MapService
 @inject IJSRuntime JSRuntime
 @using System.Text.Json
 @using System.IO
@@ -24,7 +23,7 @@
                 documentIndex += 1;
                 var docTb = doc.Url?.FirstOrDefault()?.ThumbnailUrl ?? doc.Url?.FirstOrDefault()?.Url;
 
-                <RadzenColumn Size="MapState.IsMobileView ? 3 : 2">
+                <RadzenColumn Size="MapService.IsMobileView ? 3 : 2">
                     <RadzenCard class="document-card" title="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.LabelCs : doc.LabelEn)">
                         <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
                             <div style="position:relative;width:100%">

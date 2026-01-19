@@ -1,26 +1,24 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
-@inject MapStateService MapState
-@inject MapLogicService MapLogic
-@inject StoryMapService StoryMapService
+@inject MapService MapService
 @inject IJSRuntime JS
 
 <div style="padding:2.5rem 2.5rem 0 2.5rem;" id="card-narrative">
 
-    @if (MapState.AllNarrativeMaps != null)
+    @if (MapService.AllNarrativeMaps != null)
     {
-        if (MapState.DialogParameters.Id == null)
+        if (MapService.DialogParameters.Id == null)
         {
             <h1 class="rz-mb-8" style="color:var(--Wine-Red)">@cl.GetString("storyMaps")</h1>
-            @foreach (var map in MapState.AllNarrativeMaps)
+            @foreach (var map in MapService.AllNarrativeMaps)
             {
                 <div>
-                    <h4 class="rz-mb-6" style="cursor:pointer" onclick="@(() => StoryMapService.ShowNarrativeMap(map.Id))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.LabelCs : @map.LabelEn)</h4>
+                    <h4 class="rz-mb-6" style="cursor:pointer" onclick="@(() => MapService.ShowNarrativeMap(map.Id))">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? @map.LabelCs : @map.LabelEn)</h4>
                 </div>
             }
         }
-        else if (MapState.DialogParameters.Id != null && MapState.AllNarrativeMaps.Count > 1)
+        else if (MapService.DialogParameters.Id != null && MapService.AllNarrativeMaps.Count > 1)
         {
-            <RadzenRow onclick="@(() => StoryMapService.ShowAllStoryMaps())" AlignItems="AlignItems.Center" class="rz-mb-4" Style="cursor:pointer">
+            <RadzenRow onclick="@(() => MapService.ShowAllStoryMaps())" AlignItems="AlignItems.Center" class="rz-mb-4" Style="cursor:pointer">
                 <RadzenColumn Size="1">
                     <RadzenImage Path="images/arrow-left-grey.png" />
                 </RadzenColumn>
@@ -34,11 +32,11 @@
                 </RadzenColumn>
             </RadzenRow>
         }
-        if (MapState.DialogParameters.Id != null || MapState.AllNarrativeMaps.Count == 1)
+        if (MapService.DialogParameters.Id != null || MapService.AllNarrativeMaps.Count == 1)
         {
             <RadzenRow>
                 <RadzenColumn Size="12">
-                    <h1 class="rz-mb-6" style="color:var(--Wine-Red)">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? MapState.NarrativeMap?.LabelCs : MapState.NarrativeMap?.LabelEn)</h1>
+                    <h1 class="rz-mb-6" style="color:var(--Wine-Red)">@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? MapService.NarrativeMap?.LabelCs : MapService.NarrativeMap?.LabelEn)</h1>
                 </RadzenColumn>
             </RadzenRow>
 
@@ -52,12 +50,12 @@
 
     protected override async Task OnInitializedAsync()
     {
-        MapState.OnChange += StateHasChanged;
-        await MapLogic.GetAllNarrativeMaps();
+        MapService.OnChange += StateHasChanged;
+        // await StoryMapService.GetAllNarrativeMaps();
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= StateHasChanged;
+        MapService.OnChange -= StateHasChanged;
     }
 }

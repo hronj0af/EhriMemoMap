@@ -1,4 +1,4 @@
-﻿@inject MapStateService MapState
+﻿@inject MapService MapService
 @inject IStringLocalizer<CommonResources> cl
 @inject NavigationManager NavManager
 
@@ -26,17 +26,17 @@
 @code {
     protected override void OnInitialized()
     {
-        MapState.OnChange += StateHasChanged;
+        MapService.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= StateHasChanged;
+        MapService.OnChange -= StateHasChanged;
     }
 
-    private void ShowHome()
+    private async Task ShowHome()
     {
-        NavManager.NavigateTo("/", true);
-        // NavManager.NavigateTo("/" + MapState.Map?.InitialVariables?.City ?? "", true);
+        await MapService.SetDialog(DialogTypeEnum.None);
+        NavManager.NavigateTo("/");
     }
 }

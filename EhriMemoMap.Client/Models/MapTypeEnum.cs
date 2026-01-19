@@ -2,6 +2,6 @@
 {
     public enum MapTypeEnum
     {
-        Normal, StoryMapWhole, StoryMapOneStop
+        Normal = 0, AllStoryMaps = 1, StoryMapWhole = 2, StoryMapOneStop = 3
     }
 }

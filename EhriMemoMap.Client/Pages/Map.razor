@@ -5,10 +5,9 @@
 @inject IJSRuntime JS
 @inject DialogService DialogService
 @inject IStringLocalizer<CommonResources> cl
-@inject MapStateService MapState
-@inject MapLogicService MapLogic
+@inject MapService MapService
 
-@if (MapState.AppState != AppStateEnum.Shutdown)
+@if (MapService.AppState != AppStateEnum.Shutdown)
 {
 
     <div id="map" style="cursor:default;">
@@ -56,15 +55,15 @@
     {
         this.firstRender = firstRender;
 
-        if (firstRender && !MapState.MapStateWasInit)
+        if (firstRender && !MapService.MapStateWasInit)
         {
             // tady se zjistí šířka a výška okna kvůli zobrazení dialogového okna s dalšími informacemi
-            MapState.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
-            MapState.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
+            MapService.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
+            MapService.WindowHeight = await JS.InvokeAsync<int>("mapAPI.getWindowHeight");
 
             // zjistím, jestli se jedná o mobilní zařízení
-            MapState.IsMobileView = await JS.InvokeAsync<bool>("mapAPI.isMobileView");
-            isMobileView = MapState.IsMobileView;
+            MapService.IsMobileView = await JS.InvokeAsync<bool>("mapAPI.isMobileView");
+            isMobileView = MapService.IsMobileView;
 
             // musím do javascriptu šoupnout odkaz na instanci téhle třídy Map,
             // abych pak mohl z javascriptu volat metodu RefreshObjectsOnMap a ShowPlaceInfo
@@ -78,12 +77,12 @@
 
             // inicializace hlavního objektu mapy
             // pokud jsou v url parametry layers a timeline, tak se použijí, jinak se použijí defaultní hodnoty
-            await MapState.Init(City, layers, timelinePointName);
-            await MapLogic.GetAllNarrativeMaps();
+            await MapService.Init(City, layers, timelinePointName);
+            await MapService.GetAllNarrativeMaps();
 
             string? bounds = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "bounds");
 
-            if (MapState.AppState == AppStateEnum.Shutdown)
+            if (MapService.AppState == AppStateEnum.Shutdown)
             {
                 DialogService.Open<Error>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = false, Width = "720px" });
                 return;
@@ -97,27 +96,28 @@
             // tak se zobrazí dialog s vysvětlením, jak se v mapě pohybovat
             // pokud už s mapou začal pracovat, tak ho s tímto uvítacím dialogem nebudeme otravovat
             if (string.IsNullOrEmpty(bounds) && coordinates == null)
-                if (!MapState.IsMobileView)
+                if (!MapService.IsMobileView)
                     DialogService.Open<Welcome>(" ", options: new DialogOptions { ShowClose = false, ShowTitle = false, CloseDialogOnOverlayClick = true, Width = "720px" });
                 else
-                    await MapState.SetDialog(DialogTypeEnum.Welcome);
+                    await MapService.SetDialog(DialogTypeEnum.Welcome);
 
 
             // voláme javascriptovou metodu leafletu, která inicializuje mapu
             // jako parametr předám informace o vrstvách a počátečním zobrazení mapy
-            await JS.InvokeVoidAsync("mapAPI.initMap", MapState.GetMapInfoForLeaflet(mapZoom));
+            await JS.InvokeVoidAsync("mapAPI.initMap", MapService.GetMapInfoForLeaflet(mapZoom));
 
             // tady se zase zjistí, jak je velká oblast, která se zobrazuje na mapě
-            MapState.MapZoom = mapZoom == 0 ? await JS.InvokeAsync<float>("mapAPI.getZoom") : mapZoom;
-            MapState.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
+            MapService.MapZoom = mapZoom == 0 ? await JS.InvokeAsync<float>("mapAPI.getZoom") : mapZoom;
+            MapService.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
 
             if (coordinates != null)
                 await ShowPlaceInfo(mapZoom, coordinates, 0);
 
             // a posledně zmiňované informace se pak použijí pro zobrazení špendlíků a polygonů na mapě
-            await MapLogic.RefreshObjectsOnMap(true);
+            await MapService.RefreshObjectsOnMap(true);
+            await JS.InvokeVoidAsync("mapAPI.showLayersForNormalMap");
 
-            MapState.NotifyStateChanged();
+            MapService.NotifyStateChanged();
         }
 
     }
@@ -125,9 +125,9 @@
     [JSInvokable("SetMobileView")]
     public void SetMobileView(bool value)
     {
-        MapState.IsMobileView = value;
+        MapService.IsMobileView = value;
         isMobileView = value;
-        MapState.NotifyStateChanged();
+        MapService.NotifyStateChanged();
         StateHasChanged();
     }
 
@@ -139,9 +139,9 @@
     [JSInvokable("RefreshObjectsOnMap")]
     public async Task RefreshObjectsOnMap(bool withPolygons, float zoom, Coordinate[] mapBounds)
     {
-        MapState.MapZoom = zoom;
-        MapState.SetBBox(mapBounds);
-        await MapLogic.RefreshObjectsOnMap(withPolygons);
+        MapService.MapZoom = zoom;
+        MapService.SetBBox(mapBounds);
+        await MapService.RefreshObjectsOnMap(withPolygons);
         if (!string.IsNullOrEmpty(selectedPointGuidsJson))
         {
             await JS.InvokeVoidAsync("mapAPI.selectPointOnMap", selectedPointGuidsJson);
@@ -150,14 +150,14 @@
 
     public void RemoveObjects(dynamic obj)
     {
-        if (!MapState.IsMobileView)
+        if (!MapService.IsMobileView)
             JS.InvokeVoidAsync("mapAPI.removeAdditionalObjects");
     }
 
     [JSInvokable("ShowPlaceInfo")]
     public async Task ShowPlaceInfo(float zoom, Coordinate[] coordinates, double mouseClickPointX)
     {
-        var placesOnMap = await MapLogic.GetMapObjects(true, false, coordinates);
+        var placesOnMap = await MapService.GetMapObjects(true, false, coordinates);
         if (placesOnMap.Count == 0)
             return;
 
@@ -171,10 +171,10 @@
 
         var mapLocationJson = JsonConvert.SerializeObject(new { type = "Point", coordinates = new double[] { coordinates[0].X, coordinates[1].Y } }, serializerSettings);
 
-        await MapState.SetDialog(DialogTypeEnum.Place, new DialogParameters { Places = placesOnMap });
+        await MapService.SetDialog(DialogTypeEnum.Place, new DialogParameters { Places = placesOnMap });
 
-        if (MapState.ShouldBeMapCenteredAfterClick(mouseClickPointX))
-            await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), MapState.MapZoom);
+        if (MapService.ShouldBeMapCenteredAfterClick(mouseClickPointX))
+            await JS.InvokeVoidAsync("mapAPI.goToLocation", coordinates.AsJson(), MapService.MapZoom);
 
         await JS.InvokeVoidAsync("mapAPI.setUrlFromSelectedPlace", JsonConvert.SerializeObject(new object[] 
             { 
@@ -182,7 +182,7 @@
                 new { coordinates[0].Y, coordinates[0].X } 
             } ));
 
-        MapState.NotifyStateChanged();
+        MapService.NotifyStateChanged();
     }
 
     private async Task<Coordinate[]?> GetCoordinatesFromUrl()

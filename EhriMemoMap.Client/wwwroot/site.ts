@@ -113,6 +113,12 @@ namespace mapAPI {
         }
     }
 
+    export function destroyMap(): void {
+        if (map != null) {
+            map.remove();
+            map = null;
+        }
+    }
 
     export function resetMapViewToInitialState() {
         if (initialVariables == null)
@@ -246,13 +252,13 @@ namespace mapAPI {
 
     // konvertuje objekt s nastavením mapových vrstev do mapových vrstev leafletu
     export function convertMapSettingsObjectToMapLayer(mapSettingsObject): L.TileLayer {
-        if (mapSettingsObject.type == 'Base') {
+        if (mapSettingsObject.type == LayersTypeEnum.Base) {
             return new L.TileLayer(mapSettingsObject.url, {
                 maxZoom: 18,
                 attribution: mapSettingsObject.attribution,
             });
         }
-        else if (mapSettingsObject.type == 'WMS') {
+        else if (mapSettingsObject.type == LayersTypeEnum.WMS) {
             return new L.TileLayer.WMS(mapSettingsObject.url, {
                 tileSize: 512,
                 //map: mapSettingsObject.mapParameter,
@@ -843,9 +849,9 @@ namespace mapAPI {
     /// HELPER METHODS
     //////////////////////////
 
-    export function hideAllLayers() {
+    export function hideLayersForNormalMap() {
         groups.forEach(group => {
-            if (group.options.type == "Base" || group.options.type == "WMS")
+            if (group.options.type == LayersTypeEnum.Base || group.options.type == LayersTypeEnum.WMS)
                 return;
             map.eachLayer(function (layer) {
                 if (layer.options.id == group.options.id)
@@ -854,11 +860,11 @@ namespace mapAPI {
         });
     }
 
-    export function showAllLayers() {
-        // nejdřív všechny vrstvy odstraníme, aby se pak na mapě zbytečně nepřekrývaly
-        hideAllLayers();
+    export function showLayersForNormalMap() {
+        // nejdřív všechny vrstvy pro jistotu odstraníme, aby se pak na mapě zbytečně nepřekrývaly
+        hideLayersForNormalMap();
         groups.forEach(group => {
-            if (group.options.type == "Base" || group.options.type == "Narration")
+            if (group.options.type == LayersTypeEnum.Base || group.options.type == LayersTypeEnum.Narration)
                 return;
             if (group.options.selected)
                 group.addTo(map);
@@ -1207,3 +1213,15 @@ enum NarrativeMapStopPlaceType {
     Trajectory = "trajectory point",
 }
 
+enum MapTypeEnum {
+    Normal,
+    AllStoryMaps,
+    StoryMapWhole,
+    StoryMapOneStop
+}
+
+enum LayersTypeEnum {
+    Base = "Base",
+    WMS = "WMS",
+    Narration = "Narration"
+}

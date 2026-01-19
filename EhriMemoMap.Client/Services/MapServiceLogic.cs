@@ -1,15 +1,11 @@
-﻿using EhriMemoMap.Client.Components.Dialogs.Victim;
-using EhriMemoMap.Models;
-using EhriMemoMap.Resources;
+﻿using EhriMemoMap.Models;
 using EhriMemoMap.Shared;
-using Microsoft.Extensions.Localization;
 using Microsoft.JSInterop;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Radzen;
-using System.Net.NetworkInformation;
 using System.Text;
 
 namespace EhriMemoMap.Client.Services
@@ -17,25 +13,9 @@ namespace EhriMemoMap.Client.Services
     /// <summary>
     /// Logika nad mapou
     /// </summary>
-    public class MapLogicService
+    public partial class MapService
     {
-        private readonly MapStateService _mapState;
-        private readonly IJSRuntime _js;
-        private readonly IStringLocalizer<CommonResources> _cl;
-        private readonly HttpClient _client;
-        private readonly string _apiUrl;
-
-        public MapLogicService(MapStateService mapState, IJSRuntime js, IStringLocalizer<CommonResources> cl, IHttpClientFactory clientFactory, IConfiguration configuration)
-        {
-            _mapState = mapState;
-            _js = js;
-            _cl = cl;
-            _client = clientFactory.CreateClient();
-            _apiUrl = configuration.GetSection("App")["ApiURL"] ?? "";
-
-
-        }
-
+        
         public async Task RefreshObjectsOnMap(bool withPolygons)
         {
             var serializerSettings = new JsonSerializerSettings
@@ -56,36 +36,36 @@ namespace EhriMemoMap.Client.Services
 
         public async Task<List<MapObjectForLeafletModel>> GetMapObjects(bool withPolygons, bool aggregate, Coordinate[]? customCoordinates = null)
         {
-            if (_mapState == null || _mapState.Map == null)
+            if (Map == null)
                 return [];
 
             var parameters = new MapObjectParameters();
 
             // vyfiltruju objekty podle toho, na jakem bode casove ose lezi
-            if (_mapState.Map.Timeline != null && _mapState.Map.Timeline.Any(a => a.Selected))
-                parameters.SelectedTimeLinePoint = _mapState.Map.Timeline.FirstOrDefault(a => a.Selected);
+            if (Map.Timeline != null && Map.Timeline.Any(a => a.Selected))
+                parameters.SelectedTimeLinePoint = Map.Timeline.FirstOrDefault(a => a.Selected);
 
             // vyber objektu podle toho, do jake nalezi vrstvy
             var selectedLayerNames = new List<string?>();
-            foreach (var layer in _mapState.GetNotBaseLayers(true).Where(a => a.Type != LayerType.Heatmap && a.PlaceType != null && (withPolygons || a.Type != LayerType.Polygons)))
+            foreach (var layer in GetNotBaseLayers(true).Where(a => a.Type != LayerType.Heatmap && a.PlaceType != null && (withPolygons || a.Type != LayerType.Polygons)))
             {
                 // krome nazvu vrstvy zkoumam i to, jestli se pri danem zoomu mapy ma vrstva vubec zobrazovat
-                if (!_mapState.ShowLayersForce && ((layer.MinZoom != null && _mapState.MapZoom < layer.MinZoom) || (layer.MaxZoom != null && _mapState.MapZoom > layer.MaxZoom)))
+                if (!ShowLayersForce && ((layer.MinZoom != null && MapZoom < layer.MinZoom) || (layer.MaxZoom != null && MapZoom > layer.MaxZoom)))
                     continue;
                 selectedLayerNames.Add(layer.PlaceType?.ToString());
             }
             parameters.SelectedLayerNames = selectedLayerNames;
             parameters.CustomCoordinates = customCoordinates?.Select(a => new PointModel { X = a.X, Y = a.Y }).ToArray();
-            parameters.MapSouthWestPoint = new PointModel { X = _mapState.MapSouthWestPoint.X, Y = _mapState.MapSouthWestPoint.Y };
-            parameters.MapNorthEastPoint = new PointModel { X = _mapState.MapNorthEastPoint.X, Y = _mapState.MapNorthEastPoint.Y };
-            parameters.City = _mapState.Map.InitialVariables?.City;
+            parameters.MapSouthWestPoint = new PointModel { X = MapSouthWestPoint.X, Y = MapSouthWestPoint.Y };
+            parameters.MapNorthEastPoint = new PointModel { X = MapNorthEastPoint.X, Y = MapNorthEastPoint.Y };
+            parameters.City = Map.InitialVariables?.City;
 
             var objects = await GetResultFromApiPost<List<MapObject>>("getmapobjects", parameters);
 
             if (aggregate)
                 objects = AggregateSameAddresses(objects);
 
-            return objects.Select(a => new MapObjectForLeafletModel(a, false, _mapState.Map.Layers)).ToList();
+            return objects.Select(a => new MapObjectForLeafletModel(a, false, Map.Layers)).ToList();
         }
 
         /// <summary>
@@ -135,23 +115,23 @@ namespace EhriMemoMap.Client.Services
         public async Task<List<MapObjectForLeafletModel>> GetDistrictStatistics()
         {
             // pokud neni zadna vrstva s statistikami vybrana, vratim prazdny seznam
-            var layer = _mapState.GetNotBaseLayers().FirstOrDefault(a => a.Selected && a.PlaceType == PlaceType.Statistics);
+            var layer = GetNotBaseLayers().FirstOrDefault(a => a.Selected && a.PlaceType == PlaceType.Statistics);
 
             // pokud neni zadna vrstva s statistikami vybrana, vratim prazdny seznam
             if (layer == null)
                 return [];
 
-            if (!(_mapState.MapZoom >= layer.MinZoom && _mapState.MapZoom <= layer.MaxZoom) && !(_mapState.MapZoom < layer.MinZoom && _mapState.MapZoom >= 0))
+            if (!(MapZoom >= layer.MinZoom && MapZoom <= layer.MaxZoom) && !(MapZoom < layer.MinZoom && MapZoom >= 0))
                 return [];
 
             var statistics = new List<MapStatistic>();
-            var parameters = new DistrictStatisticsParameters { Total = true, TimeLinePoint = _mapState.GetTimelinePoint() };
+            var parameters = new DistrictStatisticsParameters { Total = true, TimeLinePoint = GetTimelinePoint() };
 
             // pokud je zoom vetsi nez maximalni zoom vrstvy, zobrazim statistiky pro jednotlive casti Prahy
-            if (_mapState.MapZoom >= layer.MinZoom && _mapState.MapZoom <= layer.MaxZoom)
+            if (MapZoom >= layer.MinZoom && MapZoom <= layer.MaxZoom)
                 parameters.Total = false;
 
-            parameters.City = _mapState.Map.InitialVariables?.City;
+            parameters.City = Map.InitialVariables?.City;
 
             statistics = await GetResultFromApiGet<List<MapStatistic>>("getdistrictstatistics", $"city={parameters.City}&total={parameters.Total}{(parameters.TimeLinePoint != null ? "&timeLinePoint=" + parameters.TimeLinePoint?.ToString("yyyy-MM-dd") : "")}");
 
@@ -161,7 +141,7 @@ namespace EhriMemoMap.Client.Services
         public async Task<List<MapObjectForLeafletModel>> GetHeatMap(Coordinate[]? customCoordinates = null)
         {
             // pokud neni zadna vrstva s statistikami vybrana, vratim prazdny seznam
-            var layer = _mapState.GetNotBaseLayers().FirstOrDefault(a => a.Selected && a.Type == LayerType.Heatmap);
+            var layer = GetNotBaseLayers().FirstOrDefault(a => a.Selected && a.Type == LayerType.Heatmap);
 
             // pokud neni zadna vrstva s statistikami vybrana, vratim prazdny seznam
             if (layer == null)
@@ -172,9 +152,9 @@ namespace EhriMemoMap.Client.Services
                 SelectedLayerNames = [layer.PlaceType?.ToString()],
                 SelectedTimeLinePoint = new TimelinePointModel { From = null, To = null },
                 CustomCoordinates = customCoordinates?.Select(a => new PointModel { X = a.X, Y = a.Y }).ToArray(),
-                MapSouthWestPoint = new PointModel { X = _mapState.MapSouthWestPoint.X, Y = _mapState.MapSouthWestPoint.Y },
-                MapNorthEastPoint = new PointModel { X = _mapState.MapNorthEastPoint.X, Y = _mapState.MapNorthEastPoint.Y },
-                City = _mapState.Map.InitialVariables?.City
+                MapSouthWestPoint = new PointModel { X = MapSouthWestPoint.X, Y = MapSouthWestPoint.Y },
+                MapNorthEastPoint = new PointModel { X = MapNorthEastPoint.X, Y = MapNorthEastPoint.Y },
+                City = Map.InitialVariables?.City
             };
             var heatmap = await GetResultFromApiPost<List<MapObject>>("getheatmap", parameters);
 
@@ -183,7 +163,7 @@ namespace EhriMemoMap.Client.Services
 
         public async Task<WelcomeDialogStatistics> GetWelcomeDialogStatistics()
         {
-            var statistics = await GetResultFromApiGet<WelcomeDialogStatistics>("getwelcomedialogstatistics", "city=" + _mapState.Map.InitialVariables?.City);
+            var statistics = await GetResultFromApiGet<WelcomeDialogStatistics>("getwelcomedialogstatistics", "city=" + Map.InitialVariables?.City);
             return statistics;
         }
 
@@ -199,7 +179,7 @@ namespace EhriMemoMap.Client.Services
             return result;
         }
 
-        private async Task<T> GetResultFromApiPost<T>(string apiMethod, object? parameters)
+        public async Task<T> GetResultFromApiPost<T>(string apiMethod, object? parameters)
         {
             var json = JsonConvert.SerializeObject(parameters);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -216,7 +196,7 @@ namespace EhriMemoMap.Client.Services
 
         }
 
-        private async Task<T> GetResultFromApiGet<T>(string apiMethod, string parameters)
+        public async Task<T> GetResultFromApiGet<T>(string apiMethod, string parameters)
         {
             var jsonString = await _client.GetStringAsync(_apiUrl + apiMethod + "?" + parameters);
 
@@ -233,7 +213,7 @@ namespace EhriMemoMap.Client.Services
         {
             if (id == null)
                 return null;
-            var result = await GetResultFromApiGet<VictimLongInfoModel>("getvictimlonginfo", "city=" + _mapState.Map.InitialVariables?.City + "&id=" + id);
+            var result = await GetResultFromApiGet<VictimLongInfoModel>("getvictimlonginfo", "city=" + Map.InitialVariables?.City + "&id=" + id);
             return result;
         }
 
@@ -241,42 +221,15 @@ namespace EhriMemoMap.Client.Services
         /// NARRATIVE MAP ///
         /////////////////////
 
-        public async Task GetAllNarrativeMaps()
-        {
-            if ((_mapState.Map.InitialVariables?.StoryMaps ?? false) == false)
-                return;
-            
-            if (_mapState.AllNarrativeMaps != null && _mapState.AllNarrativeMaps.Count > 0)
-                return;
 
-            var result = await GetResultFromApiGet<List<NarrativeMap>>("getallnarrativemaps", "city=" + _mapState.Map.InitialVariables?.City);
-            _mapState.AllNarrativeMaps = result;
-        }
 
-        public async Task GetNarrativeMap(long? id, string? city)
-        {
-            if (id == null)
-                return;
-
-            var result = await GetResultFromApiGet<NarrativeMap>("getnarrativemap", "id=" + id + "&city=" + city);
-            _mapState.NarrativeMap = result;
-        }
-
-        public async Task ShowNarrativeMapPlaces()
-        {
-            if (_mapState.NarrativeMap == null)
-                return;
-            await ShowPlacesOnMap(_mapState.NarrativeMap?.Stops?.SelectMany(a => a.Places!).Where(a => a.Type == "main point"));
-            await _mapState.SetMapType(MapTypeEnum.StoryMapWhole);
-        }
-
-        public async Task ShowPlacesOnMap(IEnumerable<Place>? places)
+        public async Task ShowPlacesOnMap(IEnumerable<Place>? places, bool defaultColor = true)
         {
             if (places == null || !places.Any())
                 return;
 
             var transformedPlaces = places.
-                Select(b => new MapObjectForLeafletModel(b)).ToList();
+                Select(b => new MapObjectForLeafletModel(b, defaultColor)).ToList();
 
             if (transformedPlaces.Any(a => a.PlaceType == "trajectory point"))
             {
@@ -295,21 +248,12 @@ namespace EhriMemoMap.Client.Services
             await _js.InvokeVoidAsync("mapAPI.addObjectsFromJsonString", jsonPlaces, LayerType.Narration.ToString());
         }
 
-        public async Task ShowStopPlacesOnMap(long stopId)
-        {
-            await _mapState.SetMapType(MapTypeEnum.StoryMapOneStop);
-            var stop = _mapState.NarrativeMap?.Stops?.FirstOrDefault(a => a.Id == stopId);
-            if (stop == null)
-                return;
-            await ShowPlacesOnMap(stop.Places);
-            _mapState.NotifyStateChanged();
-        }
 
         public async Task ShowVictim(long? id)
         {
-            _mapState.VictimLongInfo = await GetVictimLongInfo(id);
-            await _mapState.SetDialog(DialogTypeEnum.Victim, new DialogParameters { Id = _mapState.VictimLongInfo?.Id, Places = _mapState.DialogParameters.Places });
-            _mapState.NotifyStateChanged();
+            VictimLongInfo = await GetVictimLongInfo(id);
+            await SetDialog(DialogTypeEnum.Victim, new DialogParameters { Id = VictimLongInfo?.Id, Places = DialogParameters.Places });
+            NotifyStateChanged();
 
         }
 

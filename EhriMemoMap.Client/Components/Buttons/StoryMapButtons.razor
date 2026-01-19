@@ -1,16 +1,16 @@
-﻿@* @inject MapStateService MapState
+﻿@* @inject MapService MapService
 @inject MapLogicService MapLogic
 
 @inject IStringLocalizer<CommonResources> cl
 
-@if (MapState.MapType == MapTypeEnum.StoryMapWhole || MapState.MapType == MapTypeEnum.StoryMapOneStop)
+@if (MapService.MapType == MapTypeEnum.StoryMapWhole || MapService.MapType == MapTypeEnum.StoryMapOneStop)
 {
     <div style="@style">
         <div style="display:flex;gap:5px">
              <RadzenButton Size="ButtonSize.Small" Click="CloseNarrativeMap" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat">
                 @cl["back"]
             </RadzenButton>
-             @if (MapState.MapType == MapTypeEnum.StoryMapOneStop)
+             @if (MapService.MapType == MapTypeEnum.StoryMapOneStop)
             {
                 <RadzenButton Size="ButtonSize.Small" Click="(() => MapLogic.ShowNarrativeMapPlaces())" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat">
                     @cl["backToStoryMapWhole"]
@@ -27,25 +27,25 @@
 
     protected override void OnInitialized()
     {
-        MapState.OnChange += OnMyChangeHandler;
+        MapService.OnChange += OnMyChangeHandler;
         style = GetStyle();
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMyChangeHandler;
+        MapService.OnChange -= OnMyChangeHandler;
     }
 
     public async Task CloseNarrativeMap()
     {
-        await MapState.SetMapType(MapTypeEnum.Normal);
-        await MapState.SetDialog(DialogTypeEnum.None);
-        MapState.NotifyStateChanged();
+        await MapService.SetMapType(MapTypeEnum.Normal);
+        await MapService.SetDialog(DialogTypeEnum.None);
+        MapService.NotifyStateChanged();
     }
 
     public string GetStyle()
     {
-        if (MapState.IsMobileView)
+        if (MapService.IsMobileView)
             return $"position:absolute;top:54px;left:10px;z-index:1002;";
         return $"position:absolute;top:20px;left:20px;z-index:1002";
     }

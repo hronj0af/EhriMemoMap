@@ -13,6 +13,7 @@ public class NarrativeMap
     public string? DescriptionCs { get; set; }
 
     public string? DescriptionEn { get; set; }
+    public Place[]? MainPoints { get; set; }
 
     public NarrativeMapStop[]? Stops { get; set; } = [];
 

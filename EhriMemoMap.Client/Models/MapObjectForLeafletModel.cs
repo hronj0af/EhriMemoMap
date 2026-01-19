@@ -25,7 +25,7 @@ public partial class MapObjectForLeafletModel
             : "<img src='css/images/marker-icon.png' />";
     }
 
-    public MapObjectForLeafletModel(Place place)
+    public MapObjectForLeafletModel(Place place, bool defaultColor = true)
     {
         Id = place.Id.ToString();
         Label = place.LabelCs;
@@ -37,7 +37,7 @@ public partial class MapObjectForLeafletModel
         {
             case "main point":
                 var iconNumber = place.NarrativeMapId % 7;
-                HtmlIcon = $"<img src='css/images/narrative-icon{iconNumber}.png' />";
+                HtmlIcon = $"<img src='css/images/narrative-icon{(defaultColor ? "" : iconNumber)}.png' />";
                 Clickable = true;
                 IconAnchor = [22, 55];
                 break;

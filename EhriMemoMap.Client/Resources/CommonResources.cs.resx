@@ -921,4 +921,19 @@ zájmu, míst paměti nebo připomínkových akcí</value>
   <data name="layer_HGC-borders_protectorate_b_m-v1_abstract_pacov" xml:space="preserve">
     <value>Původní hranice Protektorátu Čechy a Morava byly převzaty z datového souboru vytvořeného v rámci projektu, který dokumentuje měsíční změny evropských hranic v letech 1938–1945. Data jsou mnohem lépe prezentována s přesnými vojenskými frontovými liniemi, která nebyla dosud plně digitalizována, ale představují cenný přínos pro výzkum.</value>
   </data>
+  <data name="layer_HGC-borders_protectorate_b_m-v1_title_ricany" xml:space="preserve">
+    <value>Hranice Protektorátu Čech a Moravy</value>
+  </data>
+  <data name="layer_HGC-borders_protectorate_b_m-v1_abstract_ricany" xml:space="preserve">
+    <value>Původní hranice Protektorátu Čechy a Morava byly převzaty z datového souboru vytvořeného v rámci projektu, který dokumentuje měsíční změny evropských hranic v letech 1938–1945. Data jsou mnohem lépe prezentována s přesnými vojenskými frontovými liniemi, která nebyla dosud plně digitalizována, ale představují cenný přínos pro výzkum.</value>
+  </data>
+  <data name="countStoryMaps" xml:space="preserve">
+    <value>Příběhové mapy</value>
+  </data>
+  <data name="help_storymap_pacov" xml:space="preserve">
+    <value>Příběhové mapy v Pacově</value>
+  </data>
+  <data name="help_storymap_ricany" xml:space="preserve">
+    <value>Příběh říčanské Tóry</value>
+  </data>
 </root>

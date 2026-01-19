@@ -1,25 +1,23 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
-@inject MapStateService MapState
-@inject StoryMapService StoryMapService
+@inject MapService MapService
 @inject IJSRuntime JSRuntime
-
 
 <div style="padding:2.5rem 2.5rem 0 2.5rem;">
 
-    @if (MapState.VictimLongInfo != null)
+    @if (MapService.VictimLongInfo != null)
     {
 
         <RadzenRow class="rz-mb-6" AlignItems="AlignItems.End" JustifyContent="JustifyContent.SpaceBetween">
             <RadzenColumn Size="9">
-                <h1>@MapState.VictimLongInfo.Label</h1>
+                <h1>@MapService.VictimLongInfo.Label</h1>
             </RadzenColumn>
-            @if (MapState.VictimLongInfo.NarrativeMapId != null)
+            @if (MapService.VictimLongInfo.NarrativeMapId != null)
             {
                 <RadzenColumn Size="3" Style="text-align: right;">
                     <img 
                         style="width: 30px; cursor: pointer;" 
                         title="@cl.GetString("viewStoryMap")..." 
-                        onclick="@(() => StoryMapService.ShowNarrativeMap(MapState.VictimLongInfo.NarrativeMapId))" 
+                        onclick="@(() => MapService.ShowNarrativeMap(MapService.VictimLongInfo.NarrativeMapId))" 
                         src="images/storymap-icon.png" />
                 </RadzenColumn>
             }
@@ -28,42 +26,42 @@
 
         <table class="victim">
 
-            @if (MapState.VictimLongInfo.Places != null)
+            @if (MapService.VictimLongInfo.Places != null)
             {
 
                 @* maiden name *@
-                @if (!string.IsNullOrEmpty(MapState.VictimLongInfo.Maidenname))
+                @if (!string.IsNullOrEmpty(MapService.VictimLongInfo.Maidenname))
                 {
                     <tr>
                         <td>
                             @cl["maidenname"].Value.FirstLetterToUpper()
                         </td>
                         <td>
-                            @MapState.VictimLongInfo.Maidenname
+                            @MapService.VictimLongInfo.Maidenname
                         </td>
                     </tr>
                 }
                 @* titul *@
-                @if (!string.IsNullOrEmpty(MapState.VictimLongInfo.Title))
+                @if (!string.IsNullOrEmpty(MapService.VictimLongInfo.Title))
                 {
                     <tr>
                         <td>
                             @cl["personTitle"].Value.FirstLetterToUpper()
                         </td>
                         <td>
-                            @MapState.VictimLongInfo.Title
+                            @MapService.VictimLongInfo.Title
                         </td>
                     </tr>
                 }
                 @* datum narození *@
-                @if (MapState.VictimLongInfo.BirthDate != null || !string.IsNullOrEmpty(MapState.VictimLongInfo.BirthDateText))
+                @if (MapService.VictimLongInfo.BirthDate != null || !string.IsNullOrEmpty(MapService.VictimLongInfo.BirthDateText))
                 {
                     <tr>
                         <td>
                             @cl["birthDate"].Value.FirstLetterToUpper()
                         </td>
                         <td>
-                            @(MapState.VictimLongInfo.BirthDateText ?? MapState.VictimLongInfo.BirthDate?.ToString("d. M. yyyy"))
+                            @(MapService.VictimLongInfo.BirthDateText ?? MapService.VictimLongInfo.BirthDate?.ToString("d. M. yyyy"))
                         </td>
                     </tr>
                 }
@@ -83,7 +81,7 @@
                 <VictimPlace Type="36" ResourceNameType="otherResidence" />
 
                 @* deportace *@
-                @if (MapState.VictimLongInfo.Transports != null && MapState.VictimLongInfo.Transports.Count() > 0)
+                @if (MapService.VictimLongInfo.Transports != null && MapService.VictimLongInfo.Transports.Count() > 0)
                 {
                     <tr>
                         <td>
@@ -92,7 +90,7 @@
                         </td>
                         <td>
                             <ul style="margin:0;list-style-type:none;padding:0">
-                                @foreach (var transport in MapState.VictimLongInfo.Transports.OrderBy(a => a.Id))
+                                @foreach (var transport in MapService.VictimLongInfo.Transports.OrderBy(a => a.Id))
                                 {
                                     <li>
                                         @transport.Code
@@ -111,7 +109,7 @@
                 @* místo věznění *@
                 <VictimPlace Type="28" />
 
-                @if (!string.IsNullOrEmpty(MapState.VictimLongInfo.FateCs))
+                @if (!string.IsNullOrEmpty(MapService.VictimLongInfo.FateCs))
                 {
                     @* osud úmrtí *@
                     <tr>
@@ -119,7 +117,7 @@
                             @cl["fate"].Value.FirstLetterToUpper()
                         </td>
                         <td>
-                            @(CultureInfo.CurrentCulture.Name == "en-US" ? MapState.VictimLongInfo.FateEn : MapState.VictimLongInfo.FateCs)
+                            @(CultureInfo.CurrentCulture.Name == "en-US" ? MapService.VictimLongInfo.FateEn : MapService.VictimLongInfo.FateCs)
                         </td>
                     </tr>
                 }
@@ -128,14 +126,14 @@
                 <VictimPlace Type="29" />
 
                 @* datum úmrtí *@
-                @if (MapState.VictimLongInfo.DeathDate != null || !string.IsNullOrEmpty(MapState.VictimLongInfo.DeathDateText))
+                @if (MapService.VictimLongInfo.DeathDate != null || !string.IsNullOrEmpty(MapService.VictimLongInfo.DeathDateText))
                 {
                     <tr>
                         <td>
                             @cl["deathDate"].Value.FirstLetterToUpper()
                         </td>
                         <td>
-                            @(MapState.VictimLongInfo.DeathDateText ?? MapState.VictimLongInfo.DeathDate?.ToString("d. M. yyyy"))
+                            @(MapService.VictimLongInfo.DeathDateText ?? MapService.VictimLongInfo.DeathDate?.ToString("d. M. yyyy"))
                         </td>
                     </tr>
                 }
@@ -144,7 +142,7 @@
                 <VictimPlace Type="23" />
 
                 @* další informace DescriptionCs a DescriptionEn *@
-                var otherInfo = CultureInfo.CurrentCulture.Name == "en-US" ? MapState.VictimLongInfo.DescriptionEn : MapState.VictimLongInfo.DescriptionCs;
+                var otherInfo = CultureInfo.CurrentCulture.Name == "en-US" ? MapService.VictimLongInfo.DescriptionEn : MapService.VictimLongInfo.DescriptionCs;
                 @if (!string.IsNullOrEmpty(otherInfo))
                 {
                     <tr>
@@ -186,14 +184,14 @@
             }
         </table>
 
-        @if (MapState.VictimLongInfo.RelatedPersons != null && MapState.VictimLongInfo.RelatedPersons.Count() > 0)
+        @if (MapService.VictimLongInfo.RelatedPersons != null && MapService.VictimLongInfo.RelatedPersons.Count() > 0)
         {
             // „Nejbližší rodina“, omezeno na vztahy „manžel“ (id 5), „manželka“ (id 6), „otec“ (id 9), „matka“ (id 7), „syn“ (id 13), „dcera (id 3)“, „bratr“ (id 2), „sestra (id 10)“.
-            if (MapState.VictimLongInfo.RelatedPersons.Any(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
+            if (MapService.VictimLongInfo.RelatedPersons.Any(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
             {
                 <h3 class="rz-mt-8">@cl["relatedClosestFamily"]</h3>
                 <RadzenRow class="rz-mt-4" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
-                    @foreach (var relatedPerson in MapState.VictimLongInfo.RelatedPersons.Where(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
+                    @foreach (var relatedPerson in MapService.VictimLongInfo.RelatedPersons.Where(a => new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
                     {
                         <VictimShortInfo Victim="@relatedPerson" Small="true" Relative="true" />
                     }
@@ -203,7 +201,7 @@
 
 
             // ostatní příbuzní
-            if (MapState.VictimLongInfo.RelatedPersons.Any(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
+            if (MapService.VictimLongInfo.RelatedPersons.Any(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)))
             {
                 <div class="rz-mt-4" style="cursor:pointer;" onclick="@(() => ToggleRelatives())">
                     <h4>
@@ -223,7 +221,7 @@
                 @if (RelativesOpen)
                 {
                     <RadzenRow class="rz-mt-4" Gap="1rem" RowGap="2rem" JustifyContent=JustifyContent.Start>
-                        @foreach (var relatedPerson in MapState.VictimLongInfo.RelatedPersons.Where(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
+                        @foreach (var relatedPerson in MapService.VictimLongInfo.RelatedPersons.Where(a => !new long?[] { 2, 3, 5, 6, 7, 9, 10, 13 }.Contains(a.RelationshipToPersonType)) ?? [])
                         {
                             <VictimShortInfo Victim="@relatedPerson" Small="true" Relative="true" />
                         }
@@ -232,7 +230,7 @@
             }
         }
 
-        <DocumentGallery Documents="MapState.VictimLongInfo.Documents" />
+        <DocumentGallery Documents="MapService.VictimLongInfo.Documents" />
 
     }
 </div>
@@ -245,18 +243,18 @@
 
     protected override void OnInitialized()
     {
-        MapState.OnChange += StateHasChanged;
+        MapService.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= StateHasChanged;
+        MapService.OnChange -= StateHasChanged;
     }
 
     protected override void OnAfterRender(bool first)
     {
 
-        if (MapState.DialogParameters?.Id == null)
+        if (MapService.DialogParameters?.Id == null)
             return;
 
         if (first)

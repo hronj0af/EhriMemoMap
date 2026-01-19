@@ -1,7 +1,7 @@
 ﻿@using System.Xml;
 @using System.Xml.Linq;
 @inject IStringLocalizer<CommonResources> cl
-@inject MapStateService MapState
+@inject MapService MapService
 
 <RadzenRow class="rz-mb-4">
     <RadzenCard Style="width:100%">
@@ -29,7 +29,7 @@
             <RadzenRow class="rz-mt-2 rz-mb-4">
                 @foreach (var doc in Place.Documents)
                 {
-                    <RadzenColumn Size="MapState.IsMobileView ? 3 : 2">
+                    <RadzenColumn Size="MapService.IsMobileView ? 3 : 2">
                         <a href="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.DocumentUrlCs : doc.DocumentUrlEn)" target="_blank" style="text-decoration:none;color:black">
                             <RadzenCard class="document-card">
                                 <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">

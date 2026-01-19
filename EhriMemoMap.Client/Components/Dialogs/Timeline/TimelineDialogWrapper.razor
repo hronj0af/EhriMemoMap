@@ -1,11 +1,11 @@
-﻿@inject MapStateService MapState
+﻿@inject MapService MapService
 @inject IStringLocalizer<CommonResources> cl
 
-@if (MapState.WindowWidth > 0)
+@if (MapService.WindowWidth > 0)
 {
     <div class="rz-px-6 rz-pt-12" style="height:400px">
         <h1 class="rz-pb-4" style="color:var(--Wine-Red)">@cl["timeline"]</h1>
-        <Timeline Width="MapState.WindowWidth" MobileVersion="true" />
+        <Timeline Width="MapService.WindowWidth" MobileVersion="true" />
     </div>
 }
 

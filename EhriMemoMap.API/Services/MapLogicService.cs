@@ -178,6 +178,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                 Inaccessibles = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("pois_polygons"))?.Count,
                 PlacesOfMemory = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("places_of_memory"))?.Count,
                 Memorials = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("memorials"))?.Count,
+                StoryMaps = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("narrative_maps"))?.Count,
             };
         }
 
@@ -711,7 +712,40 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
         {
             using var MemoMapContext = factory.GetContext(city);
             result = MemoMapContext.NarrativeMaps.
-                Select(a => new Shared.NarrativeMap { Id = a.Id, LabelCs = a.LabelCs, LabelEn = a.LabelEn }).ToList();
+                Select(a => new Shared.NarrativeMap
+                {
+                    Id = a.Id,
+                    LabelCs = a.LabelCs,
+                    LabelEn = a.LabelEn
+                }).ToList();
+
+            var mainPoints = MemoMapContext.NarrativeMapStopsXPlaces.
+                Include(a=> a.Place).
+                Include(a => a.NarrativeMapStop).ThenInclude(a => a.NarrativeMapsXNarrativeMapStops).
+                Where(a => a.RelationshipTypeNavigation.LabelEn == "main point").
+                AsEnumerable().
+                Select(a => new
+                {
+                    a.NarrativeMapStop.NarrativeMapsXNarrativeMapStops.FirstOrDefault()?.NarrativeMapId,
+                    a.NarrativeMapStopId,
+                    a.Place
+                }).ToArray();
+
+            foreach (var map in result)
+            {
+                map.MainPoints = mainPoints.
+                    Where(a => a.NarrativeMapId == map.Id).
+                    Select(a => new Shared.Place
+                    {
+                        Id = a.Place.Id,
+                        LabelCs = map.LabelCs + "<br/>" + a.Place.LabelCs,
+                        LabelEn = map.LabelEn + "<br/>" + a.Place.LabelEn,
+                        MapPoint = a.Place.Geography.AsJson(),
+                        NarrativeMapId = a.NarrativeMapId,
+                        StopId = a.NarrativeMapStopId,
+                        Type = "main point"
+                    }).ToArray();
+            }
 
         }
         return result;
@@ -744,7 +778,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
             Include(a => a.NarrativeMapStopsXPlaces).ThenInclude(a => a.Place).
             Include(a => a.NarrativeMapStopsXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
             Include(a => a.DocumentsXNarrativeMapStops).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
-            //Where(a => a.NarrativeMapsXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
+            Where(a => a.NarrativeMapsXNarrativeMapStops.Any(b => b.NarrativeMapId == id)).
             AsEnumerable().
             Select(a =>
             {

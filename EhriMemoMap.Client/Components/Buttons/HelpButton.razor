@@ -1,12 +1,12 @@
 ﻿@inject IJSRuntime JS
 @inject IHttpClientFactory clientFactory
 @inject DialogService DialogService
-@inject MapStateService MapState
+@inject MapService MapService
 @inject IStringLocalizer<CommonResources> cl
 
 @if (!MobileVersion)
 {
-    <div class="icon @(MapState.DialogType == DialogTypeEnum.Help ? "icon-selected" : "")" title="@(cl["help"] + "...")" onclick="@(() => ShowHelp())">
+    <div class="icon @(MapService.DialogType == DialogTypeEnum.Help ? "icon-selected" : "")" title="@(cl["help"] + "...")" onclick="@(() => ShowHelp())">
         <svg width="47" height="49" viewBox="0 0 47 49" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="Group 58">
                 <path id="Rectangle 23" d="M0 3.99999C0 1.79086 1.79086 0 4 0H47.1795V48.7521H4C1.79086 48.7521 0 46.9613 0 44.7521V3.99999Z" fill="#46463D" class="background" />
@@ -44,12 +44,12 @@ else
 
     protected override void OnInitialized()
     {
-        MapState.OnChange += OnMyChangeHandler;
+        MapService.OnChange += OnMyChangeHandler;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMyChangeHandler;
+        MapService.OnChange -= OnMyChangeHandler;
     }
 
     private async void OnMyChangeHandler()
@@ -62,7 +62,7 @@ else
 
     private async Task ShowHelp()
     {
-        await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.Help ? DialogTypeEnum.None : DialogTypeEnum.Help);
-        MapState.NotifyStateChanged();
+        await MapService.SetDialog(MapService.DialogType == DialogTypeEnum.Help ? DialogTypeEnum.None : DialogTypeEnum.Help);
+        MapService.NotifyStateChanged();
     }
 }

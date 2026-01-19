@@ -1,10 +1,9 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
-@inject MapLogicService MapLogic
-@inject MapStateService MapState
+@inject MapService MapService
 
 @if (Victim != null)
 {
-    <RadzenColumn Size="Small ? (MapState.IsMobileView ? 4 : 3) : (MapState.IsMobileView ? 6 : 4)">
+    <RadzenColumn Size="Small ? (MapService.IsMobileView ? 4 : 3) : (MapService.IsMobileView ? 6 : 4)">
         @if (!Victim.LongInfo)
         {
             <a href="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? Victim.DetailsCs : Victim.DetailsEn)" target="_blank" style="text-decoration:none;color:black">
@@ -81,6 +80,6 @@
         if (Victim == null || (!Victim?.LongInfo ?? false))
             return;
 
-        await MapLogic.ShowVictim(Victim!.Id);
+        await MapService.ShowVictim(Victim!.Id);
     }
 }

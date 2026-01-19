@@ -1,45 +1,44 @@
 ﻿@inject IJSRuntime JS
 @inject IHttpClientFactory clientFactory
 @inject DialogService DialogService
-@inject MapStateService MapState
-@inject MapLogicService MapLogic
-@inject StoryMapService StoryMapService
+@inject MapService MapService
 
 @inject IStringLocalizer<CommonResources> cl
 
-@if (layers != null && layers.Count(a => a.QuickAccess) > 0)
+@if ((layers != null && layers.Count(a => a.QuickAccess) > 0) || (MapService?.Map?.InitialVariables?.StoryMaps ?? false))
 {
     <div style="position:absolute;top:20px;left:20px;z-index:2000">
         <div style="display:flex;gap:10px">
-            @if (MapState?.Map?.InitialVariables?.StoryMaps ?? false)
+            @if (MapService.MapType == MapTypeEnum.Normal)
             {
-                var isSelected = MapState.DialogType == DialogTypeEnum.StoryMap;
+                @foreach (var item in layers?.Where(a => a.QuickAccess).OrderBy(a => a.Order) ?? Enumerable.Empty<LayerModel>())
+                {
+                    var iconFilter = item.FontColor == FontColor.Dark ? "filter: brightness(30%);max-width:22px;max-height:22px;width: auto;height: auto;" : "max-width:22px;max-height:22px;width: auto;height: auto;";
+                    var fontColor = item.FontColor == FontColor.Light ? "var(--Beige-LIGHT)" : "var(--Grey)";
+                    var opacity = item.Selected ? "opacity:1" : "opacity:0.6";
+
+                    <div onclick="@(() => OnLayerClick(item))" style="cursor:pointer;background-color: @(item.BackgroundColor); color: @(fontColor); border-radius: 6px; order:@(item.Order); padding: 0 5px 0 5px">
+                        <div style="@opacity;height: 38px;" class="center">
+                            <RadzenImage Style="@iconFilter" class="rz-px-1" Path="@(item.Selected ? "images/checkbox-true.svg" : "images/checkbox-false.svg")"></RadzenImage>
+                            <div class="rz-px-1" style="margin-bottom:2px;font-size: 16px; font-family: Barlow; font-weight: 700;">@cl["layer_" + item.Name + "_title_short"]</div>
+                            <RadzenImage class="rz-px-2" Style="@iconFilter" Path="@("images/" + item.Name + ".png")"></RadzenImage>
+                        </div>
+                    </div>
+                }
+            }
+
+            @if (MapService?.Map?.InitialVariables?.StoryMaps ?? false)
+            {
+                var isSelected = MapService.DialogType == DialogTypeEnum.StoryMap;
                 var opacity = isSelected ? "opacity:1" : "opacity:0.6";
 
-                <div onclick="@(() => ShowStoryMap())" style="cursor:pointer;background-color: var(--Wine-Red); color: white; border-radius: 6px; padding: 0 5px 0 5px">
+                <div onclick="@(() => MapService.SwitchStoryMap())" style="cursor:pointer;background-color: var(--Wine-Red); color: white; border-radius: 6px; order: 999; padding: 0 5px 0 5px">
                     <div style="@opacity;height: 38px;" class="center">
                         <RadzenImage Style="max-width:22px;max-height:22px;width: auto;height: auto;" class="rz-px-1" Path="@(isSelected ? "images/checkbox-true.svg" : "images/checkbox-false.svg")"></RadzenImage>
                         <div class="rz-px-1" style="margin-bottom:2px;font-size: 16px; font-family: Barlow; font-weight: 700;">@cl["storyMaps"]</div>
                     </div>
                 </div>
             }
-
-            @foreach (var item in layers.Where(a => a.QuickAccess).OrderBy(a => a.Order))
-            {
-                   
-                var iconFilter = item.FontColor == FontColor.Dark ? "filter: brightness(30%);max-width:22px;max-height:22px;width: auto;height: auto;" : "max-width:22px;max-height:22px;width: auto;height: auto;";
-                var fontColor = item.FontColor == FontColor.Light ? "var(--Beige-LIGHT)" : "var(--Grey)"; 
-                var opacity = item.Selected ? "opacity:1" : "opacity:0.6";
-
-                <div onclick="@(() => OnLayerClick(item))" style="cursor:pointer;background-color: @(item.BackgroundColor); color: @(fontColor); border-radius: 6px; order:@(item.Order); padding: 0 5px 0 5px">
-                    <div style="@opacity;height: 38px;" class="center">
-                        <RadzenImage Style="@iconFilter" class="rz-px-1" Path="@(item.Selected ? "images/checkbox-true.svg" : "images/checkbox-false.svg")"></RadzenImage>
-                        <div class="rz-px-1" style="margin-bottom:2px;font-size: 16px; font-family: Barlow; font-weight: 700;">@cl["layer_" + item.Name + "_title_short"]</div>
-                        <RadzenImage class="rz-px-2" Style="@iconFilter" Path="@("images/" + item.Name + ".png")"></RadzenImage>
-                    </div>
-                </div>
-            }
-
         </div>
     </div>
 
@@ -51,13 +50,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        layers = MapState.GetNotBaseLayers().ToList();
-        MapState.OnChange += OnMyChangeHandler;
+        layers = MapService.GetNotBaseLayers().ToList();
+        MapService.OnChange += OnMyChangeHandler;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMyChangeHandler;
+        MapService.OnChange -= OnMyChangeHandler;
     }
 
 
@@ -65,35 +64,17 @@
     {
         await InvokeAsync(() =>
         {
-            layers = MapState.GetNotBaseLayers().ToList();
+            layers = MapService.GetNotBaseLayers().ToList();
             StateHasChanged();
         });
-    }
-
-    private async Task ShowStoryMap()
-    {
-        if (MapState.DialogType == DialogTypeEnum.StoryMap)
-            await MapState.SetMapType(MapTypeEnum.Normal);
-
-        var newDialogType = MapState.DialogType == DialogTypeEnum.StoryMap ? DialogTypeEnum.None : DialogTypeEnum.StoryMap;
-
-        if (newDialogType == DialogTypeEnum.StoryMap && MapState.AllNarrativeMaps != null && MapState.AllNarrativeMaps.Count == 1)
-        {
-            MapState.DialogParameters.Id = MapState.AllNarrativeMaps.FirstOrDefault()?.Id;
-            await StoryMapService.ShowNarrativeMap(MapState.DialogParameters.Id);
-        }
-        else
-            await MapState.SetDialog(newDialogType);
-
-        MapState.NotifyStateChanged();
     }
 
     private async Task OnLayerClick(LayerModel layer)
     {
         // když kliknu na tlačítko a je otevřené dialogové okno s vrstvami
         // tak notifikuju MapState, aby se změna propsala i v dialogovém okně
-        if (MapState.DialogType == DialogTypeEnum.Layers)
-            MapState.NotifyStateChanged();
+        if (MapService.DialogType == DialogTypeEnum.Layers)
+            MapService.NotifyStateChanged();
 
         layer.Selected = !layer.Selected;
         if (layer.Type == LayerType.WMS)
@@ -103,9 +84,9 @@
             await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", LayerType.Polygons.ToString(), layer.Selected);
 
         else if (layer.Type == LayerType.Objects)
-            await MapLogic.RefreshObjectsOnMap(false);
+            await MapService.RefreshObjectsOnMap(false);
 
-        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapState.GetLayersForUrlParameter());
+        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "layers", MapService.GetLayersForUrlParameter());
         StateHasChanged();
     }
 }

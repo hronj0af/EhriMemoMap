@@ -1,7 +1,6 @@
 ﻿@inject IHttpClientFactory clientFactory
 @inject DialogService DialogService
-@inject MapLogicService MapLogic
-@inject MapStateService MapState
+@inject MapService MapService
 @inject IStringLocalizer<CommonResources> cl
 @inject IJSRuntime JS
 @inject TooltipService tooltipService
@@ -97,8 +96,8 @@
     {
         timelineWidth = MobileVersion ? Width : Width - firstColumnWidth;
         timelineStyle = $"background-color: var(--Grey);position: relative;width:{timelineWidth}px;height:{height}px;";
-        timeline = MapState.GetTimeline();
-        MapState.OnChange += OnMyChangeHandler;
+        timeline = MapService.GetTimeline();
+        MapService.OnChange += OnMyChangeHandler;
     }
 
     private async Task OnCollectionClick(TimelinePointModel point)
@@ -106,23 +105,23 @@
         if (point.Selected)
             return;
 
-        MapState.ToggleTimeLinePoint(point);
+        MapService.ToggleTimeLinePoint(point);
 
-        await MapLogic.RefreshObjectsOnMap(false);
-        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "timeline", MapState.GetTimelineForUrlParameter());
+        await MapService.RefreshObjectsOnMap(false);
+        await JS.InvokeVoidAsync("mapAPI.setUrlParam", "timeline", MapService.GetTimelineForUrlParameter());
     }
 
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMyChangeHandler;
+        MapService.OnChange -= OnMyChangeHandler;
     }
 
     private async void OnMyChangeHandler()
     {
         await InvokeAsync(() =>
         {
-            timeline = MapState.GetTimeline();
+            timeline = MapService.GetTimeline();
             StateHasChanged();
         });
     }

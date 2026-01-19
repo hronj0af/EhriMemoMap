@@ -1,14 +1,13 @@
 ﻿using EhriMemoMap.Client.Components.Dialogs;
-using EhriMemoMap.Client.Components.Dialogs.Victim;
-using EhriMemoMap.Client.Helpers;
 using EhriMemoMap.Models;
+using EhriMemoMap.Resources;
 using EhriMemoMap.Shared;
+using Microsoft.Extensions.Localization;
 using Microsoft.JSInterop;
 using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Radzen;
-using System.Net.NetworkInformation;
 
 namespace EhriMemoMap.Client.Services
 {
@@ -16,20 +15,23 @@ namespace EhriMemoMap.Client.Services
     /// <summary>
     /// Pomocné metody k nastavení mapy
     /// </summary>
-    public class MapStateService
+    public partial class MapService
     {
         private readonly IJSRuntime _js;
         private readonly HttpClient _client;
         private string _appUrl;
         public AppStateEnum AppState;
         private DialogService _dialogService;
+        private readonly IStringLocalizer<CommonResources> _cl;
+        private readonly string _apiUrl;
 
 
-        public MapStateService(IJSRuntime js, HttpClient client, IConfiguration configuration, DialogService dialogService)
+        public MapService(IJSRuntime js, HttpClient client, IConfiguration configuration, DialogService dialogService, IStringLocalizer<CommonResources> cl, IHttpClientFactory clientFactory)
         {
             _js = js;
             _client = client;
             _appUrl = configuration?.GetSection("App")["AppURL"] ?? "";
+            _apiUrl = configuration?.GetSection("App")["ApiURL"] ?? "";
             AppState = configuration?.GetSection("App")["AppState"] == "Development"
                 ? AppStateEnum.Development
                     : configuration?.GetSection("App")["AppState"] == "Shutdown"
@@ -37,6 +39,9 @@ namespace EhriMemoMap.Client.Services
                         : AppStateEnum.Production;
             WidthOfDialogPercent = Math.Round(100 * WidthOfDialogRatio) + "%";
             _dialogService = dialogService;
+
+            _cl = cl;
+
         }
 
         public decimal WidthOfDialogRatio = 1 / (decimal)3;
@@ -114,13 +119,15 @@ namespace EhriMemoMap.Client.Services
                 ArePlacesEqual(lastHistoryItem?.Parameters.Places, parameters?.Places))
                 return;
 
-            DialogParametersHistory.Add(new DialogParametersHistoryItem
+            var newDialogHistoryItem = new DialogParametersHistoryItem
             {
                 DialogType = dialogType,
                 MapType = MapType,
                 VictimInfo = VictimLongInfo,
                 Parameters = parameters ?? new DialogParameters()
-            });
+            };
+
+            DialogParametersHistory.Add(newDialogHistoryItem);
         }
 
         private bool ArePlacesEqual(List<MapObjectForLeafletModel>? places1, List<MapObjectForLeafletModel>? places2)
@@ -145,12 +152,14 @@ namespace EhriMemoMap.Client.Services
             DialogParametersHistory.RemoveAt(DialogParametersHistory.Count - 1);
             var lastItem = DialogParametersHistory.Last();
             VictimLongInfo = lastItem.VictimInfo;
-            await SetDialog(lastItem.DialogType, lastItem.Parameters);
             await SetMapType(lastItem.MapType);
+            await SetDialog(lastItem.DialogType, lastItem.Parameters);
         }
 
         public async Task SetDialog(DialogTypeEnum newDialogType, DialogParameters? parameters = null)
         {
+            if (DialogType == DialogTypeEnum.None && newDialogType == DialogTypeEnum.None)
+                return;
             if (newDialogType == DialogTypeEnum.None)
             {
                 await _dialogService.CloseSideAsync();
@@ -182,13 +191,21 @@ namespace EhriMemoMap.Client.Services
             if (newValue == MapTypeEnum.Normal)
             {
                 await _js.InvokeVoidAsync("mapAPI.resetMapViewToInitialState");
-                await _js.InvokeVoidAsync("mapAPI.showAllLayers");
+                await _js.InvokeVoidAsync("mapAPI.showLayersForNormalMap");
 
                 NarrativeMap = null;
             }
-            else if (newValue == MapTypeEnum.StoryMapOneStop)
+            else 
             {
-                //await _js.InvokeVoidAsync("mapAPI.hideAllLayers");
+                await _js.InvokeVoidAsync("mapAPI.hideLayersForNormalMap");
+                if (newValue == MapTypeEnum.AllStoryMaps)
+                {
+                    await ShowAllNarrativeMapsPlaces();
+                }
+                else
+                {
+                    await ShowNarrativeMapPlaces();
+                }
             }
 
             if (isMobileView)
@@ -265,7 +282,7 @@ namespace EhriMemoMap.Client.Services
         public async Task Init(string? city, string? layers = null, string? timelinePoint = null)
         {
             var json = await _client.GetStringAsync(_appUrl + $"mapsettings.{city}.json");
-            var settings = JsonConvert.DeserializeObject<MapStateService>(json);
+            var settings = JsonConvert.DeserializeObject<MapService>(json);
             if (settings == null)
                 return;
             Map = settings.Map;
@@ -280,6 +297,20 @@ namespace EhriMemoMap.Client.Services
 
             MapStateWasInit = true;
             NotifyStateChanged();
+        }
+
+        public async Task Destroy()
+        {
+            MapStateWasInit = false;
+            Map = null!;
+            NarrativeMap = null;
+            VictimLongInfo = null;
+            DialogParametersHistory.Clear();
+            DialogParameters = new DialogParameters();
+            DialogType = DialogTypeEnum.None;
+            MapType = MapTypeEnum.Normal;
+            AllNarrativeMaps = null!;
+            await _js.InvokeVoidAsync("mapAPI.destroyMap");
         }
 
         /// <summary>
@@ -429,4 +460,5 @@ namespace EhriMemoMap.Client.Services
         }
 
     }
+    
 }

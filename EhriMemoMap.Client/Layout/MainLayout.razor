@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
 @inject IStringLocalizer<CommonResources> cl
-@inject MapStateService MapState
+@inject MapService MapService
 
 <PageTitle>MemoMap @cityName</PageTitle>
 
@@ -18,13 +18,13 @@
 
     protected override void OnInitialized()
     {
-        MapState.OnChange += StateHasChanged;
-        cityName = !string.IsNullOrEmpty(MapState?.Map?.InitialVariables?.City) ? cl["city_" + MapState?.Map?.InitialVariables?.City] : "";
+        MapService.OnChange += StateHasChanged;
+        cityName = !string.IsNullOrEmpty(MapService?.Map?.InitialVariables?.City) ? cl["city_" + MapService?.Map?.InitialVariables?.City] : "";
 
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= StateHasChanged;
+        MapService.OnChange -= StateHasChanged;
     }
 }

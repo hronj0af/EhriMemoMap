@@ -1,6 +1,5 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
-@inject MapStateService MapState
-@inject StoryMapService StoryMapService
+@inject MapService MapService
 @inject IJSRuntime JSRuntime
 
 
@@ -56,7 +55,7 @@
 
     protected override void OnInitialized()
     {
-        Places = MapState.VictimLongInfo?.Places?.Where(a => a.Type == Type).ToArray();
+        Places = MapService.VictimLongInfo?.Places?.Where(a => a.Type == Type).ToArray();
         if (Places == null || Places.Count() == 0)
             return;
 

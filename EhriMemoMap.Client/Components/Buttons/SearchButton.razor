@@ -1,12 +1,12 @@
 ﻿@inject IJSRuntime JS
 @inject IHttpClientFactory clientFactory
 @inject DialogService DialogService
-@inject MapStateService MapState
+@inject MapService MapService
 @inject IStringLocalizer<CommonResources> cl
 
 @if (!MobileVersion)
 {
-    <div class="icon @(MapState.DialogType == DialogTypeEnum.Search ? "icon-selected" : "") @(Disabled ? "icon-disabled" : "")" 
+    <div class="icon @(MapService.DialogType == DialogTypeEnum.Search ? "icon-selected" : "") @(Disabled ? "icon-disabled" : "")" 
          title="@(Disabled ? "" : cl["search"] + "...")" 
          onclick="@(Disabled ? null : () => ShowSearch())">
         <svg width="47" height="50" viewBox="0 0 47 50" fill="none" xmlns="http://www.w3.org/2000/svg" style="@(Disabled ? "opacity: 0.4;" : "")">
@@ -30,7 +30,7 @@
 else
 {
     <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" 
-                 class="@((MapState.DialogType == DialogTypeEnum.Search ? "mobile-menu-icon-selected" : "mobile-menu-icon") + " " + (Border ? "border" : "") + " " + (Disabled ? "mobile-menu-icon-disabled" : ""))" 
+                 class="@((MapService.DialogType == DialogTypeEnum.Search ? "mobile-menu-icon-selected" : "mobile-menu-icon") + " " + (Border ? "border" : "") + " " + (Disabled ? "mobile-menu-icon-disabled" : ""))" 
                  title="@(Disabled ? "" : cl["layers"] + "...")" 
                  onclick="@(Disabled ? null : () => ShowSearch())">
         <svg width="26" height="28" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg" style="@(Disabled ? "opacity: 0.4;" : "")">
@@ -53,12 +53,12 @@ else
 
     protected override void OnInitialized()
     {
-        MapState.OnChange += StateHasChanged;
+        MapService.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= StateHasChanged;
+        MapService.OnChange -= StateHasChanged;
     }
 
 
@@ -66,8 +66,8 @@ else
     {
         if (Disabled) return;
         
-        await MapState.SetDialog(MapState.DialogType == DialogTypeEnum.Search ? DialogTypeEnum.None : DialogTypeEnum.Search);
-        MapState.NotifyStateChanged();
+        await MapService.SetDialog(MapService.DialogType == DialogTypeEnum.Search ? DialogTypeEnum.None : DialogTypeEnum.Search);
+        MapService.NotifyStateChanged();
     }
 
 

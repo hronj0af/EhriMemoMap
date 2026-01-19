@@ -1,9 +1,9 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
-@inject MapStateService MapState
+@inject MapService MapService
 
 <DialogButtons />
 
-@switch (MapState.DialogType)
+@switch (MapService.DialogType)
 {
     case DialogTypeEnum.Help:
         <Help />
@@ -38,11 +38,11 @@
 
     protected override void OnInitialized()
     {
-        MapState.OnChange += StateHasChanged;
+        MapService.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= StateHasChanged;
+        MapService.OnChange -= StateHasChanged;
     }
 }

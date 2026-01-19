@@ -1,8 +1,7 @@
 ﻿@using System.Xml;
 @using System.Xml.Linq;
 @inject IStringLocalizer<CommonResources> cl
-@inject MapStateService MapState
-@inject MapLogicService MapLogic
+@inject MapService MapService
 
 @if (PlacesToShow != null)
 {
@@ -96,7 +95,7 @@
 
     protected override void OnInitialized()
     {
-        MapState.OnChange += StateHasChanged;
+        MapService.OnChange += StateHasChanged;
     }
 
 }

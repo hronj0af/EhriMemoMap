@@ -81,6 +81,13 @@ var mapAPI;
         }
     }
     mapAPI.initMap = initMap;
+    function destroyMap() {
+        if (map != null) {
+            map.remove();
+            map = null;
+        }
+    }
+    mapAPI.destroyMap = destroyMap;
     function resetMapViewToInitialState() {
         if (initialVariables == null)
             map.setView([50.07905886, 14.43715096], 14);
@@ -176,13 +183,13 @@ var mapAPI;
     }
     mapAPI.setMapWithInfoFromUrl = setMapWithInfoFromUrl;
     function convertMapSettingsObjectToMapLayer(mapSettingsObject) {
-        if (mapSettingsObject.type == 'Base') {
+        if (mapSettingsObject.type == LayersTypeEnum.Base) {
             return new L.TileLayer(mapSettingsObject.url, {
                 maxZoom: 18,
                 attribution: mapSettingsObject.attribution,
             });
         }
-        else if (mapSettingsObject.type == 'WMS') {
+        else if (mapSettingsObject.type == LayersTypeEnum.WMS) {
             return new L.TileLayer.WMS(mapSettingsObject.url, {
                 tileSize: 512,
                 layers: mapSettingsObject.layersParameter,
@@ -594,9 +601,9 @@ var mapAPI;
         });
     }
     mapAPI.selectPointOnMap = selectPointOnMap;
-    function hideAllLayers() {
+    function hideLayersForNormalMap() {
         groups.forEach(group => {
-            if (group.options.type == "Base" || group.options.type == "WMS")
+            if (group.options.type == LayersTypeEnum.Base || group.options.type == LayersTypeEnum.WMS)
                 return;
             map.eachLayer(function (layer) {
                 if (layer.options.id == group.options.id)
@@ -604,17 +611,17 @@ var mapAPI;
             });
         });
     }
-    mapAPI.hideAllLayers = hideAllLayers;
-    function showAllLayers() {
-        hideAllLayers();
+    mapAPI.hideLayersForNormalMap = hideLayersForNormalMap;
+    function showLayersForNormalMap() {
+        hideLayersForNormalMap();
         groups.forEach(group => {
-            if (group.options.type == "Base" || group.options.type == "Narration")
+            if (group.options.type == LayersTypeEnum.Base || group.options.type == LayersTypeEnum.Narration)
                 return;
             if (group.options.selected)
                 group.addTo(map);
         });
     }
-    mapAPI.showAllLayers = showAllLayers;
+    mapAPI.showLayersForNormalMap = showLayersForNormalMap;
     function toggleLayerGroup(name, selected) {
         const groupName = name + "_group";
         const groupToAdd = groups.find(a => a.options.id == groupName);
@@ -827,4 +834,17 @@ var NarrativeMapStopPlaceType;
     NarrativeMapStopPlaceType["Context"] = "context point";
     NarrativeMapStopPlaceType["Trajectory"] = "trajectory point";
 })(NarrativeMapStopPlaceType || (NarrativeMapStopPlaceType = {}));
+var MapTypeEnum;
+(function (MapTypeEnum) {
+    MapTypeEnum[MapTypeEnum["Normal"] = 0] = "Normal";
+    MapTypeEnum[MapTypeEnum["AllStoryMaps"] = 1] = "AllStoryMaps";
+    MapTypeEnum[MapTypeEnum["StoryMapWhole"] = 2] = "StoryMapWhole";
+    MapTypeEnum[MapTypeEnum["StoryMapOneStop"] = 3] = "StoryMapOneStop";
+})(MapTypeEnum || (MapTypeEnum = {}));
+var LayersTypeEnum;
+(function (LayersTypeEnum) {
+    LayersTypeEnum["Base"] = "Base";
+    LayersTypeEnum["WMS"] = "WMS";
+    LayersTypeEnum["Narration"] = "Narration";
+})(LayersTypeEnum || (LayersTypeEnum = {}));
 //# sourceMappingURL=site.js.map

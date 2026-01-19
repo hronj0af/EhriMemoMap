@@ -1,20 +1,20 @@
 ﻿@inject DialogService DialogService
 @inject IJSRuntime JS
-@inject MapStateService MapState
+@inject MapService MapService
 
 @{
-    var buttonStyle = "z-index:2000;position:fixed;background-color:var(--Beige-LIGHT);width:" + (MapState.IsMobileView ? "100%" : MapState.WidthOfDialogPercent);
+    var buttonStyle = "z-index:2000;position:fixed;background-color:var(--Beige-LIGHT);width:" + (MapService.IsMobileView ? "100%" : MapService.WidthOfDialogPercent);
 }
 
 <RadzenRow JustifyContent="JustifyContent.SpaceBetween" Style="@buttonStyle">
     <RadzenStack Orientation="Orientation.Horizontal">
-        @if (MapState.DialogParametersHistory.Count > 1)
+        @if (MapService.DialogParametersHistory.Count > 1)
         {
             <RadzenButton Click=OnBack Icon="arrow_back" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" />
         }
     </RadzenStack>
     <RadzenStack Orientation="Orientation.Horizontal">
-        @if (MapState.IsMobileView && MapState.DialogType != DialogTypeEnum.Help)
+        @if (MapService.IsMobileView && MapService.DialogType != DialogTypeEnum.Help)
         {
             <RadzenButton Click=OnFullscreen Icon="fullscreen" ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" />
         }
@@ -26,33 +26,33 @@
 
     private async Task OnClose()
     {
-        if (MapState.DialogType == DialogTypeEnum.StoryMap)
-            await MapState.SetMapType(MapTypeEnum.Normal);
-        MapState.IsDialogFullScreen = false;
-        await MapState.SetDialog(DialogTypeEnum.None);
-        MapState.NotifyStateChanged();
+        if (MapService.DialogType == DialogTypeEnum.StoryMap)
+            await MapService.SetMapType(MapTypeEnum.Normal);
+        MapService.IsDialogFullScreen = false;
+        await MapService.SetDialog(DialogTypeEnum.None);
+        MapService.NotifyStateChanged();
     }
 
     private async Task OnFullscreen()
     {
-        MapState.IsDialogFullScreen = !MapState.IsDialogFullScreen;
-        await JS.InvokeVoidAsync("mapAPI.setDialogFullScreen", MapState.IsDialogFullScreen);
-        MapState.NotifyStateChanged();
+        MapService.IsDialogFullScreen = !MapService.IsDialogFullScreen;
+        await JS.InvokeVoidAsync("mapAPI.setDialogFullScreen", MapService.IsDialogFullScreen);
+        MapService.NotifyStateChanged();
     }
 
     private async Task OnBack()
     {
-        await MapState.SetLastDialog();
-        MapState.NotifyStateChanged();
+        await MapService.SetLastDialog();
+        MapService.NotifyStateChanged();
     }
 
     protected override void OnInitialized()
     {
-        MapState.OnChange += StateHasChanged;
+        MapService.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= StateHasChanged;
+        MapService.OnChange -= StateHasChanged;
     }
 }

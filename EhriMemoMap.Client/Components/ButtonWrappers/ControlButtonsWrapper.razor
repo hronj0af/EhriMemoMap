@@ -1,28 +1,21 @@
-﻿@inject MapStateService MapState
+﻿@inject MapService MapService
 
-@if (!string.IsNullOrEmpty(style) && MapState.Map?.InitialVariables != null)
+@if (!string.IsNullOrEmpty(style) && MapService.Map?.InitialVariables != null)
 {
     <div id="controlButtonsWrapper" style="@style">
-        @if (MapState.IsMobileView == false)
+        @if (MapService.IsMobileView == false)
         {
             <RadzenRow Gap="0" RowGap="5px" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
                 <RadzenColumn Size="12">
-                    @if (MapState?.Map?.InitialVariables?.AllCities != null && MapState.Map.InitialVariables.AllCities.Count() > 0)
-                    {
-                        <AllCitiesButton />
-                    }
-                    else
-                    {
-                        <HomeButton />
-                    }
+                    <HomeButton />
                 </RadzenColumn>
                 <RadzenColumn Size="12">
-                    <SearchButton Disabled="MapState.MapType != MapTypeEnum.Normal" />
+                    <SearchButton Disabled="MapService.MapType != MapTypeEnum.Normal" />
                 </RadzenColumn>
                 <RadzenColumn Size="12">
-                    <LayersButton Disabled="MapState.MapType != MapTypeEnum.Normal" />
+                    <LayersButton Disabled="MapService.MapType != MapTypeEnum.Normal" />
                 </RadzenColumn>
-                @if (MapState?.Map?.InitialVariables?.StoryMaps ?? false)
+                @if (MapService?.Map?.InitialVariables?.StoryMaps ?? false)
                 {
                     <RadzenColumn Size="12">
                         <StoryMapButton />
@@ -41,7 +34,7 @@
         {
             <RadzenRow Gap="0" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
                 <RadzenColumn Size="size">
-                    <SearchButton MobileVersion="true" Border="true" Disabled="MapState.MapType != MapTypeEnum.Normal" />
+                    <SearchButton MobileVersion="true" Border="true" Disabled="MapService.MapType != MapTypeEnum.Normal" />
                 </RadzenColumn>
                 @if (ShowTimelineButton())
                 {
@@ -56,7 +49,7 @@
                     </RadzenColumn>
                 }
                 <RadzenColumn Size="size">
-                    <LayersButton MobileVersion="true" Disabled="MapState.MapType != MapTypeEnum.Normal" />
+                    <LayersButton MobileVersion="true" Disabled="MapService.MapType != MapTypeEnum.Normal" />
                 </RadzenColumn>
             </RadzenRow>
 
@@ -73,7 +66,7 @@
 
     protected override void OnInitialized()
     {
-        MapState.OnChange += OnMyChangeHandler;
+        MapService.OnChange += OnMyChangeHandler;
     }
 
     protected override void OnAfterRender(bool firstRender)
@@ -82,13 +75,13 @@
         size = GetSize();
         if (!firstRender)
         {
-            justifyContent = MapState.IsMobileView ? JustifyContent.Center : JustifyContent.End;
+            justifyContent = MapService.IsMobileView ? JustifyContent.Center : JustifyContent.End;
         }
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= OnMyChangeHandler;
+        MapService.OnChange -= OnMyChangeHandler;
     }
 
     private async void OnMyChangeHandler()
@@ -103,12 +96,12 @@
 
     public bool ShowStoryMapButton()
     {
-        return MapState?.Map?.InitialVariables?.StoryMaps ?? false;
+        return MapService?.Map?.InitialVariables?.StoryMaps ?? false;
     }
 
     public bool ShowTimelineButton()
     {
-        return MapState.GetTimeline() != null && MapState.MapType == MapTypeEnum.Normal;
+        return MapService.GetTimeline() != null && MapService.MapType == MapTypeEnum.Normal;
     }
 
     public int GetSize()
@@ -126,13 +119,13 @@
 
     public string GetStyle()
     {
-        if (MapState.IsMobileView)
-            if (!MapState.IsDialogFullScreen)
-                return $"position:absolute;{(MapState.DialogType != DialogTypeEnum.None && MapState.DialogType != DialogTypeEnum.Help ? $"bottom:{MapState.HeightOfDialog}%" : "bottom:0px")};z-index:10005;background-color:var(--Grey);width:100%;";
+        if (MapService.IsMobileView)
+            if (!MapService.IsDialogFullScreen)
+                return $"position:absolute;{(MapService.DialogType != DialogTypeEnum.None && MapService.DialogType != DialogTypeEnum.Help ? $"bottom:{MapService.HeightOfDialog}%" : "bottom:0px")};z-index:10005;background-color:var(--Grey);width:100%;";
             else
-                return $"display:none;";// position:absolute;{(MapState.DialogType != DialogTypeEnum.None && MapState.DialogType != DialogTypeEnum.Help ? $"bottom:{MapState.WindowHeight - 88}px" : "bottom:0px")};z-index:10005;background-color:var(--Grey);width:100%;";
+                return $"display:none;";// position:absolute;{(MapService.DialogType != DialogTypeEnum.None && MapService.DialogType != DialogTypeEnum.Help ? $"bottom:{MapService.WindowHeight - 88}px" : "bottom:0px")};z-index:10005;background-color:var(--Grey);width:100%;";
 
-        return $"position:absolute;top:30px;right:{(MapState.DialogType == DialogTypeEnum.None ? "0px" : MapState.WidthOfDialogPercent)};z-index:1005;width:47px";
+        return $"position:absolute;top:30px;right:{(MapService.DialogType == DialogTypeEnum.None ? "0px" : MapService.WidthOfDialogPercent)};z-index:1005;width:47px";
     }
 
 }

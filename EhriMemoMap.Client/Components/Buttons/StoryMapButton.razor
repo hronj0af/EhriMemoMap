@@ -1,12 +1,11 @@
-﻿@inject MapStateService MapState
+﻿@inject MapService MapService
 @inject IStringLocalizer<CommonResources> cl
 @inject NavigationManager NavManager
 @inject DialogService DialogService
-@inject StoryMapService StoryMapService
 
 @if (!MobileVersion)
 {
-    <div class="icon @(MapState.DialogType == DialogTypeEnum.StoryMap ? "icon-selected" : "")" title="@(cl["storyMaps"] + "...")" onclick="@(() => ShowStoryMap())">
+    <div class="icon @(MapService.DialogType == DialogTypeEnum.StoryMap ? "icon-selected" : "")" title="@(cl["storyMaps"] + "...")" onclick="@(() => MapService.SwitchStoryMap())">
         <svg class="icon" width="47" height="49" viewBox="0 0 47 49" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path class="background" d="M0 3.99999C0 1.79086 1.79086 0 4 0H47.1795V48.7521H4C1.79086 48.7521 0 46.9613 0 44.7521V3.99999Z" fill="#46463D" />
             <g transform="translate(11.3, 8)">
@@ -22,7 +21,7 @@
 }
 else
 {
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" class="@((MapState.DialogType == DialogTypeEnum.StoryMap ? "mobile-menu-icon-selected" : "mobile-menu-icon") + " " + (Border ? "mobile-menu-icon-border" : ""))" title="@(cl["storyMaps"] + "...")" onclick="@(() => ShowStoryMap())">
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" class="@((MapService.DialogType == DialogTypeEnum.StoryMap ? "mobile-menu-icon-selected" : "mobile-menu-icon") + " " + (Border ? "mobile-menu-icon-border" : ""))" title="@(cl["storyMaps"] + "...")" onclick="@(() => MapService.SwitchStoryMap())">
         <svg width="30" height="28" viewBox="0 0 50 50" preserveAspectRatio="none" class="icon" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g transform="translate(5.7, 3.6) scale(1.4)">
                 <path class="foreground" d="M12.2887 28.651C15.412 25.7837 17.729 23.1787 19.2394 20.8362C20.7499 18.4937 21.5052 16.4136 21.5052 14.5959C21.5052 11.8053 20.6155 9.52041 18.8362 7.74111C17.0569 5.96181 14.8744 5.07217 12.2887 5.07217C9.70292 5.07217 7.52041 5.96181 5.74111 7.74111C3.96181 9.52041 3.07217 11.8053 3.07217 14.5959C3.07217 16.4136 3.82741 18.4937 5.33789 20.8362C6.84837 23.1787 9.16529 25.7837 12.2887 28.651ZM12.2887 32.7217C8.16684 29.2143 5.08827 25.9565 3.05296 22.9483C1.01765 19.9402 0 17.156 0 14.5959C0 10.7557 1.23527 7.69631 3.7058 5.41778C6.17633 3.13926 9.03729 2 12.2887 2C15.54 2 18.401 3.13926 20.8715 5.41778C23.3421 7.69631 24.5773 10.7557 24.5773 14.5959C24.5773 17.156 23.5597 19.9402 21.5244 22.9483C19.4891 25.9565 16.4105 29.2143 12.2887 32.7217Z" fill="white" />
@@ -47,31 +46,11 @@ else
 
     protected override void OnInitialized()
     {
-        MapState.OnChange += StateHasChanged;
+        MapService.OnChange += StateHasChanged;
     }
 
     public void Dispose()
     {
-        MapState.OnChange -= StateHasChanged;
-    }
-
-
-    private async Task ShowStoryMap()
-    {
-        if (MapState.DialogType == DialogTypeEnum.StoryMap)
-            await MapState.SetMapType(MapTypeEnum.Normal);
-
-        var newDialogType = MapState.DialogType == DialogTypeEnum.StoryMap ? DialogTypeEnum.None : DialogTypeEnum.StoryMap;
-        
-
-        if (newDialogType == DialogTypeEnum.StoryMap && MapState.AllNarrativeMaps != null && MapState.AllNarrativeMaps.Count == 1)
-        {
-            MapState.DialogParameters.Id = MapState.AllNarrativeMaps.FirstOrDefault()?.Id;
-            await StoryMapService.ShowNarrativeMap(MapState.DialogParameters.Id);
-        }
-        else
-            await MapState.SetDialog(newDialogType);
-
-        MapState.NotifyStateChanged();
+        MapService.OnChange -= StateHasChanged;
     }
 }
