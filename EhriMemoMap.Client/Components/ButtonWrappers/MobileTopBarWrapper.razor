@@ -5,18 +5,9 @@
 {
     <div style="background-color:var(--Wine-Red);color:var(--Beige);position:absolute;top:0px;left:0px;width:100%;z-index:1001;">
         <RadzenRow AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween" Style="padding:10px">
-            @if (MapService?.Map?.InitialVariables?.AllCities != null && MapService.Map.InitialVariables.AllCities.Count() > 0)
-            {
-                <RadzenColumn Size="6">
-                    <h2 style="cursor:pointer" onclick="@(() => ShowAllCities())">MemoMap</h2>
-                </RadzenColumn>
-            }
-            else
-            {
-                <RadzenColumn Size="6">
-                    <h2 style="cursor:pointer" onclick="@(() => ShowHome())">MemoMap</h2>
-                </RadzenColumn>
-            }
+            <RadzenColumn Size="6">
+                <h2 style="cursor:pointer" onclick="@(() => ShowHome())">MemoMap</h2>
+            </RadzenColumn>
             <RadzenColumn Size="6">
                 <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.End">
                     <JoinButton MobileVersion="true" />
@@ -30,9 +21,10 @@
 
 @code {
 
-    private void ShowHome()
+    private async Task ShowHome()
     {
-        NavManager.NavigateTo("/", true);
+        await MapService.SetDialog(DialogTypeEnum.None);
+        NavManager.NavigateTo("/");
     }
 
     protected override void OnInitialized()
@@ -44,11 +36,4 @@
     {
         MapService.OnChange -= StateHasChanged;
     }
-
-    private async Task ShowAllCities()
-    {
-        await MapService.SetDialog(MapService.DialogType == DialogTypeEnum.AllCities ? DialogTypeEnum.None : DialogTypeEnum.AllCities);
-        MapService.NotifyStateChanged();
-    }
-
 }

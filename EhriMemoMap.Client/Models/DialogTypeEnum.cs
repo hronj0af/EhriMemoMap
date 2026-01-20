@@ -2,6 +2,6 @@
 {
     public enum DialogTypeEnum
     {
-        Help, Layers, Place, Search, Timeline, None, Welcome, Victim, AllCities, StoryMap
+        Help, Layers, Place, Search, Timeline, None, Welcome, Victim, StoryMap
     }
 }

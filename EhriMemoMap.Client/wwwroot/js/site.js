@@ -337,6 +337,8 @@ var mapAPI;
         for (let i = 0; i < parsedObjects.length; i++) {
             const parsedLocation = JSON.parse(parsedObjects[i].mapPoint);
             var newObject = null;
+            if (parsedLocation == null)
+                continue;
             if (parsedLocation.type == "Point") {
                 parsedObjects[i].mapPointModel = parsedLocation;
                 newObject = getPoint(parsedObjects[i], 'z-index-999', parsedObjects[i].placeType == NarrativeMapStopPlaceType.Main ? openStoryMapTimelineLabel : null);

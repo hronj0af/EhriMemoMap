@@ -465,6 +465,9 @@ namespace mapAPI {
             const parsedLocation = JSON.parse(parsedObjects[i].mapPoint);
             var newObject = null;
 
+            if (parsedLocation == null)
+                continue;
+
             if (parsedLocation.type == "Point") {
                 parsedObjects[i].mapPointModel = parsedLocation;
                 newObject = getPoint(
