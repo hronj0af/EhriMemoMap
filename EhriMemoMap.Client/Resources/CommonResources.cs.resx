@@ -456,7 +456,7 @@
     <value>Bydliště</value>
   </data>
   <data name="welcomeText_prague_short" xml:space="preserve">
-    <value>Adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a také místa, kam Židé v Praze během války nesměli.</value>
+    <value>Adresy více než 40 000 obětí holokaustu, 1 700 policejních incidentů a místa Židům zakázaná. Historická mapa Prahy z roku 1938.</value>
   </data>
   <data name="welcomeText_prague_long" xml:space="preserve">
     <value>&lt;p&gt;Před druhou světovou v&amp;aacute;lkou žilo v Praze t&amp;eacute;měř čtyřicet tis&amp;iacute;c Židů, přežilo přibližně sedm a půl tis&amp;iacute;ce z nich. V MemoMap Praha mohou uživatel&amp;eacute; zkoumat osudy židovsk&amp;yacute;ch obět&amp;iacute; prostřednictv&amp;iacute;m n&amp;aacute;sleduj&amp;iacute;c&amp;iacute;ch datov&amp;yacute;ch vrstev: &lt;strong&gt;Bydli&amp;scaron;tě&lt;/strong&gt; - obsahuje v&amp;iacute;ce než osm tis&amp;iacute;c adres, na nichž v době okupace žili židov&amp;scaron;t&amp;iacute; obyvatel&amp;eacute;. Informace o bydli&amp;scaron;ti zpravidla poch&amp;aacute;z&amp;iacute; z registrace Židů v protektor&amp;aacute;tu, kter&amp;aacute; byla zah&amp;aacute;jena na podzim 1941. V mnoha př&amp;iacute;padech proto zachycuje situaci po nucen&amp;eacute;m přestěhov&amp;aacute;n&amp;iacute; do jin&amp;eacute; čtvrti nebo sestěhov&amp;aacute;n&amp;iacute; do společn&amp;yacute;ch bytů. Po kliknut&amp;iacute; na konkr&amp;eacute;tn&amp;iacute; adresu se zobraz&amp;iacute; nejen souhrnn&amp;yacute; počet židovsk&amp;yacute;ch obyvatel a statistika jejich osudů v době okupace, ale tak&amp;eacute; jm&amp;eacute;na a fotografie obět&amp;iacute;, včetně odkazu na detailn&amp;iacute; informace na port&amp;aacute;lu &lt;a href="http://holocaust.cz"&gt;holocaust.cz&lt;/a&gt; spravovan&amp;eacute; Institutem Terez&amp;iacute;nsk&amp;eacute; iniciativy.&amp;nbsp;&lt;/p&gt;
@@ -468,14 +468,8 @@
 &lt;p&gt;Př&amp;iacute;prava dat a v&amp;yacute;voj aplikace byly &amp;ndash; kromě podpory &lt;strong&gt;Ministerstva &amp;scaron;kolstv&amp;iacute;, ml&amp;aacute;deže a tělov&amp;yacute;chovy ČR&lt;/strong&gt; &amp;ndash; umožněny tak&amp;eacute; d&amp;iacute;ky podpoře programu &lt;strong&gt;Strategie 21 Akademie&lt;/strong&gt; &lt;strong&gt;věd &lt;/strong&gt;&lt;em&gt;Město jako laboratoř změny&lt;/em&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;a href="/prague"&gt;Přej&amp;iacute;t na MemoMap Praha&lt;/a&gt;.&lt;/p&gt;</value>
   </data>
-  <data name="welcomeText_prague_last_residence_short" xml:space="preserve">
+  <data name="welcomeText_prague_last_residence" xml:space="preserve">
     <value>Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli.</value>
-  </data>
-  <data name="welcomeText_prague_last_residence_long" xml:space="preserve">
-    <value>&lt;p&gt;&lt;strong&gt;Interaktivní mapa Prahy z doby protektorátu&lt;/strong&gt; zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli. Díky časové ose je vidět, jak lidé postupně mizeli ze svých domovů. Aplikace je přizpůsobena pro mobilní zařízení, můžete se s ní proto vydat přímo do města.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Co MemoMap obsahuje?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Aplikace zobrazuje informace o více než 40 000 obětech holokaustu, o 1 700 případech porušování protižidovských předpisů a nařízení, o 120 zajímavých místech souvisejících s jejich každodenním životem a pronásledováním a také o 110 místech, která byla židovským obyvatelům Prahy v době války nepřístupná.&lt;/p&gt;
-&lt;p&gt;Data o obětech holokaustu pocházejí z databáze, kterou spravuje Institut Terezínské iniciativy. Aplikace díky tomu zpřístupňuje nejen fotografie obětí, ale také skeny policejních záznamů, které se týkají porušování protižidovských předpisů a nařízení (tyto skeny pocházejí z fondu Policejního ředitelství Praha v Národním archivu).&lt;/p&gt;</value>
   </data>
   <data name="goToMap" xml:space="preserve">
     <value>Přejít na mapu</value>
@@ -624,7 +618,7 @@ Interaktivní mapa z doby protektorátu ukazuje, kde v Pacově žili jeho židov
   &lt;/div&gt;</value>
   </data>
   <data name="welcomeText_pacov_short" xml:space="preserve">
-    <value>Místa, kde v Pacově bydleli židovští obyvatelé, místa spojená s židovskou historií města, ale i informace o střetávání židovského a většinového obyvatelstva.</value>
+    <value>Místa, kde v Pacově bydleli židovští obyvatelé. Příběhy obětí. Historická mapa Pacova z roku 1942.</value>
   </data>
   <data name="welcomeText_pacov_long" xml:space="preserve">
     <value>&lt;p&gt;Poč&amp;aacute;tky židovsk&amp;eacute; př&amp;iacute;tomnosti v Pacově sahaj&amp;iacute; do druh&amp;eacute; poloviny 16. stolet&amp;iacute;. Zhruba o sto let později zde vznikla n&amp;aacute;božensk&amp;aacute; obec, kter&amp;aacute; se po dlouhou dobu rozv&amp;iacute;jela v přev&amp;aacute;žně katolick&amp;eacute;m prostřed&amp;iacute; bez v&amp;yacute;razněj&amp;scaron;&amp;iacute;ch konfliktů. Na poč&amp;aacute;tku 19. stolet&amp;iacute; byl Pacov dokonce s&amp;iacute;dlem krajsk&amp;eacute;ho rab&amp;iacute;na. Židovsk&amp;eacute; domy se od 18. stolet&amp;iacute; soustřeďovaly předev&amp;scaron;&amp;iacute;m do dne&amp;scaron;n&amp;iacute; Autengruberovy a Hronovy ulice, &amp;scaron;kola a rabin&amp;aacute;t s&amp;iacute;dlily v Malovcově ulici.&lt;/p&gt;
@@ -636,7 +630,7 @@ Interaktivní mapa z doby protektorátu ukazuje, kde v Pacově žili jeho židov
 &lt;p&gt;&lt;a href="/pacov"&gt;Přej&amp;iacute;t na MemoMap Pacov&lt;/a&gt;.&lt;/p&gt;</value>
   </data>
   <data name="welcomeText_ricany_short" xml:space="preserve">
-    <value>Osudy říčanských obětí a místa spojená s jejich životy. Historická mapa Říčan z roku 1935.</value>
+    <value>Místa spojená s životy říčanských Židů. Videa z připomínkových akcí. Historická mapa Říčan z roku 1935.</value>
   </data>
   <data name="welcomeText_ricany_long" xml:space="preserve">
     <value>&lt;p&gt;Židovsk&amp;aacute; př&amp;iacute;tomnost v Ř&amp;iacute;čanech je doložena nejpozději od 19. stolet&amp;iacute; a nejv&amp;yacute;razněji se projevovala v obdob&amp;iacute; mezi dvěma světov&amp;yacute;mi v&amp;aacute;lkami. Ve městě a přilehl&amp;yacute;ch obc&amp;iacute;ch Rado&amp;scaron;ovice a Stra&amp;scaron;&amp;iacute;n tehdy žilo několik des&amp;iacute;tek židovsk&amp;yacute;ch obyvatel, přev&amp;aacute;žně z obchodnick&amp;yacute;ch a řemeslnick&amp;yacute;ch rodin. Soustřeďovali se zejm&amp;eacute;na na Masarykově n&amp;aacute;měst&amp;iacute; a v jeho okol&amp;iacute; a byli přirozenou souč&amp;aacute;st&amp;iacute; každodenn&amp;iacute;ho života města &amp;ndash; pod&amp;iacute;leli se na spolkov&amp;eacute;m, kulturn&amp;iacute;m i sportovn&amp;iacute;m děn&amp;iacute;. N&amp;aacute;božensk&amp;yacute; život se odehr&amp;aacute;val v m&amp;iacute;stn&amp;iacute; modlitebně, administrativně pak ř&amp;iacute;čan&amp;scaron;t&amp;iacute; Žid&amp;eacute; n&amp;aacute;leželi k n&amp;aacute;božensk&amp;eacute; obci v Uhř&amp;iacute;něvsi.&lt;/p&gt;
@@ -975,6 +969,18 @@ Aplikaci lze používat nejen z domácího či školního počítače, ale také
 &lt;p&gt;&lt;strong&gt;MemoMap&lt;/strong&gt; nab&amp;iacute;z&amp;iacute; pohled na mikrohistorii vylučov&amp;aacute;n&amp;iacute; židovsk&amp;eacute;ho obyvatelstva ze společnosti &amp;ndash; na omezov&amp;aacute;n&amp;iacute; pohybu, př&amp;iacute;stupu k veřejn&amp;eacute;mu prostoru i na proměny vztahů mezi obyvateli okupovan&amp;yacute;ch m&amp;iacute;st. Aplikace přin&amp;aacute;&amp;scaron;&amp;iacute; nov&amp;yacute; pohled na důvěrně zn&amp;aacute;m&amp;yacute; sd&amp;iacute;len&amp;yacute; prostor měst. &amp;Scaron;kol&amp;aacute;m umožňuje za pomoci modern&amp;iacute; technologie kl&amp;aacute;st nov&amp;eacute; ot&amp;aacute;zky o holokaustu a rasov&amp;eacute; segregaci. Turistům a průvodcům poskytuje novou zku&amp;scaron;enost při objevov&amp;aacute;n&amp;iacute; měst s multietnickou histori&amp;iacute;.&lt;/p&gt;
 &lt;p&gt;Aplikaci &lt;strong&gt;MemoMap&lt;/strong&gt; vytvořil &lt;strong&gt;Masarykův &amp;uacute;stav a archiv AV ČR&lt;/strong&gt; jako službu česk&amp;eacute;ho uzlu Evropsk&amp;eacute; infrastruktury pro v&amp;yacute;zkum holokaustu (&lt;strong&gt;EHRI-CZ&lt;/strong&gt;). Ten je souč&amp;aacute;st&amp;iacute; infrastruktury &lt;strong&gt;LINDAT/CLARIAH-CZ&lt;/strong&gt;, kter&amp;aacute; je plně podporov&amp;aacute;na Ministerstvem &amp;scaron;kolstv&amp;iacute;, ml&amp;aacute;deže a tělov&amp;yacute;chovy Česk&amp;eacute; republiky v r&amp;aacute;mci programu &amp;bdquo;velk&amp;yacute;ch v&amp;yacute;zkumn&amp;yacute;ch infrastruktur&amp;ldquo;.&lt;/p&gt;
 &lt;p&gt;Do budoucna pl&amp;aacute;nujeme v projektu &lt;strong&gt;MemoMap&lt;/strong&gt; pokračovat a roz&amp;scaron;iřovat jej o dal&amp;scaron;&amp;iacute; lokality a data. Pokud disponujete doplňuj&amp;iacute;c&amp;iacute;mi informacemi, archivn&amp;iacute;mi materi&amp;aacute;ly či jin&amp;yacute;mi prameny, kter&amp;eacute; by bylo možn&amp;eacute; v &lt;strong&gt;MemoMap&lt;/strong&gt; využ&amp;iacute;t, nev&amp;aacute;hejte n&amp;aacute;s pros&amp;iacute;m kontaktovat prostřednictv&amp;iacute;m n&amp;aacute;sleduj&amp;iacute;c&amp;iacute;ho formul&amp;aacute;ře.&lt;/p&gt;
-&lt;p&gt;V současnosti dostupn&amp;eacute; &lt;strong&gt;MemoMapy&lt;/strong&gt; pro města: &lt;strong&gt;&lt;a href="https://memomap.cz/prague"&gt;Praha&lt;/a&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;a href="https://memomap.cz/pacov"&gt;Pacov&lt;/a&gt;&lt;/strong&gt; a &lt;strong&gt;&lt;a href="https://memomap.cz/ricany"&gt;Ř&amp;iacute;čany&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;</value>
+&lt;p&gt;V současnosti dostupn&amp;eacute; &lt;strong&gt;MemoMapy&lt;/strong&gt; pro města: &lt;strong&gt;&lt;a href="/prague"&gt;Praha&lt;/a&gt;&lt;/strong&gt;, &lt;strong&gt;&lt;a href="/pacov"&gt;Pacov&lt;/a&gt;&lt;/strong&gt; a &lt;strong&gt;&lt;a href="/ricany"&gt;Ř&amp;iacute;čany&lt;/a&gt;&lt;/strong&gt;.&lt;/p&gt;</value>
+  </data>
+  <data name="welcomeText_ricany" xml:space="preserve">
+    <value>Interaktivní MemoMapa Říčan ukazuje osudy místních obětí a místa spojená s jejich životy; využívá zároveň historickou mapu Říčan z roku 1935. Aplikace vznikla ve spolupráci Masarykova ústavu a Archivu AV ČR a Města Říčany. Zvláštní poděkování patří paní Věře Likešové a Markétě Žilkové z Městského úřadu Říčany.</value>
+  </data>
+  <data name="welcomeText_pacov" xml:space="preserve">
+    <value>Interaktivní mapa z doby protektorátu zobrazuje, kde v Pacově bydleli jeho židovští obyvatelé, a přináší informace o zajímavých místech spojených s židovskou historií města, ale i o střetávání židovského a většinového obyvatelstva. Takzvané příběhové mapy umožňují detailně sledovat konkrétní osobní příběhy a trajektorie. Data jsou doplněna o digitalizované dokumenty a fotografie. Aplikace vznikla ve spolupráci s neziskovou organizací Tikkun Pacov. Zvláštní poděkování patří panu Pavlu Tychtlovi.</value>
+  </data>
+  <data name="welcomeText_prague" xml:space="preserve">
+    <value>Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli. Díky časové ose je vidět, jak lidé postupně mizeli ze svých domovů. Aplikace je přizpůsobena pro mobilní zařízení, můžete se s ní proto vydat přímo do města.</value>
+  </data>
+  <data name="joinToProject" xml:space="preserve">
+    <value>Zapojte se do projektu...</value>
   </data>
 </root>

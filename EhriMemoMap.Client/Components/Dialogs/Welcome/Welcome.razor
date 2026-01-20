@@ -11,7 +11,7 @@
                 <div style="padding:1.5rem">
                     <h1 style="padding-bottom:10px;font-size:48px;">MemoMap</h1>
                     <div style="font-size:15px;padding-bottom:10px">
-                    @((MarkupString)cl["welcomeText_" + MapService?.Map?.InitialVariables?.City + "_short"].ToString())
+                    @((MarkupString)cl["welcomeText_" + MapService?.Map?.InitialVariables?.City].ToString())
                     </div>
                     <RadzenButton Click="OnClose" Style="text-transform: none;" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Outlined">@cl["goToMap"]</RadzenButton>
                 </div>
@@ -33,7 +33,7 @@
                 <div style="padding:1.5rem">
                     <h1 style="padding-bottom:10px;font-size:48px;">MemoMap</h1>
                     <div style="font-size:12px;">
-                    @((MarkupString)cl["welcomeText_" + MapService?.Map?.InitialVariables?.City + "_short"].ToString())
+                    @((MarkupString)cl["welcomeText_" + MapService?.Map?.InitialVariables?.City].ToString())
                 </div>
                 </div>
                 <div style="padding:1.5rem">

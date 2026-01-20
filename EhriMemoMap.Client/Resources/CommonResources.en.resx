@@ -462,14 +462,8 @@
 &lt;p&gt;The application displays information on more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish regulations and ordinances, 120 places of interest related to their daily lives and persecution, and 110 places that were inaccessible to the Jewish residents of Prague during the war.&lt;/p&gt;
 &lt;p&gt;Data on Holocaust victims comes from the database managed by the Institute of Terezín Initiative. The application thus provides access not only to photographs of victims, but also to scanned police records related to violations of anti-Jewish regulations and ordinances (these scans come from the fond of the Prague Police Directorate in the National Archives).&lt;/p&gt;</value>
   </data>
-  <data name="welcomeText_prague_last_residence_short" xml:space="preserve">
+  <data name="welcomeText_prague_last_residence" xml:space="preserve">
     <value>An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war.</value>
-  </data>
-  <data name="welcomeText_prague_last_residence_long" xml:space="preserve">
-    <value>&lt;p&gt;&lt;strong&gt;An interactive map of Prague during the Protectorate&lt;/strong&gt; shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war. The timeline shows how people gradually disappeared from their homes. The app is adapted for mobile devices, so you can take it directly to the city.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;What does MemoMap contain?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;The application displays information on more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish regulations and ordinances, 120 places of interest related to their daily lives and persecution, and 110 places that were inaccessible to the Jewish residents of Prague during the war.&lt;/p&gt;
-&lt;p&gt;Data on Holocaust victims comes from the database managed by the Institute of Terezín Initiative. The application thus provides access not only to photographs of victims, but also to scanned police records related to violations of anti-Jewish regulations and ordinances (these scans come from the fond of the Prague Police Directorate in the National Archives).&lt;/p&gt;</value>
   </data>
   <data name="goToMap" xml:space="preserve">
     <value>Go to map</value>
@@ -968,5 +962,17 @@ addresses, points of interest, memorial sites, or remembrance events</value>
   </data>
   <data name="welcomeText_long" xml:space="preserve">
     <value>bla bla bla</value>
+  </data>
+  <data name="welcomeText_prague" xml:space="preserve">
+    <value>An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war. The timeline shows how people gradually disappeared from their homes. The app is adapted for mobile devices, so you can take it directly to the city.</value>
+  </data>
+  <data name="welcomeText_pacov" xml:space="preserve">
+    <value>An interactive map from the Protectorate period shows where Pacov's Jewish inhabitants lived and provides information about interesting places connected with the town's Jewish history and the interaction between the Jewish and majority population. Story maps allow specific personal stories and trajectories to be traced in detail. The data is supplemented by digitized documents and photographs. The application was created in cooperation with the non-profit organization Tikkun Pacov. Special thanks go to Mr. Pavel Tychtl.</value>
+  </data>
+  <data name="welcomeText_ricany" xml:space="preserve">
+    <value>Interactive MemoMap shows the fates of local victims and places associated with their lives; it also uses a historical map of Říčany from 1935. The Application was created through the collaboration of the Masaryk Institute and Archives of the Czech Academy of Sciences and the Municipal Office of Říčany. Special thanks go to Ms Věra Likešová and Ms Markéta Žilková from the Říčany Municipal Office.</value>
+  </data>
+  <data name="joinToProject" xml:space="preserve">
+    <value>Join the project...</value>
   </data>
 </root>
