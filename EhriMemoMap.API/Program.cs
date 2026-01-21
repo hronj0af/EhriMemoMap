@@ -98,6 +98,9 @@ app.MapPost("/getplaces", (PlacesParameters parameters, MapLogicService service)
 
 app.MapPost("/getsolrplaces", (SolrQueryParameters parameters, SolrService service) => service.SolrExecuteDocument(parameters));
 
+app.MapPost("/getwfsobjects", async (WFSParameters parameters, MapLogicService service, IHttpClientFactory httpClientFactory) => 
+    await service.GetWFSObjects(parameters, httpClientFactory.CreateClient()));
+
 app.MapGet("/updatesolrindex", (SolrUpdateService service) => service.UpdateAllPlacesAsync());
 
 app.MapGet("/wmsProxy", async (HttpContext context) =>

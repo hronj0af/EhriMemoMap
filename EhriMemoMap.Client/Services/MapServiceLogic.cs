@@ -15,7 +15,7 @@ namespace EhriMemoMap.Client.Services
     /// </summary>
     public partial class MapService
     {
-        
+
         public async Task RefreshObjectsOnMap(bool withPolygons)
         {
             var serializerSettings = new JsonSerializerSettings
@@ -47,7 +47,12 @@ namespace EhriMemoMap.Client.Services
 
             // vyber objektu podle toho, do jake nalezi vrstvy
             var selectedLayerNames = new List<string?>();
-            foreach (var layer in GetNotBaseLayers(true).Where(a => a.Type != LayerType.Heatmap && a.PlaceType != null && (withPolygons || a.Type != LayerType.Polygons)))
+
+            var layers = GetNotBaseLayers(true).
+                Where(a => a.Type != LayerType.Heatmap && a.Type != LayerType.WFS).
+                Where(a => a.PlaceType != null && (withPolygons || a.Type != LayerType.Polygons));
+
+            foreach (var layer in layers)
             {
                 // krome nazvu vrstvy zkoumam i to, jestli se pri danem zoomu mapy ma vrstva vubec zobrazovat
                 if (!ShowLayersForce && ((layer.MinZoom != null && MapZoom < layer.MinZoom) || (layer.MaxZoom != null && MapZoom > layer.MaxZoom)))
@@ -65,8 +70,32 @@ namespace EhriMemoMap.Client.Services
             if (aggregate)
                 objects = AggregateSameAddresses(objects);
 
-            return objects.Select(a => new MapObjectForLeafletModel(a, false, Map.Layers)).ToList();
+            if (withPolygons)
+                objects.AddRange(await GetWFSObjects());
+            return objects.Select(a => new MapObjectForLeafletModel(a, false, Map?.Layers)).ToList();
         }
+
+        public async Task<List<MapObject>> GetWFSObjects()
+        {
+            var layers = GetNotBaseLayers().Where(a => a.Type == LayerType.WFS && a.Selected);
+
+            if (!layers.Any())
+                return [];
+
+            var parameters = new WFSParameters
+            {
+                WFSLayers = layers.Select(layer => new WFSLayerInfo
+                {
+                    Name = layer.Name,
+                    Url = layer.Url,
+                    PlaceType = layer.PlaceType?.ToString()
+                }).ToList()
+            };
+
+            var result = await GetResultFromApiPost<List<MapObject>>("getwfsobjects", parameters);
+            return result;
+        }
+
 
         /// <summary>
         /// Slouci objekty se stejnou adresou do jednoho objektu 
@@ -234,7 +263,7 @@ namespace EhriMemoMap.Client.Services
             if (transformedPlaces.Any(a => a.PlaceType == "trajectory point"))
             {
                 transformedPlaces.LastOrDefault(a => a.PlaceType == "trajectory point").HtmlIcon = "<img src='css/images/narrative-icon.png' />";
-                transformedPlaces.LastOrDefault(a => a.PlaceType == "trajectory point").IconAnchor = [22,55];
+                transformedPlaces.LastOrDefault(a => a.PlaceType == "trajectory point").IconAnchor = [22, 55];
                 transformedPlaces.LastOrDefault(a => a.PlaceType == "trajectory point").Clickable = true;
 
             }

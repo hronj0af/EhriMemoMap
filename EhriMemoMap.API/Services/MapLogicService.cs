@@ -838,4 +838,67 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
 
         return map;
     }
+
+    public async Task<List<Shared.MapObject>> GetWFSObjects(WFSParameters parameters, HttpClient httpClient)
+    {
+        var result = new List<Shared.MapObject>();
+
+        if (parameters.WFSLayers == null || !parameters.WFSLayers.Any())
+            return result;
+
+        foreach (var layer in parameters.WFSLayers)
+        {
+            if (string.IsNullOrWhiteSpace(layer.Url))
+                continue;
+
+            try
+            {
+                var jsonString = await httpClient.GetStringAsync(layer.Url);
+
+                // Parse the GeoJSON as a dynamic object first
+                var geoJson = JsonConvert.DeserializeObject<dynamic>(jsonString);
+
+                if (geoJson?.features != null)
+                {
+                    foreach (var feature in geoJson.features)
+                    {
+                        if (feature.geometry == null)
+                            continue;
+
+                        // Parse the geometry using GeoJsonSerializer
+                        var geometryJson = JsonConvert.SerializeObject(feature.geometry);
+                        Geometry? geometry = null;
+
+                        using (var stringReader = new StringReader(geometryJson))
+                        using (var jsonReader = new Newtonsoft.Json.JsonTextReader(stringReader))
+                        {
+                            var serializer = NetTopologySuite.IO.GeoJsonSerializer.Create();
+                            geometry = serializer.Deserialize<Geometry>(jsonReader);
+                        }
+
+                        var mapObject = new Shared.MapObject
+                        {
+                            PlaceType = layer.PlaceType,
+                            LayerName = layer.Name,
+                            GeographyMapPoint = geometry is Point ? geometry : null,
+                            GeographyMapPolygon = geometry is Polygon or MultiPolygon ? geometry : null,
+                            MapPoint = geometry is Point ? geometry.AsJson() : null,
+                            MapPolygon = geometry is Polygon or MultiPolygon ? geometry.AsJson() : null,
+                            LabelCs = feature.properties?.name?.ToString() ?? string.Empty,
+                            LabelEn = feature.properties?.name?.ToString() ?? string.Empty
+                        };
+
+                        result.Add(mapObject);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle WFS request errors
+                Console.WriteLine($"Error fetching WFS data from {layer.Url}: {ex.Message}");
+            }
+        }
+
+        return result;
+    }
 }

@@ -7,6 +7,7 @@ public partial class MapObject
         return new Shared.MapObject
         {
             PlaceType = PlaceType,
+            LayerName = PlaceType,
             Citizens = Citizens,
             CitizensTotal = CitizensTotal,
             Id = Id,

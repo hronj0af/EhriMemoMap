@@ -14,6 +14,7 @@ var mapAPI;
     let groups = [];
     let trackingInterval = null;
     let _isMobileView = null;
+    let mapSettings = null;
     let applicationIsTrackingLocation = null;
     let actualLocation = null;
     let dialogWidth = null;
@@ -27,7 +28,7 @@ var mapAPI;
     let heatmapData = null;
     let initialVariables = null;
     function initMap(jsonMapSettings) {
-        const mapSettings = JSON.parse(jsonMapSettings);
+        mapSettings = JSON.parse(jsonMapSettings);
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
         initialVariables = mapSettings.initialVariables;
@@ -69,15 +70,16 @@ var mapAPI;
             const group = new L.FeatureGroup(null, {
                 id: mapSettings.layers[i].name + "_group",
                 type: mapSettings.layers[i].type,
-                selected: mapSettings.layers[i].selected
+                selected: mapSettings.layers[i].selected,
+                name: mapSettings.layers[i].name
             });
-            group.setZIndex(mapSettings.layers[i].zIndex);
             groups.push(group);
             if (mapSettings.layers[i].selected)
                 group.addTo(map);
             const layer = convertMapSettingsObjectToMapLayer(mapSettings.layers[i]);
             if (layer != null)
                 group.addLayer(layer);
+            group.setZIndex(mapSettings.layers[i].zIndex);
         }
     }
     mapAPI.initMap = initMap;
@@ -229,8 +231,8 @@ var mapAPI;
     }
     mapAPI.initBlazorMapObject = initBlazorMapObject;
     function callBlazor_RefreshObjectsOnMap() {
-        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
-        const mapHasPolygonsYet = polygonsGroup.getLayers().length > 0;
+        const polygonsGroup = groups.filter(a => a.options.type == "Polygons");
+        const mapHasPolygonsYet = polygonsGroup.length > 0;
         blazorMapObjects["Map"].invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet, map.getZoom(), getMapBoundsForMapState());
     }
     mapAPI.callBlazor_RefreshObjectsOnMap = callBlazor_RefreshObjectsOnMap;
@@ -248,8 +250,10 @@ var mapAPI;
     }
     mapAPI.callBlazor_ShowPlaceInfo = callBlazor_ShowPlaceInfo;
     function refreshObjectsOnMap(objectJson) {
+        if (groups == null || groups.length == 0)
+            return;
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
-        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
+        const polygonsGroup = groups.filter(a => a.options.type == "Polygons" || a.options.type == "WFS");
         objectsGroup.clearLayers();
         const objects = JSON.parse(objectJson);
         for (let i = 0; i < objects.length; i++) {
@@ -257,8 +261,10 @@ var mapAPI;
             if (objects[i].mapPolygon != null) {
                 objects[i].mapPolygonModel = JSON.parse(objects[i].mapPolygon);
                 newObject = getPolygon(objects[i]);
-                if (objects[i].placeType == "Inaccessible")
-                    newObject.addTo(polygonsGroup);
+                if (objects[i].layerName != null && objects[i].layerName.toLocaleLowerCase() != "statistics") {
+                    var groupToAdd = polygonsGroup.find(a => a.options.name.toLocaleLowerCase() == objects[i].layerName.toLocaleLowerCase());
+                    newObject.addTo(groupToAdd);
+                }
                 else
                     newObject.addTo(objectsGroup);
             }
@@ -269,7 +275,9 @@ var mapAPI;
                 newObject.addTo(objectsGroup);
             }
         }
-        polygonsGroup.bringToFront();
+        for (let i = 0; i < polygonsGroup.length; i++) {
+            polygonsGroup[i].bringToFront();
+        }
         if (heatmapLayer) {
             map.removeLayer(heatmapLayer);
         }
@@ -278,8 +286,16 @@ var mapAPI;
             seedHeatmapData(objects, heatmapIndex);
             showHeatmap(heatmapData.find(a => a.id === heatmapIndex).heatmapdata);
         }
+        setZIndexForGroups();
     }
     mapAPI.refreshObjectsOnMap = refreshObjectsOnMap;
+    function setZIndexForGroups() {
+        for (let i = 0; i < mapSettings.layers.length; i++) {
+            var group = groups.find(a => a.options.name == mapSettings.layers[i].name);
+            group.setZIndex(mapSettings.layers[i].zIndex);
+        }
+    }
+    mapAPI.setZIndexForGroups = setZIndexForGroups;
     function seedHeatmapData(objects, heatmapIndex) {
         if (heatmapData != null && heatmapData.find(a => a.id == heatmapIndex) != null)
             return;
@@ -589,12 +605,14 @@ var mapAPI;
     mapAPI.removeObjects = removeObjects;
     function removeAdditionalObjects() {
         removeObjects("AdditionalObjects");
-        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
-        polygonsGroup.eachLayer(function (item) {
-            if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
-                item.setStyle({ fillColor: polygonColor });
-            }
-        });
+        const polygonsGroups = groups.filter(a => a.options.type == "Polygons");
+        for (var i = 0; i < polygonsGroups.length; i++) {
+            polygonsGroups[i].eachLayer(function (item) {
+                if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
+                    item.setStyle({ fillColor: polygonColor });
+                }
+            });
+        }
     }
     mapAPI.removeAdditionalObjects = removeAdditionalObjects;
     function unselectAllSelectedPoints() {
@@ -633,6 +651,14 @@ var mapAPI;
         });
     }
     mapAPI.selectPointOnMap = selectPointOnMap;
+    function getGroups() {
+        return groups;
+    }
+    mapAPI.getGroups = getGroups;
+    function getMap() {
+        return map;
+    }
+    mapAPI.getMap = getMap;
     function hideLayersForNormalMap() {
         groups.forEach(group => {
             if (group.options.type == LayersTypeEnum.Base || group.options.type == LayersTypeEnum.WMS)
@@ -655,10 +681,9 @@ var mapAPI;
     }
     mapAPI.showLayersForNormalMap = showLayersForNormalMap;
     function toggleLayerGroup(name, selected) {
-        const groupName = name + "_group";
-        const groupToAdd = groups.find(a => a.options.id == groupName);
+        const groupToAdd = groups.find(a => a.options.name == name);
         groupToAdd.options.selected = selected;
-        map.eachLayer(function (layer) { if (layer.options.id == groupName)
+        map.eachLayer(function (layer) { if (layer.options.name == name)
             layer.remove(); });
         if (selected) {
             groupToAdd.addTo(map);

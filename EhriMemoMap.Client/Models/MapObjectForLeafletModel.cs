@@ -60,6 +60,7 @@ public partial class MapObjectForLeafletModel
         MapPoint = mapObject.MapPoint;
         PlaceType = mapObject.PlaceType;
         Heatmap = heatmap;
+        LayerName = mapObject.LayerName;
         PriorityOnMap = layers?.FirstOrDefault(a => !string.IsNullOrEmpty(a.Name) && a.Name?.ToLower() == mapObject.PlaceType?.ToLower())?.PriorityOnMap;
 
         if (heatmap)
@@ -187,6 +188,7 @@ public partial class MapObjectForLeafletModel
     }
     public bool Clickable { get; set; }
     public string? PlaceType { get; set; }
+    public string? LayerName { get; set; }
 
     public decimal? Citizens { get; set; }
 

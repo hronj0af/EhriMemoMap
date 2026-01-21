@@ -9,8 +9,8 @@
       "lat": 49.46755233053013,
       "lng": 15.010156631469728,
       "minBounds": {
-        "X": -90,
-        "Y": -90
+        "X": -120,
+        "Y": -120
       },
       "maxBounds": {
         "X": 90,
@@ -26,7 +26,7 @@
         "attribution": "MÚA AVČR, Tikkun Pacov, z. s. &copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
         "attributionUrl": "https://ehri.cz/memogis_cs.html#howto_credit",
         "type": "base",
-        "zIndex": "50",
+        "zIndex": 50,
         "selected": true
       },
       {
@@ -37,21 +37,21 @@
         "type": "wms",
         "selected": true,
         "opacities": "255",
-        "zIndex": "100",
+        "zIndex": 100,
         "order": 100,
         "backgroundColor": "#D5D2B8",
         "fontColor": "Dark",
         "cssClass": "customWmsLayerPacov"
       },
       {
-        "name": "HGC-borders_protectorate_b_m-v1",
+        "name": "HGC-BordersProtectorateBM-v2",
         "url": "https://geodata.ehri-project.eu/geoserver/wms?",
         "mapParameter": "",
-        "layersParameter": "HGC-borders_protectorate_b_m-v1",
+        "layersParameter": "HGC-BordersProtectorateBM-v2",
         "type": "wms",
         "selected": true,
         "opacities": "255",
-        "zIndex": "100",
+        "zIndex": 300,
         "order": 100,
         "backgroundColor": "#D5D2B8",
         "fontColor": "Dark",

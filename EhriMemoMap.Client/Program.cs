@@ -1,4 +1,3 @@
-using EhriMemoMap.Client;
 using Radzen;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -13,7 +12,6 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<TooltipService>();
 builder.Services.AddScoped<MapService>();
-// builder.Services.AddLocalization();
 builder.Services.AddOptions();
 builder.Services.AddSingleton<IStringLocalizerFactory, ResourceManagerStringLocalizerFactory>();
 builder.Services.AddTransient(typeof(IStringLocalizer<>), typeof(StringLocalizer<>));

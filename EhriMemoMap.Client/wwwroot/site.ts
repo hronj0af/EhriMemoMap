@@ -21,6 +21,7 @@ namespace mapAPI {
     let groups: L.FeatureGroup[] = [];
     let trackingInterval: number = null;
     let _isMobileView: boolean = null;
+    let mapSettings: MapSettingsForLeafletModel = null;
     let applicationIsTrackingLocation: boolean = null;
     let actualLocation: GeolocationPosition = null;
     let dialogWidth: string = null;
@@ -42,7 +43,7 @@ namespace mapAPI {
     export function initMap(jsonMapSettings: string): void {
         //history.replaceState({}, '', "praha");
 
-        const mapSettings = JSON.parse(jsonMapSettings) as MapSettingsForLeafletModel;
+        mapSettings = JSON.parse(jsonMapSettings) as MapSettingsForLeafletModel;
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
         initialVariables = mapSettings.initialVariables;
@@ -99,9 +100,9 @@ namespace mapAPI {
             const group = new L.FeatureGroup(null, {
                 id: mapSettings.layers[i].name + "_group",
                 type: mapSettings.layers[i].type,
-                selected: mapSettings.layers[i].selected
+                selected: mapSettings.layers[i].selected,
+                name: mapSettings.layers[i].name
             });
-            group.setZIndex(mapSettings.layers[i].zIndex);
             groups.push(group);
 
             if (mapSettings.layers[i].selected)
@@ -110,6 +111,9 @@ namespace mapAPI {
             const layer = convertMapSettingsObjectToMapLayer(mapSettings.layers[i]);
             if (layer != null)
                 group.addLayer(layer);
+
+            group.setZIndex(mapSettings.layers[i].zIndex);
+
         }
     }
 
@@ -314,8 +318,8 @@ namespace mapAPI {
     }
 
     export function callBlazor_RefreshObjectsOnMap() {
-        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
-        const mapHasPolygonsYet = polygonsGroup.getLayers().length > 0;
+        const polygonsGroup = groups.filter(a => a.options.type == "Polygons");
+        const mapHasPolygonsYet = polygonsGroup.length > 0;
         blazorMapObjects["Map"].invokeMethodAsync("RefreshObjectsOnMap", !mapHasPolygonsYet, map.getZoom(), getMapBoundsForMapState());
     }
 
@@ -344,8 +348,11 @@ namespace mapAPI {
 
     // refreshuje se všechno, kromě nepřístupných míst, protože ta jsou vidět pořád
     export function refreshObjectsOnMap(objectJson) {
+        if (groups == null || groups.length == 0)
+            return;
+
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
-        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
+        const polygonsGroup = groups.filter(a => a.options.type == "Polygons" || a.options.type == "WFS");
 
         objectsGroup.clearLayers();
 
@@ -361,8 +368,10 @@ namespace mapAPI {
                 objects[i].mapPolygonModel = JSON.parse(objects[i].mapPolygon) as PolygonModel;
                 newObject = getPolygon(objects[i]);
 
-                if (objects[i].placeType == "Inaccessible")
-                    newObject.addTo(polygonsGroup);
+                if (objects[i].layerName != null && objects[i].layerName.toLocaleLowerCase() != "statistics") {
+                    var groupToAdd = polygonsGroup.find(a => a.options.name.toLocaleLowerCase() == objects[i].layerName.toLocaleLowerCase());
+                    newObject.addTo(groupToAdd);
+                }
                 else
                     newObject.addTo(objectsGroup);
 
@@ -376,7 +385,9 @@ namespace mapAPI {
                 newObject.addTo(objectsGroup);
             }
         }
-        polygonsGroup.bringToFront();
+        for (let i = 0; i < polygonsGroup.length; i++) {
+            polygonsGroup[i].bringToFront();
+        }
 
         // pokud je heatmapa, tak ji zobrazíme
         if (heatmapLayer) {
@@ -388,7 +399,17 @@ namespace mapAPI {
             seedHeatmapData(objects, heatmapIndex);
             showHeatmap(heatmapData.find(a => a.id === heatmapIndex).heatmapdata);
         }
+
+        setZIndexForGroups();
     }
+
+    export function setZIndexForGroups() {
+        for (let i = 0; i < mapSettings.layers.length; i++) {
+            var group = groups.find(a => a.options.name == mapSettings.layers[i].name);
+            group.setZIndex(mapSettings.layers[i].zIndex);
+        }
+    }
+
 
     export function seedHeatmapData(objects: MapObjectForLeafletModel[], heatmapIndex: string) {
         if (heatmapData != null && heatmapData.find(a => a.id == heatmapIndex) != null)
@@ -834,13 +855,14 @@ namespace mapAPI {
     export function removeAdditionalObjects(): void {
         removeObjects("AdditionalObjects");
 
-        const polygonsGroup = groups.find(a => a.options.id == "Polygons_group");
-        polygonsGroup.eachLayer(function (item: L.Polygon) {
-            if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
-                item.setStyle({ fillColor: polygonColor });
-            }
-        });
-
+        const polygonsGroups = groups.filter(a => a.options.type == "Polygons");
+        for (var i = 0; i < polygonsGroups.length; i++) {
+            polygonsGroups[i].eachLayer(function (item: L.Polygon) {
+                if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
+                    item.setStyle({ fillColor: polygonColor });
+                }
+            });
+        }
     }
 
     export function unselectAllSelectedPoints() {
@@ -889,6 +911,14 @@ namespace mapAPI {
     /// HELPER METHODS
     //////////////////////////
 
+    export function getGroups() {
+        return groups;
+    }
+
+    export function getMap() {
+        return map;
+    }
+
     export function hideLayersForNormalMap() {
         groups.forEach(group => {
             if (group.options.type == LayersTypeEnum.Base || group.options.type == LayersTypeEnum.WMS)
@@ -912,12 +942,12 @@ namespace mapAPI {
     }
 
     export function toggleLayerGroup(name: string, selected: boolean): void {
-        const groupName = name + "_group";
-        const groupToAdd = groups.find(a => a.options.id == groupName);
+        //const groupName = name + "_group";
+        const groupToAdd = groups.find(a => a.options.name == name);
         groupToAdd.options.selected = selected;
 
         // nejdřív vrstvu odstraníme, abych pak nepřidával přes starou další a další a další...
-        map.eachLayer(function (layer) { if (layer.options.id == groupName) layer.remove(); })
+        map.eachLayer(function (layer) { if (layer.options.name == name) layer.remove(); })
 
         if (selected) {
             groupToAdd.addTo(map);
@@ -1177,6 +1207,7 @@ interface HeatmapData {
 interface MapObjectForLeafletModel {
     heatmap: boolean;
     clickable: boolean;
+    layerName: string | null;
     placeType: string | null;
     citizens: number | null;
     citizensTotal: number | null;

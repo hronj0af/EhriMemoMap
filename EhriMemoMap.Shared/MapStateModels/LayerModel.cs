@@ -13,7 +13,7 @@ namespace EhriMemoMap.Shared
         public PlaceType? PlaceType { get; set; }
         public string? Attribution { get; set; }
         public string? Opacities { get; set; }
-        public string? ZIndex { get; set; }
+        public int? ZIndex { get; set; }
         public string? CssClass { get;set; }
         public string? MapParameter { get; set; }
         public string? LayersParameter { get; set; }
@@ -41,7 +41,7 @@ namespace EhriMemoMap.Shared
 
     public enum LayerType
     {
-        Images, Objects, WMS, Base, Polygons, Heatmap, Narration
+        Images, Objects, WMS, Base, Polygons, Heatmap, Narration, WFS
     }
 
     public enum FontColor

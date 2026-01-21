@@ -939,16 +939,16 @@ addresses, points of interest, memorial sites, or remembrance events</value>
   <data name="openMap" xml:space="preserve">
     <value>Open map</value>
   </data>
-  <data name="layer_HGC-borders_protectorate_b_m-v1_title_pacov" xml:space="preserve">
+  <data name="layer_HGC-BordersProtectorateBM-v2_title_pacov" xml:space="preserve">
     <value>Border of the Protectorate Bohemia and Moravia</value>
   </data>
-  <data name="layer_HGC-borders_protectorate_b_m-v1_abstract_pacov" xml:space="preserve">
+  <data name="layer_HGC-BordersProtectorateBM-v2_abstract_pacov" xml:space="preserve">
     <value>The original borders of the Protectorate Bohemia and Moravia were taken from a dataset created as a part of a project which documents monthly European border changes from 1938-1945. The data are much better presented with accurate military front lines, data which has not been fully digitized but would constitute a valuable addition to the research.</value>
   </data>
-  <data name="layer_HGC-borders_protectorate_b_m-v1_title_ricany" xml:space="preserve">
+  <data name="layer_HGC-BordersProtectorateBM-v2_title_ricany" xml:space="preserve">
     <value>Border of the Protectorate Bohemia and Moravia</value>
   </data>
-  <data name="layer_HGC-borders_protectorate_b_m-v1_abstract_ricany" xml:space="preserve">
+  <data name="layer_HGC-BordersProtectorateBM-v2_abstract_ricany" xml:space="preserve">
     <value>The original borders of the Protectorate Bohemia and Moravia were taken from a dataset created as a part of a project which documents monthly European border changes from 1938-1945. The data are much better presented with accurate military front lines, data which has not been fully digitized but would constitute a valuable addition to the research.</value>
   </data>
   <data name="countStoryMaps" xml:space="preserve">

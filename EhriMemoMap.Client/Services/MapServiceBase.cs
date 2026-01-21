@@ -262,11 +262,12 @@ namespace EhriMemoMap.Client.Services
                 MapParameter = a.MapParameter,
                 LayersParameter = a.LayersParameter,
                 CssClass = a.CssClass ?? "",
+                ZIndex = a.ZIndex
             }).
             Union(
             [
-                new() { Name = LayerType.Objects.ToString(), Type = LayerType.Objects.ToString(), Selected = true },
-                new() { Name = LayerType.Polygons.ToString(), Type = LayerType.Polygons.ToString(), Selected = true },
+                new() { Name = LayerType.Objects.ToString(), Type = LayerType.Objects.ToString(), Selected = true, ZIndex = 0 },
+                //new() { Name = LayerType.Polygons.ToString(), Type = LayerType.Polygons.ToString(), Selected = true },
                 new() { Name = "AdditionalObjects", Type = LayerType.Polygons.ToString(), Selected = true, ZIndex = 9999 },
                 new() { Name = LayerType.Narration.ToString(), Type = LayerType.Narration.ToString(), Selected = false, ZIndex = 9999 }
             ]).

@@ -38,7 +38,7 @@
                             <i>@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DateCs : stop.DateEn)</i>
                         </div>
                         <div class="rz-mt-4">
-                            @((MarkupString)((CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DescriptionCs : stop.DescriptionEn) ?? ""))
+                            @((MarkupString)((CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? stop.DescriptionCs?.Nl2Br() : stop.DescriptionEn?.Nl2Br()) ?? ""))
                         </div>
                         
                         @if (stop?.Documents?.Any() ?? false)

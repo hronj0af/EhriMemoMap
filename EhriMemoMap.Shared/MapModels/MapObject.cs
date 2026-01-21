@@ -5,6 +5,7 @@ namespace EhriMemoMap.Shared;
 public partial class MapObject
 {
     public string? PlaceType { get; set; }
+    public string? LayerName { get; set; }
 
     public decimal? Citizens { get; set; }
 

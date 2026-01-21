@@ -102,8 +102,8 @@
         if (layer.Type == LayerType.WMS)
             await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", layer.Name, layer.Selected);
 
-        else if (layer.Type == LayerType.Polygons)
-            await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", LayerType.Polygons.ToString(), layer.Selected);
+        else if (layer.Type == LayerType.Polygons || layer.Type == LayerType.WFS)
+            await JS.InvokeVoidAsync("mapAPI.toggleLayerGroup", layer.Name, layer.Selected);
 
         else if (layer.Type == LayerType.Objects || layer.Type == LayerType.Heatmap)
             await MapService.RefreshObjectsOnMap(false);
