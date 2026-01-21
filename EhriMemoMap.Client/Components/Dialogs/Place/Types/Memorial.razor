@@ -12,8 +12,15 @@
         <p>
             @((MarkupString)((CultureInfo.CurrentCulture.Name == "en-US" ? Place.DescriptionEn?.Nl2Br() : Place.DescriptionCs?.Nl2Br()) ?? ""))
         </p>
-
-
+        @{
+            var link = CultureInfo.CurrentCulture.Name == "en-US" ? Place.LinkEn : Place.LinkCs;
+        }
+        @if (!string.IsNullOrEmpty(link))
+        {
+            <p>
+                <a href="@link" target="_blank">@link</a>
+            </p>
+        }
         <DocumentGallery Documents="Place.Documents" />
 
     </RadzenCard>

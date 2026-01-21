@@ -1,6 +1,6 @@
 ﻿@inject MapService MapService
 
-@if (MapService.IsMobileView == false)
+@if (MapService.MapState == MapStateEnum.Rendered && MapService.IsMobileView == false)
 {
     <LayersQuickAccessButtons />
 }

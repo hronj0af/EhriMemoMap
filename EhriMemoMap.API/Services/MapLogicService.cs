@@ -447,6 +447,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                     AddressEn = a.EventsXPlaces.FirstOrDefault()?.Place.LabelEn,
                     LabelCs = a.LabelCs,
                     LabelEn = a.LabelEn,
+                    LinkCs = a.LinkCs,
+                    LinkEn = a.LinkEn,
                     DescriptionCs = a.DescriptionCs,
                     DescriptionEn = a.DescriptionEn,
                     Date = a.Date,

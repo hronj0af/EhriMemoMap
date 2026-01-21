@@ -8,13 +8,13 @@
         {
             if (Place.Type == "stolpersteine_set")
             {
-                <h2>@cl["memoryType_" + Place.Type]</h2>
+                <h3>@cl["memoryType_" + Place.Type]</h3>
             }
             else
             {
-                <h2>
+                <h3>
                     @((CultureInfo.CurrentCulture.Name == "en-US" ? Place.LabelEn : Place.LabelCs) ?? "")
-                </h2>
+                </h3>
             }
         }
         else

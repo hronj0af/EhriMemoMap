@@ -1,6 +1,6 @@
 ﻿@inject MapService MapService
 
-@if (!string.IsNullOrEmpty(style) && MapService.Map?.InitialVariables != null)
+@if (MapService.MapState == MapStateEnum.Rendered && !string.IsNullOrEmpty(style) && MapService.Map?.InitialVariables != null)
 {
     <div id="controlButtonsWrapper" style="@style">
         @if (MapService.IsMobileView == false)

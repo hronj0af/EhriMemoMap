@@ -56,7 +56,7 @@ namespace EhriMemoMap.Client.Services
         public string SearchedPlaceString = "";
         public IEnumerable<SolrPlace>? SearchedPlaces;
 
-        public bool MapStateWasInit = false;
+        public MapStateEnum MapState = MapStateEnum.NotInitialized;
 
         public event Action OnChange;
         public NarrativeMap? NarrativeMap { get; set; }
@@ -296,13 +296,13 @@ namespace EhriMemoMap.Client.Services
 
             InitInfoAboutTimeline(timelinePoint);
 
-            MapStateWasInit = true;
+            MapState = MapStateEnum.Initialized;
             NotifyStateChanged();
         }
 
         public async Task Destroy()
         {
-            MapStateWasInit = false;
+            MapState = MapStateEnum.NotInitialized;
             Map = null!;
             NarrativeMap = null;
             VictimLongInfo = null;
@@ -461,5 +461,12 @@ namespace EhriMemoMap.Client.Services
         }
 
     }
-    
+
+    public enum MapStateEnum
+    {
+        NotInitialized,
+        Initialized,
+        Rendered
+    }
+
 }

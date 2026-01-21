@@ -28,6 +28,12 @@
                         <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
                             <div style="position:relative;width:100%">
                                 <RadzenImage style="cursor:pointer" class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@docTb" onclick="@(() => ShowImage(actIndex, currentDocumentIndex))" />
+                                @if (doc.Type != "image" && doc.Type != "text")
+                                {
+                                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,35%);pointer-events:none;">
+                                        <RadzenImage Path="images/icon-play.png" style="width:48px;height:48px;opacity:0.9;" />
+                                    </div>
+                                }
                             </div>
 
                             <!-- Hidden container used by BiggerPicture -->

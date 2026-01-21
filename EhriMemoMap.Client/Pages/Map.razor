@@ -55,7 +55,7 @@
     {
         this.firstRender = firstRender;
 
-        if (firstRender && !MapService.MapStateWasInit)
+        if (firstRender && MapService.MapState == MapStateEnum.NotInitialized)
         {
             // tady se zjistí šířka a výška okna kvůli zobrazení dialogového okna s dalšími informacemi
             MapService.WindowWidth = await JS.InvokeAsync<int>("mapAPI.getWindowWidth");
@@ -116,7 +116,7 @@
             // a posledně zmiňované informace se pak použijí pro zobrazení špendlíků a polygonů na mapě
             await MapService.RefreshObjectsOnMap(true);
             await JS.InvokeVoidAsync("mapAPI.showLayersForNormalMap");
-
+            MapService.MapState = MapStateEnum.Rendered;
             MapService.NotifyStateChanged();
         }
 

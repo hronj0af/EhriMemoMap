@@ -6,6 +6,7 @@
 @inject MapService MapService
 @using Microsoft.Extensions.Configuration
 @using System.Globalization
+@using Microsoft.AspNetCore.Components
 
 <div style="position:fixed; top:95px; right: 0px; width: 30px; z-index: 1000;">
         <LanguageButton />
@@ -267,6 +268,10 @@ else
 </style>
 
 @code {
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "detail")]
+    public string? Detail { get; set; }
+
     private string[] Cities = Array.Empty<string>();
     private bool ShowingDetail = false;
     private string DetailTitle = "";
@@ -276,6 +281,36 @@ else
     {
         Cities = configuration.GetSection("App:Cities").Get<string[]>() ?? Array.Empty<string>();
         await MapService.Destroy();
+    }
+
+    protected override void OnParametersSet()
+    {
+        UpdateDetailFromParameter();
+    }
+
+    private void UpdateDetailFromParameter()
+    {
+        if (!string.IsNullOrEmpty(Detail))
+        {
+            if (Detail == "main")
+            {
+                DetailTitle = "";
+                DetailContent = cl["welcomeText_long"].ToString();
+                ShowingDetail = true;
+            }
+            else
+            {
+                DetailTitle = cl["city_" + Detail].ToString();
+                DetailContent = cl["welcomeText_" + Detail + "_long"].ToString();
+                ShowingDetail = true;
+            }
+        }
+        else
+        {
+            ShowingDetail = false;
+            DetailTitle = "";
+            DetailContent = "";
+        }
     }
 
     private string TargetLanguage => CultureInfo.CurrentCulture.Name == "cs-CZ" ? "EN" : "CS";
@@ -289,22 +324,16 @@ else
 
     private void ShowWelcomeTextLong()
     {
-        DetailTitle = "";
-        DetailContent = cl["welcomeText_long"].ToString();
-        ShowingDetail = true;
+        NavigationManager.NavigateTo("/?detail=main");
     }
 
     private void ShowCityInfo(string city)
     {
-        DetailTitle = cl["city_" + city].ToString();
-        DetailContent = cl["welcomeText_" + city + "_long"].ToString();
-        ShowingDetail = true;
+        NavigationManager.NavigateTo($"/?detail={city}");
     }
 
     private void HideDetail()
     {
-        ShowingDetail = false;
-        DetailTitle = "";
-        DetailContent = "";
+        NavigationManager.NavigateTo("/");
     }
 }

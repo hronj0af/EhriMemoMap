@@ -981,6 +981,6 @@ Aplikaci lze používat nejen z domácího či školního počítače, ale také
     <value>Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli. Díky časové ose je vidět, jak lidé postupně mizeli ze svých domovů. Aplikace je přizpůsobena pro mobilní zařízení, můžete se s ní proto vydat přímo do města.</value>
   </data>
   <data name="joinToProject" xml:space="preserve">
-    <value>Zapojte se do projektu...</value>
+    <value>Zapojte se do projektu</value>
   </data>
 </root>
