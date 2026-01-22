@@ -827,8 +827,8 @@ The application is continuously developed and maintained within the Czech node o
   <data name="layer_memorial_title_short" xml:space="preserve">
     <value>Remembrance events</value>
   </data>
-  <data name="otherStoryMaps" xml:space="preserve">
-    <value>Other story maps</value>
+  <data name="backToOtherStoryMaps" xml:space="preserve">
+    <value>Back to other story maps</value>
   </data>
   <data name="birthDate" xml:space="preserve">
     <value>Birth date</value>

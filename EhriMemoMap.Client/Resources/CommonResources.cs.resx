@@ -824,8 +824,8 @@ Interaktivní mapa z doby protektorátu ukazuje, kde v Pacově žili jeho židov
   <data name="layer_memorial_title_short" xml:space="preserve">
     <value>Připomínkové akce</value>
   </data>
-  <data name="otherStoryMaps" xml:space="preserve">
-    <value>Ostatní příběhové mapy</value>
+  <data name="backToOtherStoryMaps" xml:space="preserve">
+    <value>Zpět na ostatní příběhové mapy</value>
   </data>
   <data name="birthDate" xml:space="preserve">
     <value>Datum narození</value>

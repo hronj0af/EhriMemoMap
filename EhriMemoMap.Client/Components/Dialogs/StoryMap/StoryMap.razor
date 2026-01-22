@@ -19,12 +19,9 @@
         else if (MapService.DialogParameters.Id != null && MapService.AllNarrativeMaps.Count > 1)
         {
             <RadzenRow onclick="@(() => MapService.ShowAllStoryMaps())" AlignItems="AlignItems.Center" class="rz-mb-4" Style="cursor:pointer">
-                <RadzenColumn Size="1">
-                    <RadzenImage Path="images/arrow-left-grey.png" />
-                </RadzenColumn>
-                <RadzenColumn Size="10">
+                <RadzenColumn Size="11">
                     <h4>
-                        @cl.GetString("otherStoryMaps")
+                        @cl.GetString("backToOtherStoryMaps")
                     </h4>
                 </RadzenColumn>
                 <RadzenColumn Size="1">

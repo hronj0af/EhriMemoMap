@@ -7,6 +7,8 @@ namespace EhriMemoMap.Models
         public DialogTypeEnum DialogType { get; set; }
         public MapTypeEnum MapType { get; set; }
         public VictimLongInfoModel? VictimInfo { get; set; }
+
+        public NarrativeMap? NarrativeMap { get; set; } 
         public DialogParameters Parameters { get; set; } = new DialogParameters();
     }
 

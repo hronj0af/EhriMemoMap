@@ -17,8 +17,8 @@ namespace EhriMemoMap.Client.Services
             if (id == null)
                 return;
             await SetMapType(MapTypeEnum.StoryMapWhole);
+            await GetNarrativeMap(id, Map.InitialVariables?.City);
             await SetDialog(DialogTypeEnum.StoryMap, new DialogParameters { Id = id });
-            await GetNarrativeMap(DialogParameters.Id, Map.InitialVariables?.City);
             await ShowNarrativeMapPlaces();
             NotifyStateChanged();
         }

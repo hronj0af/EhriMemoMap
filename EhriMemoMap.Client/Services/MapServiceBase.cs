@@ -124,7 +124,8 @@ namespace EhriMemoMap.Client.Services
                 DialogType = dialogType,
                 MapType = MapType,
                 VictimInfo = VictimLongInfo,
-                Parameters = parameters ?? new DialogParameters()
+                NarrativeMap = NarrativeMap,
+                Parameters = new DialogParameters { Id = parameters?.Id, Places = parameters?.Places }
             };
 
             DialogParametersHistory.Add(newDialogHistoryItem);
@@ -152,6 +153,7 @@ namespace EhriMemoMap.Client.Services
             DialogParametersHistory.RemoveAt(DialogParametersHistory.Count - 1);
             var lastItem = DialogParametersHistory.Last();
             VictimLongInfo = lastItem.VictimInfo;
+            NarrativeMap = lastItem.NarrativeMap;
             await SetMapType(lastItem.MapType);
             await SetDialog(lastItem.DialogType, lastItem.Parameters);
         }
