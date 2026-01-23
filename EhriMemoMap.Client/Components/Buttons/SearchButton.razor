@@ -67,6 +67,9 @@ else
         if (Disabled) return;
         
         await MapService.SetDialog(MapService.DialogType == DialogTypeEnum.Search ? DialogTypeEnum.None : DialogTypeEnum.Search);
+        if (MapService.MapType != MapTypeEnum.Normal)
+            await MapService.SetMapType(MapTypeEnum.Normal);
+
         MapService.NotifyStateChanged();
     }
 

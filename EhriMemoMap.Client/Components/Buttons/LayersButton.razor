@@ -82,8 +82,10 @@ else
     private async Task ShowLayersList()
     {
         if (Disabled) return;
-        
+
         await MapService.SetDialog(MapService.DialogType == DialogTypeEnum.Layers ? DialogTypeEnum.None : DialogTypeEnum.Layers);
+        if (MapService.MapType != MapTypeEnum.Normal)
+            await MapService.SetMapType(MapTypeEnum.Normal);
         MapService.NotifyStateChanged();
     }
 }

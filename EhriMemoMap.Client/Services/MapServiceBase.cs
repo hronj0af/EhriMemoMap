@@ -284,14 +284,15 @@ namespace EhriMemoMap.Client.Services
         /// </summary>
         public async Task Init(string? city, string? layers = null, string? timelinePoint = null)
         {
-            var json = await _client.GetStringAsync(_appUrl + $"mapsettings.{city}.json");
-            var settings = JsonConvert.DeserializeObject<MapService>(json);
+            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            var json = await _client.GetStringAsync($"{_appUrl}mapsettings.{city}.json?v={timestamp}");
+            var settings = JsonConvert.DeserializeObject<MapService>(json);   
             if (settings == null)
                 return;
             Map = settings.Map;
             Map.InitialVariables?.HeightOfDialog = HeightOfDialog;
 
-            if (!string.IsNullOrEmpty(layers))
+            if (!string.IsNullOrEmpty(layers))   
                 InitInfoAboutLayersSelection(layers.Split(','));
             else
                 InitInfoAboutLayersSelection();

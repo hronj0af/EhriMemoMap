@@ -37,7 +37,7 @@
         {
             <RadzenRow Gap="0" JustifyContent="justifyContent" AlignItems="AlignItems.Center">
                 <RadzenColumn Size="size">
-                    <SearchButton MobileVersion="true" Border="true" Disabled="MapService.MapType != MapTypeEnum.Normal" />
+                    <SearchButton MobileVersion="true" Border="true" />
                 </RadzenColumn>
                 @if (ShowTimelineButton())
                 {
@@ -52,7 +52,7 @@
                     </RadzenColumn>
                 }
                 <RadzenColumn Size="size">
-                    <LayersButton MobileVersion="true" Disabled="MapService.MapType != MapTypeEnum.Normal" />
+                    <LayersButton MobileVersion="true" />
                 </RadzenColumn>
             </RadzenRow>
 

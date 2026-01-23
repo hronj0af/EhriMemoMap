@@ -76,6 +76,25 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+    <script>
+        // Zachycení chyb při stahování frameworku
+        window.addEventListener('error', function (e) {
+            // Kontrola, zda chyba pochází z frameworku Blazoru
+            if (e.target && (e.target.src || "").indexOf('_framework') > -1) {
+                console.warn("Detekována chyba načítání frameworku (verze). Čistím cache a obnovuji...");
+
+                // Vymazání Cache Storage (klíčové pro PWA)
+                if ('caches' in window) {
+                    caches.keys().then(names => {
+                        for (let name of names) caches.delete(name);
+                    });
+                }
+
+                // Vynucený reload z originálního serveru
+                window.location.reload(true);
+            }
+        }, true);
+    </script>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="https://vjs.zencdn.net/8.23.4/video.min.js"></script>
 </body>
