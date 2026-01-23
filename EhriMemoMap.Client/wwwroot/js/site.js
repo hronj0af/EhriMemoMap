@@ -118,8 +118,12 @@ var mapAPI;
     function resetMapViewToInitialState() {
         if (initialVariables == null)
             map.setView([50.07905886, 14.43715096], 14);
-        else
-            map.setView([initialVariables.lat, initialVariables.lng], initialVariables.zoom);
+        else {
+            var initialZoom = isMobileView() ? initialVariables.zoomMobile : initialVariables.zoom;
+            var initialLat = isMobileView() ? initialVariables.latMobile : initialVariables.lat;
+            var initialLng = isMobileView() ? initialVariables.lngMobile : initialVariables.lng;
+            map.setView([initialLat, initialLng], initialZoom);
+        }
     }
     mapAPI.resetMapViewToInitialState = resetMapViewToInitialState;
     function onResizeWindow() {

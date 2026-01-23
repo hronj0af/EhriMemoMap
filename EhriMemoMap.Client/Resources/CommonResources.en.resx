@@ -575,15 +575,11 @@
   <data name="helpContent_pacov" xml:space="preserve">
     <value>&lt;div&gt;
   &lt;p&gt;
-  &lt;h4&gt;
-About MemoMap Pacov
-  &lt;/h4&gt;
-  &lt;/p&gt;
-  &lt;p&gt;
   &lt;h4&gt;What does MemoMap Pacov contain?&lt;/h4&gt;
   &lt;/p&gt;
   &lt;p&gt;
-The interactive map from the Protectorate era shows where Jewish residents lived in Pacov and also presents places associated with local Jewish history and everyday contacts between the Jewish and majority populations. So-called story maps allow detailed tracking of selected personal stories and trajectories of Pacov residents. The presented data also includes digitized documents and photographs that further illustrate the stories of people and places.
+An interactive map of the Jewish community in Pacov shows the residences of more than 100 Jewish inhabitants of the town, as well as places connected with the Jewish history of Pacov and the everyday coexistence of the Jewish and majority populations. It also offers so-called story maps, which allow users to follow specific personal stories and their trajectories in detail. The data is supplemented by digitized documents and photographs that further illustrate the stories of people and places.
+&lt;/p&gt;&lt;p&gt;The map is based on multiple sources, such as archival records and personal documents, so the information in individual records may vary slightly.
   &lt;/p&gt;
   &lt;p&gt;
 The data is based on available Holocaust victim databases, archival sources, and scholarly publications. The preparation of data and texts involved pupils from local primary schools and the Municipal Office of Říčany.
@@ -840,7 +836,8 @@ The application is continuously developed and maintained within the Czech node o
 About MemoMap Říčany
   &lt;/h4&gt;
   &lt;/p&gt;
-  &lt;p&gt;The former Jewish community in Říčany only began to be openly addressed again after the Velvet 
+&lt;p&gt;An interactive map of the Jewish community in Říčany shows the residences and stories of nearly one hundred Jewish residents of the town, as well as places connected with their lives, current memorial and commemorative sites, and the story of the Říčany Torah.&lt;/p&gt;  
+&lt;p&gt;The former Jewish community in Říčany only began to be openly addressed again after the Velvet 
 Revolution. In 2012, a memorial plaque to the victims of the Holocaust was unveiled at the Old Town 
 Hall in Říčany. In 2017, the first Stolpersteine, or "stumbling stones," were laid on Masaryk Square. 
 Three years later, an information stand about the stones of the disappeared was set up in the old tobacco 
@@ -979,10 +976,10 @@ addresses, points of interest, memorial sites, or remembrance events</value>
     <value>An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war. The timeline shows how people gradually disappeared from their homes. The app is adapted for mobile devices, so you can take it directly to the city.</value>
   </data>
   <data name="welcomeText_pacov" xml:space="preserve">
-    <value>An interactive map from the Protectorate period shows where Pacov's Jewish inhabitants lived and provides information about interesting places connected with the town's Jewish history and the interaction between the Jewish and majority population. Story maps allow specific personal stories and trajectories to be traced in detail. The data is supplemented by digitized documents and photographs. The application was created in cooperation with the non-profit organization Tikkun Pacov. Special thanks go to Mr. Pavel Tychtl.</value>
+    <value>An interactive map of the Jewish community in Pacov shows the residences of more than 100 Jewish residents of the town, as well as places connected with the Jewish history of Pacov, and the everyday coexistence of the Jewish and majority populations. It also offers so-called story maps, which allow users to follow specific personal stories and their trajectories in detail. The data is supplemented with digitized documents and photographs. MemoMap Pacov was created in collaboration with the non-profit organization &lt;a href="https://tikkun.cz/" target="_blank" style="color:inherit"&gt;Tikkun Pacov&lt;/a&gt;, with special thanks to Mr. Pavel Tychtl. The application is adapted for mobile devices, so you can take it with you directly to the town.</value>
   </data>
   <data name="welcomeText_ricany" xml:space="preserve">
-    <value>Interactive MemoMap shows the fates of local victims and places associated with their lives; it also uses a historical map of Říčany from 1935. The Application was created through the collaboration of the Masaryk Institute and Archives of the Czech Academy of Sciences and the Municipal Office of Říčany. Special thanks go to Ms Věra Likešová and Ms Markéta Žilková from the Říčany Municipal Office.</value>
+    <value>An interactive map of the Jewish community in Říčany shows the residences and stories of nearly one hundred Jewish residents of the town, as well as places connected with their lives, current memorial and commemorative sites, and the story of the Říčany Torah. The map captures the process of gradually commemorating the Jewish history of Říčany after 1989, including the unveiling of a memorial plaque to Holocaust victims at the Old Town Hall in 2012, the installation of the first Stolpersteine in 2017, and the creation of an information booth. The interactive MemoMap has been in development since 2025 in collaboration with students from Bezručova Elementary School No. 2 and Říčanský les Elementary School No. 3, the City of Říčany, and the Říčany Museum. The application is adapted for mobile devices, so you can take it with you directly to the town.</value>
   </data>
   <data name="joinToProject" xml:space="preserve">
     <value>Join the project</value>

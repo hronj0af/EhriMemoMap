@@ -2,11 +2,13 @@
   "map": {
     "initialVariables": {
       "city": "prague_last_residence",
-      "allCities": [ ],
+      "allCities": [],
       "zoom": 12,
       "zoomMobile": 11,
       "lat": 50.07905886,
       "lng": 14.43715096,
+      "latMobile": 50.07905886,
+      "lngMobile": 14.43715096,
       "minBounds": {
         "X": 49.763,
         "Y": 13.842

@@ -8,6 +8,8 @@
       "zoomMobile": 15,
       "lat": 49.46755233053013,
       "lng": 15.010156631469728,
+      "latMobile": 49.4681,
+      "lngMobile": 15.003,
       "minBounds": {
         "X": -120,
         "Y": -120

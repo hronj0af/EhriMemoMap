@@ -41,8 +41,6 @@ namespace mapAPI {
 
     // připraví mapu do úvodního stavu
     export function initMap(jsonMapSettings: string): void {
-        //history.replaceState({}, '', "praha");
-
         mapSettings = JSON.parse(jsonMapSettings) as MapSettingsForLeafletModel;
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
@@ -163,8 +161,13 @@ namespace mapAPI {
     export function resetMapViewToInitialState() {
         if (initialVariables == null)
             map.setView([50.07905886, 14.43715096], 14); // defaultně nastavíme mapu na Prahu
-        else
-            map.setView([initialVariables.lat, initialVariables.lng], /*isMobileView() ? initialVariables.zoomMobile : */initialVariables.zoom);
+        else {
+            var initialZoom = isMobileView() ? initialVariables.zoomMobile : initialVariables.zoom;
+            var initialLat = isMobileView() ? initialVariables.latMobile : initialVariables.lat;
+            var initialLng = isMobileView() ? initialVariables.lngMobile : initialVariables.lng;
+            map.setView([initialLat, initialLng], initialZoom);
+
+        }
     }
 
     export function onResizeWindow(): void {
@@ -1239,6 +1242,8 @@ interface InitialVariables {
     zoomMobile: number | null;
     lat: number | null;
     lng: number | null;
+    latMobile: number | null;
+    lngMobile: number | null;
     minBounds: any | null;
     maxBounds: any | null;
     minZoom: number | null;
