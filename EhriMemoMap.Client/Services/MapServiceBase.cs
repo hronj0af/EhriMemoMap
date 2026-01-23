@@ -315,7 +315,7 @@ namespace EhriMemoMap.Client.Services
             AllNarrativeMaps = null!;
             await _js.InvokeVoidAsync("mapAPI.destroyMap");
         }
-
+        
         /// <summary>
         /// Když se načítá poprvé nastavení mapy, nastav správně příznak Selected u všech vrstev;
         /// pokud je ale zadaný parametr layers s vybranými vrstvami, pak nastav příznak Selected jen u těchto vybraných

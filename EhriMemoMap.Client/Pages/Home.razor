@@ -283,6 +283,12 @@ else
         await MapService.Destroy();
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await JS.InvokeVoidAsync("resetPageElementHeight");
+    }
+
     protected override void OnParametersSet()
     {
         UpdateDetailFromParameter();

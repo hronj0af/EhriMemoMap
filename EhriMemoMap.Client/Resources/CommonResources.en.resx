@@ -984,4 +984,10 @@ addresses, points of interest, memorial sites, or remembrance events</value>
   <data name="joinToProject" xml:space="preserve">
     <value>Join the project</value>
   </data>
+  <data name="backToHomepage" xml:space="preserve">
+    <value>Back to homepage</value>
+  </data>
+  <data name="feedbackForm" xml:space="preserve">
+    <value>Feedback form</value>
+  </data>
 </root>

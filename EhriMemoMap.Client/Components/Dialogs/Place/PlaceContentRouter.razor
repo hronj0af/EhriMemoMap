@@ -7,7 +7,7 @@
 {
     @if (PlaceType == PlaceType.Incident)
     {
-        foreach (var place in PlacesToShow.Incidents ?? [])
+        foreach (var place in PlacesToShow.Incidents?.OrderBy(a=>a.LabelCs).ToArray() ?? [])
         {
             <Incident Place="place" />
         }
@@ -15,7 +15,7 @@
 
     else if (PlaceType == PlaceType.Interest) 
     {
-        foreach (var place in PlacesToShow.PlacesOfInterest ?? [])
+        foreach (var place in PlacesToShow.PlacesOfInterest?.OrderBy(a => a.LabelCs).ToArray() ?? [])
         {
             <Interest Place="place" />
         }
@@ -23,7 +23,7 @@
 
     else if (PlaceType == PlaceType.Inaccessible)
     {
-        foreach (var place in PlacesToShow.InaccessiblePlaces ?? [])
+        foreach (var place in PlacesToShow.InaccessiblePlaces?.OrderBy(a => a.LabelCs).ToArray() ?? [])
         {
             <Interest Place="place" />
         }
@@ -65,18 +65,20 @@
     
     else if (PlaceType == PlaceType.Memory)
     {
-        for (var i = 0; i < (PlacesToShow?.PlacesOfMemory?.Count ?? 0); i++)
+        var places = PlacesToShow?.PlacesOfMemory?.OrderBy(a => a.LabelCs).ToList();
+        for (var i = 0; i < (places?.Count ?? 0); i++)
         {
-            var place = PlacesToShow?.PlacesOfMemory?[i];
+            var place = places?[i];
             <Memory Place="place" />
         }
     }
 
     else if (PlaceType == PlaceType.Memorial)
     {
-        for (var i = 0; i < (PlacesToShow?.Memorials?.Count ?? 0); i++)
+        var places = PlacesToShow?.Memorials?.OrderBy(a => a.LabelCs).ToList();
+        for (var i = 0; i < (places?.Count ?? 0); i++)
         {
-            var place = PlacesToShow?.Memorials?[i];
+            var place = places?[i];
             <Memorial Place="place" />
         }
     }

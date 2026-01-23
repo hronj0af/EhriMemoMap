@@ -38,3 +38,8 @@ function closeGallery() {
         return;
     bp.close();
 }
+
+function resetPageElementHeight() {
+    const pageElement = document.getElementsByClassName("page");
+    pageElement[0].style.height = "";
+}

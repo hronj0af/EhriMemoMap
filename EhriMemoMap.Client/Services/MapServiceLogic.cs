@@ -111,7 +111,7 @@ namespace EhriMemoMap.Client.Services
             if (objects == null)
                 return result;
 
-            var objectGroups = objects.GroupBy(a => a.PlaceType);
+            var objectGroups = objects.OrderBy(a => a.LabelCs).GroupBy(a => a.PlaceType);
 
             foreach (var objectGroup in objectGroups)
             {

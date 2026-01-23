@@ -979,4 +979,10 @@ Aplikaci lze používat nejen z domácího či školního počítače, ale také
   <data name="joinToProject" xml:space="preserve">
     <value>Zapojte se do projektu</value>
   </data>
+  <data name="backToHomepage" xml:space="preserve">
+    <value>Zpět na hlavní stránku</value>
+  </data>
+  <data name="feedbackForm" xml:space="preserve">
+    <value>Zpětná vazba</value>
+  </data>
 </root>

@@ -15,7 +15,7 @@ public partial class MapObjectForLeafletModel
             return;
 
         Id = place.Id;
-        Label = place.PlaceCs;
+        Label = CultureInfo.CurrentCulture.Name == "en-US" ? place.LabelEn : place.LabelCs;
         MapPoint = place.MapLocation;
         Clickable = true;
         IconAnchor = [13,45];
@@ -28,7 +28,7 @@ public partial class MapObjectForLeafletModel
     public MapObjectForLeafletModel(Place place, bool defaultColor = true)
     {
         Id = place.Id.ToString();
-        Label = place.LabelCs;
+        Label = CultureInfo.CurrentCulture.Name == "en-US" ? place.LabelEn : place.LabelCs;
         MapPoint = place.MapPoint;
         PlaceType = place.Type;
         StopId = place.StopId;
@@ -48,12 +48,12 @@ public partial class MapObjectForLeafletModel
                 break;
             default:
                 HtmlIcon = "<img src='css/images/marker-icon-wine-red.png' />";
-                IconAnchor = [22, 41];
+                IconAnchor = [12, 41];
                 break;
         }
     }
 
-    public MapObjectForLeafletModel(Shared.MapObject mapObject, bool heatmap, List<LayerModel>? layers = null)
+    public MapObjectForLeafletModel(MapObject mapObject, bool heatmap, List<LayerModel>? layers = null)
     {
         Clickable = !heatmap;
         Citizens = mapObject.Citizens;
