@@ -305,8 +305,6 @@ namespace EhriMemoMap.Client.Services
 
         public async Task Destroy()
         {
-            await _dialogService.CloseSideAsync();
-            _dialogService.Close();
             MapState = MapStateEnum.NotInitialized;
             Map = null!;
             NarrativeMap = null;
@@ -317,8 +315,10 @@ namespace EhriMemoMap.Client.Services
             MapType = MapTypeEnum.Normal;
             AllNarrativeMaps = null!;
             await _js.InvokeVoidAsync("mapAPI.destroyMap");
+            await _dialogService.CloseSideAsync();
+            _dialogService.Close();
         }
-        
+
         /// <summary>
         /// Když se načítá poprvé nastavení mapy, nastav správně příznak Selected u všech vrstev;
         /// pokud je ale zadaný parametr layers s vybranými vrstvami, pak nastav příznak Selected jen u těchto vybraných

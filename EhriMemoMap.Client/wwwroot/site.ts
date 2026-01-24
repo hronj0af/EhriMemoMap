@@ -901,6 +901,8 @@ namespace mapAPI {
     export function selectPointOnMap(guidArrayJson: string): void {
         const guidArray = JSON.parse(guidArrayJson) as string[];
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
+        if (objectsGroup == undefined || objectsGroup == null)
+            return;
         objectsGroup.eachLayer(function (item: L.Marker) {
             if (item.getElement() != null && item.options.guid !== undefined && guidArray.indexOf(item.options.guid) > -1) {
                 item.getElement().className = item.getElement().className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');

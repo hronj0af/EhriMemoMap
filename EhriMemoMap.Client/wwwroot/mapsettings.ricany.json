@@ -8,8 +8,8 @@
       "zoomMobile": 15,
       "lat": 49.9925,
       "lng": 14.6665067612,
-      "latMobile": 49.9925,
-      "lngMobile": 14.6665067612,
+      "latMobile": 49.9885000,
+      "lngMobile": 14.662599314089845,
       "minBounds": {
         "X": -90,
         "Y": -90
@@ -39,7 +39,7 @@
         "type": "wms",
         "selected": true,
         "opacities": "255",
-        "zIndex": 300,
+        "zIndex": 75,
         "order": 100,
         "backgroundColor": "#D5D2B8",
         "fontColor": "Dark",

@@ -646,6 +646,8 @@ var mapAPI;
     function selectPointOnMap(guidArrayJson) {
         const guidArray = JSON.parse(guidArrayJson);
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
+        if (objectsGroup == undefined || objectsGroup == null)
+            return;
         objectsGroup.eachLayer(function (item) {
             if (item.getElement() != null && item.options.guid !== undefined && guidArray.indexOf(item.options.guid) > -1) {
                 item.getElement().className = item.getElement().className.replace('map-point-selected', 'map-point').replace('map-point', 'map-point-selected');
