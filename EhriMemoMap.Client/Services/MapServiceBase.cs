@@ -292,7 +292,7 @@ namespace EhriMemoMap.Client.Services
             Map = settings.Map;
             Map.InitialVariables?.HeightOfDialog = HeightOfDialog;
 
-            if (!string.IsNullOrEmpty(layers))   
+            if (!string.IsNullOrEmpty(layers))
                 InitInfoAboutLayersSelection(layers.Split(','));
             else
                 InitInfoAboutLayersSelection();
@@ -305,6 +305,8 @@ namespace EhriMemoMap.Client.Services
 
         public async Task Destroy()
         {
+            await _dialogService.CloseSideAsync();
+            _dialogService.Close();
             MapState = MapStateEnum.NotInitialized;
             Map = null!;
             NarrativeMap = null;
