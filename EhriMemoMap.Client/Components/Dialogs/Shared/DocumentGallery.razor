@@ -11,66 +11,55 @@
     {
         <h3 class="rz-mt-8 rz-mb-4">@cl["relatedDocuments"]</h3>
     }
-    <div id="documents_@(guid)">
-        <RadzenRow class="rz-mt-2 rz-mb-4">
-            @{
-                var documentIndex = 0;
-            }
-            @foreach (var doc in Documents)
-            {
-                long actIndex = doc.Id;
-                var currentDocumentIndex = documentIndex; // Lokální kopie pro tento iteration
-                documentIndex += 1;
-                var docTb = doc.Url?.FirstOrDefault()?.ThumbnailUrl ?? doc.Url?.FirstOrDefault()?.Url;
+    <div id="documents_@(guid)" class="rz-mt-8">
+        @{
+            var documentIndex = 0;
+        }
+        @foreach (var doc in Documents)
+        {
+            long actIndex = doc.Id;
+            var currentDocumentIndex = documentIndex; // Lokální kopie pro tento iteration
+            documentIndex += 1;
+            var docTb = doc.Url?.FirstOrDefault()?.ThumbnailUrl ?? doc.Url?.FirstOrDefault()?.Url;
 
-                <RadzenColumn Size="MapService.IsMobileView ? 3 : 2">
-                    <RadzenCard class="document-card" title="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? doc.LabelCs : doc.LabelEn)">
-                        <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
-                            <div style="position:relative;width:100%">
-                                <RadzenImage style="cursor:pointer" class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@docTb" onclick="@(() => ShowImage(actIndex, currentDocumentIndex))" />
-                                @if (doc.Type != "image" && doc.Type != "text")
-                                {
-                                    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,35%);pointer-events:none;">
-                                        <RadzenImage Path="images/icon-play.png" style="width:48px;height:48px;opacity:0.9;" />
-                                    </div>
-                                }
-                            </div>
+            <div id="doc-container-@guid-@currentDocumentIndex" style="position:relative; display:inline-block;height:100px;margin-right:3px">
+                <RadzenImage style="cursor:pointer" class="document-photo" alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())" Path="@docTb" onclick="@(() => ShowImage(actIndex, currentDocumentIndex))" />
+                @if (doc.Type != "image" && doc.Type != "text")
+                {
+                    <RadzenImage Path="images/icon-play.png" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:48px; height:48px; opacity:0.9; pointer-events:none;" />
+                }
+            </div>
 
-                            <!-- Hidden container used by BiggerPicture -->
-                            <div id="documents_@actIndex" style="display:none;">
-                                @if (doc.Url != null)
-                                {
-                                    if (doc.Type == "image" || doc.Type == "text")
-                                    {
-                                        foreach (var url in doc.Url)
-                                        {
-                                            <a 
-                                               data-img="@url.Url"
-                                               data-caption="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())"
-                                               data-alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())">
-                                            </a>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // One anchor per video (keeps parity with previous behavior)
-                                        foreach (var url in doc.Url)
-                                        {
-                                            var sourcesJson = GetSourcesJson(url);
-                                            var thumb = url.ThumbnailUrl ?? docTb;
-                                             <a href="@url.Url"
-                                               data-sources="@sourcesJson"
-                                               data-thumb="@thumb">
-                                            </a>
-                                        }
-                                    }
-                                }
-                            </div>
-                        </RadzenStack>
-                    </RadzenCard>
-                </RadzenColumn>
-            }
-        </RadzenRow>
+            <!-- Hidden container used by BiggerPicture -->
+            <div id="documents_@actIndex" style="display:none;">
+                @if (doc.Url != null)
+                {
+                    if (doc.Type == "image" || doc.Type == "text")
+                    {
+                        foreach (var url in doc.Url)
+                        {
+                            <a data-img="@url.Url"
+                               data-caption="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())"
+                               data-alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())">
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        // One anchor per video (keeps parity with previous behavior)
+                        foreach (var url in doc.Url)
+                        {
+                            var sourcesJson = GetSourcesJson(url);
+                            var thumb = url.ThumbnailUrl ?? docTb;
+                            <a href="@url.Url"
+                               data-sources="@sourcesJson"
+                               data-thumb="@thumb">
+                            </a>
+                        }
+                    }
+                }
+            </div>
+        }
     </div>
 }
 
@@ -82,6 +71,14 @@
     public bool ShowTitle { get; set; } = true;
 
     private string guid = Guid.NewGuid().ToString();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (Documents != null && Documents.Any())
+        {
+            await JSRuntime.InvokeVoidAsync("adjustDocumentContainerWidths", guid);
+        }
+    }
 
     private async Task ShowImage(long imageNumber, int documentIndex)
     {

@@ -43,3 +43,27 @@ function resetPageElementHeight() {
     const pageElement = document.getElementsByClassName("page");
     pageElement[0].style.height = "";
 }
+
+
+window.adjustDocumentContainerWidths = function (guid) {
+    // Počkáme na načtení obrázků
+    setTimeout(function () {
+        const containers = document.querySelectorAll('[id^="doc-container-' + guid + '-"]');
+
+        containers.forEach(function (container) {
+            const img = container.querySelector('.document-photo');
+            if (img) {
+                // Pokud je obrázek už načtený
+                if (img.complete) {
+                    container.style.width = img.offsetWidth + 'px';
+                } else {
+                    // Počkáme na načtení obrázku
+                    img.onload = function () {
+                        container.style.width = img.offsetWidth + 'px';
+                    };
+                }
+            }
+            console.log(img);
+        });
+    }, 100);
+};

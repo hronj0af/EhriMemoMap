@@ -6,9 +6,14 @@
     "removeComments": true,
     "sourceMap": true,
     "target": "es6",
-    "outDir": "wwwroot/js"
+    "rootDir": "wwwroot/js",
+    "outDir": "wwwroot/js",
+    "allowJs": true
   },
   "include": [
-    "wwwroot/**/*"
+    "wwwroot/js/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

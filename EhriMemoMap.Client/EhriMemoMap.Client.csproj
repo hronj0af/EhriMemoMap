@@ -73,5 +73,10 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="wwwroot/js/**/*.ts">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 
 </Project>

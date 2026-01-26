@@ -118,6 +118,9 @@
             await MapService.RefreshObjectsOnMap(true);
             await JS.InvokeVoidAsync("mapAPI.showLayersForNormalMap");
             MapService.MapState = MapStateEnum.Rendered;
+
+            await JS.InvokeVoidAsync("mapAPI.fitMapToWindow");
+
             MapService.NotifyStateChanged();
         }
 

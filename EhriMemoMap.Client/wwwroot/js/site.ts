@@ -1,5 +1,5 @@
 ﻿// FUNKCE PRO OVLÁDÁNÍ MAPY
-/// <reference path="ts/leaflet/index.d.ts" />
+/// <reference path="../ts/leaflet/index.d.ts" />
 
 namespace mapAPI {
 
@@ -16,10 +16,10 @@ namespace mapAPI {
     let bluepointIcon: L.Icon = null;
     let addressIcon: L.DivIcon = null;
     let incidentIcon: L.DivIcon = null;
+    let watchId = null;
     let interestIcon: L.DivIcon = null;
     let blazorMapObjects = [];
     let groups: L.FeatureGroup[] = [];
-    let trackingInterval: number = null;
     let _isMobileView: boolean = null;
     let mapSettings: MapSettingsForLeafletModel = null;
     let applicationIsTrackingLocation: boolean = null;
@@ -45,8 +45,6 @@ namespace mapAPI {
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
         initialVariables = mapSettings.initialVariables;
-
-        fitMapToWindow();
 
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
         addressIcon = new L.DivIcon();
@@ -113,15 +111,14 @@ namespace mapAPI {
             group.setZIndex(mapSettings.layers[i].zIndex);
 
         }
+
+        fitMapToWindow();
     }
 
     export function destroyMap(): void {
-        // Zastavit tracking interval
-        if (trackingInterval != null) {
-            clearInterval(trackingInterval);
-            trackingInterval = null;
-        }
 
+        hideMyLocation();
+    
         // Odstranit heatmap layer
         if (heatmapLayer != null && map != null) {
             map.removeLayer(heatmapLayer);
@@ -141,7 +138,7 @@ namespace mapAPI {
                     }
                 }
             });
-            groups = [];
+            groups = []; 
         }
 
         // Odstranit mapu
@@ -154,8 +151,8 @@ namespace mapAPI {
         // Vyčistit další proměnné
         applicationIsTrackingLocation = null;
         actualLocation = null;
-        blazorMapObjects = [];
-        initialVariables = null;
+        blazorMapObjects = []; 
+        initialVariables = null; 
     }
 
     export function resetMapViewToInitialState() {
@@ -165,6 +162,8 @@ namespace mapAPI {
             var initialZoom = isMobileView() ? initialVariables.zoomMobile : initialVariables.zoom;
             var initialLat = isMobileView() ? initialVariables.latMobile : initialVariables.lat;
             var initialLng = isMobileView() ? initialVariables.lngMobile : initialVariables.lng;
+            if (initialLat == undefined || initialLng == undefined || initialZoom == undefined)
+                return;
             map.setView([initialLat, initialLng], initialZoom);
 
         }
@@ -179,12 +178,11 @@ namespace mapAPI {
     }
 
     // nastaví mapu, aby lícovala s oknem
-    export function fitMapToWindow(heightOfDialog = null, mapWidth = null): void {
+    export function fitMapToWindow(heightOfDialog:string = null, mapWidth = null): void {
         const pageHeight = window.innerHeight;
-        const pageWidth = window.innerWidth;
 
         const tempHeight = heightOfDialog != null && isMobileView()
-            ? pageHeight * (heightOfDialog / 100)
+            ? pageHeight * (heightOfDialog == null ? 0 : parseInt(heightOfDialog)) / 100
             : pageHeight - (document.getElementById("controlButtonsWrapper") != null
                 ? document.getElementById("controlButtonsWrapper").offsetTop
                 : 0);
@@ -743,6 +741,8 @@ namespace mapAPI {
     export function fitMapToGroup(groupName) {
 
         const objectsGroup = groups.find(a => a.options.id == groupName);
+        if (objectsGroup === undefined || objectsGroup == null)
+            return;
 
         // Předpokládejme, že `objectsGroup` obsahuje všechny markery, které chcete zobrazit
         var latlngs = [];
@@ -1074,12 +1074,48 @@ namespace mapAPI {
         if (!navigator.geolocation) {
             console.log("Your browser doesn't support geolocation feature!");
         } else {
-            navigator.geolocation.watchPosition(showMyLocation, null, {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
-            });
+            // Zrušíme předchozí sledování, pokud existuje
+            if (watchId !== null) {
+                navigator.geolocation.clearWatch(watchId);
+            }
+
+            watchId = navigator.geolocation.watchPosition(
+                showMyLocation,
+                handleLocationError, // Přidán error callback
+                {
+                    enableHighAccuracy: true,
+                    timeout: 20000,    // ZVÝŠENO na 20 sekund pro iOS
+                    maximumAge: 0
+                }
+            );
         }
+    }
+
+    function handleLocationError(error) {
+        console.warn(`ERROR(${error.code}): ${error.message}`);
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                alert("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                alert("The request to get user location timed out.");
+                break;
+            default:
+                alert("An unknown error occurred while retrieving location.");
+                break;
+        }
+    }
+
+    export function hideMyLocation(): void {
+        if (watchId !== null) {
+            navigator.geolocation.clearWatch(watchId); // OPRAVENO: clearWatch místo clearInterval
+            watchId = null;
+        }
+        applicationIsTrackingLocation = false;
+        removeBluepoint();
     }
 
     export function goToLocation(pointString, zoom: number): void {
@@ -1088,6 +1124,8 @@ namespace mapAPI {
     }
 
     export function goToMyLocation(): void {
+        if (actualLocation == null)
+            return;
         const lat = actualLocation.coords.latitude;
         const long = actualLocation.coords.longitude;
         map.setView([lat, long], 15);
@@ -1107,19 +1145,17 @@ namespace mapAPI {
         }
     }
 
-    export function hideMyLocation(): void {
-        clearInterval(trackingInterval);
-        applicationIsTrackingLocation = false;
-        removeBluepoint();
-    }
-
     export function addBluepoint(point, icon: L.Icon): void {
         const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+        if (objectsGroup === undefined || objectsGroup === null)
+            return;
         new L.Marker(point, { icon: icon, type: "bluepoint" }).addTo(objectsGroup);
     }
 
     export function removeBluepoint(): void {
         const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+        if (objectsGroup === undefined || objectsGroup === null)
+            return;
         objectsGroup.eachLayer(function (item) {
             if (item.options.type !== undefined && item.options.type == "bluepoint") {
                 item.remove();
@@ -1146,7 +1182,7 @@ namespace mapAPI {
             isFullscreen = true;
             document.querySelector("aside").style.width = "100%";
             document.querySelector("aside").style.height = "100%";
-            fitMapToWindow(window.innerHeight - 44);
+            fitMapToWindow((window.innerHeight - 44).toString());
         } else if (!value && isFullscreen && dialogHeight != null && dialogWidth != null) {
             isFullscreen = false;
             document.querySelector("aside").style.width = dialogWidth;

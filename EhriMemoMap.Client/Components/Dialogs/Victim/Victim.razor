@@ -158,7 +158,7 @@
                                         @((MarkupString)otherInfo.AsSpan(0, 200).ToString().Nl2Br())...
                                     </span>
                                     <span>
-                                        <a style="cursor:pointer" href="#" @onclick="@(() => ShowMoreOtherInfo = !ShowMoreOtherInfo)">@cl["more"]</a>
+                                        <a style="cursor:pointer" @onclick="@(() => ShowMoreOtherInfo = !ShowMoreOtherInfo)">@cl["more"]</a>
                                     </span>
                                 }
                                 else
@@ -167,7 +167,7 @@
                                         @((MarkupString)otherInfo.Nl2Br())
                                     </span>
                                     <span>
-                                        <a style="cursor:pointer" href="#" @onclick="@(() => ShowMoreOtherInfo = !ShowMoreOtherInfo)">@cl["less"]</a>
+                                        <a style="cursor:pointer" @onclick="@(() => ShowMoreOtherInfo = !ShowMoreOtherInfo)">@cl["less"]</a>
                                     </span>
                                 }
                             }

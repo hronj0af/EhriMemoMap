@@ -9,10 +9,10 @@ var mapAPI;
     let bluepointIcon = null;
     let addressIcon = null;
     let incidentIcon = null;
+    let watchId = null;
     let interestIcon = null;
     let blazorMapObjects = [];
     let groups = [];
-    let trackingInterval = null;
     let _isMobileView = null;
     let mapSettings = null;
     let applicationIsTrackingLocation = null;
@@ -32,7 +32,6 @@ var mapAPI;
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
         wmsProxyUrl = mapSettings.initialVariables.wmsProxyUrl;
         initialVariables = mapSettings.initialVariables;
-        fitMapToWindow();
         incidentIcon = new L.DivIcon({ className: 'leaflet-incident-icon' });
         addressIcon = new L.DivIcon();
         interestIcon = new L.DivIcon({ className: 'leaflet-interest-icon' });
@@ -81,13 +80,11 @@ var mapAPI;
                 group.addLayer(layer);
             group.setZIndex(mapSettings.layers[i].zIndex);
         }
+        fitMapToWindow();
     }
     mapAPI.initMap = initMap;
     function destroyMap() {
-        if (trackingInterval != null) {
-            clearInterval(trackingInterval);
-            trackingInterval = null;
-        }
+        hideMyLocation();
         if (heatmapLayer != null && map != null) {
             map.removeLayer(heatmapLayer);
             heatmapLayer = null;
@@ -122,6 +119,8 @@ var mapAPI;
             var initialZoom = isMobileView() ? initialVariables.zoomMobile : initialVariables.zoom;
             var initialLat = isMobileView() ? initialVariables.latMobile : initialVariables.lat;
             var initialLng = isMobileView() ? initialVariables.lngMobile : initialVariables.lng;
+            if (initialLat == undefined || initialLng == undefined || initialZoom == undefined)
+                return;
             map.setView([initialLat, initialLng], initialZoom);
         }
     }
@@ -135,9 +134,8 @@ var mapAPI;
     mapAPI.onResizeWindow = onResizeWindow;
     function fitMapToWindow(heightOfDialog = null, mapWidth = null) {
         const pageHeight = window.innerHeight;
-        const pageWidth = window.innerWidth;
         const tempHeight = heightOfDialog != null && isMobileView()
-            ? pageHeight * (heightOfDialog / 100)
+            ? pageHeight * (heightOfDialog == null ? 0 : parseInt(heightOfDialog)) / 100
             : pageHeight - (document.getElementById("controlButtonsWrapper") != null
                 ? document.getElementById("controlButtonsWrapper").offsetTop
                 : 0);
@@ -520,6 +518,8 @@ var mapAPI;
     mapAPI.getCurve = getCurve;
     function fitMapToGroup(groupName) {
         const objectsGroup = groups.find(a => a.options.id == groupName);
+        if (objectsGroup === undefined || objectsGroup == null)
+            return;
         var latlngs = [];
         objectsGroup.eachLayer(function (layer) {
             if (layer instanceof L.Marker) {
@@ -794,20 +794,51 @@ var mapAPI;
             console.log("Your browser doesn't support geolocation feature!");
         }
         else {
-            navigator.geolocation.watchPosition(showMyLocation, null, {
+            if (watchId !== null) {
+                navigator.geolocation.clearWatch(watchId);
+            }
+            watchId = navigator.geolocation.watchPosition(showMyLocation, handleLocationError, {
                 enableHighAccuracy: true,
-                timeout: 5000,
+                timeout: 20000,
                 maximumAge: 0
             });
         }
     }
     mapAPI.turnOnLocationTracking = turnOnLocationTracking;
+    function handleLocationError(error) {
+        console.warn(`ERROR(${error.code}): ${error.message}`);
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                alert("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                alert("The request to get user location timed out.");
+                break;
+            default:
+                alert("An unknown error occurred while retrieving location.");
+                break;
+        }
+    }
+    function hideMyLocation() {
+        if (watchId !== null) {
+            navigator.geolocation.clearWatch(watchId);
+            watchId = null;
+        }
+        applicationIsTrackingLocation = false;
+        removeBluepoint();
+    }
+    mapAPI.hideMyLocation = hideMyLocation;
     function goToLocation(pointString, zoom) {
         const point = JSON.parse(pointString).coordinates;
         map.flyTo([point[1], point[0]], zoom);
     }
     mapAPI.goToLocation = goToLocation;
     function goToMyLocation() {
+        if (actualLocation == null)
+            return;
         const lat = actualLocation.coords.latitude;
         const long = actualLocation.coords.longitude;
         map.setView([lat, long], 15);
@@ -825,19 +856,17 @@ var mapAPI;
         }
     }
     mapAPI.showMyLocation = showMyLocation;
-    function hideMyLocation() {
-        clearInterval(trackingInterval);
-        applicationIsTrackingLocation = false;
-        removeBluepoint();
-    }
-    mapAPI.hideMyLocation = hideMyLocation;
     function addBluepoint(point, icon) {
         const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+        if (objectsGroup === undefined || objectsGroup === null)
+            return;
         new L.Marker(point, { icon: icon, type: "bluepoint" }).addTo(objectsGroup);
     }
     mapAPI.addBluepoint = addBluepoint;
     function removeBluepoint() {
         const objectsGroup = groups.find(a => a.options.id == "AdditionalObjects_group");
+        if (objectsGroup === undefined || objectsGroup === null)
+            return;
         objectsGroup.eachLayer(function (item) {
             if (item.options.type !== undefined && item.options.type == "bluepoint") {
                 item.remove();
@@ -859,7 +888,7 @@ var mapAPI;
             isFullscreen = true;
             document.querySelector("aside").style.width = "100%";
             document.querySelector("aside").style.height = "100%";
-            fitMapToWindow(window.innerHeight - 44);
+            fitMapToWindow((window.innerHeight - 44).toString());
         }
         else if (!value && isFullscreen && dialogHeight != null && dialogWidth != null) {
             isFullscreen = false;
