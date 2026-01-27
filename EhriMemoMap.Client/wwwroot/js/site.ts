@@ -181,8 +181,14 @@ namespace mapAPI {
     export function fitMapToWindow(heightOfDialog:string = null, mapWidth = null): void {
         const pageHeight = window.innerHeight;
 
-        const tempHeight = heightOfDialog != null && isMobileView()
-            ? pageHeight * (heightOfDialog == null ? 0 : parseInt(heightOfDialog)) / 100
+        //const tempHeight = heightOfDialog != null && isMobileView()
+        //    ? pageHeight * (heightOfDialog == null ? 0 : parseInt(heightOfDialog)) / 100
+        //    : pageHeight - (document.getElementById("controlButtonsWrapper") != null
+        //        ? document.getElementById("controlButtonsWrapper").offsetTop
+        //        : 0);
+
+        const tempHeight = isMobileView()
+            ? pageHeight * (heightOfDialog != null ? parseInt(heightOfDialog) : 0) / 100
             : pageHeight - (document.getElementById("controlButtonsWrapper") != null
                 ? document.getElementById("controlButtonsWrapper").offsetTop
                 : 0);

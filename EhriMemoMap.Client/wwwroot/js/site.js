@@ -134,8 +134,8 @@ var mapAPI;
     mapAPI.onResizeWindow = onResizeWindow;
     function fitMapToWindow(heightOfDialog = null, mapWidth = null) {
         const pageHeight = window.innerHeight;
-        const tempHeight = heightOfDialog != null && isMobileView()
-            ? pageHeight * (heightOfDialog == null ? 0 : parseInt(heightOfDialog)) / 100
+        const tempHeight = isMobileView()
+            ? pageHeight * (heightOfDialog != null ? parseInt(heightOfDialog) : 0) / 100
             : pageHeight - (document.getElementById("controlButtonsWrapper") != null
                 ? document.getElementById("controlButtonsWrapper").offsetTop
                 : 0);
