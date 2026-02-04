@@ -2064,6 +2064,7 @@ export abstract class Path extends Layer {
 export interface PolylineOptions extends PathOptions {
     smoothFactor?: number | undefined;
     noClip?: boolean | undefined;
+
 }
 
 export class Polyline<T extends geojson.GeometryObject = geojson.LineString | geojson.MultiLineString, P = any>

@@ -53,15 +53,20 @@ public partial class MapObjectForLeafletModel
         }
     }
 
-    public MapObjectForLeafletModel(MapObject mapObject, bool heatmap, List<LayerModel>? layers = null)
+    public MapObjectForLeafletModel(MapObject mapObject, bool heatmap, List<LayerModel>? layers = null, IStringLocalizer<CommonResources>? cl = null)
     {
+        var layer = layers?.FirstOrDefault(a => !string.IsNullOrEmpty(a.Name) && a.Name?.ToLower() == mapObject.LayerName?.ToLower());
         Clickable = !heatmap;
         Citizens = mapObject.Citizens;
         MapPoint = mapObject.MapPoint;
         PlaceType = mapObject.PlaceType;
         Heatmap = heatmap;
         LayerName = mapObject.LayerName;
-        PriorityOnMap = layers?.FirstOrDefault(a => !string.IsNullOrEmpty(a.Name) && a.Name?.ToLower() == mapObject.PlaceType?.ToLower())?.PriorityOnMap;
+        PriorityOnMap = layer?.PriorityOnMap;
+        CustomPolygonColor = layer?.CustomPolygonColor;
+        CustomPolygonFillColor = layer?.CustomPolygonFillColor;
+        CustomPolygonFillOpacity = layer?.CustomPolygonFillOpacity;
+        CustomPolygonWeight = layer?.CustomPolygonWeight;
 
         if (heatmap)
             return;
@@ -69,7 +74,12 @@ public partial class MapObjectForLeafletModel
         CitizensTotal = mapObject.CitizensTotal;
         Id = mapObject.Id.ToString();
         Guid = mapObject.PlaceType + "_" + mapObject.Id + "_" + mapObject.DateFrom?.ToString("yyyy-mm-dd");
-        Label = CultureInfo.CurrentCulture.Name == "en-US" ? mapObject.LabelEn : mapObject.LabelCs;
+        
+        if (!string.IsNullOrEmpty(layer?.LabelCode) && cl != null)
+            Label = cl[layer.LabelCode];
+        else
+            Label = CultureInfo.CurrentCulture.Name == "en-US" ? mapObject.LabelEn : mapObject.LabelCs;
+        
         MapPolygon = mapObject.MapPolygon;
 
         if (PlaceType == Shared.PlaceType.Incident.ToString())
@@ -200,6 +210,10 @@ public partial class MapObjectForLeafletModel
     public string? Label { get; set; }
     public string? CustomTooltipClass { get; set; }
     public string? CustomPolygonClass { get; set; }
+    public string? CustomPolygonColor { get; set; }
+    public string? CustomPolygonFillColor { get; set; }
+    public decimal? CustomPolygonFillOpacity { get; set; }
+    public decimal? CustomPolygonWeight { get; set; }
 
     public string? MapPoint { get; set; }
 

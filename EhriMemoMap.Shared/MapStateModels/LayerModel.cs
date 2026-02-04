@@ -23,6 +23,12 @@ namespace EhriMemoMap.Shared
         public bool QuickAccess { get; set; }
         public string? BackgroundColor { get; set; }
         public FontColor? FontColor { get; set; }
+        public string? CustomPolygonColor { get; set; }
+        public string? CustomPolygonFillColor { get; set; }
+        public decimal? CustomPolygonFillOpacity { get; set; }
+        public decimal? CustomPolygonWeight { get; set; }
+        public string? LabelCode { get; set; }
+
 
         /// <summary>
         /// Od jakého minimálního stupně přiblížení se bude vrstva zobrazovat 

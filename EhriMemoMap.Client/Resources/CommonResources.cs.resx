@@ -985,4 +985,7 @@ Aplikaci lze používat nejen z domácího či školního počítače, ale také
   <data name="feedbackForm" xml:space="preserve">
     <value>Zpětná vazba</value>
   </data>
+  <data name="protectorateBM" xml:space="preserve">
+    <value>Protektorát Čechy a Morava</value>
+  </data>
 </root>

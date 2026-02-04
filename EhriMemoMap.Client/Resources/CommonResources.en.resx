@@ -991,4 +991,7 @@ The application can be used not only on a home or school computer, but also dire
   <data name="feedbackForm" xml:space="preserve">
     <value>Feedback form</value>
   </data>
+  <data name="protectorateBM" xml:space="preserve">
+    <value>Protectorate Bohemia and Moravia</value>
+  </data>
 </root>

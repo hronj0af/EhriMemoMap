@@ -72,7 +72,7 @@ namespace EhriMemoMap.Client.Services
 
             if (withPolygons)
                 objects.AddRange(await GetWFSObjects());
-            return objects.Select(a => new MapObjectForLeafletModel(a, false, Map?.Layers)).ToList();
+            return objects.Select(a => new MapObjectForLeafletModel(a, false, Map?.Layers, _cl)).ToList();
         }
 
         public async Task<List<MapObject>> GetWFSObjects()

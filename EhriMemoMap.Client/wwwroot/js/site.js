@@ -21,8 +21,8 @@ var mapAPI;
     let dialogHeight = null;
     let mobileDialogHeight = null;
     let isFullscreen = null;
-    let polygonStrokeColor = "#222";
-    let polygonColor = "#C5222C";
+    let polygonColorDefault = "#222";
+    let polygonFillColorDefault = "#C5222C";
     let polygonColorSelected = "#000";
     let heatmapLayer = null;
     let heatmapData = null;
@@ -563,6 +563,7 @@ var mapAPI;
     }
     mapAPI.getPoint = getPoint;
     function getPolygon(polygonObject) {
+        var _a, _b, _c, _d;
         const pointsArray = [];
         for (let j = 0; j < polygonObject.mapPolygonModel.coordinates.length; j++) {
             for (let m = 0; m < polygonObject.mapPolygonModel.coordinates[j].length; m++) {
@@ -580,8 +581,23 @@ var mapAPI;
             }
         }
         const polygonOptions = polygonObject.customPolygonClass != undefined && polygonObject.customPolygonClass != null
-            ? { className: polygonObject.customPolygonClass, color: null, weight: null, fillOpacity: null, opacity: null, fillColor: null }
-            : { fillColor: polygonColor, color: polygonStrokeColor, weight: 0.5, fillOpacity: 0.40, opacity: 1 };
+            ?
+                {
+                    className: polygonObject.customPolygonClass,
+                    color: polygonObject.customPolygonColor,
+                    weight: null,
+                    fillOpacity: polygonObject.customPolygonFillOpacity,
+                    opacity: null,
+                    fillColor: polygonObject.customPolygonFillColor
+                }
+            :
+                {
+                    fillColor: (_a = polygonObject.customPolygonFillColor) !== null && _a !== void 0 ? _a : polygonFillColorDefault,
+                    color: (_b = polygonObject.customPolygonColor) !== null && _b !== void 0 ? _b : polygonColorDefault,
+                    weight: (_c = polygonObject.customPolygonWeight) !== null && _c !== void 0 ? _c : 0.5,
+                    fillOpacity: (_d = polygonObject.customPolygonFillOpacity) !== null && _d !== void 0 ? _d : 0.40,
+                    opacity: 1
+                };
         const result = new L.Polygon(pointsArray, polygonOptions);
         if (polygonObject.clickable) {
             result.on('click', callBlazor_ShowPlaceInfo);
@@ -613,7 +629,7 @@ var mapAPI;
         for (var i = 0; i < polygonsGroups.length; i++) {
             polygonsGroups[i].eachLayer(function (item) {
                 if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
-                    item.setStyle({ fillColor: polygonColor });
+                    item.setStyle({ fillColor: item.options.color != undefined && item.options.color != null ? item.options.color : polygonColorDefault });
                 }
             });
         }

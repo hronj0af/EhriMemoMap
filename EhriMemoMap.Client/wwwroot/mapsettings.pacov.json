@@ -33,17 +33,23 @@
       },
       {
         "name": "HGC-BordersProtectorateBM-v2",
-        "url": "https://geodata.ehri-project.eu/geoserver/wms?",
+        //"url": "https://geodata.ehri-project.eu/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typeNames=HGC-borders_protectorate_b_m-v1&outputFormat=application/json",
+        "url": "https://geodata.ehri-project.eu/geoserver/wfs?request=GetFeature&service=WFS&version=1.1.0&outputFormat=application%2Fjson&typeName=ehri:HGC-borders-19410430-v1",
         "mapParameter": "",
         "layersParameter": "HGC-BordersProtectorateBM-v2",
-        "type": "wms",
+        "type": "wfs",
         "selected": true,
         "opacities": "255",
         "zIndex": 75,
         "order": 100,
         "backgroundColor": "#D5D2B8",
         "fontColor": "Dark",
-        "cssClass": "customWmsLayerPacov"
+        "cssClass": "customWmsLayerPacov",
+        "customPolygonFillColor": "#f0f",
+        "customPolygonColor": "#000",
+        "customPolygonFillOpacity": 0,
+        "customPolygonWeight": 2,
+        "labelCode": "protectorateBM"
       },
       {
         "name": "MGS-pacov_historical_map_1942-cze-v1",

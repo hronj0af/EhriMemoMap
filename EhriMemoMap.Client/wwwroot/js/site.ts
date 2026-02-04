@@ -28,8 +28,8 @@ namespace mapAPI {
     let dialogHeight: string = null;
     let mobileDialogHeight: number = null;
     let isFullscreen: boolean = null;
-    let polygonStrokeColor: string = "#222";
-    let polygonColor: string = "#C5222C";
+    let polygonColorDefault: string = "#222";
+    let polygonFillColorDefault: string = "#C5222C";
     let polygonColorSelected: string = "#000"; // "#cc1111";
     let heatmapLayer: HeatmapOverlay | null = null; // Globální proměnná pro heatmapu
     let heatmapData: { id: string; heatmapdata: HeatmapData; }[] | null = null;
@@ -826,8 +826,23 @@ namespace mapAPI {
         }
 
         const polygonOptions = polygonObject.customPolygonClass != undefined && polygonObject.customPolygonClass != null
-            ? { className: polygonObject.customPolygonClass, color: null, weight: null, fillOpacity: null, opacity: null, fillColor: null } // tohle se používá pro statistiku čtvrtí
-            : { fillColor: polygonColor, color: polygonStrokeColor, weight: 0.5, fillOpacity: 0.40, opacity: 1 }; // tohle se používá pro nepřístupná místa
+            ?
+            {
+                className: polygonObject.customPolygonClass,
+                color: polygonObject.customPolygonColor,
+                weight: null,
+                fillOpacity: polygonObject.customPolygonFillOpacity,
+                opacity: null,
+                fillColor: polygonObject.customPolygonFillColor
+            } // tohle se používá pro statistiku čtvrtí
+            :
+            {
+                fillColor: polygonObject.customPolygonFillColor ?? polygonFillColorDefault,
+                color: polygonObject.customPolygonColor ?? polygonColorDefault,
+                weight: polygonObject.customPolygonWeight ?? 0.5,
+                fillOpacity: polygonObject.customPolygonFillOpacity ?? 0.40,
+                opacity: 1
+            }; // tohle se používá pro nepřístupná místa
 
         const result = new L.Polygon(pointsArray, polygonOptions);
 
@@ -868,7 +883,7 @@ namespace mapAPI {
         for (var i = 0; i < polygonsGroups.length; i++) {
             polygonsGroups[i].eachLayer(function (item: L.Polygon) {
                 if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
-                    item.setStyle({ fillColor: polygonColor });
+                    item.setStyle({ fillColor: item.options.color != undefined && item.options.color != null ? item.options.color : polygonColorDefault });
                 }
             });
         }
@@ -1269,6 +1284,10 @@ interface MapObjectForLeafletModel {
     iconAnchor: L.PointExpression | null;
     customTooltipClass: string | null;
     customPolygonClass: string | null;
+    customPolygonColor: string | null;
+    customPolygonFillColor: string | null;
+    customPolygonFillOpacity: number | null;
+    customPolygonWeight: number | null;
     stopId: number | null;
     narrativeMapId: number | null;
     priorityOnMap: number | null;
