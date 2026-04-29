@@ -25,7 +25,8 @@ public partial class Document
     public string? CreationPlaceCs { get; set; }
     public string? CreationPlaceEn { get; set; }
 
-    public string? Owner { get; set; }
+    public string? OwnerCs { get; set; }
+    public string? OwnerEn { get; set; }
     public OmekaUrl[]? Url { get; set; }
     public string? DocumentUrlCs { get; set; }
     public string? DocumentUrlEn { get; set; }
@@ -38,13 +39,13 @@ public partial class Document
                     (!string.IsNullOrEmpty(DescriptionCs) ? " | " + DescriptionCs : "") +
                     (!string.IsNullOrEmpty(CreationDateCs) ? " | " + CreationDateCs : "") +
                     (!string.IsNullOrEmpty(CreationPlaceCs) ? " | " + CreationPlaceCs : "") +
-                    (!string.IsNullOrEmpty(Owner) ? " | " + Owner : ""),
+                    (!string.IsNullOrEmpty(OwnerCs) ? " | " + OwnerCs : ""),
 
             _ => LabelEn + 
                     (!string.IsNullOrEmpty(DescriptionEn) ? " | " + DescriptionEn : "") + 
                     (!string.IsNullOrEmpty(CreationDateEn) ? " | " + CreationDateEn : "") + 
                     (!string.IsNullOrEmpty(CreationPlaceEn) ? " | " + CreationPlaceEn : "") + 
-                    (!string.IsNullOrEmpty(Owner) ? " | " + Owner : "")
+                    (!string.IsNullOrEmpty(OwnerEn) ? " | " + OwnerEn : "")
         };
     }
 }

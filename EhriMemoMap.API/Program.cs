@@ -1,5 +1,5 @@
 using EhriMemoMap.API.Services;
-using EhriMemoMap.Data;
+using EhriMemoMap.Data.Memogis;
 using EhriMemoMap.Data.MemoMap ;
 using EhriMemoMap.Services;
 using EhriMemoMap.Shared;
@@ -44,7 +44,7 @@ var cors = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(cors, builder =>
+    options.AddPolicy(cors, builder =>  
     {
         builder.AllowAnyOrigin()
                 .AllowAnyMethod()

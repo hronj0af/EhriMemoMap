@@ -1,5 +1,5 @@
 ﻿using EhriMemoMap.API.Helpers;
-using EhriMemoMap.Data;
+using EhriMemoMap.Data.Memogis;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.IO;
 using Newtonsoft.Json;
@@ -21,7 +21,7 @@ namespace EhriMemoMap.API.Services
             var places = new List<SolrPlaceForUpdate>();
 
             // Prague places of memory
-            places.AddRange(_context.PraguePlacesOfMemories.AsEnumerable().Select(p => new SolrPlaceForUpdate
+            places.AddRange(_context.PlacesOfMemories.AsEnumerable().Select(p => new SolrPlaceForUpdate
             {
                 City = "prague",
                 Id = $"{p.Id}.memory.prague",
@@ -41,7 +41,7 @@ namespace EhriMemoMap.API.Services
             }));
 
             // Prague places of interest
-            places.AddRange(_context.PraguePlacesOfInterests.AsEnumerable().Select(p => new SolrPlaceForUpdate
+            places.AddRange(_context.PlacesOfInterests.AsEnumerable().Select(p => new SolrPlaceForUpdate
             {
                 City = "prague",
                 Id = $"{p.Id}.interest.prague",
@@ -61,7 +61,7 @@ namespace EhriMemoMap.API.Services
             }));
 
             // Prague incidents
-            places.AddRange(_context.PragueIncidentsTimelines.AsEnumerable().Select(p => new SolrPlaceForUpdate
+            places.AddRange(_context.IncidentsTimelines.AsEnumerable().Select(p => new SolrPlaceForUpdate
             {
                 City = "prague",
                 Id = $"{p.Id}.incident.prague",
@@ -81,8 +81,8 @@ namespace EhriMemoMap.API.Services
             }));
 
             // Prague victims - join with addresses
-            var victims = from v in _context.PragueVictimsTimelines
-                          join a in _context.PragueAddressesStatsTimelines on v.PlaceId equals a.Id
+            var victims = from v in _context.Entities
+                          join a in _context.AddressesStatsTimelines on v.PlaceId equals a.Id
                           select new { Victim = v, Address = a };
 
             places.AddRange(victims.AsEnumerable().Select(va => new SolrPlaceForUpdate
@@ -112,7 +112,7 @@ namespace EhriMemoMap.API.Services
             var places = new List<SolrPlaceForUpdate>();
 
             // Prague places of memory (same as prague)
-            places.AddRange(_context.PraguePlacesOfMemories.AsEnumerable().Select(p => new SolrPlaceForUpdate
+            places.AddRange(_context.PlacesOfMemories.AsEnumerable().Select(p => new SolrPlaceForUpdate
             {
                 City = "prague_last_residence",
                 Id = $"{p.Id}.memory.prague_last_residence",
@@ -132,7 +132,7 @@ namespace EhriMemoMap.API.Services
             }));
 
             // Prague places of interest (same as prague)
-            places.AddRange(_context.PraguePlacesOfInterests.AsEnumerable().Select(p => new SolrPlaceForUpdate
+            places.AddRange(_context.PlacesOfInterests.AsEnumerable().Select(p => new SolrPlaceForUpdate
             {
                 City = "prague_last_residence",
                 Id = $"{p.Id}.interest.prague_last_residence",
@@ -152,7 +152,7 @@ namespace EhriMemoMap.API.Services
             }));
 
             // Prague incidents (same as prague)
-            places.AddRange(_context.PragueIncidentsTimelines.AsEnumerable().Select(p => new SolrPlaceForUpdate
+            places.AddRange(_context.IncidentsTimelines.AsEnumerable().Select(p => new SolrPlaceForUpdate
             {
                 City = "prague_last_residence",
                 Id = $"{p.Id}.incident.prague_last_residence",
@@ -172,7 +172,7 @@ namespace EhriMemoMap.API.Services
             }));
 
             // Prague victims (same as prague) - join with addresses
-            var victims = _context.PragueVictimsTimelines.Join(_context.PragueAddressesStatsTimelines,
+            var victims = _context.Entities.Join(_context.AddressesStatsTimelines,
                     v => v.PlaceId,
                     a => a.Id,
                     (v, a) => new { Victim = v, Address = a });
@@ -197,7 +197,7 @@ namespace EhriMemoMap.API.Services
             }));
 
             // Prague last residence victims
-            places.AddRange(_context.PragueLastResidences
+            places.AddRange(_context.LastResidences
                 .Include(lr => lr.Victim)
                 .Include(lr => lr.Address)
                 .AsEnumerable()

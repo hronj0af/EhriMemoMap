@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NetTopologySuite.Geometries;
 using NodaTime;
 
-namespace EhriMemoMap.Data;
+namespace EhriMemoMap.Data.Memogis;
 
 public partial class MapStatistic
 {

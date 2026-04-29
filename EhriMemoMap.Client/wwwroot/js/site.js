@@ -27,6 +27,7 @@ var mapAPI;
     let heatmapLayer = null;
     let heatmapData = null;
     let initialVariables = null;
+    let mapInitialized = false;
     function initMap(jsonMapSettings) {
         mapSettings = JSON.parse(jsonMapSettings);
         mobileDialogHeight = mapSettings.initialVariables.heightOfDialog;
@@ -55,6 +56,8 @@ var mapAPI;
         if (!setMapWithInfoFromUrl())
             resetMapViewToInitialState();
         map.on("moveend", function () {
+            if (mapInitialized == false)
+                return;
             document.getElementById("map").style.cursor = 'default';
             setUrlByMapInfo();
             callBlazor_RefreshObjectsOnMap();
@@ -81,6 +84,7 @@ var mapAPI;
             group.setZIndex(mapSettings.layers[i].zIndex);
         }
         fitMapToWindow();
+        mapInitialized = true;
     }
     mapAPI.initMap = initMap;
     function destroyMap() {
@@ -110,6 +114,7 @@ var mapAPI;
         actualLocation = null;
         blazorMapObjects = [];
         initialVariables = null;
+        mapInitialized = false;
     }
     mapAPI.destroyMap = destroyMap;
     function resetMapViewToInitialState() {
@@ -252,6 +257,7 @@ var mapAPI;
     }
     mapAPI.callBlazor_ShowPlaceInfo = callBlazor_ShowPlaceInfo;
     function refreshObjectsOnMap(objectJson) {
+        console.log("refreshObjectsOnMap");
         if (groups == null || groups.length == 0)
             return;
         const objectsGroup = groups.find(a => a.options.id == "Objects_group");
@@ -588,7 +594,8 @@ var mapAPI;
                     weight: null,
                     fillOpacity: polygonObject.customPolygonFillOpacity,
                     opacity: null,
-                    fillColor: polygonObject.customPolygonFillColor
+                    fillColor: polygonObject.customPolygonFillColor,
+                    smoothFactor: 0
                 }
             :
                 {
@@ -596,7 +603,8 @@ var mapAPI;
                     color: (_b = polygonObject.customPolygonColor) !== null && _b !== void 0 ? _b : polygonColorDefault,
                     weight: (_c = polygonObject.customPolygonWeight) !== null && _c !== void 0 ? _c : 0.5,
                     fillOpacity: (_d = polygonObject.customPolygonFillOpacity) !== null && _d !== void 0 ? _d : 0.40,
-                    opacity: 1
+                    opacity: 1,
+                    smoothFactor: 0
                 };
         const result = new L.Polygon(pointsArray, polygonOptions);
         if (polygonObject.clickable) {
@@ -949,6 +957,12 @@ var MapTypeEnum;
     MapTypeEnum[MapTypeEnum["StoryMapWhole"] = 2] = "StoryMapWhole";
     MapTypeEnum[MapTypeEnum["StoryMapOneStop"] = 3] = "StoryMapOneStop";
 })(MapTypeEnum || (MapTypeEnum = {}));
+var MapStateEnum;
+(function (MapStateEnum) {
+    MapStateEnum[MapStateEnum["NotInitialized"] = 0] = "NotInitialized";
+    MapStateEnum[MapStateEnum["Initialized"] = 1] = "Initialized";
+    MapStateEnum[MapStateEnum["Rendered"] = 2] = "Rendered";
+})(MapStateEnum || (MapStateEnum = {}));
 var LayersTypeEnum;
 (function (LayersTypeEnum) {
     LayersTypeEnum["Base"] = "Base";

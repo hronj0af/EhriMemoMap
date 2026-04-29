@@ -1,7 +1,7 @@
 ﻿
-namespace EhriMemoMap.Data;
+namespace EhriMemoMap.Data.Memogis;
 
-public partial class PragueAddressesStatsTimeline
+public partial class AddressesStatsTimeline
 {
     public Shared.PragueAddressesStatsTimeline ConvertToPragueAddressesStatsTimelineShared()
     {

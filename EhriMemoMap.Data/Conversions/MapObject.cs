@@ -1,4 +1,4 @@
-﻿namespace EhriMemoMap.Data;
+﻿namespace EhriMemoMap.Data.Memogis;
 
 public partial class MapObject
 {

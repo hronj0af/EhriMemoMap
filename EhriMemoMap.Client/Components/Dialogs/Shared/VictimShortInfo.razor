@@ -1,5 +1,8 @@
 ﻿@inject IStringLocalizer<CommonResources> cl
 @inject MapService MapService
+@inject IJSRuntime JSRuntime
+@using System.Globalization
+@using System.IO
 
 @if (Victim != null)
 {
@@ -9,7 +12,44 @@
             <a href="@(CultureInfo.CurrentCulture.ToString() == "cs-CZ" ? Victim.DetailsCs : Victim.DetailsEn)" target="_blank" style="text-decoration:none;color:black">
                 <RadzenCard class="@(VictimCardCss)">
                     <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="5px">
-                        <RadzenImage class="@VictimPhotoCss" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
+                        <div style="position:relative;width:100%">
+                            <RadzenImage class="@VictimPhotoCss" Path="@(!string.IsNullOrEmpty(Victim.Photo) && Victim.Photo != "NULL" && Victim.Photo != "null" ? Victim.Photo : "images/face.png")" />
+                            @if (Victim.Documents != null && Victim.Documents.Length > 0)
+                            {
+                                <img title="@cl.GetString("relatedDocuments")" width="25" style="z-index:99999" class="document-forward-icon" src="/images/photo-icon.png"
+                                     @onclick:stopPropagation="true"
+                                     @onclick:preventDefault="true"
+                                     @onclick="ShowDocuments" />
+                                <div id="documents_vsi_@(victimDocGuid)" style="display:none;">
+                                            @foreach (var doc in Victim.Documents)
+                                            {
+                                                @if (doc.Url != null)
+                                                {
+                                                    if (doc.Type == "image" || doc.Type == "text")
+                                                    {
+                                                        foreach (var url in doc.Url)
+                                                        {
+                                                            <a data-img="@url.Url"
+                                                               data-caption="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())"
+                                                               data-alt="@doc.GetTitle(CultureInfo.CurrentCulture.ToString())"></a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        foreach (var url in doc.Url)
+                                                        {
+                                                            var sourcesJson = GetSourcesJson(url);
+                                                            var thumb = url.ThumbnailUrl ?? doc.Url.FirstOrDefault()?.ThumbnailUrl ?? doc.Url.FirstOrDefault()?.Url;
+                                                            <a href="@url.Url"
+                                                               data-sources="@sourcesJson"
+                                                               data-thumb="@thumb"></a>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </div>
+                            }
+                        </div>
                         <div class="victim-label"><small>@((MarkupString)Victim.GetLabelForPicture())</small></div>
                     </RadzenStack>
                 </RadzenCard>
@@ -65,14 +105,13 @@
     private string? VictimCardCss;
     private string? VictimPhotoCss;
     private string? VictimFace;
-
+    private string victimDocGuid = Guid.NewGuid().ToString("N");
 
     protected override void OnInitialized()
     {
         VictimCardCss = (Small ? "victim-card-small" : "victim-card") + " rz-mb-4";
         VictimPhotoCss = (Small ? "victim-photo-small" : "victim-photo") + " rz-mb-4";
         VictimFace = Small ? "images/face-small.png" : "images/face.png";
-
     }
 
     public async Task OnVictimClick()
@@ -81,5 +120,33 @@
             return;
 
         await MapService.ShowVictim(Victim!.Id);
+    }
+
+    private async Task ShowDocuments()
+    {
+        if (Victim?.Documents == null || Victim.Documents.Length == 0)
+            return;
+
+        await JSRuntime.InvokeVoidAsync("initGallery", $"vsi_{victimDocGuid}", 0);
+    }
+
+    private static string GetSourcesJson(OmekaUrl? url)
+    { 
+        if (url == null) return "[]";
+        var items = new[] { new { src = url.Url, type = GetMimeTypeFromUrl(url.Url) } };
+        return System.Text.Json.JsonSerializer.Serialize(items);
+    }
+
+    private static string GetMimeTypeFromUrl(string url)
+    {
+        var ext = Path.GetExtension(url)?.ToLowerInvariant();
+        return ext switch
+        {
+            ".webm" => "video/webm",
+            ".mp4" => "video/mp4",
+            ".mp3" => "audio/mp3",
+            ".ogv" or ".ogg" => "video/ogg",
+            _ => "video/mp4"
+        };
     }
 }

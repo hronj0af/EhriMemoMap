@@ -1,4 +1,4 @@
-﻿using EhriMemoMap.Data;
+﻿using EhriMemoMap.Data.Memogis;
 using EhriMemoMap.Shared;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
@@ -6,6 +6,7 @@ using EhriMemoMap.API.Helpers;
 using Newtonsoft.Json;
 using EhriMemoMap.Data.MemoMap;
 using EhriMemoMap.API.Services;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace EhriMemoMap.Services;
 
@@ -14,7 +15,7 @@ namespace EhriMemoMap.Services;
 /// </summary>
 public class MapLogicService(MemogisContext context, MemoMapContextFactory factory)
 {
-    public IQueryable<Data.MapObject> PrepareMapObjectsQuery(MapObjectParameters parameters)
+    public IQueryable<Data.Memogis.MapObject> PrepareMapObjectsQuery(MapObjectParameters parameters)
     {
         // nejdriv si pripravim mapove objekty pro dalsi dotazy
         var query = context.MapObjects.Where(a => a.City == parameters.City).AsQueryable();
@@ -224,7 +225,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
         if (parameters.PlacesOfMemoryIds == null)
             return null;
 
-        var result = context.PraguePlacesOfMemories.Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).
+        var result = context.PlacesOfMemories.Where(p => parameters.PlacesOfMemoryIds.Contains(p.Id)).
             AsEnumerable().
             GroupBy(p => (p.Type, p.AddressCs)).Select(a => new PlaceMemory
             {
@@ -293,7 +294,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                     CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
                     CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
                     Id = c.Id,
-                    Owner = c.Owner,
+                    OwnerCs = c.Owner,
+                    OwnerEn = c.Owner,
                     Type = c.Type,
                     Url = c?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, null)).ToArray() ?? []
                 }).ToArray()
@@ -311,7 +313,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
 
         if (parameters.City?.Contains("prague") ?? false)
         {
-            result = context.PragueIncidentsTimelines.Where(p => parameters.IncidentsIds.Contains(p.Id)).
+            result = context.IncidentsTimelines.Where(p => parameters.IncidentsIds.Contains(p.Id)).
             Select(a => new PlaceIncident
             {
                 Id = a.Id,
@@ -335,7 +337,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
             // jenže v ní je sloupec id, který není primárním klíčem
             // databázi spravuje Aneta Plzáková, nikoli já - takže to prozatím necháme takto
             foreach (var incident in result)
-                incident.Documents = context.PragueIncidentsXDocuments.Where(a => a.IncidentId == incident.Id).
+                incident.Documents = context.IncidentsXDocuments.Where(a => a.IncidentId == incident.Id).
                     Select(a => new Shared.Document
                     {
                         DocumentUrlCs = a.DocumentCs,
@@ -373,7 +375,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
             return null;
 
         if (parameters.City?.Contains("prague") ?? false)
-            return context.PraguePlacesOfInterestTimelines.
+            return context.PlacesOfInterestTimelines.
                 Where(p => parameters.PlacesOfInterestIds.Contains(p.Id)).
                 Select(a => new PlaceInterest
                 {
@@ -416,7 +418,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                         CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
                         CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
                         Id = c.Id,
-                        Owner = c.Owner,
+                        OwnerCs = c.Owner,
+                        OwnerEn = c.Owner,
                         Type = c.Type,
                         Url = c?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, d?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
                     }).ToArray()
@@ -463,7 +466,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                         CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
                         CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
                         Id = c.Id,
-                        Owner = c.Owner,
+                        OwnerCs = c.Owner,
+                        OwnerEn = c.Owner,
                         Type = c.Type,
                         Url = c?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, d?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
                     }).ToArray()
@@ -480,7 +484,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
             return null;
 
         if (parameters.City?.Contains("prague") ?? false)
-            return context.PraguePlacesOfInterestTimelines.
+            return context.PlacesOfInterestTimelines.
             Where(p => parameters.InaccessiblePlacesIds.Contains(p.Id)).
             Select(a => new PlaceInterest
             {
@@ -504,7 +508,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
 
         if (parameters.City?.Contains("prague") ?? false)
         {
-            return context.PragueAddressesStatsTimelines.Where(p => parameters.AddressesIds.Contains(p.Id)).
+            return context.AddressesStatsTimelines.Where(p => parameters.AddressesIds.Contains(p.Id)).
+                ToList().
                 Select(a => new AddressWithVictims
                 {
                     Address = new AddressInfo
@@ -516,7 +521,11 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                         CurrentEn = a.AddressCurrentEn,
                     },
                     PragueAddress = a.ConvertToPragueAddressesStatsTimelineShared(),
-                    Victims = context.PragueVictimsTimelines.Where(b => b.PlaceId == a.Id).OrderBy(a => a.Label).
+                    Victims = context.Entities.
+                        Include(b => b.DocumentsXEntities).ThenInclude(b => b.Document).ThenInclude(b => b.DocumentsXMedia).ThenInclude(b => b.Media).
+                        Include(b => b.DocumentsXEntities).ThenInclude(b => b.Document).ThenInclude(b => b.CreationPlaceNavigation).
+                        Where(b => b.PlaceId == a.Id).OrderBy(a => a.Label).
+                        AsEnumerable().
                         Select(a => new VictimShortInfoModel
                         {
                             DetailsCs = a.DetailsCs,
@@ -524,6 +533,22 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                             Label = a.Label,
                             Photo = a.Photo,
                             TransportDate = a.TransportDate,
+                            Documents = a.DocumentsXEntities.OrderBy(c => c.Id).Select(c => c.Document).Select(c => new Shared.Document
+                            {
+                                CreationDateCs = c.CreationDateCs,
+                                CreationDateEn = c.CreationDateEn,
+                                DescriptionCs = c.DescriptionCs,
+                                DescriptionEn = c.DescriptionEn,
+                                LabelCs = c.LabelCs,
+                                LabelEn = c.LabelEn,
+                                CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
+                                CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
+                                Id = c.Id,
+                                OwnerCs = c.OwnerCs,
+                                OwnerEn = c.OwnerEn,
+                                Type = c.Type,
+                                Url = c?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, d?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
+                            }).ToArray(),
                             LongInfo = false
                         }).
                         ToList()
@@ -569,7 +594,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
         if (parameters.City != "prague_last_residence")
             return null;
 
-        return [.. context.PragueAddressesStatsTimelines.Where(p => parameters.AddressesLastResidenceIds.Contains(p.Id)).
+        return [.. context.AddressesStatsTimelines.Where(p => parameters.AddressesLastResidenceIds.Contains(p.Id)).
             AsEnumerable().
             Select(a => new AddressWithVictims
             {
@@ -582,7 +607,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                     CurrentEn = a.AddressCurrentEn,
                 },
                 PragueAddress = a.ConvertToPragueAddressesStatsTimelineShared(),
-                Victims = context.PragueVictimsTimelines.Where(b => b.PragueLastResidences.Any(c => c.AddressId == a.Id)).OrderBy(a => a.Label).
+                Victims = context.Entities.Where(b => b.LastResidences.Any(c => c.AddressId == a.Id)).OrderBy(a => a.Label).
                     Select(a => new VictimShortInfoModel
                     {
                         DetailsCs = a.DetailsCs,
@@ -676,7 +701,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                         CreationPlaceCs = c.CreationPlaceNavigation?.LabelCs,
                         CreationPlaceEn = c.CreationPlaceNavigation?.LabelEn,
                         Id = c.Id,
-                        Owner = c.Owner,
+                        OwnerCs = c.Owner,
+                        OwnerEn = c.Owner,
                         Type = c.Type,
                         Url = c?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, d?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
                     }).ToArray(),
@@ -722,7 +748,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                 }).ToList();
 
             var mainPoints = MemoMapContext.NarrativeMapStopsXPlaces.
-                Include(a=> a.Place).
+                Include(a => a.Place).
                 Include(a => a.NarrativeMapStop).ThenInclude(a => a.NarrativeMapsXNarrativeMapStops).
                 Where(a => a.RelationshipTypeNavigation.LabelEn == "main point").
                 AsEnumerable().
@@ -829,7 +855,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                         CreationPlaceCs = b!.CreationPlaceNavigation?.LabelCs,
                         CreationPlaceEn = b!.CreationPlaceNavigation?.LabelEn,
                         Id = b!.Id,
-                        Owner = b.Owner,
+                        OwnerCs = b.Owner,
+                        OwnerEn = b.Owner,
                         Type = b.Type,
                         Url = b?.DocumentsXMedia?.Select(d => new OmekaUrl(d?.Media?.OmekaUrl, d?.Media?.OmekaThumbnailUrl))?.ToArray() ?? []
                     }).ToArray()
@@ -855,7 +882,41 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
 
             try
             {
-                var jsonString = await httpClient.GetStringAsync(layer.Url);
+                string? jsonString = null;
+
+                try
+                {
+                    var uri = new Uri(layer.Url);
+                    var queryParams = QueryHelpers.ParseQuery(uri.Query);
+
+                    string? name = null;
+                    if (queryParams.TryGetValue("typeName", out var tn1))
+                    {
+                        name = tn1.ToString();
+                    }
+                    else if (queryParams.TryGetValue("typeNames", out var tn2))
+                    {
+                        name = tn2.ToString();
+                    }
+
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        var filePath = Path.Combine("WfsMaps", $"{name}.json");
+                        if (File.Exists(filePath))
+                        {
+                            jsonString = await File.ReadAllTextAsync(filePath);
+                        }
+                    }
+                }
+                catch
+                {
+                    // ignore and fetch from url
+                }
+
+                if (string.IsNullOrEmpty(jsonString))
+                {
+                    jsonString = await httpClient.GetStringAsync(layer.Url);
+                }
 
                 // Parse the GeoJSON as a dynamic object first
                 var geoJson = JsonConvert.DeserializeObject<dynamic>(jsonString);
@@ -872,7 +933,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                         Geometry? geometry = null;
 
                         using (var stringReader = new StringReader(geometryJson))
-                        using (var jsonReader = new Newtonsoft.Json.JsonTextReader(stringReader))
+                        using (var jsonReader = new JsonTextReader(stringReader))
                         {
                             var serializer = NetTopologySuite.IO.GeoJsonSerializer.Create();
                             geometry = serializer.Deserialize<Geometry>(jsonReader);
@@ -883,7 +944,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                             PlaceType = layer.PlaceType,
                             LayerName = layer.Name,
                             GeographyMapPoint = geometry is Point ? geometry : null,
-                            GeographyMapPolygon = geometry is Polygon or MultiPolygon ? geometry : null,
+                            //GeographyMapPolygon = geometry is Polygon or MultiPolygon ? geometry : null,
                             MapPoint = geometry is Point ? geometry.AsJson() : null,
                             MapPolygon = geometry is Polygon or MultiPolygon ? geometry.AsJson() : null,
                             LabelCs = feature.properties?.name?.ToString() ?? string.Empty,

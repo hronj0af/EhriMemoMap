@@ -20,6 +20,7 @@
         public string? RelationshipToPersonCs { get; set; }
         public string? RelationshipToPersonEn { get; set; }
         public bool LongInfo { get; set; }
+        public Document[]? Documents { get; set; }
         public string GetLabelForPicture()
             => !string.IsNullOrEmpty(Label)
                 ? (Label?.Insert(0, "<b>").Replace(" (*", "</b><br/>*").Replace(")", "") ?? "")

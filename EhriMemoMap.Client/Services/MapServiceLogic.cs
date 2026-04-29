@@ -71,7 +71,11 @@ namespace EhriMemoMap.Client.Services
                 objects = AggregateSameAddresses(objects);
 
             if (withPolygons)
-                objects.AddRange(await GetWFSObjects());
+            {
+                var wfsObjects = await GetWFSObjects();
+                objects.AddRange(wfsObjects);
+
+            }
             return objects.Select(a => new MapObjectForLeafletModel(a, false, Map?.Layers, _cl)).ToList();
         }
 

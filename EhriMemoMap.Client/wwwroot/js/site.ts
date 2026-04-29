@@ -34,6 +34,7 @@ namespace mapAPI {
     let heatmapLayer: HeatmapOverlay | null = null; // Globální proměnná pro heatmapu
     let heatmapData: { id: string; heatmapdata: HeatmapData; }[] | null = null;
     let initialVariables: InitialVariables = null;
+    let mapInitialized: boolean = false;
 
     //////////////////////////
     /// INIT
@@ -77,6 +78,8 @@ namespace mapAPI {
 
         // update url a obrázkových vrstev po té, co se změní poloha mapy
         map.on("moveend", function () {
+            if (mapInitialized == false)
+                return;
             document.getElementById("map").style.cursor = 'default';
             setUrlByMapInfo();
             callBlazor_RefreshObjectsOnMap();
@@ -113,6 +116,7 @@ namespace mapAPI {
         }
 
         fitMapToWindow();
+        mapInitialized = true;
     }
 
     export function destroyMap(): void {
@@ -152,7 +156,8 @@ namespace mapAPI {
         applicationIsTrackingLocation = null;
         actualLocation = null;
         blazorMapObjects = []; 
-        initialVariables = null; 
+        initialVariables = null;
+        mapInitialized = false;
     }
 
     export function resetMapViewToInitialState() {
@@ -355,6 +360,7 @@ namespace mapAPI {
 
     // refreshuje se všechno, kromě nepřístupných míst, protože ta jsou vidět pořád
     export function refreshObjectsOnMap(objectJson) {
+        console.log("refreshObjectsOnMap");
         if (groups == null || groups.length == 0)
             return;
 
@@ -833,7 +839,8 @@ namespace mapAPI {
                 weight: null,
                 fillOpacity: polygonObject.customPolygonFillOpacity,
                 opacity: null,
-                fillColor: polygonObject.customPolygonFillColor
+                fillColor: polygonObject.customPolygonFillColor,
+                smoothFactor: 0 //
             } // tohle se používá pro statistiku čtvrtí
             :
             {
@@ -841,7 +848,9 @@ namespace mapAPI {
                 color: polygonObject.customPolygonColor ?? polygonColorDefault,
                 weight: polygonObject.customPolygonWeight ?? 0.5,
                 fillOpacity: polygonObject.customPolygonFillOpacity ?? 0.40,
-                opacity: 1
+                opacity: 1,
+                smoothFactor: 0 //
+
             }; // tohle se používá pro nepřístupná místa
 
         const result = new L.Polygon(pointsArray, polygonOptions);
@@ -1358,6 +1367,12 @@ enum MapTypeEnum {
     AllStoryMaps,
     StoryMapWhole,
     StoryMapOneStop
+}
+
+enum MapStateEnum {
+    NotInitialized,
+    Initialized,
+    Rendered
 }
 
 enum LayersTypeEnum {

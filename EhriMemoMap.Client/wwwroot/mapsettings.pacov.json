@@ -34,10 +34,11 @@
       {
         "name": "HGC-BordersProtectorateBM-v2",
         //"url": "https://geodata.ehri-project.eu/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typeNames=HGC-borders_protectorate_b_m-v1&outputFormat=application/json",
-        "url": "https://geodata.ehri-project.eu/geoserver/wfs?request=GetFeature&service=WFS&version=1.1.0&outputFormat=application%2Fjson&typeName=ehri:HGC-borders-19410430-v1",
+        //"url": "https://geodata.ehri-project.eu/geoserver/wfs?request=GetFeature&service=WFS&version=1.1.0&outputFormat=application/json&typeName=HGC-borders-19380430-v1&srsName=EPSG:4326",
+        "url": "https://api.memomap.cz/wmsProxy?",
         "mapParameter": "",
-        "layersParameter": "HGC-BordersProtectorateBM-v2",
-        "type": "wfs",
+        "layersParameter": "HGC-borders-19380430-v1",
+        "type": "wms",
         "selected": true,
         "opacities": "255",
         "zIndex": 75,
@@ -48,7 +49,7 @@
         "customPolygonFillColor": "#f0f",
         "customPolygonColor": "#000",
         "customPolygonFillOpacity": 0,
-        "customPolygonWeight": 2,
+        "customPolygonWeight": 5,
         "labelCode": "protectorateBM"
       },
       {
