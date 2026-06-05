@@ -1,4 +1,4 @@
-﻿// FUNKCE PRO OVLÁDÁNÍ MAPY
+// FUNKCE PRO OVLÁDÁNÍ MAPY
 /// <reference path="../ts/leaflet/index.d.ts" />
 
 namespace mapAPI {
@@ -854,6 +854,7 @@ namespace mapAPI {
             }; // tohle se používá pro nepřístupná místa
 
         const result = new L.Polygon(pointsArray, polygonOptions);
+        (result.options as any).originalFillColor = polygonOptions.fillColor;
 
         if (polygonObject.clickable) {
             result.on('click', callBlazor_ShowPlaceInfo);
@@ -891,8 +892,9 @@ namespace mapAPI {
         const polygonsGroups = groups.filter(a => a.options.type == "Polygons");
         for (var i = 0; i < polygonsGroups.length; i++) {
             polygonsGroups[i].eachLayer(function (item: L.Polygon) {
-                if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
-                    item.setStyle({ fillColor: item.options.color != undefined && item.options.color != null ? item.options.color : polygonColorDefault });
+                if (item.options.fillColor === polygonColorSelected) {
+                    const originalColor = (item.options as any).originalFillColor ?? polygonFillColorDefault;
+                    item.setStyle({ fillColor: originalColor });
                 }
             });
         }

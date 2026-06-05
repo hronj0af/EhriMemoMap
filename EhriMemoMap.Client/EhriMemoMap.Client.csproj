@@ -7,6 +7,11 @@
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
 
+  <!-- AOT pouze při explicitním publish přes CLI: dotnet publish -c Release /p:AotPublish=true -->
+  <PropertyGroup Condition="'$(AotPublish)' == 'true'">
+    <RunAOTCompilation>true</RunAOTCompilation>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.1" PrivateAssets="all" />
@@ -30,6 +35,8 @@
 
   <PropertyGroup>
     <BlazorLinkOnBuild>false</BlazorLinkOnBuild>
+    <!-- NetTopologySuite uses SIMD intrinsics which are NIY in MONO WASM interpreter -->
+    <WasmEnableSIMD>false</WasmEnableSIMD>
   </PropertyGroup>
 
   <!-- Rozšíření seznamu assemblies, které se nesmí trimovat -->

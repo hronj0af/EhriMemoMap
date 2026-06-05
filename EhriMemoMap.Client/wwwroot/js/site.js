@@ -607,6 +607,7 @@ var mapAPI;
                     smoothFactor: 0
                 };
         const result = new L.Polygon(pointsArray, polygonOptions);
+        result.options.originalFillColor = polygonOptions.fillColor;
         if (polygonObject.clickable) {
             result.on('click', callBlazor_ShowPlaceInfo);
         }
@@ -636,8 +637,10 @@ var mapAPI;
         const polygonsGroups = groups.filter(a => a.options.type == "Polygons");
         for (var i = 0; i < polygonsGroups.length; i++) {
             polygonsGroups[i].eachLayer(function (item) {
-                if (item.options.fillColor != undefined || item.options.fillColor == polygonColorSelected) {
-                    item.setStyle({ fillColor: item.options.color != undefined && item.options.color != null ? item.options.color : polygonColorDefault });
+                var _a;
+                if (item.options.fillColor === polygonColorSelected) {
+                    const originalColor = (_a = item.options.originalFillColor) !== null && _a !== void 0 ? _a : polygonFillColorDefault;
+                    item.setStyle({ fillColor: originalColor });
                 }
             });
         }
