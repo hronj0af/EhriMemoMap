@@ -1,4 +1,4 @@
-﻿@* @page "/map" *@
+@* @page "/map" *@
 @page "/{City}"
 
 @using NetTopologySuite.Geometries;
@@ -90,7 +90,12 @@
             };
 
             var coordinates = await GetCoordinatesFromUrl();
-            var mapZoom = (int)decimal.Parse(await JS.InvokeAsync<string>("mapAPI.getUrlParam", "zoom") ?? "0");
+            var zoomStr = await JS.InvokeAsync<string>("mapAPI.getUrlParam", "zoom");
+            float initialZoom = 0;
+            if (!string.IsNullOrEmpty(zoomStr) && float.TryParse(zoomStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var parsedZoom))
+            {
+                initialZoom = parsedZoom;
+            }
 
             // pokud není v url parametr bounds (uživatel s mapou ještě nezačal pracovat), 
             // a nejsou zadané koordináty pro zobrazení určitého místa
@@ -105,14 +110,14 @@
 
             // voláme javascriptovou metodu leafletu, která inicializuje mapu
             // jako parametr předám informace o vrstvách a počátečním zobrazení mapy
-            await JS.InvokeVoidAsync("mapAPI.initMap", MapService.GetMapInfoForLeaflet(mapZoom));
+            await JS.InvokeVoidAsync("mapAPI.initMap", MapService.GetMapInfoForLeaflet((int)Math.Round(initialZoom)));
 
             // tady se zase zjistí, jak je velká oblast, která se zobrazuje na mapě
-            MapService.MapZoom = mapZoom == 0 ? await JS.InvokeAsync<float>("mapAPI.getZoom") : mapZoom;
+            MapService.MapZoom = initialZoom == 0 ? await JS.InvokeAsync<float>("mapAPI.getZoom") : initialZoom;
             MapService.SetBBox(await JS.InvokeAsync<Coordinate[]>("mapAPI.getMapBoundsForMapState"));
 
             if (coordinates != null)
-                await ShowPlaceInfo(mapZoom, coordinates, 0);
+                await ShowPlaceInfo(MapService.MapZoom, coordinates, 0);
 
             // a posledně zmiňované informace se pak použijí pro zobrazení špendlíků a polygonů na mapě
             await MapService.RefreshObjectsOnMap(true);
