@@ -10,6 +10,10 @@ html, body {
     background-color: var(--Beige);
 }
 
+body {
+    border-top: 0.625rem solid var(--Wine-Red);
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Barlow';
     font-weight: 700;
