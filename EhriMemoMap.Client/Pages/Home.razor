@@ -8,9 +8,10 @@
 @using Microsoft.Extensions.Configuration
 @using System.Globalization
 @using Microsoft.AspNetCore.Components
+@using System.Web
 
 <div style="position:fixed; top:95px; right: 0px; width: 30px; z-index: 1000;">
-        <LanguageButton />
+    <LanguageButton />
 </div>
 <div style="position:fixed; top:35px; right: 17px; width: 30px; z-index: 1000;">
     <JoinButton />
@@ -22,16 +23,144 @@
     </div>
     <div class="detail-container">
 
-
         <h1 class="main-title">@cl["memoMaps"]</h1>
 
-        @if (!string.IsNullOrEmpty(DetailTitle))
+        @if (Detail == "metodiky")
         {
-            <h2 class="detail-subtitle">@DetailTitle</h2>
+            <h2 class="detail-subtitle">Metodiky pro práci s MemoMap</h2>
+
+            <div class="detail-content metodiky-content">
+                <p>
+                    Chcete s žáky a studenty zkoumat, jak holokaust zasáhl do života židovských obyvatel a proměnil město, jeho veřejný prostor i vztahy mezi lidmi? 
+                    Právě s tématy pracují tři nově vytvořené metodiky, které jsou nyní volně ke stažení.
+                </p>
+                <p>
+                    Metodiky připravili kolegové z <a href="https://www.antikomplex.cz/" target="_blank" style="text-decoration:none" rel="noopener noreferrer" title="Antikomplex"><strong>Antikomplexu</strong></a>
+                    ve spolupráci s <a href="https://www.ehri-project.eu/" target="_blank" rel="noopener noreferrer" style="text-decoration:none" title="EHRI-CZ"><strong>EHRI-CZ</strong></a> 
+                    Ukazují, jak lze MemoMap využít ve výuce, a to zejména ve vzdělávací oblasti Člověk a společnost – dějepis, má ovšem přesahy i do Výchovy k občanství, Geografie a Průřezových témat (Společnost pro všechny).
+                </p>
+
+                <div class="metodiky-logos">
+                    <a href="https://www.antikomplex.cz/" target="_blank" rel="noopener noreferrer" title="Antikomplex">
+                        <img src="images/antikomplex-logo.png" alt="Antikomplex logo" class="partner-logo" />
+                    </a>
+                    <a href="https://www.ehri.cz/" target="_blank" rel="noopener noreferrer" title="EHRI-CZ">
+                        <img src="images/ehri-cz-logo2.png" alt="EHRI-CZ logo" class="partner-logo" />
+                    </a>
+                </div>
+
+                <p>
+                    Tři metodiky určené pro 8.–9. ročníky základních škol (+ odpovídající ročníky víceletých gymnázií) 
+                    a pro střední školy jsme zaměřili na tři témata: <strong>„ghetto beze zdí“</strong> – co ho vytvořilo a jaké byly dopady tohoto konstruktu na společnost, 
+                    <strong>„veřejný prostor“</strong> – způsoby jeho utváření a důsledků vylučování z něj a <strong>„místo“</strong> coby sociální a morální konstrukci, 
+                    díky které je možné zkoumat vztah mezi člověkem a prostředím, jež je formováno mocí, jak to činí tzv. sociální a kulturní geografie.
+                </p>
+
+                <p class="metodiky-intro-note">
+                    <strong>Podrobnější informace o jednotlivých metodikách a možnost jejich stažení naleznete níže.</strong>
+                </p>
+
+                <div class="metodiky-cards">
+                    <!-- Metodika 1 -->
+                    <div class="metodika-card">
+                        <h3 class="metodika-title">Metodika <em>Město jako nástroj moci: segregace Židů ve veřejném prostoru v protektorátní Praze</em></h3>
+                        <div class="metodika-target"><strong>Cílová skupina:</strong> 1.–4. ročník SŠ</div>
+                        <p class="metodika-desc">
+                            Metodika vede studenty ke zkoumání vlivů, které spoluvytvářely veřejný prostor v období, kdy platila protižidovská nařízení. 
+                            Studenti porozumí tomu, že prostor není pouhým fyzickým místem, ale má svá psaná i nepsaná pravidla, která jsou utvářena 
+                            lidskými interakcemi, vztahy, normami, mocí a kulturou, které se mění v čase. Hledají odpovědi na otázky, jaký vliv na aktéry 
+                            ve veřejném prostoru má to, když je prostor mocensky zneužit, a to nejen na perzekuované, ale i na přihlížející. 
+                            V rámci reflexe klade metodika otázku, co můžeme dělat dnes, aby veřejný prostor zůstal otevřený a pravidla v něm nastavená 
+                            byla spravedlivá pro všechny jeho uživatele.
+                        </p>
+                        <h4 class="download-title">Ke stažení:</h4>
+                        <div class="download-list">
+                            <a href="metodiky/Mesto_jako_nastroj_moci/ATX_EHRI_METODIKA_MESTO%20JAKO%20NASTROJ_metodick%C3%BD_materi%C3%A1l.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Metodický materiál (vzdělávací aktivita)
+                            </a>
+                            <a href="metodiky/Mesto_jako_nastroj_moci/ATX_EHRI_METODIKA_MESTO%20JAKO%20NASTROJ_pracovni%20list.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Pracovní list
+                            </a>
+                            <a href="metodiky/Mesto_jako_nastroj_moci/ATX_EHRI_METODIKA_MESTO%20JAKO%20NASTROJ_doprovodne%20materialy.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný materiál (archivní dokumenty)
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Metodika 2 -->
+                    <div class="metodika-card">
+                        <h3 class="metodika-title">Metodika <em>Nebýt součástí místa. Využití MemoMap ve výuce</em></h3>
+                        <div class="metodika-target"><strong>Cílová skupina:</strong> 9. ročník ZŠ a 1.–4. ročník SŠ</div>
+                        <p class="metodika-desc">
+                            Metodika zkoumá, co znamená patřit do určitého prostoru a co se děje, když je člověku toto právo odepřeno. 
+                            Na příkladu vylučování pražských Židů z veřejného prostoru během třicátých a čtyřicátých let 20. století 
+                            se žáci a studenti učí vnímat proměny městského prostředí v čase a prostoru, v němž se střetávají paměť a moc. 
+                            Název vychází z klíčového pojmu „Out of Place“ z díla Tima Cresswella, který upozorňuje, že společnost určuje, 
+                            kdo někam patří a kdo ne. Ti, kteří jsou označeni za „mimo místo“, často ztrácejí právo být viděni a slyšeni. 
+                            Aktivita pomáhá žákům a studentům pochopit, jakým způsobem se takové procesy odehrávaly i v jejich městě a jaké měly dopady. 
+                            Zároveň aktivita otevírá prostor pro reflexi současnosti – kdo je dnes „mimo místo“ v našem městě, škole nebo společnosti.
+                        </p>
+                        <h4 class="download-title">Ke stažení:</h4>
+                        <div class="download-list">
+                            <a href="metodiky/Nebyt_soucasti_mista/ATX_EHRI_METODIKA_NEBYT%20SOUCASTI%20MISTA_metodick%C3%BD_materi%C3%A1l.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Metodický materiál (vzdělávací aktivita)
+                            </a>
+                            <a href="metodiky/Nebyt_soucasti_mista/ATX_EHRI_METODIKA_NEBYT%20SOUCASTI%20MISTA_doprovodny%20text.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný text
+                            </a>
+                            <a href="metodiky/Nebyt_soucasti_mista/ATX_EHRI_METODIKA_NEBYT%20SOUCASTI%20MISTA_pracovni%20list.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Pracovní list
+                            </a>
+                            <a href="metodiky/Nebyt_soucasti_mista/ATX_EHRI_METODIKA_NEBYT%20SOUCASTI%20MISTA_doprovodne%20materialy.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný materiál (archivní dokumenty)
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Metodika 3 -->
+                    <div class="metodika-card">
+                        <h3 class="metodika-title">Metodika <em>Právo v době bezpráví</em></h3>
+                        <div class="metodika-target"><strong>Cílová skupina:</strong> 8.–9. ročník ZŠ a 1.–4. ročník SŠ</div>
+                        <p class="metodika-desc">
+                            Metodika klade otázky, k jakým situacím vedlo zavádění rasového dělení společnosti, jak se při nich chovali „muži zákona“, 
+                            nežidovští obyvatelé a jak Židé. K hledáním odpovědí využívá bohatého archivu tzv. incidentů z MemoMap. Žáci 
+                            pracují s historickými zdroji, které se učí kriticky posuzovat. Například: Jaké je hlavní sdělení textu/obrázku? Je, nebo není manipulativní a proč? 
+                            Nese zkoumaná situace rysy porušení zásad demokracie a lidských práv? Při vytváření vlastního výstupu se učí využívat 
+                            více zdrojů informací (např. také populárně-naučný text, novinový a internetový článek, databáze, archivní nebo muzejní fond a sbírka 
+                            či digitalizovaný zdroj).
+                        </p>
+                        <h4 class="download-title">Ke stažení:</h4>
+                        <div class="download-list">
+                            <a href="metodiky/Pravo_v_dobe_bezpravi/ATX_EHRI_METODIKA_PRAVO%20V%20DOBE%20BEZPRAVI_metodick%C3%BD_materi%C3%A1l.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Metodický materiál (vzdělávací aktivita)
+                            </a>
+                            <a href="metodiky/Pravo_v_dobe_bezpravi/ATX_EHRI_METODIKA_PRAVO%20V%20DOBE%20BEZPRAVI_doprovodny%20text_1.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný text 1.
+                            </a>
+                            <a href="metodiky/Pravo_v_dobe_bezpravi/ATX_EHRI_METODIKA_PRAVO%20V%20DOBE%20BEZPRAVI_doprovodny%20text_2.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný text 2.
+                            </a>
+                            <a href="metodiky/Pravo_v_dobe_bezpravi/ATX_EHRI_METODIKA_PRAVO%20V%20DOBE%20BEZPRAVI_pracovni%20list.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Pracovní list
+                            </a>
+                            <a href="metodiky/Pravo_v_dobe_bezpravi/ATX_EHRI_METODIKA_PRAVO%20V%20DOBE%20BEZPRAVI_doprovodne%20materialy.pdf" download class="download-button" target="_blank">
+                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný materiál (archivní dokumenty)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
-        <div class="detail-content">
-            @((MarkupString)DetailContent)
-        </div>
+        else
+        {
+            @if (!string.IsNullOrEmpty(DetailTitle))
+            {
+                <h2 class="detail-subtitle">@DetailTitle</h2>
+            }
+            <div class="detail-content">
+                @((MarkupString)DetailContent)
+            </div>
+        }
 
     </div>
 }
@@ -43,8 +172,12 @@ else
 
         <div class="intro-text">
             @((MarkupString)cl["welcomeText_short"].ToString())
-            <div class="read-more-container">
+            <div class="read-more-container" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                 <RadzenButton Text="@cl["moreInfo"]" Click="@ShowWelcomeTextLong" class="info-btn" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Icon="info" />
+                @if (CultureInfo.CurrentCulture.Name == "cs-CZ")
+                {
+                    <RadzenButton Text="@cl["metodiky"]" Click="@ShowMetodiky" class="info-btn" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Icon="school" />
+                }
             </div>
         </div>
 
@@ -265,6 +398,117 @@ else
         .detail-content strong {
             color: var(--Wine-Red);
         }
+
+    .metodiky-logos {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2.5rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+    }
+
+    .partner-logo {
+        max-height: 70px;
+        width: auto;
+        object-fit: contain;
+        transition: transform 0.2s ease;
+    }
+
+        .partner-logo:hover {
+            transform: scale(1.05);
+        }
+
+    .metodiky-intro-note {
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .metodiky-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        margin-top: 2rem;
+        width: 100%;
+    }
+
+    .metodika-card {
+        background: #efeddc;
+        border-radius: 8px;
+        padding: 2rem;
+        transition: box-shadow 0.2s ease;
+    }
+
+        .metodika-card:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+    .metodika-title {
+        color: var(--Wine-Red);
+        font-family: 'Barlow', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+    }
+
+    .metodika-target {
+        font-family: 'Barlow', sans-serif;
+        font-size: 1.05rem;
+        color: #46463D;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eaeaea;
+    }
+
+    .metodika-desc {
+        color: var(--Grey);
+        font-family: 'Noto Serif', serif;
+        font-size: 1.05rem;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+    }
+
+    .download-title {
+        color: var(--Wine-Red);
+        font-family: 'Barlow', sans-serif;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+    }
+
+    .download-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .download-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--Wine-Red);
+        font-family: 'Barlow', sans-serif;
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        padding: 0.5rem 0.85rem;
+        background-color: #fff;
+        border: 1px solid rgba(131, 24, 67, 0.2);
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        width: fit-content;
+    }
+
+        .download-button:hover {
+            background-color: var(--Wine-Red);
+            color: #ffffff;
+            border-color: var(--Wine-Red);
+            text-decoration: none;
+        }
 </style>
 
 @code {
@@ -280,6 +524,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         Cities = configuration.GetSection("App:Cities").Get<string[]>() ?? Array.Empty<string>();
+        UpdateDetailFromParameter();
         await MapService.Destroy();
     }
 
@@ -296,18 +541,43 @@ else
 
     private void UpdateDetailFromParameter()
     {
-        if (!string.IsNullOrEmpty(Detail))
+        // [SupplyParameterFromQuery] works for in-app navigation, but on a full WASM
+        // page reload it may not be set yet — fall back to manual URL parsing in that case.
+        string? rawDetail = Detail;
+        if (string.IsNullOrWhiteSpace(rawDetail))
         {
-            if (Detail == "main")
+            try
+            {
+                var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+                rawDetail = System.Web.HttpUtility.ParseQueryString(uri.Query)["detail"];
+            }
+            catch { }
+        }
+
+        var cleanDetail = string.IsNullOrWhiteSpace(rawDetail) ? null : rawDetail.Trim().ToLowerInvariant();
+
+        if (!string.IsNullOrEmpty(cleanDetail))
+        {
+            if (cleanDetail == "main")
             {
                 DetailTitle = "";
                 DetailContent = cl["welcomeText_long"].ToString();
                 ShowingDetail = true;
             }
+            else if (cleanDetail == "metodiky")
+            {
+                DetailTitle = "Metodiky pro práci s MemoMap";
+                DetailContent = "";
+                ShowingDetail = true;
+            }
             else
             {
-                DetailTitle = cl["city_" + Detail].ToString();
-                DetailContent = cl["welcomeText_" + Detail + "_long"].ToString();
+                var cityKey = "city_" + cleanDetail;
+                var cityLongKey = "welcomeText_" + cleanDetail + "_long";
+                var titleRes = cl[cityKey];
+                var contentRes = cl[cityLongKey];
+                DetailTitle = titleRes.ResourceNotFound ? cl["city_" + rawDetail].ToString() : titleRes.ToString();
+                DetailContent = contentRes.ResourceNotFound ? cl["welcomeText_" + rawDetail + "_long"].ToString() : contentRes.ToString();
                 ShowingDetail = true;
             }
         }
@@ -328,18 +598,8 @@ else
         NavigationManager.NavigateTo(NavigationManager.Uri, forceLoad: true);
     }
 
-    private void ShowWelcomeTextLong()
-    {
-        NavigationManager.NavigateTo("/?detail=main");
-    }
-
-    private void ShowCityInfo(string city)
-    {
-        NavigationManager.NavigateTo($"/?detail={city}");
-    }
-
-    private void HideDetail()
-    {
-        NavigationManager.NavigateTo("/");
-    }
+    private void ShowWelcomeTextLong() => NavigationManager.NavigateTo("/?detail=main");
+    private void ShowMetodiky() => NavigationManager.NavigateTo("/?detail=metodiky");
+    private void ShowCityInfo(string city) => NavigationManager.NavigateTo($"/?detail={city}");
+    private void HideDetail() => NavigationManager.NavigateTo("/");
 }
