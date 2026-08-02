@@ -19,7 +19,7 @@
 @if (ShowingDetail)
 {
     <div style="position:fixed; top:20px; left: 0px; width: 100px; z-index: 1000;">
-        <RadzenButton Icon="arrow_back" Click="@HideDetail" class="back-btn" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" />
+        <RadzenButton Icon="arrow_back" Click="@HideDetail" class="back-btn" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" style="border-radius: 0 4px 4px 0"/>
     </div>
     <div class="detail-container">
 
@@ -174,17 +174,13 @@ else
             @((MarkupString)cl["welcomeText_short"].ToString())
             <div class="read-more-container" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                 <RadzenButton Text="@cl["moreInfo"]" Click="@ShowWelcomeTextLong" class="info-btn" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Icon="info" />
-                @if (CultureInfo.CurrentCulture.Name == "cs-CZ")
-                {
-                    <RadzenButton Text="@cl["metodiky"]" Click="@ShowMetodiky" class="info-btn" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Icon="school" />
-                }
             </div>
         </div>
 
         <RadzenRow Gap="1rem">
             @foreach (var city in Cities)
             {
-                <RadzenColumn SizeLG="4" SizeSM="12" SizeMD="6">
+                <RadzenColumn SizeLG="6" SizeSM="12" SizeMD="6">
                     <RadzenCard Style="height:200px;" class="rz-mb-12 rz-mt-4">
                         <div class="city-card" style="@($"background-image: linear-gradient(rgba(255, 255, 255, 0.7) 100%), url('images/welcome_image_{city.ToLower()}.jpg'); background-size: cover; background-position: center;")">
                             <h2 class="city-title" style="cursor:pointer" onclick="@(() => NavigationManager.NavigateTo("/" + city, false))">
@@ -195,6 +191,20 @@ else
                             <div class="city-buttons">
                                 <RadzenButton Text="@cl["moreInfo"]" Click="@(() => ShowCityInfo(city))" class="info-btn" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Icon="info" />
                             </div>
+                        </div>
+                    </RadzenCard>
+                </RadzenColumn>
+            }
+            @if (CultureInfo.CurrentCulture.Name == "cs-CZ")
+            {
+                <RadzenColumn SizeLG="6" SizeSM="12" SizeMD="6">
+                    <RadzenCard style="height:265px" class="rz-mb-12 rz-mt-4">
+                        <div class="city-card">
+                            <h2 class="city-title" style="cursor:pointer" onclick="@ShowMetodiky">
+                                Metodiky pro výuku
+                                <RadzenButton Icon="arrow_forward" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Style="vertical-align: middle; margin-left: 0.5rem;" />
+                            </h2>
+                            <p class="city-description">Materiály pro práci s MemoMap - volně ke stažení.</p>
                         </div>
                     </RadzenCard>
                 </RadzenColumn>
