@@ -36,18 +36,9 @@
                 </p>
                 <p>
                     Metodiky připravili kolegové z <a href="https://www.antikomplex.cz/" target="_blank" style="text-decoration:none" rel="noopener noreferrer" title="Antikomplex"><strong>Antikomplexu</strong></a>
-                    ve spolupráci s <a href="https://www.ehri-project.eu/" target="_blank" rel="noopener noreferrer" style="text-decoration:none" title="EHRI-CZ"><strong>EHRI-CZ</strong></a> 
+                    ve spolupráci s <a href="https://www.ehri-project.eu/" target="_blank" rel="noopener noreferrer" style="text-decoration:none" title="EHRI-CZ"><strong>EHRI-CZ</strong></a>. 
                     Ukazují, jak lze MemoMap využít ve výuce, a to zejména ve vzdělávací oblasti Člověk a společnost – dějepis, má ovšem přesahy i do Výchovy k občanství, Geografie a Průřezových témat (Společnost pro všechny).
                 </p>
-
-                <div class="metodiky-logos">
-                    <a href="https://www.antikomplex.cz/" target="_blank" rel="noopener noreferrer" title="Antikomplex">
-                        <img src="images/antikomplex-logo.png" alt="Antikomplex logo" class="partner-logo" />
-                    </a>
-                    <a href="https://www.ehri.cz/" target="_blank" rel="noopener noreferrer" title="EHRI-CZ">
-                        <img src="images/ehri-cz-logo2.png" alt="EHRI-CZ logo" class="partner-logo" />
-                    </a>
-                </div>
 
                 <p>
                     Tři metodiky určené pro 8.–9. ročníky základních škol (+ odpovídající ročníky víceletých gymnázií) 
@@ -149,6 +140,15 @@
                         </div>
                     </div>
                 </div>
+                <div class="metodiky-logos">
+                    <a href="https://www.antikomplex.cz/" target="_blank" rel="noopener noreferrer" title="Antikomplex">
+                        <img src="images/antikomplex-logo.png" alt="Antikomplex logo" class="partner-logo" />
+                    </a>
+                    <a href="https://www.ehri.cz/" target="_blank" rel="noopener noreferrer" title="EHRI-CZ">
+                        <img src="images/ehri-cz-logo2.png" alt="EHRI-CZ logo" class="partner-logo" />
+                    </a>
+                </div>
+
             </div>
         }
         else
@@ -198,13 +198,13 @@ else
             @if (CultureInfo.CurrentCulture.Name == "cs-CZ")
             {
                 <RadzenColumn SizeLG="6" SizeSM="12" SizeMD="6">
-                    <RadzenCard style="height:265px" class="rz-mb-12 rz-mt-4">
-                        <div class="city-card">
+                    <RadzenCard style="height:200px" class="rz-mb-12 rz-mt-4">
+                        <div class="city-card" style="@($"background-image: linear-gradient(rgba(255, 230, 227, 0.75) 100%), url('images/welcome_image_metodiky.jpg'); background-size: cover; background-position: center;")">
                             <h2 class="city-title" style="cursor:pointer" onclick="@ShowMetodiky">
-                                Metodiky pro výuku
+                                Metodiky pro učitele
                                 <RadzenButton Icon="arrow_forward" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Style="vertical-align: middle; margin-left: 0.5rem;" />
                             </h2>
-                            <p class="city-description">Materiály pro práci s MemoMap - volně ke stažení.</p>
+                            <p class="city-description">Využijte MemoMap ve výuce. Metodiky pro žáky 8.–9. tříd ZŠ a studenty SŠ ke stažení.</p>
                         </div>
                     </RadzenCard>
                 </RadzenColumn>

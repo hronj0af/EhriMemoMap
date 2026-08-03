@@ -910,7 +910,7 @@ div.leaflet-overlay-pane svg > g path.statistics-polygon {
     align-items: center;
     justify-content: center;
     gap: 2.5rem;
-    /*margin: 2rem 0;*/
+    margin: 3rem 0;
     flex-wrap: wrap;
 }
 
