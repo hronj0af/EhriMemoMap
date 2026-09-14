@@ -995,6 +995,75 @@ The application can be used not only on a home or school computer, but also dire
     <value>Protectorate Bohemia and Moravia</value>
   </data>
   <data name="metodiky" xml:space="preserve">
-    <value>Metodiky pro výuku</value>
+    <value>Teaching Resources</value>
+  </data>
+  <data name="metodiky_subtitle" xml:space="preserve">
+    <value>Teaching Resources for Using MemoMaps</value>
+  </data>
+  <data name="metodiky_card_desc" xml:space="preserve">
+    <value>Use MemoMaps in the classroom. Teaching resources for pupils in Grades 8–9 of primary schools and secondary school students, available for download.</value>
+  </data>
+  <data name="metodiky_intro1" xml:space="preserve">
+    <value>Would you like your pupils or students to explore how the Holocaust affected the lives of Jewish residents and transformed the city, its public spaces, and relationships between people? These are the themes addressed by three newly developed teaching resources, which are now freely available for download.</value>
+  </data>
+  <data name="metodiky_intro2" xml:space="preserve">
+    <value>The teaching resources were developed by our colleagues from &lt;a href="https://www.antikomplex.cz/" target="_blank" style="text-decoration:none" rel="noopener noreferrer" title="Antikomplex"&gt;&lt;strong&gt;Antikomplex&lt;/strong&gt;&lt;/a&gt; in co-operation with &lt;a href="https://www.ehri-project.eu/" target="_blank" rel="noopener noreferrer" style="text-decoration:none" title="EHRI-CZ"&gt;&lt;strong&gt;EHRI-CZ&lt;/strong&gt;&lt;/a&gt;. They demonstrate how MemoMaps can be used in the classroom, particularly in the People and Society (Člověk a společnost) curriculum area (History), while also offering interdisciplinary links to Civics, Geography, and cross-curricular themes such as Society for All (Společnost pro všechny).</value>
+  </data>
+  <data name="metodiky_intro3" xml:space="preserve">
+    <value>The three teaching resources are intended for pupils in Grades 8–9 of primary schools as well as for secondary schools. They focus on three key themes: &lt;strong&gt;"The Ghetto without Walls"&lt;/strong&gt; – what created the ghetto and its effect on society; &lt;strong&gt;"Public Space"&lt;/strong&gt; – how public space is shaped and the consequences of exclusion from it; and &lt;strong&gt;"Place"&lt;/strong&gt; as a social and moral construct, enabling students to examine the relationship between people and environments shaped by power, drawing on approaches from social and cultural geography.</value>
+  </data>
+  <data name="metodiky_intro_note" xml:space="preserve">
+    <value>More detailed information about each teaching resource, together with download links, can be found below.</value>
+  </data>
+  <data name="metodiky_download_title" xml:space="preserve">
+    <value>Downloads:</value>
+  </data>
+  <data name="metodiky_dl_material" xml:space="preserve">
+    <value>Teaching Resource (Educational Activity)</value>
+  </data>
+  <data name="metodiky_dl_worksheet" xml:space="preserve">
+    <value>Student Worksheet</value>
+  </data>
+  <data name="metodiky_dl_background" xml:space="preserve">
+    <value>Background Text</value>
+  </data>
+  <data name="metodiky_dl_background1" xml:space="preserve">
+    <value>Background Text 1</value>
+  </data>
+  <data name="metodiky_dl_background2" xml:space="preserve">
+    <value>Background Text 2</value>
+  </data>
+  <data name="metodiky_dl_archival" xml:space="preserve">
+    <value>Supplementary Materials (Archival Documents)</value>
+  </data>
+  <data name="metodiky1_title" xml:space="preserve">
+    <value>Teaching Resource: &lt;em&gt;The City as an Instrument of Power: The Segregation of Jews in Public Space in Nazi-Occupied Prague&lt;/em&gt;</value>
+  </data>
+  <data name="metodiky1_target" xml:space="preserve">
+    <value>Secondary schools (Grades 9–12)</value>
+  </data>
+  <data name="metodiky1_desc" xml:space="preserve">
+    <value>This teaching resource encourages students to explore the forces that shaped public space during the period when anti-Jewish regulations were in force. Students learn that space is not merely a physical location but is governed by both written and unwritten rules, formed through human interactions, social relationships, norms, power, and culture, all of which change over time. The activities invite students to consider how the abuse of power in public space affects not only those who are persecuted but also those who witness such persecution. As part of the reflection, the resource asks what we can do today to ensure that public spaces remain open and that the rules governing them are fair to all who use them.</value>
+  </data>
+  <data name="metodiky2_title" xml:space="preserve">
+    <value>Teaching Resource: &lt;em&gt;Out of Place: Using MemoMaps in the Classroom&lt;/em&gt;</value>
+  </data>
+  <data name="metodiky2_target" xml:space="preserve">
+    <value>Grade 9 of primary schools and secondary schools (Grades 9–12)</value>
+  </data>
+  <data name="metodiky2_desc" xml:space="preserve">
+    <value>This teaching resource explores what it means to belong to a particular place and what happens when that right is denied. Using the example of the exclusion of Prague's Jewish population from public space during the 1930s and 1940s, pupils and students examine how urban environments change over time and how memory and power shape the spaces in which we live. The title is inspired by Tim Cresswell's concept of &lt;strong&gt;"Out of Place"&lt;/strong&gt;, which highlights how societies determine who belongs in a place and who does not. Those labelled as "out of place" are often denied the right to be seen and heard. Through this activity, pupils and students gain a deeper understanding of how such processes unfolded in their own city and the impact they had. At the same time, the resource encourages reflection on the present by asking who might be considered "out of place" in today's city, school, or society.</value>
+  </data>
+  <data name="metodiky3_title" xml:space="preserve">
+    <value>Teaching Resource: &lt;em&gt;Law in a Time of Lawlessness&lt;/em&gt;</value>
+  </data>
+  <data name="metodiky3_target" xml:space="preserve">
+    <value>Grades 8–9 of primary schools and secondary schools (Grades 9–12)</value>
+  </data>
+  <data name="metodiky3_desc" xml:space="preserve">
+    <value>This teaching resource examines the consequences of introducing racial segregation into society by asking how the rule of law was transformed during the Holocaust. Students explore how law enforcement officers, non-Jewish citizens, and Jews responded to anti-Jewish measures, drawing on the rich archive of so-called incidents available in MemoMaps. Working with historical sources, pupils and students develop their ability to analyse evidence critically. They consider questions such as: What is the main message of a text or image? Is it manipulative, and if so, why? Does the situation reflect a violation of democratic principles or human rights? As part of the activities, students also learn to create their own outputs by drawing on multiple types of sources, including popular history publications, newspaper and online articles, databases, archival and museum collections, and digitised historical materials.</value>
+  </data>
+  <data name="metodiky_target_label" xml:space="preserve">
+    <value>Target group:</value>
   </data>
 </root>

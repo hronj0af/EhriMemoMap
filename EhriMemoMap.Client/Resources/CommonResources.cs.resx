@@ -989,6 +989,75 @@ Aplikaci lze používat nejen z domácího či školního počítače, ale také
     <value>Protektorát Čechy a Morava</value>
   </data>
   <data name="metodiky" xml:space="preserve">
-    <value>Metodiky pro výuku</value>
+    <value>Metodiky pro učitele</value>
+  </data>
+  <data name="metodiky_subtitle" xml:space="preserve">
+    <value>Metodiky pro práci s MemoMap</value>
+  </data>
+  <data name="metodiky_card_desc" xml:space="preserve">
+    <value>Využijte MemoMap ve výuce. Metodiky pro žáky 8.–9. tříd ZŠ a studenty SŠ ke stažení.</value>
+  </data>
+  <data name="metodiky_intro1" xml:space="preserve">
+    <value>Chcete s žáky a studenty zkoumat, jak holokaust zasáhl do života židovských obyvatel a proměnil město, jeho veřejný prostor i vztahy mezi lidmi? Právě s tématy pracují tři nově vytvořené metodiky, které jsou nyní volně ke stažení.</value>
+  </data>
+  <data name="metodiky_intro2" xml:space="preserve">
+    <value>Metodiky připravili kolegové z &lt;a href="https://www.antikomplex.cz/" target="_blank" style="text-decoration:none" rel="noopener noreferrer" title="Antikomplex"&gt;&lt;strong&gt;Antikomplexu&lt;/strong&gt;&lt;/a&gt; ve spolupráci s &lt;a href="https://www.ehri-project.eu/" target="_blank" rel="noopener noreferrer" style="text-decoration:none" title="EHRI-CZ"&gt;&lt;strong&gt;EHRI-CZ&lt;/strong&gt;&lt;/a&gt;. Ukazují, jak lze MemoMap využít ve výuce, a to zejména ve vzdělávací oblasti Člověk a společnost – dějepis, má ovšem přesahy i do Výchovy k občanství, Geografie a Průřezových témat (Společnost pro všechny).</value>
+  </data>
+  <data name="metodiky_intro3" xml:space="preserve">
+    <value>Tři metodiky určené pro 8.–9. ročníky základních škol (+ odpovídající ročníky víceletých gymnázií) a pro střední školy jsme zaměřili na tři témata: &lt;strong&gt;„ghetto beze zdí“&lt;/strong&gt; – co ho vytvořilo a jaké byly dopady tohoto konstruktu na společnost, &lt;strong&gt;„veřejný prostor“&lt;/strong&gt; – způsoby jeho utváření a důsledků vylučování z něj a &lt;strong&gt;„místo“&lt;/strong&gt; coby sociální a morální konstrukci, díky které je možné zkoumat vztah mezi člověkem a prostředím, jež je formováno mocí, jak to činí tzv. sociální a kulturní geografie.</value>
+  </data>
+  <data name="metodiky_intro_note" xml:space="preserve">
+    <value>Podrobnější informace o jednotlivých metodikách a možnost jejich stažení naleznete níže.</value>
+  </data>
+  <data name="metodiky_download_title" xml:space="preserve">
+    <value>Ke stažení:</value>
+  </data>
+  <data name="metodiky_dl_material" xml:space="preserve">
+    <value>Metodický materiál (vzdělávací aktivita)</value>
+  </data>
+  <data name="metodiky_dl_worksheet" xml:space="preserve">
+    <value>Pracovní list</value>
+  </data>
+  <data name="metodiky_dl_background" xml:space="preserve">
+    <value>Doprovodný text</value>
+  </data>
+  <data name="metodiky_dl_background1" xml:space="preserve">
+    <value>Doprovodný text 1.</value>
+  </data>
+  <data name="metodiky_dl_background2" xml:space="preserve">
+    <value>Doprovodný text 2.</value>
+  </data>
+  <data name="metodiky_dl_archival" xml:space="preserve">
+    <value>Doprovodný materiál (archivní dokumenty)</value>
+  </data>
+  <data name="metodiky1_title" xml:space="preserve">
+    <value>Metodika &lt;em&gt;Město jako nástroj moci: segregace Židů ve veřejném prostoru v protektorátní Praze&lt;/em&gt;</value>
+  </data>
+  <data name="metodiky1_target" xml:space="preserve">
+    <value>1.–4. ročník SŠ</value>
+  </data>
+  <data name="metodiky1_desc" xml:space="preserve">
+    <value>Metodika vede studenty ke zkoumání vlivů, které spoluvytvářely veřejný prostor v období, kdy platila protižidovská nařízení. Studenti porozumí tomu, že prostor není pouhým fyzickým místem, ale má svá psaná i nepsaná pravidla, která jsou utvářena lidskými interakcemi, vztahy, normami, mocí a kulturou, které se mění v čase. Hledají odpovědi na otázky, jaký vliv na aktéry ve veřejném prostoru má to, když je prostor mocensky zneužit, a to nejen na perzekuované, ale i na přihlížející. V rámci reflexe klade metodika otázku, co můžeme dělat dnes, aby veřejný prostor zůstal otevřený a pravidla v něm nastavená byla spravedlivá pro všechny jeho uživatele.</value>
+  </data>
+  <data name="metodiky2_title" xml:space="preserve">
+    <value>Metodika &lt;em&gt;Nebýt součástí místa. Využití MemoMap ve výuce&lt;/em&gt;</value>
+  </data>
+  <data name="metodiky2_target" xml:space="preserve">
+    <value>9. ročník ZŠ a 1.–4. ročník SŠ</value>
+  </data>
+  <data name="metodiky2_desc" xml:space="preserve">
+    <value>Metodika zkoumá, co znamená patřit do určitého prostoru a co se děje, když je člověku toto právo odepřeno. Na příkladu vylučování pražských Židů z veřejného prostoru během třicátých a čtyřicátých let 20. století se žáci a studenti učí vnímat proměny městského prostředí v čase a prostoru, v němž se střetávají paměť a moc. Název vychází z klíčového pojmu „Out of Place“ z díla Tima Cresswella, který upozorňuje, že společnost určuje, kdo někam patří a kdo ne. Ti, kteří jsou označeni za „mimo místo“, často ztrácejí právo být viděni a slyšeni. Aktivita pomáhá žákům a studentům pochopit, jakým způsobem se takové procesy odehrávaly i v jejich městě a jaké měly dopady. Zároveň aktivita otevírá prostor pro reflexi současnosti – kdo je dnes „mimo místo“ v našem městě, škole nebo společnosti.</value>
+  </data>
+  <data name="metodiky3_title" xml:space="preserve">
+    <value>Metodika &lt;em&gt;Právo v době bezpráví&lt;/em&gt;</value>
+  </data>
+  <data name="metodiky3_target" xml:space="preserve">
+    <value>8.–9. ročník ZŠ a 1.–4. ročník SŠ</value>
+  </data>
+  <data name="metodiky3_desc" xml:space="preserve">
+    <value>Metodika klade otázky, k jakým situacím vedlo zavádění rasového dělení společnosti, jak se při nich chovali „muži zákona“, nežidovští obyvatelé a jak Židé. K hledáním odpovědí využívá bohatého archivu tzv. incidentů z MemoMap. Žáci pracují s historickými zdroji, které se učí kriticky posuzovat. Například: Jaké je hlavní sdělení textu/obrázku? Je, nebo není manipulativní a proč? Nese zkoumaná situace rysy porušení zásad demokracie a lidských práv? Při vytváření vlastního výstupu se učí využívat více zdrojů informací (např. také populárně-naučný text, novinový a internetový článek, databáze, archivní nebo muzejní fond a sbírka či digitalizovaný zdroj).</value>
+  </data>
+  <data name="metodiky_target_label" xml:space="preserve">
+    <value>Cílová skupina:</value>
   </data>
 </root>

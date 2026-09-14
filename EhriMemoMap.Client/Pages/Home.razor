@@ -27,115 +27,93 @@
 
         @if (Detail == "metodiky")
         {
-            <h2 class="detail-subtitle">Metodiky pro práci s MemoMap</h2>
+            <h2 class="detail-subtitle">@cl["metodiky_subtitle"]</h2>
 
             <div class="detail-content metodiky-content">
                 <p>
-                    Chcete s žáky a studenty zkoumat, jak holokaust zasáhl do života židovských obyvatel a proměnil město, jeho veřejný prostor i vztahy mezi lidmi? 
-                    Právě s tématy pracují tři nově vytvořené metodiky, které jsou nyní volně ke stažení.
+                    @cl["metodiky_intro1"]
                 </p>
                 <p>
-                    Metodiky připravili kolegové z <a href="https://www.antikomplex.cz/" target="_blank" style="text-decoration:none" rel="noopener noreferrer" title="Antikomplex"><strong>Antikomplexu</strong></a>
-                    ve spolupráci s <a href="https://www.ehri-project.eu/" target="_blank" rel="noopener noreferrer" style="text-decoration:none" title="EHRI-CZ"><strong>EHRI-CZ</strong></a>. 
-                    Ukazují, jak lze MemoMap využít ve výuce, a to zejména ve vzdělávací oblasti Člověk a společnost – dějepis, má ovšem přesahy i do Výchovy k občanství, Geografie a Průřezových témat (Společnost pro všechny).
+                    @((MarkupString)cl["metodiky_intro2"].ToString())
                 </p>
 
                 <p>
-                    Tři metodiky určené pro 8.–9. ročníky základních škol (+ odpovídající ročníky víceletých gymnázií) 
-                    a pro střední školy jsme zaměřili na tři témata: <strong>„ghetto beze zdí“</strong> – co ho vytvořilo a jaké byly dopady tohoto konstruktu na společnost, 
-                    <strong>„veřejný prostor“</strong> – způsoby jeho utváření a důsledků vylučování z něj a <strong>„místo“</strong> coby sociální a morální konstrukci, 
-                    díky které je možné zkoumat vztah mezi člověkem a prostředím, jež je formováno mocí, jak to činí tzv. sociální a kulturní geografie.
+                    @((MarkupString)cl["metodiky_intro3"].ToString())
                 </p>
 
                 <p class="metodiky-intro-note">
-                    <strong>Podrobnější informace o jednotlivých metodikách a možnost jejich stažení naleznete níže.</strong>
+                    <strong>@cl["metodiky_intro_note"]</strong>
                 </p>
 
                 <div class="metodiky-cards">
                     <!-- Metodika 1 -->
                     <div class="metodika-card">
-                        <h3 class="metodika-title">Metodika <em>Město jako nástroj moci: segregace Židů ve veřejném prostoru v protektorátní Praze</em></h3>
-                        <div class="metodika-target"><strong>Cílová skupina:</strong> 1.–4. ročník SŠ</div>
+                        <h3 class="metodika-title">@((MarkupString)cl["metodiky1_title"].ToString())</h3>
+                        <div class="metodika-target"><strong>@cl["metodiky_target_label"]</strong> @cl["metodiky1_target"]</div>
                         <p class="metodika-desc">
-                            Metodika vede studenty ke zkoumání vlivů, které spoluvytvářely veřejný prostor v období, kdy platila protižidovská nařízení. 
-                            Studenti porozumí tomu, že prostor není pouhým fyzickým místem, ale má svá psaná i nepsaná pravidla, která jsou utvářena 
-                            lidskými interakcemi, vztahy, normami, mocí a kulturou, které se mění v čase. Hledají odpovědi na otázky, jaký vliv na aktéry 
-                            ve veřejném prostoru má to, když je prostor mocensky zneužit, a to nejen na perzekuované, ale i na přihlížející. 
-                            V rámci reflexe klade metodika otázku, co můžeme dělat dnes, aby veřejný prostor zůstal otevřený a pravidla v něm nastavená 
-                            byla spravedlivá pro všechny jeho uživatele.
+                            @cl["metodiky1_desc"]
                         </p>
-                        <h4 class="download-title">Ke stažení:</h4>
+                        <h4 class="download-title">@cl["metodiky_download_title"]</h4>
                         <div class="download-list">
                             <a href="metodiky/Mesto_jako_nastroj_moci/ATX_EHRI_METODIKA_MESTO%20JAKO%20NASTROJ_metodick%C3%BD_materi%C3%A1l.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Metodický materiál (vzdělávací aktivita)
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_material"]
                             </a>
                             <a href="metodiky/Mesto_jako_nastroj_moci/ATX_EHRI_METODIKA_MESTO%20JAKO%20NASTROJ_pracovni%20list.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Pracovní list
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_worksheet"]
                             </a>
                             <a href="metodiky/Mesto_jako_nastroj_moci/ATX_EHRI_METODIKA_MESTO%20JAKO%20NASTROJ_doprovodne%20materialy.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný materiál (archivní dokumenty)
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_archival"]
                             </a>
                         </div>
                     </div>
 
                     <!-- Metodika 2 -->
                     <div class="metodika-card">
-                        <h3 class="metodika-title">Metodika <em>Nebýt součástí místa. Využití MemoMap ve výuce</em></h3>
-                        <div class="metodika-target"><strong>Cílová skupina:</strong> 9. ročník ZŠ a 1.–4. ročník SŠ</div>
+                        <h3 class="metodika-title">@((MarkupString)cl["metodiky2_title"].ToString())</h3>
+                        <div class="metodika-target"><strong>@cl["metodiky_target_label"]</strong> @cl["metodiky2_target"]</div>
                         <p class="metodika-desc">
-                            Metodika zkoumá, co znamená patřit do určitého prostoru a co se děje, když je člověku toto právo odepřeno. 
-                            Na příkladu vylučování pražských Židů z veřejného prostoru během třicátých a čtyřicátých let 20. století 
-                            se žáci a studenti učí vnímat proměny městského prostředí v čase a prostoru, v němž se střetávají paměť a moc. 
-                            Název vychází z klíčového pojmu „Out of Place“ z díla Tima Cresswella, který upozorňuje, že společnost určuje, 
-                            kdo někam patří a kdo ne. Ti, kteří jsou označeni za „mimo místo“, často ztrácejí právo být viděni a slyšeni. 
-                            Aktivita pomáhá žákům a studentům pochopit, jakým způsobem se takové procesy odehrávaly i v jejich městě a jaké měly dopady. 
-                            Zároveň aktivita otevírá prostor pro reflexi současnosti – kdo je dnes „mimo místo“ v našem městě, škole nebo společnosti.
+                            @cl["metodiky2_desc"]
                         </p>
-                        <h4 class="download-title">Ke stažení:</h4>
+                        <h4 class="download-title">@cl["metodiky_download_title"]</h4>
                         <div class="download-list">
                             <a href="metodiky/Nebyt_soucasti_mista/ATX_EHRI_METODIKA_NEBYT%20SOUCASTI%20MISTA_metodick%C3%BD_materi%C3%A1l.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Metodický materiál (vzdělávací aktivita)
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_material"]
                             </a>
                             <a href="metodiky/Nebyt_soucasti_mista/ATX_EHRI_METODIKA_NEBYT%20SOUCASTI%20MISTA_doprovodny%20text.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný text
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_background"]
                             </a>
                             <a href="metodiky/Nebyt_soucasti_mista/ATX_EHRI_METODIKA_NEBYT%20SOUCASTI%20MISTA_pracovni%20list.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Pracovní list
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_worksheet"]
                             </a>
                             <a href="metodiky/Nebyt_soucasti_mista/ATX_EHRI_METODIKA_NEBYT%20SOUCASTI%20MISTA_doprovodne%20materialy.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný materiál (archivní dokumenty)
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_archival"]
                             </a>
                         </div>
                     </div>
 
                     <!-- Metodika 3 -->
                     <div class="metodika-card">
-                        <h3 class="metodika-title">Metodika <em>Právo v době bezpráví</em></h3>
-                        <div class="metodika-target"><strong>Cílová skupina:</strong> 8.–9. ročník ZŠ a 1.–4. ročník SŠ</div>
+                        <h3 class="metodika-title">@((MarkupString)cl["metodiky3_title"].ToString())</h3>
+                        <div class="metodika-target"><strong>@cl["metodiky_target_label"]</strong> @cl["metodiky3_target"]</div>
                         <p class="metodika-desc">
-                            Metodika klade otázky, k jakým situacím vedlo zavádění rasového dělení společnosti, jak se při nich chovali „muži zákona“, 
-                            nežidovští obyvatelé a jak Židé. K hledáním odpovědí využívá bohatého archivu tzv. incidentů z MemoMap. Žáci 
-                            pracují s historickými zdroji, které se učí kriticky posuzovat. Například: Jaké je hlavní sdělení textu/obrázku? Je, nebo není manipulativní a proč? 
-                            Nese zkoumaná situace rysy porušení zásad demokracie a lidských práv? Při vytváření vlastního výstupu se učí využívat 
-                            více zdrojů informací (např. také populárně-naučný text, novinový a internetový článek, databáze, archivní nebo muzejní fond a sbírka 
-                            či digitalizovaný zdroj).
+                            @cl["metodiky3_desc"]
                         </p>
-                        <h4 class="download-title">Ke stažení:</h4>
+                        <h4 class="download-title">@cl["metodiky_download_title"]</h4>
                         <div class="download-list">
                             <a href="metodiky/Pravo_v_dobe_bezpravi/ATX_EHRI_METODIKA_PRAVO%20V%20DOBE%20BEZPRAVI_metodick%C3%BD_materi%C3%A1l.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Metodický materiál (vzdělávací aktivita)
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_material"]
                             </a>
                             <a href="metodiky/Pravo_v_dobe_bezpravi/ATX_EHRI_METODIKA_PRAVO%20V%20DOBE%20BEZPRAVI_doprovodny%20text_1.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný text 1.
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_background1"]
                             </a>
                             <a href="metodiky/Pravo_v_dobe_bezpravi/ATX_EHRI_METODIKA_PRAVO%20V%20DOBE%20BEZPRAVI_doprovodny%20text_2.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný text 2.
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_background2"]
                             </a>
                             <a href="metodiky/Pravo_v_dobe_bezpravi/ATX_EHRI_METODIKA_PRAVO%20V%20DOBE%20BEZPRAVI_pracovni%20list.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Pracovní list
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_worksheet"]
                             </a>
                             <a href="metodiky/Pravo_v_dobe_bezpravi/ATX_EHRI_METODIKA_PRAVO%20V%20DOBE%20BEZPRAVI_doprovodne%20materialy.pdf" download class="download-button" target="_blank">
-                                <RadzenIcon Icon="picture_as_pdf" /> Doprovodný materiál (archivní dokumenty)
+                                <RadzenIcon Icon="picture_as_pdf" /> @cl["metodiky_dl_archival"]
                             </a>
                         </div>
                     </div>
@@ -195,20 +173,17 @@ else
                     </RadzenCard>
                 </RadzenColumn>
             }
-            @if (CultureInfo.CurrentCulture.Name == "cs-CZ")
-            {
-                <RadzenColumn SizeLG="6" SizeSM="12" SizeMD="6">
-                    <RadzenCard style="height:200px" class="rz-mb-12 rz-mt-4">
-                        <div class="city-card" style="@($"background-image: linear-gradient(rgba(255, 230, 227, 0.75) 100%), url('images/welcome_image_metodiky.jpg'); background-size: cover; background-position: center;")">
-                            <h2 class="city-title" style="cursor:pointer" onclick="@ShowMetodiky">
-                                Metodiky pro učitele
-                                <RadzenButton Icon="arrow_forward" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Style="vertical-align: middle; margin-left: 0.5rem;" />
-                            </h2>
-                            <p class="city-description">Využijte MemoMap ve výuce. Metodiky pro žáky 8.–9. tříd ZŠ a studenty SŠ ke stažení.</p>
-                        </div>
-                    </RadzenCard>
-                </RadzenColumn>
-            }
+            <RadzenColumn SizeLG="6" SizeSM="12" SizeMD="6">
+                <RadzenCard style="height:200px" class="rz-mb-12 rz-mt-4">
+                    <div class="city-card" style="@($"background-image: linear-gradient(rgba(255, 230, 227, 0.75) 100%), url('images/welcome_image_metodiky.jpg'); background-size: cover; background-position: center;")">
+                        <h2 class="city-title" style="cursor:pointer" onclick="@ShowMetodiky">
+                            @cl["metodiky"]
+                            <RadzenButton Icon="arrow_forward" Variant="Variant.Text" ButtonStyle="ButtonStyle.Secondary" Style="vertical-align: middle; margin-left: 0.5rem;" />
+                        </h2>
+                        <p class="city-description">@cl["metodiky_card_desc"]</p>
+                    </div>
+                </RadzenCard>
+            </RadzenColumn>
         </RadzenRow>
     </div>
 }
@@ -268,7 +243,7 @@ else
             }
             else if (cleanDetail == "metodiky")
             {
-                DetailTitle = "Metodiky pro práci s MemoMap";
+                DetailTitle = cl["metodiky_subtitle"].ToString();
                 DetailContent = "";
                 ShowingDetail = true;
             }
