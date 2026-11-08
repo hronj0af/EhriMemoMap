@@ -1,0 +1,9 @@
+/* Všechny styly aplikace – ve stejném pořadí, v jakém je načítal index.html Blazor klienta.
+   Vite je spojí do jednoho souboru s hashem a postcss-preset-env doplní fallbacky pro starší prohlížeče.
+   (Font Awesome a open-iconic se nepoužívaly, proto tu nejsou; písma Barlow a Noto Serif jsou z Google Fonts v index.html.) */
+@import './leaflet.css';
+@import './app.css';
+@import './site.css';
+@import './radzen.css';
+@import './bigger-picture.css';
+@import './video-js.css';

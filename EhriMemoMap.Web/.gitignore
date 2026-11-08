@@ -1,0 +1,38 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Statické soubory synchronizované z EhriMemoMap.Client/wwwroot (scripts/sync-static.mjs)
+/public/appsettings.json
+/public/appsettings.Development.json
+/public/favicon.png
+/public/css/
+/public/images/
+/public/metodiky/
+/public/viewer/
+/public/mapsettings.*.json
+
+# Generováno z .resx (scripts/resx-to-json.mjs)
+/src/i18n/cs.json
+/src/i18n/en.json

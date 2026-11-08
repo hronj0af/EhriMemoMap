@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-39PMF0ZRMB"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-39PMF0ZRMB');
+    </script>
+    <script type="application/ld+json">
+        {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "MemoMap",
+        "description": {
+            "cs": "Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli.",
+            "en": "An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war."
+          },
+        "url": "https://www.memomap.cz"
+        }
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli." hreflang="cs" />
+    <meta name="description" content="An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war." hreflang="en" />
+    <meta name="robots" content="nofollow" />
+    <title>MemoMap</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+
+    <!-- Styly aplikace (Vite je zpracuje a připojí jako soubor s hashem); připojené tady, ne importem z JS,
+         aby je legacy bundle neobsahoval podruhé jako vkládaný text --><link rel="stylesheet" href="/src/styles/index.css" />
+    <!-- Webová písma -->
+    <link href="https://fonts.googleapis.com/css?family=Barlow:400,500,600,700|Noto%20Serif:400" rel="stylesheet" />
+
+    <!-- Globální knihovny bez ES modulů -->
+    <script src="https://vjs.zencdn.net/8.23.4/video.min.js"></script>
+</head>
+
+<body id="body">
+    <div id="app">
+        <svg class="loading-progress">
+            <circle r="40%" cx="50%" cy="50%" />
+            <circle r="40%" cx="50%" cy="50%" />
+        </svg>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
