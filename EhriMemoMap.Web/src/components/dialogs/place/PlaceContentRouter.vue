@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Components/Dialogs/Place/PlaceContentRouter.razor – seznam míst daného typu (+ filtr jmen u adres).
-// Pozn.: v Blazoru měla ikona lupy u filtru překlep "onclik", takže nedělala nic; filtr se uplatní
-// po potvrzení textu (událost change), stejně jako @bind-Value u RadzenTextBox.
+// Filtr jmen se uplatní po potvrzení textu (Enter, opuštění pole) nebo kliknutím na lupu.
+// (V Blazoru měla lupa překlep "onclik" a nedělala nic.)
 import { computed, ref } from 'vue'
 import { PlaceType } from '../../../models/enums'
 import type { PlacesResult } from '../../../models/api'
@@ -50,7 +50,7 @@ const addresses = computed(() =>
           :placeholder="t('filterNames')"
           @change="filteredName = filterInput"
         />
-        <img src="images/search-only-dark.svg" style="cursor: pointer" class="rz-pb-2" />
+        <img src="images/search-only-dark.svg" style="cursor: pointer" class="rz-pb-2" @click="filteredName = filterInput" />
       </RzStack>
       <AddressPlace v-for="(house, i) in addresses ?? []" :key="i" :house="house" :filtered-name="filteredName" />
     </template>

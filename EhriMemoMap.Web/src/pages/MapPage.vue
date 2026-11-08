@@ -22,6 +22,12 @@ const store = useMapStore()
 
 const cityName = computed(() => props.city || 'prague')
 
+/** Rozměry okna pro panel a časovou osu (Blazor je zjišťoval jen při načtení stránky). */
+function updateWindowSize() {
+  store.windowWidth = window.innerWidth
+  store.windowHeight = window.innerHeight
+}
+
 onMounted(async () => {
   document.title = 'MemoMap ' + t('city_' + cityName.value)
 
@@ -35,8 +41,8 @@ onMounted(async () => {
   })
 
   // rozměry okna kvůli dialogu, mobilní zobrazení
-  store.windowWidth = window.innerWidth
-  store.windowHeight = window.innerHeight
+  updateWindowSize()
+  window.addEventListener('resize', updateWindowSize)
   store.setMobileView(isMobileView())
 
   // vrstvy a bod časové osy z URL
@@ -88,6 +94,7 @@ onMounted(async () => {
 })
 
 onUnmounted(() => {
+  window.removeEventListener('resize', updateWindowSize)
   store.destroy()
   setMapEventHandlers(null)
   setMapController(null)

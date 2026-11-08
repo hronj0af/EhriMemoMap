@@ -1,8 +1,7 @@
 <script setup lang="ts">
 // Components/Dialogs/Place/Types/AddressTypes/PragueVictimList.razor – oběti na pražské adrese.
 // Při vybraném bodu časové osy rozdělené na přítomné (transport po datu) a nepřítomné (transport k datu).
-// Pozn.: v Blazoru se v rozdělených skupinách filtr jmen uplatňoval jen na zobrazení nadpisu,
-// ne na samotný seznam – zachováno.
+// Filtr jmen platí i pro rozdělené skupiny (v Blazoru se uplatňoval jen na zobrazení nadpisu).
 import { computed } from 'vue'
 import type { VictimShortInfoModel } from '../../../../../models/api'
 import { useMapStore } from '../../../../../stores/map'
@@ -20,19 +19,20 @@ const visible = computed(() => !!props.victims && props.victims.length > 0 && an
 const point = computed(() => store.timelinePoint)
 
 // C# porovnání DateTime? – s null je výsledek false (oběť bez data transportu není v žádné skupině)
+const filtered = computed(() => (props.victims ?? []).filter((a) => matchesFilter(a, props.filteredName)))
+
 const present = computed(() =>
-  (props.victims ?? []).filter((a) => {
+  filtered.value.filter((a) => {
     const d = dateKey(a.transportDate)
     return d !== null && point.value !== null && d > point.value
   }),
 )
 const absent = computed(() =>
-  (props.victims ?? []).filter((a) => {
+  filtered.value.filter((a) => {
     const d = dateKey(a.transportDate)
     return d !== null && point.value !== null && d <= point.value
   }),
 )
-const filtered = computed(() => (props.victims ?? []).filter((a) => matchesFilter(a, props.filteredName)))
 </script>
 
 <template>

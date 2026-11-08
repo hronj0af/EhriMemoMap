@@ -30,7 +30,7 @@ async function showSearch() {
   >
     <IconSearch :style="disabled ? 'opacity: 0.4;' : ''" />
   </div>
-  <!-- Pozn.: Blazor zde měl třídu "border" (ne "mobile-menu-icon-border") a title "layers" – zachováno. -->
+  <!-- Třída "border" (ne "mobile-menu-icon-border") je převzatá z Blazoru – vizuálně stejná (pravý okraj). -->
   <RzStack
     v-else
     orientation="horizontal"
@@ -39,7 +39,7 @@ async function showSearch() {
       store.dialogType === DialogType.Search ? 'mobile-menu-icon-selected' : 'mobile-menu-icon',
       { border: border, 'mobile-menu-icon-disabled': disabled },
     ]"
-    :title="disabled ? '' : t('layers') + '...'"
+    :title="disabled ? '' : t('search') + '...'"
     @click="showSearch"
   >
     <IconSearchMobile :style="disabled ? 'opacity: 0.4;' : ''" />

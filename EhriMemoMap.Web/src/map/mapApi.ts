@@ -253,18 +253,34 @@ export function fitMapToWindow(heightOfDialog: number | null = null, mapWidth: s
 // URL
 // ------------------------------------------------------------------
 
+/** Parametr "bounds" z URL: "jihZápadLat,jihZápadLng,severVýchodLat,severVýchodLng" (zapisuje setUrlByMapInfo). */
+function getBoundsFromUrl(): L.LatLngBounds | null {
+  const values = getUrlParam('bounds')?.split(',').map(Number)
+  if (!values || values.length !== 4 || values.some((v) => !Number.isFinite(v))) return null
+  return L.latLngBounds([values[0], values[1]], [values[2], values[3]])
+}
+
 /**
- * Nastaví mapu podle parametrů URL (setMapWithInfoFromUrl + getMapInfoFromUrl).
- * Pozn.: v site.ts se parametr "bounds" sice četl, ale do výsledku se nikdy nedostal (bounds zůstávalo null),
- * takže se pohled nastavuje jen podle x1/y1 a zoom. Kvůli shodnému chování se starou verzí je to zachováno.
+ * Nastaví mapu podle parametrů URL (setMapWithInfoFromUrl + getMapInfoFromUrl):
+ * 1) výřez "bounds" (+ "zoom"), 2) vybrané místo "x1/y1" (+ "zoom").
+ * Pozn.: v site.ts se "bounds" kvůli chybě nikdy nepoužil (sdílený odkaz otevřel výchozí pohled) – opraveno.
  */
 function setMapWithInfoFromUrl(): boolean {
   if (!map) return false
+  const zoomParam = getUrlParam('zoom')
+  const zoom = Number(zoomParam ?? '13')
+
+  const bounds = getBoundsFromUrl()
+  if (bounds) {
+    if (zoomParam != null && Number.isFinite(zoom)) map.setView(bounds.getCenter(), zoom)
+    else map.fitBounds(bounds)
+    return true
+  }
+
   const x1 = getUrlParam('x1')
   const y1 = getUrlParam('y1')
-  const zoom = getUrlParam('zoom') ?? '13'
   if (x1 != null && y1 != null) {
-    map.setView([Number(y1), Number(x1)], Number(zoom))
+    map.setView([Number(y1), Number(x1)], zoom)
     return true
   }
   return false

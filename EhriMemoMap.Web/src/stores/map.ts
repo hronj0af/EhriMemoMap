@@ -113,8 +113,14 @@ export const useMapStore = defineStore('map', () => {
   const dialogType = ref<DialogType>(DialogType.None)
   const dialogParameters = shallowRef<DialogParameters>({})
   const dialogHistory = shallowRef<DialogParametersHistoryItem[]>([])
-  /** Nastavení postranního panelu – určí se při jeho otevření (jako Radzen OpenSide). */
-  const sideDialogOptions = ref<SideDialogOptions | null>(null)
+  /**
+   * Nastavení postranního panelu podle aktuálního dialogu a zařízení.
+   * (Radzen OpenSide je počítal jen při otevření panelu, ještě s typem None – nápověda a uvítání proto
+   * na mobilu nikdy nedostaly zamýšlenou plnou výšku a panel se nepřizpůsobil přepnutí mobil/desktop.)
+   */
+  const sideDialogOptions = computed<SideDialogOptions | null>(() =>
+    dialogType.value !== DialogType.None ? getDialogOptions() : null,
+  )
   /** Modální dialog (Welcome na desktopu, Error při AppState Shutdown) */
   const modal = ref<ModalType>(ModalType.None)
 
@@ -279,7 +285,6 @@ export const useMapStore = defineStore('map', () => {
     dialogHistory.value = []
     dialogParameters.value = {}
     dialogType.value = DialogType.None
-    sideDialogOptions.value = null
     mapType.value = MapType.Normal
     allNarrativeMaps.value = null
     selectedPointGuids.value = null
@@ -383,16 +388,10 @@ export const useMapStore = defineStore('map', () => {
       ctrl.removeAdditionalObjects()
       ctrl.unselectAllSelectedPoints()
       selectedPointGuids.value = null
-      sideDialogOptions.value = null
     }
 
     const height = newDialogType === DialogType.Welcome || newDialogType === DialogType.None ? 0 : heightOfDialog
     ctrl.fitMapToWindow(height, isMobileView.value ? '100%' : newDialogType !== DialogType.None ? '67%' : '100%')
-
-    // Radzen OpenSide: volby se počítají při otevření panelu, ještě s původním (None) typem dialogu
-    if (dialogType.value === DialogType.None && newDialogType !== DialogType.None) {
-      sideDialogOptions.value = getDialogOptions()
-    }
 
     dialogType.value = newDialogType
     dialogParameters.value = parameters ?? {}

@@ -201,6 +201,18 @@ describe('dialogy a historie', () => {
     await store.setDialog('Place', { places: [] })
     expect(store.sideDialogOptions).toMatchObject({ position: 'bottom', height: '50%', style: 'z-index:10000' })
   })
+
+  it('nápověda na mobilu přes celou výšku okna, i při přepnutí z jiného panelu', async () => {
+    controllerSpy()
+    const store = useMapStore()
+    store.setMobileView(true)
+    store.windowHeight = 800
+    await store.setDialog('Place', { places: [] })
+    await store.setDialog('Help')
+    expect(store.sideDialogOptions).toMatchObject({ position: 'bottom', height: '800px', style: 'z-index:50000' })
+    store.setMobileView(false)
+    expect(store.sideDialogOptions).toMatchObject({ position: 'right', width: '33%', height: '' })
+  })
 })
 
 describe('vrstvy a časová osa z UI', () => {
