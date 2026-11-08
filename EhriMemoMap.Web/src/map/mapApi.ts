@@ -214,10 +214,14 @@ export function resetMapViewToInitialState(): void {
   map.setView([initialLat, initialLng], zoom)
 }
 
+/**
+ * Změna velikosti okna (otočení telefonu, schování adresního řádku…). Rozměry mapy přepočítá aplikace
+ * podle otevřeného panelu (handlers.windowResized → store.onWindowResize). site.ts tu volal fitMapToWindow()
+ * bez parametrů, takže se mapa na mobilu natáhla i pod otevřený panel.
+ */
 function onResizeWindow(): void {
-  fitMapToWindow()
   resizePhotoHeight()
-  handlers?.setMobileView(isMobileView())
+  handlers?.windowResized()
 }
 
 /**
@@ -226,12 +230,16 @@ function onResizeWindow(): void {
  * @param mapWidth šířka mapy (desktop: "67%" při otevřeném panelu)
  */
 export function fitMapToWindow(heightOfDialog: number | null = null, mapWidth: string | null = null): void {
-  const pageHeight = window.innerHeight
+  // Výška okna bez horního pruhu stránky (body { border-top } v site.css). site.ts s ním nepočítal,
+  // dokument byl o pruh vyšší než okno a na mobilu šel posunout – lišta tlačítek pak nebyla u spodního
+  // okraje a pod ní (nebo nad spodním panelem) prosvítala mapa.
+  const pageHeight = window.innerHeight - (parseFloat(getComputedStyle(document.body).borderTopWidth) || 0)
   const mobile = isMobileView()
   const controlButtons = document.getElementById('controlButtonsWrapper')
 
+  // výška spodního panelu – panel má height: X % celého okna (ne okna bez pruhu)
   const tempHeight = mobile
-    ? (pageHeight * (heightOfDialog != null ? heightOfDialog : 0)) / 100
+    ? (window.innerHeight * (heightOfDialog != null ? heightOfDialog : 0)) / 100
     : pageHeight - (controlButtons != null ? controlButtons.offsetTop : 0)
 
   const mapElement = document.getElementById('map')
@@ -243,7 +251,7 @@ export function fitMapToWindow(heightOfDialog: number | null = null, mapWidth: s
   const mapHeight = !mobile ? pageHeight - 1 : pageHeight - 44 - tempHeight // 44 = horní lišta na mobilu
   mapElement.style.height = mapHeight + 'px'
 
-  if (mobile) mapElement.style.marginTop = '44px'
+  mapElement.style.marginTop = mobile ? '44px' : ''
   if (pageElement) pageElement.style.height = !mobile ? pageHeight - 1 + 'px' : pageHeight - 44 + 'px'
 
   map?.invalidateSize()

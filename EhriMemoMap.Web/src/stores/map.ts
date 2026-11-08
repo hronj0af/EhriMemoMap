@@ -53,6 +53,7 @@ import { dateKey } from '../models/helpers'
 import { fromMapObject, fromPlace, fromStatistics } from '../map/leafletModel'
 import { mapController } from '../map/controller'
 import { setUrlParam } from '../utils/url'
+import { isMobileView as isMobileViewForWindow } from '../utils/dom'
 
 /** Porovnání jako v C# s nullable int: s null je výsledek vždy false. */
 function gte(a: number, b: number | null | undefined): boolean {
@@ -390,8 +391,7 @@ export const useMapStore = defineStore('map', () => {
       selectedPointGuids.value = null
     }
 
-    const height = newDialogType === DialogType.Welcome || newDialogType === DialogType.None ? 0 : heightOfDialog
-    ctrl.fitMapToWindow(height, isMobileView.value ? '100%' : newDialogType !== DialogType.None ? '67%' : '100%')
+    fitMapToDialog(newDialogType)
 
     dialogType.value = newDialogType
     dialogParameters.value = parameters ?? {}
@@ -417,6 +417,28 @@ export const useMapStore = defineStore('map', () => {
     if (isMobileView.value) ctrl.toggleScaleVisibility(newValue === MapType.Normal)
 
     mapType.value = newValue
+  }
+
+  /**
+   * Rozměry mapy podle otevřeného panelu (logika ze SetDialog): na mobilu mapa končí nad spodním panelem,
+   * na desktopu má při otevřeném panelu šířku 67 %. Panel přes celou obrazovku (mobil) mapu skryje.
+   */
+  function fitMapToDialog(type: DialogType = dialogType.value): void {
+    const ctrl = mapController()
+    if (isMobileView.value && isDialogFullScreen.value && type !== DialogType.None) {
+      ctrl.setDialogFullScreen(true)
+      return
+    }
+    const height = type === DialogType.Welcome || type === DialogType.None ? 0 : heightOfDialog
+    ctrl.fitMapToWindow(height, isMobileView.value ? '100%' : type !== DialogType.None ? '67%' : '100%')
+  }
+
+  /** Změna velikosti okna: rozměry okna, mobilní/desktopové zobrazení a rozměry mapy. */
+  function onWindowResize(): void {
+    windowWidth.value = window.innerWidth
+    windowHeight.value = window.innerHeight
+    setMobileView(isMobileViewForWindow())
+    fitMapToDialog()
   }
 
   /** ShouldBeMapCenteredAfterClick – posunout mapu, aby místo nezakryl panel? */
@@ -816,6 +838,8 @@ export const useMapStore = defineStore('map', () => {
     shouldBeMapCenteredAfterClick,
     setBBox,
     setMobileView,
+    fitMapToDialog,
+    onWindowResize,
     // objekty
     refreshObjectsOnMap,
     getMapObjects,

@@ -1,0 +1,7 @@
+/* Mapová stránka: dokument se neposouvá. Mapa a panely vyplňují okno přesně (mapApi.fitMapToWindow);
+   kdyby se stránka i tak posunula (např. tahem na mobilu), lišta tlačítek ukotvená ke spodku okna by
+   se posunula s ní a pod ní by prosvítala mapa. Třídu nastavuje MapPage.vue. */
+html.map-page,
+html.map-page body {
+  overflow: hidden;
+}

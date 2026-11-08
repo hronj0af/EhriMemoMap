@@ -22,12 +22,6 @@ const store = useMapStore()
 
 const cityName = computed(() => props.city || 'prague')
 
-/** Rozměry okna pro panel a časovou osu (Blazor je zjišťoval jen při načtení stránky). */
-function updateWindowSize() {
-  store.windowWidth = window.innerWidth
-  store.windowHeight = window.innerHeight
-}
-
 onMounted(async () => {
   document.title = 'MemoMap ' + t('city_' + cityName.value)
 
@@ -37,13 +31,16 @@ onMounted(async () => {
     refreshObjectsOnMap: store.onMapMoved,
     showPlaceInfo: store.showPlaceInfo,
     setMobileView: store.setMobileView,
+    windowResized: store.onWindowResize,
     openStoryMapTimelineLabel: store.openStoryMapTimelineLabel,
   })
 
   // rozměry okna kvůli dialogu, mobilní zobrazení
-  updateWindowSize()
-  window.addEventListener('resize', updateWindowSize)
+  store.windowWidth = window.innerWidth
+  store.windowHeight = window.innerHeight
   store.setMobileView(isMobileView())
+  // dokument se na mapové stránce neposouvá (styles/map-page.css)
+  document.documentElement.classList.add('map-page')
 
   // vrstvy a bod časové osy z URL
   const layers = getUrlParam('layers')
@@ -90,11 +87,13 @@ onMounted(async () => {
   mapApi.showLayersForNormalMap()
   store.mapState = MapState.Rendered
 
-  mapApi.fitMapToWindow()
+  // rozměry mapy podle otevřeného panelu (Blazor tu volal fitMapToWindow() bez parametrů, takže při
+  // otevření odkazu s vybraným místem byla mapa na mobilu i pod panelem a místo mohlo být schované)
+  store.fitMapToDialog()
 })
 
 onUnmounted(() => {
-  window.removeEventListener('resize', updateWindowSize)
+  document.documentElement.classList.remove('map-page')
   store.destroy()
   setMapEventHandlers(null)
   setMapController(null)

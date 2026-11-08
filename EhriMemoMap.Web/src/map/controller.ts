@@ -48,6 +48,8 @@ export interface MapEventHandlers {
   refreshObjectsOnMap(withPolygons: boolean, zoom: number, bounds: [Coordinate, Coordinate]): void | Promise<void>
   showPlaceInfo(zoom: number, coordinates: Coordinate[], mouseClickPointX: number): void | Promise<void>
   setMobileView(value: boolean): void
+  /** Změnila se velikost okna – přepočítat rozměry mapy a panelu */
+  windowResized(): void
   openStoryMapTimelineLabel(stopId: number, narrativeMapId: number | null): void | Promise<void>
 }
 
