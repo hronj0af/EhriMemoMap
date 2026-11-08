@@ -9,4 +9,9 @@ export const router = createRouter({
     { path: '/', name: 'home', component: HomePage },
     { path: '/:city', name: 'map', component: () => import('./pages/MapPage.vue'), props: true },
   ],
+  // Přechod na jinou stránku (i změna ?detail= na úvodní stránce, např. metodiky) začíná nahoře;
+  // tlačítka zpět/vpřed v prohlížeči vrátí původní pozici.
+  scrollBehavior(_to, _from, savedPosition) {
+    return savedPosition ?? { top: 0 }
+  },
 })
