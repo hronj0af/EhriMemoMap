@@ -233,7 +233,8 @@ export function fitMapToWindow(heightOfDialog: number | null = null, mapWidth: s
   // Výška okna bez horního pruhu stránky (body { border-top } v site.css). site.ts s ním nepočítal,
   // dokument byl o pruh vyšší než okno a na mobilu šel posunout – lišta tlačítek pak nebyla u spodního
   // okraje a pod ní (nebo nad spodním panelem) prosvítala mapa.
-  const pageHeight = window.innerHeight - (parseFloat(getComputedStyle(document.body).borderTopWidth) || 0)
+  const bodyBorder = parseFloat(getComputedStyle(document.body).borderTopWidth) || 0
+  const pageHeight = window.innerHeight - bodyBorder
   const mobile = isMobileView()
   const controlButtons = document.getElementById('controlButtonsWrapper')
 
@@ -248,11 +249,19 @@ export function fitMapToWindow(heightOfDialog: number | null = null, mapWidth: s
 
   mapElement.style.width = mapWidth == null ? '100%' : mapWidth
 
-  const mapHeight = !mobile ? pageHeight - 1 : pageHeight - 44 - tempHeight // 44 = horní lišta na mobilu
+  // Mobil: horní lišta (44 px) je absolutně od samého vrchu okna a překrývá pruh body { border-top },
+  // mapa ale začíná až pod pruhem. Odsazení se proto zmenší o pruh, aby mapa navazovala přímo na lištu
+  // (site.ts odsazoval o celých 44 px a mezi lištou a mapou zůstal béžový pruh). Mapa končí na spodním
+  // okraji okna, resp. u horního okraje spodního panelu.
+  const mobileTopBar = 44
+  const mapHeight = !mobile ? pageHeight - 1 : window.innerHeight - mobileTopBar - tempHeight
   mapElement.style.height = mapHeight + 'px'
 
-  mapElement.style.marginTop = mobile ? '44px' : ''
-  if (pageElement) pageElement.style.height = !mobile ? pageHeight - 1 + 'px' : pageHeight - 44 + 'px'
+  const marginTop = mobile ? Math.max(0, mobileTopBar - bodyBorder) : 0
+  mapElement.style.marginTop = mobile ? marginTop + 'px' : ''
+  // odsazení mapy se přenese (margin collapsing) i na .page a posune ji dolů – výška .page ho proto odečítá,
+  // jinak by dokument byl vyšší než okno
+  if (pageElement) pageElement.style.height = !mobile ? pageHeight - 1 + 'px' : pageHeight - marginTop + 'px'
 
   map?.invalidateSize()
 }
