@@ -475,7 +475,11 @@ export const useMapStore = defineStore('map', () => {
         getHeatMap(null, abort.signal),
       ])
       if (abort.signal.aborted) return
-      mapController().refreshObjectsOnMap([...objects, ...statistics, ...heatmap])
+      const ctrl = mapController()
+      ctrl.refreshObjectsOnMap([...objects, ...statistics, ...heatmap])
+      // vybrané body (klik / odkaz s místem) znovu zvýraznit – markery se právě vytvořily znovu.
+      // (Dělá se tady, ne až v onMapMoved: načtení vyvolané posunem mapy může být zrušené novějším.)
+      if (selectedPointGuids.value?.length) ctrl.selectPointOnMap(selectedPointGuids.value)
     } catch (error) {
       if (isAbortError(error)) return
       console.error('Načtení objektů na mapě selhalo', error)
@@ -645,7 +649,6 @@ export const useMapStore = defineStore('map', () => {
     mapZoom.value = zoom
     setBBox(bounds)
     await refreshObjectsOnMap(withPolygons)
-    if (selectedPointGuids.value?.length) mapController().selectPointOnMap(selectedPointGuids.value)
   }
 
   /** ShowPlaceInfo – klik na místo v mapě: zvýrazní body a otevře panel s informacemi */

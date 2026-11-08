@@ -2,6 +2,7 @@
 // Mapová stránka – přepis EhriMemoMap.Client/Pages/Map.razor.
 // Postranní panel a modální dialogy se přes Teleport vykreslují do <body> (jako RadzenDialog v MainLayout).
 import { computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useMapStore } from '../stores/map'
 import { DialogType, MapState, ModalType } from '../models/enums'
 import { mapApi, setMapEventHandlers } from '../map/mapApi'
@@ -19,6 +20,7 @@ import ModalDialog from '../components/ui/ModalDialog.vue'
 
 const props = defineProps<{ city?: string }>()
 const store = useMapStore()
+const router = useRouter()
 
 const cityName = computed(() => props.city || 'prague')
 
@@ -47,8 +49,9 @@ onMounted(async () => {
   const timelinePointName = getUrlParam('timeline')
 
   if (!(await store.init(cityName.value, layers, timelinePointName))) {
-    console.error(`Nastavení mapy pro "${cityName.value}" se nepodařilo načíst.`)
-    store.modal = ModalType.Error
+    // neznámé město (neexistuje mapsettings.{city}.json) → úvodní stránka (Blazor tu spadl s chybou)
+    console.warn(`Mapa "${cityName.value}" neexistuje – přesměrování na úvodní stránku.`)
+    await router.replace('/')
     return
   }
   try {
@@ -85,6 +88,8 @@ onMounted(async () => {
 
   await store.refreshObjectsOnMap(true)
   mapApi.showLayersForNormalMap()
+  // opětovné přidání vrstev do mapy vrátí markerům výchozí třídy – vybrané místo z odkazu znovu zvýraznit
+  if (store.selectedPointGuids?.length) mapApi.selectPointOnMap(store.selectedPointGuids)
   store.mapState = MapState.Rendered
 
   // rozměry mapy podle otevřeného panelu (Blazor tu volal fitMapToWindow() bez parametrů, takže při

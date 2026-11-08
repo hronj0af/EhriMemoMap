@@ -59,7 +59,37 @@ V `npm run dev` se navíc přimíchá `appsettings.Development.json`, pokud obsa
 `@vitejs/plugin-legacy` vytváří legacy bundle (Babel + core-js) pro starší prohlížeče, cíle jsou ve `vite.config.ts`
 (`legacyTargets`) a `postcss.config.js`. Minimum dané Vue 3 je Safari 10 / Chrome 49.
 
-## Nasazení (IIS)
+Legacy bundle lze vyzkoušet i v moderním prohlížeči: v `dist/index.html` odstranit skripty `type="module"`
+a u zbylých atribut `nomodule` – aplikace se pak spustí jen z `*-legacy-*.js` (SystemJS).
 
-Obsah `dist/` na web. `public/web.config` zajišťuje SPA fallback na `index.html` (cesty `/prague`, `/ricany`…)
-a vypíná cache pro `index.html`.
+## Nasazení
+
+1. `npm ci && npm run build` (v repozitáři – build potřebuje `../EhriMemoMap.Client` kvůli statickým souborům
+   a slovníkům, dokud není Blazor klient odstraněný).
+2. Obsah `dist/` nahrát na web (celý adresář nahradit – staré soubory v `assets/` lze smazat).
+3. Webový server musí cesty aplikace (`/prague`, `/pacov`…) obsloužit souborem `index.html` a nesmí
+   cachovat `index.html` ani `*settings*.json`. Ukázky:
+   - **nginx** (memomap.cz): `deploy/nginx/memomap.conf`
+   - **IIS**: `deploy/iis/web.config` (zkopírovat do kořene webu; vyžaduje modul URL Rewrite)
+
+`dist/` obsahuje i zdrojové mapy (`*.js.map`) pro ladění v prohlížeči; pokud nemají být veřejné, nenahrávat je.
+
+### Přepnutí z Blazoru
+
+1. Nasadit na testovací adresu (např. subdoména) – API povoluje požadavky z libovolné domény (CORS).
+2. Otestovat na starém telefonu, kde Blazor nešel spustit, a na současném Androidu a iPhonu (vzdálené ladění:
+   Android `chrome://inspect`, iOS Safari → Vývoj). Projít: úvod, mapa, klik na adresu, detail oběti, hledání,
+   vrstvy, časová osa, příběhová mapa, galerie, přepnutí jazyka.
+3. Přepnout produkci – obsah webu nahradit `dist/` (původní publikaci Blazoru si ponechat pro návrat),
+   v nginx doplnit pravidla z `deploy/nginx/memomap.conf`.
+
+### Odstranění Blazor klienta (po ověření v provozu)
+
+1. Statické soubory natrvalo do `public/`: `git mv` z `EhriMemoMap.Client/wwwroot` – `images/`, `css/images/`,
+   `metodiky/`, `favicon.png`, `appsettings*.json`, `mapsettings.*.json`.
+2. Slovníky: vygenerované `src/i18n/cs.json` a `en.json` commitnout a dál upravovat přímo (texty jsou HTML/prostý text).
+3. Ze `package.json` odebrat `prepare-assets`/`predev`/`prebuild`, smazat `scripts/sync-static.mjs` a
+   `scripts/resx-to-json.mjs`, z `.gitignore` odebrat synchronizované cesty.
+4. `scripts/purge-radzen-css.mjs` čte téma z Blazor klienta – buď `material-base.css` přesunout do
+   `EhriMemoMap.Web/scripts/`, nebo dál upravovat přímo `src/styles/radzen.css` a skript smazat.
+5. Odebrat `EhriMemoMap.Client` z řešení (`EhriMemoMap.sln`) a smazat.
