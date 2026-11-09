@@ -53,74 +53,76 @@ function label(key: string) {
       </RzRow>
 
       <table class="victim">
-        <template v-if="victim.places != null">
-          <tr v-if="victim.maidenname">
-            <td>{{ label('maidenname') }}</td>
-            <td>{{ victim.maidenname }}</td>
-          </tr>
-          <tr v-if="victim.title">
-            <td>{{ label('personTitle') }}</td>
-            <td>{{ victim.title }}</td>
-          </tr>
-          <tr v-if="victim.birthDate != null || victim.birthDateText">
-            <td>{{ label('birthDate') }}</td>
-            <td>{{ victim.birthDateText ?? formatDate(victim.birthDate) }}</td>
-          </tr>
-          <!-- místo narození, bydliště k 13. 5. 1939, poslední bydliště před deportací, poslední bydliště, další bydliště -->
-          <VictimPlace :type="22" :show-dates="false" />
-          <VictimPlace :type="24" :show-dates="false" />
-          <VictimPlace :type="26" :show-dates="false" />
-          <VictimPlace :type="27" />
-          <VictimPlace :type="36" resource-name-type="otherResidence" />
-          <tr v-if="transports.length > 0">
-            <td>{{ label('deportation') }}</td>
-            <td>
-              <ul style="margin: 0; list-style-type: none; padding: 0">
-                <li v-for="transport in transports" :key="transport.id">
-                  {{ transport.code }}
-                  ({{ formatDate(transport.date) }},
-                  {{ byLang(transport.fromCs, transport.fromEn) }}
-                  →
-                  {{ byLang(transport.toCs, transport.toEn) }})
-                </li>
-              </ul>
-            </td>
-          </tr>
-          <!-- místo věznění -->
-          <VictimPlace :type="28" />
-          <tr v-if="victim.fateCs">
-            <td>{{ label('fate') }}</td>
-            <td>{{ byLang(victim.fateCs, victim.fateEn) }}</td>
-          </tr>
-          <!-- místo osvobození -->
-          <VictimPlace :type="29" />
-          <tr v-if="victim.deathDate != null || victim.deathDateText">
-            <td>{{ label('deathDate') }}</td>
-            <td>{{ victim.deathDateText ?? formatDate(victim.deathDate) }}</td>
-          </tr>
-          <!-- místo úmrtí -->
-          <VictimPlace :type="23" />
-          <tr v-if="otherInfo">
-            <td>{{ label('otherInfo') }}</td>
-            <td>
-              <template v-if="otherInfo.length > 200">
-                <template v-if="!showMoreOtherInfo">
-                  <span v-html="nl2br(otherInfo.substring(0, 200)) + '...'"></span>
-                  <span>
-                    <a style="cursor: pointer" @click="showMoreOtherInfo = true">{{ t('more') }}</a>
-                  </span>
+        <tbody>
+          <template v-if="victim.places != null">
+            <tr v-if="victim.maidenname">
+              <td>{{ label('maidenname') }}</td>
+              <td>{{ victim.maidenname }}</td>
+            </tr>
+            <tr v-if="victim.title">
+              <td>{{ label('personTitle') }}</td>
+              <td>{{ victim.title }}</td>
+            </tr>
+            <tr v-if="victim.birthDate != null || victim.birthDateText">
+              <td>{{ label('birthDate') }}</td>
+              <td>{{ victim.birthDateText ?? formatDate(victim.birthDate) }}</td>
+            </tr>
+            <!-- místo narození, bydliště k 13. 5. 1939, poslední bydliště před deportací, poslední bydliště, další bydliště -->
+            <VictimPlace :type="22" :show-dates="false" />
+            <VictimPlace :type="24" :show-dates="false" />
+            <VictimPlace :type="26" :show-dates="false" />
+            <VictimPlace :type="27" />
+            <VictimPlace :type="36" resource-name-type="otherResidence" />
+            <tr v-if="transports.length > 0">
+              <td>{{ label('deportation') }}</td>
+              <td>
+                <ul style="margin: 0; list-style-type: none; padding: 0">
+                  <li v-for="transport in transports" :key="transport.id">
+                    {{ transport.code }}
+                    ({{ formatDate(transport.date) }},
+                    {{ byLang(transport.fromCs, transport.fromEn) }}
+                    →
+                    {{ byLang(transport.toCs, transport.toEn) }})
+                  </li>
+                </ul>
+              </td>
+            </tr>
+            <!-- místo věznění -->
+            <VictimPlace :type="28" />
+            <tr v-if="victim.fateCs">
+              <td>{{ label('fate') }}</td>
+              <td>{{ byLang(victim.fateCs, victim.fateEn) }}</td>
+            </tr>
+            <!-- místo osvobození -->
+            <VictimPlace :type="29" />
+            <tr v-if="victim.deathDate != null || victim.deathDateText">
+              <td>{{ label('deathDate') }}</td>
+              <td>{{ victim.deathDateText ?? formatDate(victim.deathDate) }}</td>
+            </tr>
+            <!-- místo úmrtí -->
+            <VictimPlace :type="23" />
+            <tr v-if="otherInfo">
+              <td>{{ label('otherInfo') }}</td>
+              <td>
+                <template v-if="otherInfo.length > 200">
+                  <template v-if="!showMoreOtherInfo">
+                    <span v-html="nl2br(otherInfo.substring(0, 200)) + '...'"></span>
+                    <span>
+                      <a style="cursor: pointer" @click="showMoreOtherInfo = true">{{ t('more') }}</a>
+                    </span>
+                  </template>
+                  <template v-else>
+                    <span v-html="nl2br(otherInfo)"></span>
+                    <span>
+                      <a style="cursor: pointer" @click="showMoreOtherInfo = false">{{ t('less') }}</a>
+                    </span>
+                  </template>
                 </template>
-                <template v-else>
-                  <span v-html="nl2br(otherInfo)"></span>
-                  <span>
-                    <a style="cursor: pointer" @click="showMoreOtherInfo = false">{{ t('less') }}</a>
-                  </span>
-                </template>
-              </template>
-              <span v-else v-html="nl2br(otherInfo)"></span>
-            </td>
-          </tr>
-        </template>
+                <span v-else v-html="nl2br(otherInfo)"></span>
+              </td>
+            </tr>
+          </template>
+        </tbody>
       </table>
 
       <template v-if="victim.relatedPersons && victim.relatedPersons.length > 0">

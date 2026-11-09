@@ -79,6 +79,16 @@ const polygonColorDefault = '#222'
 const polygonFillColorDefault = '#C5222C'
 const polygonColorSelected = '#000'
 
+/** Objekt, na který se právě kliklo – posluchač kliknutí na mapu jeho tooltip nezavře */
+let tooltipClick: { layer: L.Layer; event: Event } | null = null
+
+/** Otevře tooltip po kliknutí/klepnutí (polygon v místě klepnutí) a označí ho, aby ho mapa hned nezavřela. */
+function openTooltipOnClick(layer: L.Marker | L.Polygon, e: L.LeafletMouseEvent, latlng?: L.LatLng): void {
+  if (!layer.getTooltip()) return
+  layer.openTooltip(latlng)
+  tooltipClick = { layer, event: e.originalEvent }
+}
+
 function findGroup(id: string): Group | undefined {
   return groups.find((a) => a.options.id === id)
 }
@@ -141,10 +151,16 @@ export function initMap(settings: MapSettingsForLeaflet): void {
     coorx = ev.containerPoint.x
   })
 
-  // jeden posluchač pro zavření tooltipů po kliknutí mimo objekt
-  map.on('click', () => {
+  // jeden posluchač pro zavření tooltipů po kliknutí mimo objekt. Kliknutí na objekt dostane nejdřív objekt
+  // (otevře svůj tooltip) a pak mapa – tooltip objektu, na který se právě kliklo, se proto nezavírá
+  // (jinak by se na mobilu, kde není "najetí myší", tooltip nikdy neukázal – např. statistiky čtvrtí).
+  map.on('click', (e: L.LeafletMouseEvent) => {
+    const keep = tooltipClick && tooltipClick.event === e.originalEvent ? tooltipClick.layer : null
+    tooltipClick = null
     for (const group of groups) {
-      group.eachLayer((layer) => (layer as L.Layer).closeTooltip?.())
+      group.eachLayer((layer) => {
+        if (layer !== keep) (layer as L.Layer).closeTooltip?.()
+      })
     }
   })
 
@@ -515,7 +531,7 @@ function getPoint(
 
   if (object.label != null) marker.bindTooltip(object.label, { sticky: true })
   if (object.clickable) marker.on('click', clickFunction ?? onObjectClick)
-  marker.on('click', () => marker.openTooltip())
+  marker.on('click', (e: L.LeafletMouseEvent) => openTooltipOnClick(marker, e))
 
   return marker
 }
@@ -562,7 +578,7 @@ function getPolygon(object: MapObjectForLeaflet, location: GeoJsonPolygon): L.Po
   const polygon = new L.Polygon(pointsArray as L.LatLngExpression[][][], options)
 
   if (object.clickable) polygon.on('click', onObjectClick)
-  polygon.on('click', () => polygon.openTooltip())
+  polygon.on('click', (e: L.LeafletMouseEvent) => openTooltipOnClick(polygon, e, e.latlng))
 
   if (object.label != null) {
     polygon.bindTooltip(object.label, { sticky: true, className: object.customTooltipClass ?? undefined })

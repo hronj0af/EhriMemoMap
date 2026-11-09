@@ -49,16 +49,18 @@ const showSurvivorsNote = computed(() => {
             </RzColumn>
           </RzRow>
           <table v-if="statisticsIsOpen && statistics.length > 0" class="rz-grid-table rz-grid-table-fixed" style="width: 100%">
-            <tr>
-              <th :style="store.isMobileView ? 'width:30%' : 'width:50%'"></th>
-              <th v-if="hasPresent" style="text-align: left; font-family: 'Barlow'; font-size: 14px">{{ t('present') }}</th>
-              <th v-if="hasAbsent" style="text-align: left; font-family: 'Barlow'; font-size: 14px">{{ t('absent') }}</th>
-            </tr>
-            <tr v-for="statistic in visibleStatistics" :key="statistic.date">
-              <td>{{ formatDate(statistic.date) }}</td>
-              <td v-if="hasPresent">{{ statistic.numberPresent }}</td>
-              <td v-if="hasAbsent">{{ statistic.numberAbsent }}</td>
-            </tr>
+            <tbody>
+              <tr>
+                <th :style="store.isMobileView ? 'width:30%' : 'width:50%'"></th>
+                <th v-if="hasPresent" style="text-align: left; font-family: 'Barlow'; font-size: 14px">{{ t('present') }}</th>
+                <th v-if="hasAbsent" style="text-align: left; font-family: 'Barlow'; font-size: 14px">{{ t('absent') }}</th>
+              </tr>
+              <tr v-for="statistic in visibleStatistics" :key="statistic.date">
+                <td>{{ formatDate(statistic.date) }}</td>
+                <td v-if="hasPresent">{{ statistic.numberPresent }}</td>
+                <td v-if="hasAbsent">{{ statistic.numberAbsent }}</td>
+              </tr>
+            </tbody>
           </table>
         </RzCard>
       </RzColumn>

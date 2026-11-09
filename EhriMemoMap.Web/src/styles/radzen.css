@@ -1,6 +1,5 @@
 /* Vygenerováno skriptem scripts/purge-radzen-css.mjs z radzen-custom/css/material-base.css
    (jen pravidla používaná aplikací). Neupravovat ručně – změny dělat ve zdroji a skript spustit znovu. */
-@charset "UTF-8";
 /*$secondary: #e91e63 !default;*/
 /*$rz-primary: #4340D2 !default;*/
 .rz-button {
@@ -266,11 +265,6 @@ $rz-shadow-10: none !default; */
 
 .rz-mb-8 {
     margin-bottom: 2rem !important;
-}
-
-
-.rz-mb-12 {
-    margin-bottom: 3rem !important;
 }
 
 .rz-px-1 {

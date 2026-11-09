@@ -55,18 +55,20 @@ const rows = computed<Row[]>(() => {
 <template>
   <RzSpinner v-if="!loaded" />
   <table v-else style="padding-bottom: 15px">
-    <tr v-for="row in rows" :key="row.label">
-      <td class="cell firstCell" :style="row.iconCellStyle">
-        <img :src="row.icon" :width="row.iconWidth" />
-      </td>
-      <td class="cell secondCell">
-        {{ t(row.label) }}
-        <span class="tooltip">
-          <img src="/images/help-small.svg" class="icon-help" />
-          <span class="tooltiptext tooltiptext-top">{{ t(row.help) }}</span>
-        </span>
-      </td>
-      <td class="cell thirdCell">{{ row.value }}</td>
-    </tr>
+    <tbody>
+      <tr v-for="row in rows" :key="row.label">
+        <td class="cell firstCell" :style="row.iconCellStyle">
+          <img :src="row.icon" :width="row.iconWidth" />
+        </td>
+        <td class="cell secondCell">
+          {{ t(row.label) }}
+          <span class="tooltip">
+            <img src="/images/help-small.svg" class="icon-help" />
+            <span class="tooltiptext tooltiptext-top">{{ t(row.help) }}</span>
+          </span>
+        </td>
+        <td class="cell thirdCell">{{ row.value }}</td>
+      </tr>
+    </tbody>
   </table>
 </template>

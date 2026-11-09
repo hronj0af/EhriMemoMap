@@ -103,6 +103,9 @@ mkdirSync(resolve(outDir, 'fonts'), { recursive: true })
 const fonts = new Set([...css.matchAll(/url\(["']?\.\.\/fonts\/([^"')]+)["']?\)/g)].map((m) => m[1]))
 for (const font of fonts) copyFileSync(resolve(radzenDir, 'fonts', font), resolve(outDir, 'fonts', font))
 css = css.replace(/url\((["']?)\.\.\/fonts\//g, 'url($1./fonts/')
+// @charset musí být na úplném začátku souboru – po spojení s ostatními styly (index.css) tam není
+// a PostCSS hlásí varování; soubory jsou UTF-8 i bez něj.
+css = css.replace(/^\s*@charset\s+"[^"]*";\s*/gm, '')
 
 const header = `/* Vygenerováno skriptem scripts/purge-radzen-css.mjs z radzen-custom/css/material-base.css
    (jen pravidla používaná aplikací). Neupravovat ručně – změny dělat ve zdroji a skript spustit znovu. */\n`
