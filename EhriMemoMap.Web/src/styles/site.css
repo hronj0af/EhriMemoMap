@@ -1024,3 +1024,8 @@ div.leaflet-overlay-pane svg > g path.statistics-polygon {
 .rz-dialog-side-position-bottom .rz-dialog-side-content {
     padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+
+/* Mobilní lišta: oddělovač (border-right) jen mezi tlačítky, ne u pravého okraje obrazovky */
+#controlButtonsWrapper .rz-row > :last-child > * {
+    border-right: none;
+}
