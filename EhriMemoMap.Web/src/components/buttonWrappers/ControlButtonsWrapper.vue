@@ -33,8 +33,9 @@ const size = computed(() => {
 const style = computed(() => {
   if (store.isMobileView) {
     if (store.isDialogFullScreen) return 'display:none;'
-    const bottom =
-      store.dialogType !== DialogType.None && store.dialogType !== DialogType.Help ? `bottom:${store.heightOfDialog}%` : 'bottom:0px'
+    const dialogOpen = store.dialogType !== DialogType.None && store.dialogType !== DialogType.Help
+    // u spodního okraje: šedé pozadí sahá až dolů, tlačítka zůstanou nad systémovým pruhem gest
+    const bottom = dialogOpen ? `bottom:${store.heightOfDialog}%` : 'bottom:0px;padding-bottom:env(safe-area-inset-bottom, 0px)'
     // fixed (ne absolute): mobilní prohlížeče při schování adresního řádku nezvětší blok, ke kterému se
     // vztahuje absolutní pozice – lišta by zůstala výš a pod ní by byla mezera o výšce adresního řádku.
     // Fixed se drží viditelného spodního okraje stejně jako spodní panel.

@@ -23,7 +23,9 @@
         }
     </script>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport-fit=cover: stránka se kreslí i pod systémový pruh gest (Android edge-to-edge, iPhone) a jeho výšku
+         dává env(safe-area-inset-bottom) – spodní lišta a panel si o ni přidají odsazení -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Interaktivní mapa Prahy z doby protektorátu zobrazuje adresy více než 40 000 obětí holokaustu, 1 700 případů porušení protižidovských nařízení, významná místa spojená s židovskou historií i pronásledováním a místa, kam Židé v době války nesměli." hreflang="cs" />
     <meta name="description" content="An interactive map of Prague during the Protectorate shows the addresses of more than 40,000 Holocaust victims, 1,700 cases of violations of anti-Jewish ordinances, important places associated with Jewish history and persecution, and places where Jews were not allowed during the war." hreflang="en" />
     <meta name="robots" content="nofollow" />

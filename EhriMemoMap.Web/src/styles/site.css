@@ -1019,3 +1019,8 @@ div.leaflet-overlay-pane svg > g path.statistics-polygon {
         border-color: var(--Wine-Red);
         text-decoration: none;
     }
+
+/* Spodní panel na mobilu: poslední řádky obsahu nesmí skončit pod systémovým pruhem gest (viz viewport-fit=cover v index.html) */
+.rz-dialog-side-position-bottom .rz-dialog-side-content {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
