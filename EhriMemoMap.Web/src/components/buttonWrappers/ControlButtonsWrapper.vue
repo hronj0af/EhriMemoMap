@@ -35,7 +35,10 @@ const style = computed(() => {
     if (store.isDialogFullScreen) return 'display:none;'
     const bottom =
       store.dialogType !== DialogType.None && store.dialogType !== DialogType.Help ? `bottom:${store.heightOfDialog}%` : 'bottom:0px'
-    return `position:absolute;${bottom};z-index:10005;background-color:var(--Grey);width:100%;`
+    // fixed (ne absolute): mobilní prohlížeče při schování adresního řádku nezvětší blok, ke kterému se
+    // vztahuje absolutní pozice – lišta by zůstala výš a pod ní by byla mezera o výšce adresního řádku.
+    // Fixed se drží viditelného spodního okraje stejně jako spodní panel.
+    return `position:fixed;${bottom};z-index:10005;background-color:var(--Grey);width:100%;`
   }
   const right = store.dialogType === DialogType.None ? '0px' : store.widthOfDialogPercent
   return `position:absolute;top:30px;right:${right};z-index:1005;width:47px`

@@ -91,7 +91,7 @@ const detail = computed(() => {
 const showDetail = (value: string | null) => router.push(value ? { path: '/', query: { detail: value } } : '/')
 
 function cityCardStyle(city: string) {
-  return `background-image: linear-gradient(rgba(255, 255, 255, 0.7) 100%), url('images/welcome_image_${city.toLowerCase()}.jpg'); background-size: cover; background-position: center;`
+  return `flex: 1 1 auto; height: auto; background-image: linear-gradient(rgba(255, 255, 255, 0.7) 100%), url('images/welcome_image_${city.toLowerCase()}.jpg'); background-size: cover; background-position: center;`
 }
 
 onMounted(() => {
@@ -172,9 +172,10 @@ onMounted(() => {
         <RzButton :text="t('moreInfo')" class="info-btn" variant="text" button-style="secondary" icon="info" @click="showDetail('main')" />
       </div>
     </div>
-    <RzRow gap="1rem">
-      <RzColumn v-for="city in cities" :key="city" :size-lg="6" :size-sm="12" :size-md="6">
-        <RzCard style="height: 200px" class="rz-mb-12 rz-mt-4">
+    <!-- dlaždice stejně široké jako úvodní text (.intro-text max 1000 px) -->
+    <RzRow gap="1rem" style="width: 100%; max-width: 1000px">
+      <RzColumn v-for="city in cities" :key="city" :size-lg="6" :size-sm="12" :size-md="6" style="display: flex; flex-direction: column">
+        <RzCard style="min-height: 200px; flex: 1 1 auto; display: flex" class="rz-mb-12 rz-mt-4">
           <div class="city-card" :style="cityCardStyle(city)">
             <h2 class="city-title" style="cursor: pointer" @click="router.push('/' + city)">
               {{ t('city_' + city) }}
@@ -187,11 +188,13 @@ onMounted(() => {
           </div>
         </RzCard>
       </RzColumn>
-      <RzColumn :size-lg="6" :size-sm="12" :size-md="6">
-        <RzCard style="height: 200px" class="rz-mb-12 rz-mt-4">
+      <RzColumn :size-lg="6" :size-sm="12" :size-md="6" style="display: flex; flex-direction: column">
+        <RzCard style="min-height: 200px; flex: 1 1 auto; display: flex" class="rz-mb-12 rz-mt-4">
           <div
             class="city-card"
             style="
+              flex: 1 1 auto;
+              height: auto;
               background-image: linear-gradient(rgba(255, 230, 227, 0.75) 100%), url('images/welcome_image_metodiky.jpg');
               background-size: cover;
               background-position: center;
