@@ -14,7 +14,7 @@ const { t, byLang } = useI18n()
 <template>
   <RzRow>
     <RzCard style="width: 100%">
-      <template v-if="place.city === 'ricany'">
+      <template v-if="place.city !== 'prague'">
         <h3 v-if="place.type === 'stolpersteine_set'">{{ t('memoryType_' + place.type) }}</h3>
         <h3 v-else>{{ byLang(place.labelCs, place.labelEn) ?? '' }}</h3>
       </template>
@@ -23,7 +23,7 @@ const { t, byLang } = useI18n()
       <h5 class="rz-mb-4">{{ byLang(place.addressCs, place.addressEn) }}</h5>
       <p v-if="place.descriptionCs" class="rz-mb-4" v-html="nl2br(byLang(place.descriptionCs, place.descriptionEn))"></p>
 
-      <template v-if="place.city === 'ricany'">
+      <template v-if="place.city !== 'prague'">
         <p v-if="place.creationDate" :class="place.inscriptionCs ? 'rz-mb-4' : ''">
           <b>{{ t('date_of_laying') }}:</b> {{ formatDate(place.creationDate) }}
         </p>
@@ -46,7 +46,7 @@ const { t, byLang } = useI18n()
             <a :href="item.linkHolocaustCs ?? undefined" target="_blank">www.holocaust.cz</a>
           </li>
         </ul>
-        <template v-if="place.city === 'ricany'">
+        <template v-if="place.city !== 'prague'">
           <p v-if="item.creationDate" :class="item.inscriptionCs ? 'rz-mb-4' : ''">
             <b>{{ t('date_of_laying') }}:</b> {{ formatDate(item.creationDate) }}
           </p>

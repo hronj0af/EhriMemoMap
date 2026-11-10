@@ -37,6 +37,7 @@ const showAddress = computed(() => !!props.house?.address && anyMatchesFilter(pr
       <PragueVictimList :victims="house.victims" :filtered-name="filteredName" />
     </template>
     <PacovVictimList v-else-if="city.includes('pacov')" :victims="house.victims" :filtered-name="filteredName" />
-    <RicanyVictimList v-else-if="city.includes('ricany')" :victims="house.victims" :filtered-name="filteredName" />
+    <!-- Říčany a ostatní města z databáze MemoMap (např. Velké Meziříčí): obecný abecední seznam obětí -->
+    <RicanyVictimList v-else :victims="house.victims" :filtered-name="filteredName" />
   </template>
 </template>
