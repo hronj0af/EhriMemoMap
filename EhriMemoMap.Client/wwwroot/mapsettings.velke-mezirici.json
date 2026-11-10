@@ -1,0 +1,79 @@
+﻿{
+  "map": {
+    "initialVariables": {
+      "city": "velke-mezirici",
+      "allCities": [ "prague", "ricany", "pacov", "velke-mezirici" ],
+      "storyMaps": true,
+      "zoom": 15,
+      "zoomMobile": 15,
+      "lat": 49.378684,
+      "lng": 16.0118866,
+      "latMobile": 49.378684,
+      "lngMobile": 16.0118866,
+      "minBounds": {
+        "X": -90,
+        "Y": -90
+      },
+      "maxBounds": {
+        "X": 90,
+        "Y": 90
+      },
+      "minZoom": 1,
+      "maxZoom": 18
+    },
+    "layers": [
+      {
+        "name": "OSM",
+        "url": "https://{s}.tile.osm.org/{z}/{x}/{y}.png",
+        "attribution": "MÚA AVČR <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
+        "attributionUrl": "https://ehri.cz/memogis_cs.html#howto_credit",
+        "type": "base",
+        "zIndex": "50",
+        "selected": true
+      },
+      {
+        "name": "interest",
+        "placeType": "interest",
+        "order": 2,
+        "type": "objects",
+        "minZoom": 15,
+        "quickAccess": false,
+        "backgroundColor": "#7E469B",
+        "fontColor": "Light",
+        "priorityOnMap": 1
+      },
+      {
+        "name": "address",
+        "placeType": "address",
+        "order": 1,
+        "type": "objects",
+        "minZoom": 15,
+        "quickAccess": true,
+        "backgroundColor": "#FFD93D",
+        "fontColor": "Dark",
+        "priorityOnMap": 2
+      },
+      {
+        "name": "memory",
+        "placeType": "memory",
+        "order": 3,
+        "type": "objects",
+        "minZoom": 15,
+        "quickAccess": true,
+        "backgroundColor": "#468a9b",
+        "fontColor": "Light"
+      },
+      {
+        "name": "memorial",
+        "placeType": "memorial",
+        "order": 3,
+        "type": "objects",
+        "minZoom": 15,
+        "quickAccess": true,
+        "backgroundColor": "#eb9622",
+        "fontColor": "Light"
+      }
+
+    ]
+  }
+}

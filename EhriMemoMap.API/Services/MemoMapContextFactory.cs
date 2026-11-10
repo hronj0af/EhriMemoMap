@@ -23,6 +23,7 @@ public class MemoMapContextFactory
         {
             "ricany" => _configuration["RICANY_DB"],
             "pacov" => _configuration["PACOV_DB"],
+            "velke-mezirici" => _configuration["VELKE_MEZIRICI_DB"],
             _ => throw new ArgumentException($"Unknown city: {city}", nameof(city))
         };
 

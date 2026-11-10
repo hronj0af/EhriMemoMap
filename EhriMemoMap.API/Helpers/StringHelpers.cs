@@ -16,7 +16,7 @@ namespace EhriMemoMap.API.Helpers
             var lowerCity = city.Trim().ToLowerInvariant();
             return lowerCity switch
             {
-                "ricany" or "pacov" => true,
+                "ricany" or "pacov" or "velke-mezirici" => true,
                 _ => false
             };
         }
@@ -30,6 +30,7 @@ namespace EhriMemoMap.API.Helpers
             {
                 "ricany" => "Říčany",
                 "pacov" => "Pacov",
+                "velke-mezirici" => "Velké Meziříčí",
                 "praha" => "Praha",
                 _ => "Unknown"
             };
