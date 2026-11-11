@@ -23,16 +23,3 @@ dist-ssr
 *.sln
 *.sw?
 
-# Statické soubory synchronizované z EhriMemoMap.Client/wwwroot (scripts/sync-static.mjs)
-/public/appsettings.json
-/public/appsettings.Development.json
-/public/favicon.png
-/public/css/
-/public/images/
-/public/metodiky/
-/public/viewer/
-/public/mapsettings.*.json
-
-# Generováno z .resx (scripts/resx-to-json.mjs)
-/src/i18n/cs.json
-/src/i18n/en.json

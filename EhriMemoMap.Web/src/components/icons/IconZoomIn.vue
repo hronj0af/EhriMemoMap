@@ -1,4 +1,4 @@
-<!-- Vygenerováno skriptem scripts/extract-icons.mjs z Components/ButtonWrappers/ZoomButtonsWrapper.razor (SVG #1) -->
+<!-- SVG ikona převzatá z Blazor klienta (Components/ButtonWrappers/ZoomButtonsWrapper.razor (SVG #1)) -->
 <template>
   <svg width="36" height="37" viewBox="0 0 36 37" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g id="Group 61">

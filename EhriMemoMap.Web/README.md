@@ -13,14 +13,13 @@ npm run typecheck
 npm test           # jednotkové testy (vitest)
 ```
 
-`dev` i `build` nejdřív spustí `prepare-assets`:
+Projekt je samostatný – na `EhriMemoMap.Client` nijak nezávisí:
 
-- `scripts/resx-to-json.mjs` vygeneruje `src/i18n/cs.json` a `en.json` z `EhriMemoMap.Client/Resources/*.resx`
-  (texty se zatím dál upravují v `.resx`).
-- `scripts/sync-static.mjs` zkopíruje statické soubory (obrázky, fonty, CSS, metodiky, `mapsettings.*.json`,
-  `appsettings*.json`) z `EhriMemoMap.Client/wwwroot` do `public/`.
+- statické soubory (obrázky, metodiky, `favicon.png`, `appsettings*.json`, `mapsettings.*.json`) jsou v `public/`,
+- texty jsou v `src/i18n/cs.json` a `en.json` (původně převedené z `.resx`; část hodnot obsahuje HTML).
 
-Obojí je v `.gitignore`, ať nejsou soubory v repu dvakrát. Po odstranění Blazor klienta se přesunou natrvalo.
+**Texty, nastavení map i obrázky se upravují jen tady.** Změny v `EhriMemoMap.Client` (`.resx`, `wwwroot`) se do
+tohoto projektu nepřenášejí.
 
 ## Struktura
 
@@ -28,9 +27,8 @@ Obojí je v `.gitignore`, ať nejsou soubory v repu dvakrát. Po odstranění Bl
 - `src/map/` – Leaflet (`mapApi.ts` = přepis `site.ts`, úpravy Leafletu, pluginy v `vendor/`)
 - `src/components/` – komponenty zrcadlí `EhriMemoMap.Client/Components` (buttons, buttonWrappers, dialogs)
 - `src/components/ui/` – náhrady Radzen komponent; generují stejné HTML třídy, vzhled dodává
-  `radzen-custom/css/material-base.css`
-- `src/components/icons/` – SVG ikony vytažené z Razor komponent skriptem `scripts/extract-icons.mjs`
-  (jednorázově; ikony se dál upravují přímo ve `.vue` souborech)
+  `src/styles/radzen.css`
+- `src/components/icons/` – SVG ikony převzaté z Razor komponent (upravují se přímo ve `.vue` souborech)
 
 ## Styly
 
@@ -39,10 +37,9 @@ jeden soubor s hashem; `postcss-preset-env` doplní fallbacky pro starší prohl
 
 - `site.css`, `app.css`, `leaflet.css`, `bigger-picture.css`, `video-js.css` – převzaté z Blazor klienta,
   dál se upravují přímo tady.
-- `radzen.css` – **generovaný** výběr z Radzen tématu (`radzen-custom/css/material-base.css`, ~980 kB → ~44 kB)
-  jen s pravidly, která aplikace používá. Po přidání nových tříd Radzenu do komponent (nebo nové hodnoty
-  `buttonStyle`, `variant`…) je potřeba ho přegenerovat: `node scripts/purge-radzen-css.mjs`
-  (dynamicky skládané třídy jsou vyjmenované v `DYNAMIC_CLASSES` ve skriptu).
+- `radzen.css` – výběr z Radzen tématu (`material-base.css` Blazor klienta, ~980 kB → ~44 kB) jen s pravidly,
+  která aplikace používá. Upravuje se přímo; při použití další třídy Radzenu (např. nové hodnoty `buttonStyle`,
+  `variant` nebo utility `rz-…`) je potřeba její pravidlo doplnit ručně.
 
 Písma Barlow a Noto Serif se načítají z Google Fonts, ikony tlačítek (Material Icons) jsou v `src/styles/fonts/`.
 
@@ -64,8 +61,7 @@ a u zbylých atribut `nomodule` – aplikace se pak spustí jen z `*-legacy-*.js
 
 ## Nasazení
 
-1. `npm ci && npm run build` (v repozitáři – build potřebuje `../EhriMemoMap.Client` kvůli statickým souborům
-   a slovníkům, dokud není Blazor klient odstraněný).
+1. `npm ci && npm run build`
 2. Obsah `dist/` nahrát na web (celý adresář nahradit – staré soubory v `assets/` lze smazat).
 3. Webový server musí cesty aplikace (`/prague`, `/pacov`…) obsloužit souborem `index.html` a nesmí
    cachovat `index.html` ani `*settings*.json`. Ukázky:
@@ -85,11 +81,5 @@ a u zbylých atribut `nomodule` – aplikace se pak spustí jen z `*-legacy-*.js
 
 ### Odstranění Blazor klienta (po ověření v provozu)
 
-1. Statické soubory natrvalo do `public/`: `git mv` z `EhriMemoMap.Client/wwwroot` – `images/`, `css/images/`,
-   `metodiky/`, `favicon.png`, `appsettings*.json`, `mapsettings.*.json`.
-2. Slovníky: vygenerované `src/i18n/cs.json` a `en.json` commitnout a dál upravovat přímo (texty jsou HTML/prostý text).
-3. Ze `package.json` odebrat `prepare-assets`/`predev`/`prebuild`, smazat `scripts/sync-static.mjs` a
-   `scripts/resx-to-json.mjs`, z `.gitignore` odebrat synchronizované cesty.
-4. `scripts/purge-radzen-css.mjs` čte téma z Blazor klienta – buď `material-base.css` přesunout do
-   `EhriMemoMap.Web/scripts/`, nebo dál upravovat přímo `src/styles/radzen.css` a skript smazat.
-5. Odebrat `EhriMemoMap.Client` z řešení (`EhriMemoMap.sln`) a smazat.
+`EhriMemoMap.Web` na Blazor klientovi nezávisí – stačí odebrat `EhriMemoMap.Client` z řešení (`EhriMemoMap.sln`)
+a složku smazat.

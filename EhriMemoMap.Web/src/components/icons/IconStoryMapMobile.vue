@@ -1,4 +1,4 @@
-<!-- Vygenerováno skriptem scripts/extract-icons.mjs z Components/Buttons/StoryMapButton.razor (SVG #1) -->
+<!-- SVG ikona převzatá z Blazor klienta (Components/Buttons/StoryMapButton.razor (SVG #1)) -->
 <template>
   <svg width="30" height="28" viewBox="0 0 50 50" preserveAspectRatio="none" class="icon" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g transform="translate(5.7, 3.6) scale(1.4)">

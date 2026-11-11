@@ -1,4 +1,4 @@
-<!-- Vygenerováno skriptem scripts/extract-icons.mjs z Components/Buttons/JoinButton.razor (SVG #1) -->
+<!-- SVG ikona převzatá z Blazor klienta (Components/Buttons/JoinButton.razor (SVG #1)) -->
 <template>
   <svg width="22" height="22" viewBox="0 -960 960 960" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="Group 135">

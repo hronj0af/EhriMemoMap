@@ -1,5 +1,5 @@
 // Jednoduchá lokalizace – náhrada IStringLocalizer<CommonResources>.
-// Slovníky cs.json/en.json se generují z .resx (scripts/resx-to-json.mjs).
+// Slovníky cs.json/en.json (původně převedené z .resx Blazor klienta) – texty se upravují přímo v nich.
 // Texty nemají parametry, část obsahuje HTML (v šablonách přes v-html).
 import { computed, ref } from 'vue'
 import cs from './cs.json'

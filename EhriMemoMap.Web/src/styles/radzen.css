@@ -1,5 +1,5 @@
-/* Vygenerováno skriptem scripts/purge-radzen-css.mjs z radzen-custom/css/material-base.css
-   (jen pravidla používaná aplikací). Neupravovat ručně – změny dělat ve zdroji a skript spustit znovu. */
+/* Výběr pravidel Radzen tématu (material-base.css) používaných aplikací – původně vygenerovaný z Blazor klienta
+   nástrojem PurgeCSS, teď se upravuje přímo zde. */
 /*$secondary: #e91e63 !default;*/
 /*$rz-primary: #4340D2 !default;*/
 .rz-button {
