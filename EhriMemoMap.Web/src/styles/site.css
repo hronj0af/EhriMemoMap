@@ -1040,3 +1040,9 @@ div.leaflet-overlay-pane svg > g path.statistics-polygon {
     text-align: left;
     line-height: 1.4;
 }
+
+/* Postranní panel se posouvá celý (aside má overflow-y: auto). Vnitřní obsah s vlastním overflow: auto byl
+   při některých šířkách o 1–2 px vyšší než sám sebe (zaokrouhlení) a ukázal druhý posuvník vedle prvního. */
+.rz-dialog-side .rz-dialog-side-content {
+    overflow: visible;
+}

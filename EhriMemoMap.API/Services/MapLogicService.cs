@@ -663,6 +663,9 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                 Include(a => a.DocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
                 Include(a => a.DocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.CreationPlaceNavigation).
                 Where(a => a.Id == id).
+                // jeden dotaz se všemi kolekcemi (bydliště × příbuzní × dokumenty × transporty…) násobí řádky – u osob
+                // s mnoha adresami (Velké Meziříčí) trval ~2 s; rozdělení na dotazy po kolekcích to zkrátí na zlomek
+                AsSplitQuery().
                 AsEnumerable().
                 Select(b => new VictimLongInfoModel
                 {
