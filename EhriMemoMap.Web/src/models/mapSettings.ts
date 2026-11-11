@@ -95,6 +95,8 @@ function normalizeInitialVariables(value: unknown): InitialVariables | null {
     city: str(prop(r, 'city')) ?? '',
     allCities: Array.isArray(allCities) ? allCities.map(String) : null,
     storyMaps: storyMaps === undefined || storyMaps === null ? null : bool(storyMaps),
+    personalTrajectories: bool(prop(r, 'personalTrajectories') ?? false),
+    homeTown: str(prop(r, 'homeTown')),
     zoom: num(prop(r, 'zoom')) ?? 0,
     zoomMobile: num(prop(r, 'zoomMobile')) ?? 0,
     minZoom: num(prop(r, 'minZoom')) ?? 0,

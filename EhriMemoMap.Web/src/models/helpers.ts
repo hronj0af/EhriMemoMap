@@ -147,6 +147,58 @@ export function addressWithDates(address: AddressInfo, culture: Culture): string
   return result
 }
 
+/**
+ * Datace bydliště na úrovni roků (Velké Meziříčí): (1938), (1938 – 1940), (1938 – ?), (? – 1938), (?).
+ * Oba údaje ve stejném roce → jen rok; chybějící hranice → otazník.
+ */
+export function residenceYears(dateFrom: ApiDate | null | undefined, dateTo: ApiDate | null | undefined): string {
+  const from = parseApiDate(dateFrom)?.year ?? null
+  const to = parseApiDate(dateTo)?.year ?? null
+  if (from == null && to == null) return '(?)'
+  if (from != null && to != null && from === to) return `(${from})`
+  return `(${from ?? '?'} – ${to ?? '?'})`
+}
+
+interface DatedRecord {
+  id: number
+  dateFrom: ApiDate | null
+  dateTo: ApiDate | null
+}
+
+/**
+ * Chronologické řazení bydlišť (Velké Meziříčí):
+ * 1. záznamy s date_from vzestupně podle date_from,
+ * 2. záznam jen s date_to se zařadí za poslední záznam, jehož date_from je starší než jeho date_to
+ *    (když takový není, na začátek),
+ * 3. záznamy bez obou datací na konec,
+ * 4. při shodě rozhoduje id vztahu.
+ */
+export function sortResidencesChronologically<T extends DatedRecord>(items: readonly T[]): T[] {
+  const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
+  const withFrom = items
+    .filter((a) => dateKey(a.dateFrom) != null)
+    .sort((a, b) => compare(dateKey(a.dateFrom)!, dateKey(b.dateFrom)!) || a.id - b.id)
+  const onlyTo = items
+    .filter((a) => dateKey(a.dateFrom) == null && dateKey(a.dateTo) != null)
+    .sort((a, b) => compare(dateKey(a.dateTo)!, dateKey(b.dateTo)!) || a.id - b.id)
+  const undated = items.filter((a) => dateKey(a.dateFrom) == null && dateKey(a.dateTo) == null).sort((a, b) => a.id - b.id)
+
+  // index záznamu s date_from, za který se záznam jen s date_to zařadí (-1 = před první)
+  const inserted = new Map<number, T[]>()
+  for (const item of onlyTo) {
+    const to = dateKey(item.dateTo)!
+    let anchor = -1
+    withFrom.forEach((a, i) => {
+      if (dateKey(a.dateFrom)! < to) anchor = i
+    })
+    inserted.set(anchor, [...(inserted.get(anchor) ?? []), item])
+  }
+
+  const result: T[] = [...(inserted.get(-1) ?? [])]
+  withFrom.forEach((a, i) => result.push(a, ...(inserted.get(i) ?? [])))
+  return [...result, ...undated]
+}
+
 /** Label ve tvaru "<b>Jméno</b><br/>*datum" (VictimShortInfoModel.GetShortLabelForPicture / VictimLongInfoModel.GetLabelForPicture). */
 function boldLabel(label: string | null): string {
   if (!label) return ''

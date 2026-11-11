@@ -21,6 +21,8 @@
         public Transport[]? Transports { get; set; }
         public DateTime? TransportDate { get; set; }
         public long? NarrativeMapId { get; set; }
+        /// <summary>Osobní trajektorie (narativní mapa typu 6)</summary>
+        public long? TrajectoryId { get; set; }
         public string GetLabelForPicture()
         => Label?.Insert(0, "<b>").Replace(" (*", "</b><br/>*").Replace(")", "") ?? "";
 

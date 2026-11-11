@@ -14,7 +14,7 @@ import IconZoomOut from '../icons/IconZoomOut.vue'
 const store = useMapStore()
 const myLocationIsVisible = ref(false)
 
-const visible = computed(() => !(store.isMobileView && store.mapType !== MapType.Normal))
+const visible = computed(() => !(store.isMobileView && store.mapType !== MapType.Normal && store.mapType !== MapType.Trajectory))
 const size = computed(() => (store.isMobileView ? 4 : 12))
 const style = computed(() =>
   store.isMobileView

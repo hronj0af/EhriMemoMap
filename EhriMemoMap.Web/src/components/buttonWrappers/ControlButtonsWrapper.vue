@@ -19,6 +19,8 @@ import TimelineButton from '../buttons/TimelineButton.vue'
 const store = useMapStore()
 
 const showStoryMapButton = computed(() => store.map?.initialVariables?.storyMaps ?? false)
+/** Hledání a vrstvy jsou dostupné na běžné mapě i při zobrazené osobní trajektorii (detail osoby) */
+const searchAndLayersDisabled = computed(() => store.mapType !== MapType.Normal && store.mapType !== MapType.Trajectory)
 const showTimelineButton = computed(() => store.timeline != null && store.mapType === MapType.Normal)
 
 /** GetSize – mobilní lišta: 12 sloupců rozdělených mezi viditelná tlačítka */
@@ -52,8 +54,8 @@ const visible = computed(() => store.mapState === MapState.Rendered && store.map
   <div v-if="visible" id="controlButtonsWrapper" :style="style">
     <RzRow v-if="!store.isMobileView" gap="0" row-gap="5px" justify-content="end" align-items="center">
       <RzColumn :size="12"><HomeButton /></RzColumn>
-      <RzColumn :size="12"><SearchButton :disabled="store.mapType !== MapType.Normal" /></RzColumn>
-      <RzColumn :size="12"><LayersButton :disabled="store.mapType !== MapType.Normal" /></RzColumn>
+      <RzColumn :size="12"><SearchButton :disabled="searchAndLayersDisabled" /></RzColumn>
+      <RzColumn :size="12"><LayersButton :disabled="searchAndLayersDisabled" /></RzColumn>
       <RzColumn v-if="showStoryMapButton" :size="12"><StoryMapButton /></RzColumn>
       <RzColumn :size="12"><HelpButton /></RzColumn>
       <RzColumn :size="12"><JoinButton /></RzColumn>

@@ -32,5 +32,8 @@ public partial class Place
     public long? StopId { get; set; }
     public long? NarrativeMapId { get; set; }
 
+    /// <summary>Druh místa (places.type: house, town, imprisonment_place…)</summary>
+    public string? Category { get; set; }
+
     public Document[]? Documents { get; set; } = [];
 }

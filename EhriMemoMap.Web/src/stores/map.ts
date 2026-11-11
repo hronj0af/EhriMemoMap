@@ -52,6 +52,8 @@ import { loadMapSettings } from '../models/mapSettings'
 import { dateKey } from '../models/helpers'
 import { fromMapObject, fromPlace, fromStatistics } from '../map/leafletModel'
 import { mapController } from '../map/controller'
+import { toTrajectoryStops } from '../map/trajectory'
+import { getCulture } from '../i18n'
 import { setUrlParam } from '../utils/url'
 import { isMobileView as isMobileViewForWindow } from '../utils/dom'
 
@@ -287,6 +289,8 @@ export const useMapStore = defineStore('map', () => {
     dialogParameters.value = {}
     dialogType.value = DialogType.None
     mapType.value = MapType.Normal
+    viewBeforeTrajectory = null
+    trajectoryRequest++
     allNarrativeMaps.value = null
     selectedPointGuids.value = null
     expandedStopId.value = null
@@ -397,17 +401,27 @@ export const useMapStore = defineStore('map', () => {
     dialogParameters.value = parameters ?? {}
 
     addToDialogHistory(newDialogType, parameters)
+    await syncTrajectory()
   }
 
   /** SetMapType – přepínání běžné mapy a příběhových map */
   async function setMapType(newValue: MapType): Promise<void> {
     if (newValue === mapType.value) return
     const ctrl = mapController()
+    const previous = mapType.value
+    if (previous === MapType.Trajectory) ctrl.hideTrajectory()
 
     if (newValue === MapType.Normal) {
-      ctrl.resetMapViewToInitialState()
+      // po trajektorii se mapa vrátí na výřez před jejím zobrazením (např. k adrese, odkud se otevřel detail osoby)
+      if (previous === MapType.Trajectory && viewBeforeTrajectory) ctrl.setView(viewBeforeTrajectory.center, viewBeforeTrajectory.zoom)
+      else ctrl.resetMapViewToInitialState()
+      viewBeforeTrajectory = null
       ctrl.showLayersForNormalMap()
       narrativeMap.value = null
+    } else if (newValue === MapType.Trajectory) {
+      // trajektorii vykresluje syncTrajectory – tady jen skrýt ostatní vrstvy jako u příběhových map
+      if (previous === MapType.Normal) viewBeforeTrajectory = ctrl.getView()
+      ctrl.hideLayersForNormalMap()
     } else {
       ctrl.hideLayersForNormalMap()
       if (newValue === MapType.AllStoryMaps) showAllNarrativeMapsPlaces()
@@ -635,6 +649,47 @@ export const useMapStore = defineStore('map', () => {
   }
 
   /** ShowVictim – detail oběti v panelu */
+  // ------------------------------------------------------------------
+  // OSOBNÍ TRAJEKTORIE (narativní mapy typu 6)
+  // ------------------------------------------------------------------
+
+  /** Výřez mapy před zobrazením trajektorie */
+  let viewBeforeTrajectory: { center: Coordinate; zoom: number } | null = null
+  /** Číslo požadavku – odpověď na starší požadavek (rychlé přepínání osob) se zahodí */
+  let trajectoryRequest = 0
+
+  /**
+   * Zobrazí osobní trajektorii osoby otevřené v detailu (pokud ji má a mapa trajektorie podporuje),
+   * jinak trajektorii odstraní a vrátí běžnou mapu. Volá se po každé změně panelu.
+   */
+  async function syncTrajectory(): Promise<void> {
+    const enabled = map.value?.initialVariables?.personalTrajectories ?? false
+    const id = enabled && dialogType.value === DialogType.Victim ? (victimLongInfo.value?.trajectoryId ?? null) : null
+    const request = ++trajectoryRequest
+
+    if (id == null) {
+      if (mapType.value === MapType.Trajectory) await setMapType(MapType.Normal)
+      return
+    }
+
+    let trajectory: NarrativeMap | null
+    try {
+      trajectory = await api.getNarrativeMap(id, city.value)
+    } catch (error) {
+      console.error('Načtení osobní trajektorie selhalo', error)
+      return
+    }
+    if (request !== trajectoryRequest || !trajectory) return
+
+    const stops = toTrajectoryStops(trajectory, map.value?.initialVariables?.homeTown ?? null, getCulture() === 'en-US')
+    if (stops.length === 0) {
+      if (mapType.value === MapType.Trajectory) await setMapType(MapType.Normal)
+      return
+    }
+    await setMapType(MapType.Trajectory)
+    mapController().showTrajectory(stops, map.value?.initialVariables?.maxZoom ?? 18)
+  }
+
   async function showVictim(id: number | null | undefined): Promise<void> {
     victimLongInfo.value = await getVictimLongInfo(id)
     await setDialog(DialogType.Victim, { id: victimLongInfo.value?.id ?? null, places: dialogParameters.value.places })

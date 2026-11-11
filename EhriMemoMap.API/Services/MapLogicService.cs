@@ -179,7 +179,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                 Inaccessibles = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("pois_polygons"))?.Count,
                 PlacesOfMemory = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("places_of_memory"))?.Count,
                 Memorials = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("memorials"))?.Count,
-                StoryMaps = statisticsMemoMap.FirstOrDefault(a => a.Type.Contains("narrative_maps"))?.Count,
+                // jen příběhové mapy (typ 5) – osobní trajektorie (typ 6) se do příběhových map nepočítají
+                StoryMaps = context.NarrativeMaps.Count(a => a.Type == NarrativeMapTypes.StoryMap),
             };
         }
 
@@ -561,7 +562,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
             return [.. context.Places.
                 Include(a => a.EntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.EntitiesXMedia).ThenInclude(a => a.Media).
                 Include(a => a.EntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
-                Include(a => a.EntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.EntitiesXNarrativeMaps).
+                Include(a => a.EntitiesXPlaces).ThenInclude(a => a.Entity).ThenInclude(a => a.EntitiesXNarrativeMaps).ThenInclude(a => a.NarrativeMap).
                 Where(p => parameters.AddressesIds.Contains(p.Id)).
                 AsEnumerable().
                 Select(a => new AddressWithVictims
@@ -578,7 +579,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                         Photo = b?.Entity.EntitiesXMedia?.Select(c => c.Media)?.FirstOrDefault()?.OmekaUrl,
                         Label = b?.Entity.Surname + ", " + b?.Entity.Firstname + (b?.Entity.Birthdate != null ? " (*" + b?.Entity.Birthdate?.ToString("d.M.yyyy") + ")" : ""),
                         RelationshipToAddressType = b?.RelationshipType,
-                        NarrativeMapId = b?.Entity.EntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                        NarrativeMapId = b?.Entity.EntitiesXNarrativeMaps.FirstOrDefault(c => c.NarrativeMap.Type == NarrativeMapTypes.StoryMap)?.NarrativeMapId,
                     })]
                 })];
         }
@@ -650,14 +651,14 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
             using var context = factory.GetContext(city);
             result = context.Entities.
                 Include(a => a.FateNavigation).
-                Include(a => a.EntitiesXNarrativeMaps).
+                Include(a => a.EntitiesXNarrativeMaps).ThenInclude(a => a.NarrativeMap).
                 Include(a => a.EntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceFromNavigation).
                 Include(a => a.EntitiesXTransports).ThenInclude(a => a.Transport).ThenInclude(a => a.PlaceToNavigation).
                 Include(a => a.EntitiesXMedia).ThenInclude(a => a.Media).
                 Include(a => a.EntitiesXPlaces).ThenInclude(a => a.Place).
                 Include(a => a.EntitiesXPlaces).ThenInclude(a => a.RelationshipTypeNavigation).
                 Include(a => a.EntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.EntitiesXMedia).ThenInclude(a => a.Media).
-                Include(a => a.EntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.EntitiesXNarrativeMaps).
+                Include(a => a.EntitiesXEntityEntity2s).ThenInclude(a => a.Entity1).ThenInclude(a => a.EntitiesXNarrativeMaps).ThenInclude(a => a.NarrativeMap).
                 Include(a => a.EntitiesXEntityEntity2s).ThenInclude(a => a.RelationshipTypeNavigation).
                 Include(a => a.DocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.DocumentsXMedia).ThenInclude(a => a.Media).
                 Include(a => a.DocumentsXEntities).ThenInclude(a => a.Document).ThenInclude(a => a.CreationPlaceNavigation).
@@ -666,7 +667,8 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                 Select(b => new VictimLongInfoModel
                 {
                     Id = b.Id,
-                    NarrativeMapId = b.EntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                    NarrativeMapId = b.EntitiesXNarrativeMaps.FirstOrDefault(c => c.NarrativeMap.Type == NarrativeMapTypes.StoryMap)?.NarrativeMapId,
+                    TrajectoryId = b.EntitiesXNarrativeMaps.FirstOrDefault(c => c.NarrativeMap.Type == NarrativeMapTypes.PersonalTrajectory)?.NarrativeMapId,
                     Maidenname = b.Maidenname,
                     Title = b.Title,
                     BirthDate = b.Birthdate,
@@ -716,7 +718,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                         RelationshipToPersonEn = a.RelationshipTypeNavigation.LabelEn,
                         RelationshipToPersonType = a.RelationshipType,
                         LongInfo = true,
-                        NarrativeMapId = a?.Entity1.EntitiesXNarrativeMaps.FirstOrDefault()?.NarrativeMapId,
+                        NarrativeMapId = a?.Entity1.EntitiesXNarrativeMaps.FirstOrDefault(c => c.NarrativeMap.Type == NarrativeMapTypes.StoryMap)?.NarrativeMapId,
                     }).ToArray(),
                     Transports = b?.EntitiesXTransports.OrderBy(a => a.Id).Select(a => new Shared.Transport
                     {
@@ -740,9 +742,11 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
         {
             using var MemoMapContext = factory.GetContext(city);
             result = MemoMapContext.NarrativeMaps.
+                Where(a => a.Type == NarrativeMapTypes.StoryMap).
                 Select(a => new Shared.NarrativeMap
                 {
                     Id = a.Id,
+                    Type = a.Type,
                     LabelCs = a.LabelCs,
                     LabelEn = a.LabelEn
                 }).ToList();
@@ -817,6 +821,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                 return new Shared.NarrativeMapStop
                 {
                     Id = a.Id,
+                    StopOrder = a.StopOrder,
                     LabelCs = a.LabelCs,
                     LabelEn = a.LabelEn,
                     DateCs = a.DateCs,
@@ -842,6 +847,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                         RemarkEn = b.Place.RemarkEn,
                         MapPoint = b.Place.Geography.AsJson(),
                         Type = b.RelationshipTypeNavigation.LabelEn,
+                        Category = b.Place.Type,
                         StopId = b.NarrativeMapStopId
                     }).ToArray(),
                     Documents = a.DocumentsXNarrativeMapStops.Select(b => b.Document).Select(b => new Shared.Document

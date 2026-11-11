@@ -1029,3 +1029,14 @@ div.leaflet-overlay-pane svg > g path.statistics-polygon {
 #controlButtonsWrapper .rz-row > :last-child > * {
     border-right: none;
 }
+
+/* Osobní trajektorie (narativní mapy typu 6) – špendlíky zastavení a jejich popisky */
+.trajectory-stop {
+    background: none;
+    border: none;
+}
+
+.trajectory-tooltip {
+    text-align: left;
+    line-height: 1.4;
+}

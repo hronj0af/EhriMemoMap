@@ -4,7 +4,7 @@
 // DotNetObjectReference. Tady store volá mapu přes MapController a mapa volá store přes MapEventHandlers.
 // Implementaci MapController registruje mapApi.ts (setMapController) při inicializaci mapy; dokud mapa
 // neexistuje, jsou volání no-op – store tak nezávisí přímo na Leafletu (a jde použít bez mapy, např. v testech).
-import type { Coordinate, MapObjectForLeaflet, MapSettingsForLeaflet } from '../models/map'
+import type { Coordinate, MapObjectForLeaflet, MapSettingsForLeaflet, TrajectoryStopForLeaflet } from '../models/map'
 
 export interface MapController {
   /** mapAPI.initMap */
@@ -41,6 +41,12 @@ export interface MapController {
   setUrlFromSelectedPlace(points: Coordinate[]): void
   resizePhotoHeight(): void
   closeGallery(): void
+  /** Osobní trajektorie: zobrazit (s přizpůsobením výřezu) / odstranit */
+  showTrajectory(stops: TrajectoryStopForLeaflet[], maxZoom: number): void
+  hideTrajectory(): void
+  /** Střed a zoom mapy */
+  getView(): { center: Coordinate; zoom: number } | null
+  setView(center: Coordinate, zoom: number): void
 }
 
 /** Volání z mapy do stavu aplikace (náhrada [JSInvokable] metod v Map.razor). */
@@ -81,6 +87,10 @@ const nullController: MapController = {
   setUrlFromSelectedPlace: noop,
   resizePhotoHeight: noop,
   closeGallery: noop,
+  showTrajectory: noop,
+  hideTrajectory: noop,
+  getView: () => null,
+  setView: noop,
 }
 
 let controller: MapController = nullController

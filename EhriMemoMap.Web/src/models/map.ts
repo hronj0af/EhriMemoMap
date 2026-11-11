@@ -12,6 +12,10 @@ export interface InitialVariables {
   city: string
   allCities: string[] | null
   storyMaps: boolean | null
+  /** Osobní trajektorie (narativní mapy typu 6) v detailu osoby a bydliště řazená chronologicky s roky (Velké Meziříčí) */
+  personalTrajectories: boolean
+  /** Domovské město mapy (places.town_cs) – bydliště v něm mají v trajektorii jinou barvu */
+  homeTown: string | null
   zoom: number
   zoomMobile: number
   minZoom: number
@@ -136,4 +140,13 @@ export interface SideDialogOptions {
   style: string
   height: string
   width: string
+}
+
+/** Zastavení osobní trajektorie pro mapu (v pořadí trajektorie) */
+export interface TrajectoryStopForLeaflet {
+  lat: number
+  lng: number
+  color: string
+  /** HTML popisku (hodnoty z API jsou escapované) */
+  tooltip: string
 }

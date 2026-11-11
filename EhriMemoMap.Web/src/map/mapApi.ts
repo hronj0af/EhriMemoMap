@@ -10,7 +10,7 @@
 // - Zápis do URL zachovává history.state (vue-router).
 import { L, HeatmapOverlay, type HeatmapData, type HeatmapOverlayLayer } from './plugins'
 import type { MapController, MapEventHandlers } from './controller'
-import type { Coordinate, InitialVariables, LayerForLeaflet, MapObjectForLeaflet, MapSettingsForLeaflet } from '../models/map'
+import type { Coordinate, InitialVariables, LayerForLeaflet, MapObjectForLeaflet, MapSettingsForLeaflet, TrajectoryStopForLeaflet } from '../models/map'
 import { LayerType, NarrativeMapStopPlaceType } from '../models/enums'
 import { setUrlParam, setUrlFromSelectedPlace as writeSelectedPlaceToUrl, getUrlParam } from '../utils/url'
 import { closeGallery, isMobileView, resizePhotoHeight } from '../utils/dom'
@@ -750,7 +750,7 @@ function shortenCurveFromEndByPixels(points: number[][], targetPx: number): numb
 }
 
 /** Křivka se šipkou mezi dvěma body (getCurve) */
-function getCurve(a: L.LatLng, b: L.LatLng, shortenEndPixels: number): L.Polyline | null {
+function getCurve(a: L.LatLng, b: L.LatLng, shortenEndPixels: number, color = '#771646'): L.Polyline | null {
   if (!map) return null
   const p1 = map.latLngToContainerPoint(a)
   const p2 = map.latLngToContainerPoint(b)
@@ -766,12 +766,106 @@ function getCurve(a: L.LatLng, b: L.LatLng, shortenEndPixels: number): L.Polylin
   if (points.length < 2) return null
 
   return L.polyline(points as L.LatLngExpression[], {
-    color: '#771646',
+    color,
     weight: 1,
     dashArray: '5, 5',
     dashOffset: '0',
     isTrajectoryLine: true,
-  } as L.PolylineOptions).arrowheads({ frequency: 'endonly', fill: true, size: '15px', color: '#771646' })
+  } as L.PolylineOptions).arrowheads({ frequency: 'endonly', fill: true, size: '15px', color })
+}
+
+// ------------------------------------------------------------------
+// OSOBNÍ TRAJEKTORIE (narativní mapy typu 6)
+// ------------------------------------------------------------------
+
+let trajectoryStops: TrajectoryStopForLeaflet[] | null = null
+let trajectoryMaxZoom = 18
+
+/** Špendlík v barvě zastavení s pořadovým číslem */
+function trajectoryPinHtml(color: string, order: number): string {
+  return (
+    '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="36" viewBox="0 0 26 36">' +
+    `<path d="M13 35C13 35 24.5 23 24.5 13.5A11.5 11.5 0 0 0 1.5 13.5C1.5 23 13 35 13 35Z" fill="${color}" stroke="#fff" stroke-width="1.5"/>` +
+    `<text x="13" y="17.5" text-anchor="middle" font-family="Barlow, sans-serif" font-size="11" font-weight="700" fill="#fff">${order}</text>` +
+    '</svg>'
+  )
+}
+
+/** Zobrazí trajektorii ve vrstvě Narration a přizpůsobí výřez mapy všem jejím bodům. */
+export function showTrajectory(stops: TrajectoryStopForLeaflet[], maxZoom: number): void {
+  const group = findGroup(LayerType.Narration + '_group')
+  if (!map || !group) return
+  group.clearLayers()
+  trajectoryStops = stops
+  trajectoryMaxZoom = maxZoom || 18
+
+  stops.forEach((stop, i) => {
+    const marker = new L.Marker([stop.lat, stop.lng], {
+      icon: L.divIcon({
+        className: 'trajectory-stop',
+        html: trajectoryPinHtml(stop.color, i + 1),
+        iconSize: [26, 36],
+        iconAnchor: [13, 36],
+        tooltipAnchor: [0, -34],
+      }),
+      zIndexOffset: 1000 + i,
+    })
+    marker.bindTooltip(stop.tooltip, { direction: 'top', className: 'trajectory-tooltip' })
+    // klik: vycentrovat a přiblížit na maximum (na mobilu se zároveň ukáže popisek)
+    marker.on('click', (e: L.LeafletMouseEvent) => {
+      openTooltipOnClick(marker, e)
+      map?.setView(marker.getLatLng(), trajectoryMaxZoom)
+    })
+    marker.addTo(group)
+  })
+
+  if (!map.hasLayer(group)) group.addTo(map)
+  // spojnice závisí na měřítku (oblouky v pixelech) – po každé změně zoomu se překreslí
+  map.off('zoomend', drawTrajectoryLines)
+  map.on('zoomend', drawTrajectoryLines)
+
+  if (stops.length > 0) {
+    const bounds = L.latLngBounds(stops.map((a) => [a.lat, a.lng] as L.LatLngTuple))
+    map.fitBounds(bounds, { padding: [50, 50], maxZoom: Math.min(trajectoryMaxZoom, 16) })
+  }
+  drawTrajectoryLines()
+}
+
+/** Odstraní trajektorii z mapy. */
+export function hideTrajectory(): void {
+  trajectoryStops = null
+  map?.off('zoomend', drawTrajectoryLines)
+  const group = findGroup(LayerType.Narration + '_group')
+  if (!group) return
+  group.clearLayers()
+  if (map?.hasLayer(group)) map.removeLayer(group)
+}
+
+/** Spojnice mezi po sobě jdoucími zastaveními – barva podle cílového zastavení. */
+function drawTrajectoryLines(): void {
+  const group = findGroup(LayerType.Narration + '_group')
+  if (!map || !group || !trajectoryStops) return
+  group.eachLayer((layer) => {
+    if ((layer.options as { isTrajectoryLine?: boolean }).isTrajectoryLine) group.removeLayer(layer)
+  })
+  for (let i = 0; i < trajectoryStops.length - 1; i++) {
+    const start = L.latLng(trajectoryStops[i].lat, trajectoryStops[i].lng)
+    const end = L.latLng(trajectoryStops[i + 1].lat, trajectoryStops[i + 1].lng)
+    // šipka mířící dolů by skončila pod špendlíkem cíle – větší mezera
+    const shorten = end.lat < start.lat ? 35 : 10
+    getCurve(start, end, shorten, trajectoryStops[i + 1].color)?.addTo(group)
+  }
+}
+
+/** Aktuální střed a zoom mapy (pro návrat po zavření trajektorie) */
+export function getView(): { center: Coordinate; zoom: number } | null {
+  if (!map) return null
+  const c = map.getCenter()
+  return { center: { x: c.lng, y: c.lat }, zoom: map.getZoom() }
+}
+
+export function setView(center: Coordinate, zoom: number): void {
+  map?.setView([center.y, center.x], zoom)
 }
 
 // ------------------------------------------------------------------
@@ -965,4 +1059,8 @@ export const mapApi: MapController = {
   setUrlFromSelectedPlace: writeSelectedPlaceToUrl,
   resizePhotoHeight,
   closeGallery,
+  showTrajectory,
+  hideTrajectory,
+  getView,
+  setView,
 }

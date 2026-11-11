@@ -87,6 +87,8 @@ export interface Place {
   mapPoint: string | null
   stopId: number | null
   narrativeMapId: number | null
+  /** Druh místa (places.type: house, town, imprisonment_place…) – jen u zastavení narativních map */
+  category?: string | null
   documents: Document[] | null
 }
 
@@ -294,7 +296,10 @@ export interface VictimLongInfoModel {
   documents: Document[] | null
   transports: Transport[] | null
   transportDate: ApiDate | null
+  /** Příběhová mapa (typ 5) */
   narrativeMapId: number | null
+  /** Osobní trajektorie (narativní mapa typu 6) */
+  trajectoryId?: number | null
 }
 
 export interface SolrPlace {

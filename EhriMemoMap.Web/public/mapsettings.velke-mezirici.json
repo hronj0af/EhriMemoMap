@@ -2,13 +2,20 @@
   "map": {
     "initialVariables": {
       "city": "velke-mezirici",
-      "allCities": [ "prague", "ricany", "pacov", "velke-mezirici" ],
-      "storyMaps": true,
+      "allCities": [
+        "prague",
+        "ricany",
+        "pacov",
+        "velke-mezirici"
+      ],
+      "storyMaps": false,
+      "personalTrajectories": true,
+      "homeTown": "Velké Meziříčí",
       "zoom": 15,
       "zoomMobile": 15,
-      "lat": 49.378684,
+      "lat": 49.358,
       "lng": 16.0118866,
-      "latMobile": 49.378684,
+      "latMobile": 49.358,
       "lngMobile": 16.0118866,
       "minBounds": {
         "X": -90,
@@ -32,12 +39,23 @@
         "selected": true
       },
       {
+        "name": "incident",
+        "placeType": "incident",
+        "order": 3,
+        "type": "objects",
+        "minZoom": 15,
+        "quickAccess": true,
+        "backgroundColor": "#C5222C",
+        "fontColor": "Light",
+        "priorityOnMap": 3
+      },
+      {
         "name": "interest",
         "placeType": "interest",
         "order": 2,
         "type": "objects",
         "minZoom": 15,
-        "quickAccess": false,
+        "quickAccess": true,
         "backgroundColor": "#7E469B",
         "fontColor": "Light",
         "priorityOnMap": 1
@@ -56,24 +74,23 @@
       {
         "name": "memory",
         "placeType": "memory",
-        "order": 3,
+        "order": 4,
         "type": "objects",
         "minZoom": 15,
-        "quickAccess": true,
+        "quickAccess": false,
         "backgroundColor": "#468a9b",
         "fontColor": "Light"
       },
       {
         "name": "memorial",
         "placeType": "memorial",
-        "order": 3,
+        "order": 5,
         "type": "objects",
         "minZoom": 15,
-        "quickAccess": true,
+        "quickAccess": false,
         "backgroundColor": "#eb9622",
         "fontColor": "Light"
       }
-
     ]
   }
 }

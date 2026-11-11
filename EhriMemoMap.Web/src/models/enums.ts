@@ -65,6 +65,8 @@ export const MapType = {
   AllStoryMaps: 'AllStoryMaps',
   StoryMapWhole: 'StoryMapWhole',
   StoryMapOneStop: 'StoryMapOneStop',
+  /** Osobní trajektorie v detailu osoby – ostatní vrstvy skryté jako u příběhových map */
+  Trajectory: 'Trajectory',
 } as const
 export type MapType = (typeof MapType)[keyof typeof MapType]
 
