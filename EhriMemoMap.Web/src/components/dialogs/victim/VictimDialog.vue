@@ -28,6 +28,16 @@ const otherRelatives = computed(() =>
   (victim.value?.relatedPersons ?? []).filter((a) => a.relationshipToPersonType == null || !CLOSEST_FAMILY.includes(a.relationshipToPersonType)),
 )
 
+/**
+ * Jméno rozdělené před posledním slovem – poslední slovo a ikona trajektorie se nezalomí od sebe
+ * (jinak by ikona mohla zůstat sama na dalším řádku).
+ */
+const labelParts = computed(() => {
+  const label = victim.value?.label ?? ''
+  const i = label.lastIndexOf(' ')
+  return i < 0 ? { head: '', tail: label } : { head: label.slice(0, i + 1), tail: label.slice(i + 1) }
+})
+
 const transports = computed(() => [...(victim.value?.transports ?? [])].sort((a, b) => a.id - b.id))
 const otherInfo = computed(() => byLang(victim.value?.descriptionCs ?? null, victim.value?.descriptionEn ?? null))
 
@@ -42,7 +52,8 @@ function label(key: string) {
       <RzRow class="rz-mb-6" align-items="end" justify-content="space-between">
         <RzColumn :size="9">
           <h1>
-            {{ victim.label
+            {{ labelParts.head }}<span class="victim-name-tail"
+              >{{ labelParts.tail
             }}<button
               v-if="victim.trajectoryId != null && store.mapType === MapType.Trajectory"
               type="button"
@@ -56,7 +67,8 @@ function label(key: string) {
                   d="M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
                 />
               </svg>
-            </button>
+            </button></span
+            >
           </h1>
         </RzColumn>
         <RzColumn v-if="victim.narrativeMapId != null" :size="3" style="text-align: right">

@@ -830,9 +830,12 @@ export function showTrajectory(stops: TrajectoryStopForLeaflet[], maxZoom: numbe
   drawTrajectoryLines()
 }
 
-/** Přizpůsobí výřez mapy všem bodům zobrazené trajektorie. */
+/** Přizpůsobí výřez mapy všem bodům zobrazené trajektorie (a zavře otevřené popisky zastavení). */
 export function fitTrajectory(): void {
   if (!map || !trajectoryStops || trajectoryStops.length === 0) return
+  findGroup(LayerType.Narration + '_group')?.eachLayer((layer) => {
+    if (layer instanceof L.Marker) layer.closeTooltip()
+  })
   const bounds = L.latLngBounds(trajectoryStops.map((a) => [a.lat, a.lng] as L.LatLngTuple))
   map.fitBounds(bounds, { padding: [50, 50], maxZoom: Math.min(trajectoryMaxZoom, 16) })
 }

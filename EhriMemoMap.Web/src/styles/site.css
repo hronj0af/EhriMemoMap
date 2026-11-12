@@ -1104,3 +1104,7 @@ div.leaflet-overlay-pane svg > g path.statistics-polygon {
 .victim-trajectory-button:focus-visible {
     opacity: 0.75;
 }
+
+.victim-name-tail {
+    white-space: nowrap;
+}
