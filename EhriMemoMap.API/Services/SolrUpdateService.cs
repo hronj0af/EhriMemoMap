@@ -398,7 +398,7 @@ namespace EhriMemoMap.API.Services
             allPlaces.AddRange(GetPragueLastResidencePlaces());
             allPlaces.AddRange(GetMemoMapPlaces("pacov", ["interest", "address", "incident"]));
             allPlaces.AddRange(GetMemoMapPlaces("ricany", ["memory", "interest", "address", "memorial"]));
-            allPlaces.AddRange(GetMemoMapPlaces("velke-mezirici", ["memory", "interest", "address", "memorial"]));
+            allPlaces.AddRange(GetMemoMapPlaces("velke-mezirici", ["memory", "interest", "address", "memorial", "incident"]));
 
             // Přidávání dokumentů do Solr v dávkách po 100
             const int batchSize = 1000;
