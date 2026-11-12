@@ -808,7 +808,9 @@ export function showTrajectory(stops: TrajectoryStopForLeaflet[], maxZoom: numbe
         iconAnchor: [13, 36],
         tooltipAnchor: [0, -34],
       }),
-      zIndexOffset: 1000 + i,
+      // při překryvu je nahoře zastavení s nižším číslem (Leaflet řadí podle y v pixelech + zIndexOffset;
+      // rozestup 1000 je větší než výška špendlíku, takže pořadí rozhoduje vždy číslo zastavení)
+      zIndexOffset: 1000 * (stops.length - i),
     })
     marker.bindTooltip(stop.tooltip, { direction: 'top', className: 'trajectory-tooltip' })
     // klik: vycentrovat a přiblížit na maximum (na mobilu se zároveň ukáže popisek)
@@ -855,6 +857,29 @@ function drawTrajectoryLines(): void {
     const shorten = end.lat < start.lat ? 35 : 10
     getCurve(start, end, shorten, trajectoryStops[i + 1].color)?.addTo(group)
   }
+}
+
+/**
+ * Vycentruje mapu na místo z detailu osoby a přiblíží na daný zoom. Leží-li v místě zastavení
+ * zobrazené trajektorie, otevře se jeho popisek (u více zastavení v jednom místě to s nejnižším číslem).
+ */
+export function showPointOnMap(point: Coordinate, zoom: number): void {
+  if (!map) return
+  const target = L.latLng(point.y, point.x)
+  map.setView(target, zoom)
+  const group = findGroup(LayerType.Narration + '_group')
+  if (!group || !trajectoryStops) return
+  let best: L.Marker | null = null
+  let bestOffset = -Infinity
+  group.eachLayer((layer) => {
+    if (!(layer instanceof L.Marker) || !layer.getLatLng().equals(target, 1e-7)) return
+    const offset = layer.options.zIndexOffset ?? 0
+    if (offset > bestOffset) {
+      best = layer
+      bestOffset = offset
+    }
+  })
+  ;(best as L.Marker | null)?.openTooltip()
 }
 
 /** Aktuální střed a zoom mapy (pro návrat po zavření trajektorie) */
@@ -1061,6 +1086,7 @@ export const mapApi: MapController = {
   closeGallery,
   showTrajectory,
   hideTrajectory,
+  showPointOnMap,
   getView,
   setView,
 }

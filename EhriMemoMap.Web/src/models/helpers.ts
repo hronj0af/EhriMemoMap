@@ -11,6 +11,7 @@ import type {
   VictimShortInfoModel,
 } from './api'
 import type { Culture } from '../i18n'
+import type { Coordinate } from './map'
 
 // ---------------- Datumy ----------------
 
@@ -125,6 +126,19 @@ export function solrDropDownInfo(place: SolrPlace, culture: Culture): string {
   return (place.labelCs ?? '') + (place.placeCs ? ' | ' + place.placeCs : '')
 }
 
+/** Souřadnice bodu z GeoJSON stringu ({"type":"Point","coordinates":[lng,lat]}); jinak null */
+export function parseGeoJsonPoint(mapPoint: string | null | undefined): Coordinate | null {
+  if (!mapPoint) return null
+  try {
+    const coordinates = (JSON.parse(mapPoint) as { coordinates?: unknown }).coordinates
+    if (!Array.isArray(coordinates) || coordinates.length < 2) return null
+    const [x, y] = coordinates as unknown[]
+    return typeof x === 'number' && typeof y === 'number' && Number.isFinite(x) && Number.isFinite(y) ? { x, y } : null
+  } catch {
+    return null
+  }
+}
+
 /** AddressInfo.GetAddress(cultureName) */
 export function addressText(address: AddressInfo, culture: Culture): string | null {
   return culture === 'en-US' ? address.en : address.cs
@@ -132,19 +146,20 @@ export function addressText(address: AddressInfo, culture: Culture): string | nu
 
 /** AddressInfo.GetAddressWithDates(cultureName) – adresa s obdobím, např. "Dlouhá 5 (1939-1941)". */
 export function addressWithDates(address: AddressInfo, culture: Culture): string {
+  const text = (culture === 'en-US' ? address.en : address.cs) ?? ''
+  const dates = addressDates(address, culture)
+  return dates ? `${text} ${dates}` : text
+}
+
+/** Jen období z addressWithDates, např. "(1939-1941)", "(do 1941)"; bez datací prázdný řetězec. */
+export function addressDates(address: AddressInfo, culture: Culture): string {
   const en = culture === 'en-US'
-  let result = (en ? address.en : address.cs) ?? ''
   const from = parseApiDate(address.dateFrom)
   const to = parseApiDate(address.dateTo)
-  if (from || to) {
-    result += ' ('
-    if (from && to && from.year !== to.year) result += `${from.year}-${to.year}`
-    else if (from && to && from.year === to.year) result += `${from.year}`
-    else if (to) result += (en ? 'until ' : 'do ') + to.year
-    else if (from) result += (en ? 'after ' : 'po ') + from.year
-    result += ')'
-  }
-  return result
+  if (!from && !to) return ''
+  if (from && to) return from.year !== to.year ? `(${from.year}-${to.year})` : `(${from.year})`
+  if (to) return `(${en ? 'until ' : 'do '}${to.year})`
+  return `(${en ? 'after ' : 'po '}${from!.year})`
 }
 
 /**

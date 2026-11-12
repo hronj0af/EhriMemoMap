@@ -47,6 +47,8 @@ export interface MapController {
   /** Střed a zoom mapy */
   getView(): { center: Coordinate; zoom: number } | null
   setView(center: Coordinate, zoom: number): void
+  /** Vycentruje mapu na místo (a otevře popisek zastavení trajektorie v tomto místě) */
+  showPointOnMap(point: Coordinate, zoom: number): void
 }
 
 /** Volání z mapy do stavu aplikace (náhrada [JSInvokable] metod v Map.razor). */
@@ -91,6 +93,7 @@ const nullController: MapController = {
   hideTrajectory: noop,
   getView: () => null,
   setView: noop,
+  showPointOnMap: noop,
 }
 
 let controller: MapController = nullController

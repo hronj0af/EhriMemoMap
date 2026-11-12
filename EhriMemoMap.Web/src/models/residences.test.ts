@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { residenceYears, sortResidencesChronologically } from './helpers'
+import { addressDates, addressWithDates, parseGeoJsonPoint, residenceYears, sortResidencesChronologically } from './helpers'
 
 describe('residenceYears – datace bydliště na úrovni roků (specifikace, tabulka příkladů)', () => {
   it.each([
@@ -54,5 +54,32 @@ describe('sortResidencesChronologically', () => {
     const items = [r(2, '1940-01-01', null), r(1, '1938-01-01', null)]
     sortResidencesChronologically(items)
     expect(ids(items)).toEqual([2, 1])
+  })
+})
+
+describe('parseGeoJsonPoint', () => {
+  it('vrátí x = délka, y = šířka', () => {
+    expect(parseGeoJsonPoint('{"type":"Point","coordinates":[16.05,49.35]}')).toEqual({ x: 16.05, y: 49.35 })
+  })
+  it.each([null, undefined, '', 'není json', '{"type":"Point"}', '{"coordinates":[16]}', '{"coordinates":["a","b"]}'])(
+    'neplatný vstup %s → null',
+    (value) => expect(parseGeoJsonPoint(value)).toBeNull(),
+  )
+})
+
+describe('addressDates / addressWithDates', () => {
+  const a = (dateFrom: string | null, dateTo: string | null) => ({
+    id: 1, cs: 'Dlouhá 5', en: 'Dlouha 5', de: null, currentCs: null, currentEn: null,
+    type: 27, typeCs: null, typeEn: null, dateFrom, dateTo,
+  })
+  it.each([
+    [null, null, '', 'Dlouhá 5'],
+    ['1939-01-01', '1941-01-01', '(1939-1941)', 'Dlouhá 5 (1939-1941)'],
+    ['1939-01-01', '1939-05-01', '(1939)', 'Dlouhá 5 (1939)'],
+    [null, '1941-01-01', '(do 1941)', 'Dlouhá 5 (do 1941)'],
+    ['1939-01-01', null, '(po 1939)', 'Dlouhá 5 (po 1939)'],
+  ])('%s / %s', (from, to, dates, full) => {
+    expect(addressDates(a(from, to), 'cs-CZ')).toBe(dates)
+    expect(addressWithDates(a(from, to), 'cs-CZ')).toBe(full)
   })
 })

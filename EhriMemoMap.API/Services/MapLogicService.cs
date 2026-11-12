@@ -694,6 +694,7 @@ public class MapLogicService(MemogisContext context, MemoMapContextFactory facto
                         TypeEn = a.RelationshipTypeNavigation.LabelEn,
                         DateFrom = a.DateFrom,
                         DateTo = a.DateTo,
+                        MapPoint = a.Place.Geography.AsJson(),
                     }).ToArray(),
                     Documents = b?.DocumentsXEntities.OrderBy(a => a.Id).Select(c => c.Document).Select(c => new Shared.Document
                     {

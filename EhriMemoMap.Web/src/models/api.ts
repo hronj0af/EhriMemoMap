@@ -207,6 +207,8 @@ export interface AddressInfo {
   typeEn: string | null
   dateFrom: ApiDate | null
   dateTo: ApiDate | null
+  /** Bod místa jako GeoJSON string (starší API ho neposílá) */
+  mapPoint?: string | null
 }
 
 export interface AddressStatistics {

@@ -49,7 +49,7 @@ import type {
   TimelinePointModel,
 } from '../models/map'
 import { loadMapSettings } from '../models/mapSettings'
-import { dateKey } from '../models/helpers'
+import { dateKey, parseGeoJsonPoint } from '../models/helpers'
 import { fromMapObject, fromPlace, fromStatistics } from '../map/leafletModel'
 import { mapController } from '../map/controller'
 import { toTrajectoryStops } from '../map/trajectory'
@@ -690,6 +690,21 @@ export const useMapStore = defineStore('map', () => {
     mapController().showTrajectory(stops, map.value?.initialVariables?.maxZoom ?? 18)
   }
 
+  /** Zoom při přechodu na místo z detailu osoby – měřítko 300 m, místo zůstane zasazené do okolí */
+  const PLACE_FOCUS_ZOOM = 15
+
+  /** Přejde v mapě na místo z detailu osoby (mapPoint = GeoJSON bod). Na mobilu panel přes celou obrazovku zmenší. */
+  function showPlaceOnMap(mapPoint: string | null | undefined): void {
+    const point = parseGeoJsonPoint(mapPoint)
+    if (!point) return
+    const ctrl = mapController()
+    if (isMobileView.value && isDialogFullScreen.value) {
+      isDialogFullScreen.value = false
+      ctrl.setDialogFullScreen(false)
+    }
+    ctrl.showPointOnMap(point, Math.min(PLACE_FOCUS_ZOOM, map.value?.initialVariables?.maxZoom || PLACE_FOCUS_ZOOM))
+  }
+
   async function showVictim(id: number | null | undefined): Promise<void> {
     victimLongInfo.value = await getVictimLongInfo(id)
     await setDialog(DialogType.Victim, { id: victimLongInfo.value?.id ?? null, places: dialogParameters.value.places })
@@ -909,6 +924,7 @@ export const useMapStore = defineStore('map', () => {
     getSolrPlaces,
     getVictimLongInfo,
     showVictim,
+    showPlaceOnMap,
     // handlery z mapy
     onMapMoved,
     showPlaceInfo,

@@ -15,6 +15,8 @@ namespace EhriMemoMap.Shared
         public string? TypeEn { get; set; }
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
+        /// <summary>Bod místa jako GeoJSON (pro přechod na místo v mapě)</summary>
+        public string? MapPoint { get; set; }
 
         public string GetAddressWithDates(string cultureName)
         {

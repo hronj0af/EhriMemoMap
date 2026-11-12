@@ -1046,3 +1046,35 @@ div.leaflet-overlay-pane svg > g path.statistics-polygon {
 .rz-dialog-side .rz-dialog-side-content {
     overflow: visible;
 }
+
+/* Detail osoby (mapy s trajektoriemi): místo jako odkaz na bod v mapě; datace se nezalamuje */
+.victim-place-link {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    text-align: left;
+    color: var(--Wine-Red);
+    text-decoration: underline dotted;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+.victim-place-link:hover,
+.victim-place-link:focus-visible {
+    text-decoration-style: solid;
+}
+
+.victim-place-link-icon {
+    width: 0.95em;
+    height: 0.95em;
+    margin-left: 2px;
+    vertical-align: -0.1em;
+    fill: currentColor;
+}
+
+.victim-place-dates {
+    white-space: nowrap;
+}
