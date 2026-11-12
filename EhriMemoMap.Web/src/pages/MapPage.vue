@@ -72,14 +72,18 @@ onMounted(async () => {
   const parsedZoom = zoomStr ? parseFloat(zoomStr) : NaN
   const initialZoom = Number.isFinite(parsedZoom) ? parsedZoom : 0
 
-  // uvítací dialog jen pokud uživatel s mapou ještě nepracoval (v URL nejsou bounds ani vybrané místo)
-  if (!bounds && coordinates == null) {
+  // otevřený detail osoby (parametr victim)
+  const victimParam = Number(getUrlParam('victim'))
+  const victimId = Number.isInteger(victimParam) && victimParam > 0 ? victimParam : null
+
+  // uvítací dialog jen pokud uživatel s mapou ještě nepracoval (v URL nejsou bounds, vybrané místo ani osoba)
+  if (!bounds && coordinates == null && victimId == null) {
     if (!store.isMobileView) store.modal = ModalType.Welcome
     else await store.setDialog(DialogType.Welcome)
   }
 
   // inicializace Leaflet mapy
-  mapApi.initMap(store.getMapInfoForLeaflet(Math.round(initialZoom)))
+  mapApi.initMap(store.getMapInfoForLeaflet())
 
   store.mapZoom = initialZoom === 0 ? mapApi.getZoom() : initialZoom
   store.setBBox(mapApi.getMapBounds())
@@ -95,6 +99,10 @@ onMounted(async () => {
   // rozměry mapy podle otevřeného panelu (Blazor tu volal fitMapToWindow() bez parametrů, takže při
   // otevření odkazu s vybraným místem byla mapa na mobilu i pod panelem a místo mohlo být schované)
   store.fitMapToDialog()
+
+  // detail osoby až po vykreslení mapy (trajektorie skrývá ostatní vrstvy a nastavuje výřez);
+  // otevřené místo z URL zůstane v historii panelu, takže tlačítko zpět se vrátí na něj
+  if (victimId != null) await store.showVictimFromUrl(victimId)
 })
 
 onUnmounted(() => {

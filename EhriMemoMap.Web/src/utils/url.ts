@@ -1,5 +1,5 @@
 // Práce s parametry URL (z site.ts: getUrlParam, setUrlParam, getSelectedPlaceFromUrl…).
-// Parametry: layers, timeline, bounds, zoom, x1/y1/x2/y2 (vybrané místo).
+// Parametry: layers, timeline, bounds, zoom, x1/y1/x2/y2 (vybrané místo), victim (otevřený detail osoby).
 import type { Coordinate } from '../models/map'
 
 export function getUrlParam(name: string): string | null {
@@ -14,6 +14,15 @@ export function setUrlParam(name: string, value: string | number | null | undefi
   const params = new URLSearchParams(window.location.search)
   params.set(name, value == null ? '' : String(value))
   history.replaceState(history.state, '', window.location.pathname + '?' + params.toString())
+}
+
+/** Odstraní parametr z URL (bez nové položky v historii). */
+export function removeUrlParam(name: string): void {
+  const params = new URLSearchParams(window.location.search)
+  if (!params.has(name)) return
+  params.delete(name)
+  const query = params.toString()
+  history.replaceState(history.state, '', window.location.pathname + (query ? '?' + query : ''))
 }
 
 /** Vybrané místo z URL (x1, y1, x2, y2) – getSelectedPlaceFromUrl. Neúplné → null. */

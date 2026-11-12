@@ -54,7 +54,7 @@ import { fromMapObject, fromPlace, fromStatistics } from '../map/leafletModel'
 import { mapController } from '../map/controller'
 import { toTrajectoryStops } from '../map/trajectory'
 import { getCulture } from '../i18n'
-import { setUrlParam } from '../utils/url'
+import { removeUrlParam, setUrlParam } from '../utils/url'
 import { isMobileView as isMobileViewForWindow } from '../utils/dom'
 
 /** Porovnání jako v C# s nullable int: s null je výsledek vždy false. */
@@ -300,9 +300,10 @@ export const useMapStore = defineStore('map', () => {
   }
 
   /** Nastavení pro Leaflet – podkladové a WMS vrstvy + skupiny objektů (GetMapInfoForLeaflet) */
-  function getMapInfoForLeaflet(zoom = 0): MapSettingsForLeaflet {
+  function getMapInfoForLeaflet(): MapSettingsForLeaflet {
+    // Blazor sem zapisoval zoom z URL do initialVariables.zoom – výchozí pohled (tlačítko domů, návrat
+    // po zavření trajektorie) pak po obnovení stránky použil zoom z URL. Výřez z URL nastavuje mapApi.initMap sám.
     const m = map.value
-    if (zoom > 0 && m?.initialVariables) m.initialVariables.zoom = zoom
 
     const layers: LayerForLeaflet[] = (m?.layers ?? [])
       .filter((a) => a.type !== LayerType.Objects)
@@ -401,6 +402,9 @@ export const useMapStore = defineStore('map', () => {
     dialogParameters.value = parameters ?? {}
 
     addToDialogHistory(newDialogType, parameters)
+    // otevřený detail osoby v URL – po obnovení stránky se znovu načte (i s trajektorií)
+    if (newDialogType === DialogType.Victim && victimLongInfo.value) setUrlParam('victim', victimLongInfo.value.id)
+    else removeUrlParam('victim')
     await syncTrajectory()
   }
 
@@ -420,7 +424,8 @@ export const useMapStore = defineStore('map', () => {
       narrativeMap.value = null
     } else if (newValue === MapType.Trajectory) {
       // trajektorii vykresluje syncTrajectory – tady jen skrýt ostatní vrstvy jako u příběhových map
-      if (previous === MapType.Normal) viewBeforeTrajectory = ctrl.getView()
+      // detail osoby obnovený z URL: výřez z URL je výřez trajektorie, po zavření se mapa vrátí na výchozí pohled
+      if (previous === MapType.Normal) viewBeforeTrajectory = restoringVictimFromUrl ? null : ctrl.getView()
       ctrl.hideLayersForNormalMap()
     } else {
       ctrl.hideLayersForNormalMap()
@@ -705,6 +710,28 @@ export const useMapStore = defineStore('map', () => {
     ctrl.showPointOnMap(point, Math.min(PLACE_FOCUS_ZOOM, map.value?.initialVariables?.maxZoom || PLACE_FOCUS_ZOOM))
   }
 
+  /** Detail osoby se obnovuje z parametru URL "victim" (po obnovení stránky / z odkazu) */
+  let restoringVictimFromUrl = false
+
+  /** Otevře detail osoby z parametru URL "victim"; neexistující osoba → parametr se odstraní. */
+  async function showVictimFromUrl(id: number): Promise<void> {
+    restoringVictimFromUrl = true
+    try {
+      const info = await getVictimLongInfo(id)
+      if (!info) {
+        removeUrlParam('victim')
+        return
+      }
+      victimLongInfo.value = info
+      await setDialog(DialogType.Victim, { id: info.id, places: dialogParameters.value.places })
+    } catch (error) {
+      console.error('Načtení detailu osoby z URL selhalo', error)
+      removeUrlParam('victim')
+    } finally {
+      restoringVictimFromUrl = false
+    }
+  }
+
   async function showVictim(id: number | null | undefined): Promise<void> {
     victimLongInfo.value = await getVictimLongInfo(id)
     await setDialog(DialogType.Victim, { id: victimLongInfo.value?.id ?? null, places: dialogParameters.value.places })
@@ -925,6 +952,7 @@ export const useMapStore = defineStore('map', () => {
     getVictimLongInfo,
     showVictim,
     showPlaceOnMap,
+    showVictimFromUrl,
     // handlery z mapy
     onMapMoved,
     showPlaceInfo,

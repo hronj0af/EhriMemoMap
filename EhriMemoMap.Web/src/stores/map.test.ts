@@ -252,8 +252,10 @@ describe('getMapInfoForLeaflet', () => {
   it('vrstvy bez objektových + systémové skupiny', async () => {
     const store = useMapStore()
     await store.init('prague')
-    const info = store.getMapInfoForLeaflet(15)
-    expect(info.initialVariables?.zoom).toBe(15)
+    const zoom = store.map?.initialVariables?.zoom
+    const info = store.getMapInfoForLeaflet()
+    // výchozí zoom z mapsettings se nepřepisuje (zoom z URL nastavuje mapa sama)
+    expect(info.initialVariables?.zoom).toBe(zoom)
     expect(info.layers.some((a) => a.type === 'Objects' && a.name !== 'Objects')).toBe(false)
     expect(info.layers.slice(-3).map((a) => a.name)).toEqual(['Objects', 'AdditionalObjects', 'Narration'])
     expect(info.layers.find((a) => a.name === 'OSM')).toMatchObject({ type: 'Base', zIndex: 50 })
