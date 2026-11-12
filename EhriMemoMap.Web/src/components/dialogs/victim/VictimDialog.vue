@@ -2,6 +2,7 @@
 // Components/Dialogs/Victim/Victim.razor – detail oběti (údaje, místa, transporty, příbuzní, dokumenty).
 import { computed, ref } from 'vue'
 import { useMapStore } from '../../../stores/map'
+import { MapType } from '../../../models/enums'
 import { firstLetterToUpper, formatDate, nl2br } from '../../../models/helpers'
 import { useI18n } from '../../../i18n'
 import RzRow from '../../ui/RzRow.vue'
@@ -40,7 +41,23 @@ function label(key: string) {
     <template v-if="victim">
       <RzRow class="rz-mb-6" align-items="end" justify-content="space-between">
         <RzColumn :size="9">
-          <h1>{{ victim.label }}</h1>
+          <h1>
+            {{ victim.label
+            }}<button
+              v-if="victim.trajectoryId != null && store.mapType === MapType.Trajectory"
+              type="button"
+              class="victim-trajectory-button"
+              :title="t('showWholeTrajectory')"
+              :aria-label="t('showWholeTrajectory')"
+              @click="store.showWholeTrajectory()"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M12 2C8.1 2 5 5.1 5 9c0 5.3 7 13 7 13s7-7.7 7-13c0-3.9-3.1-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"
+                />
+              </svg>
+            </button>
+          </h1>
         </RzColumn>
         <RzColumn v-if="victim.narrativeMapId != null" :size="3" style="text-align: right">
           <img

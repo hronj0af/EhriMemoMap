@@ -1078,3 +1078,29 @@ div.leaflet-overlay-pane svg > g path.statistics-polygon {
 .victim-place-dates {
     white-space: nowrap;
 }
+
+/* Detail osoby: ikona u jména – celá osobní trajektorie na mapě */
+.victim-trajectory-button {
+    display: inline-block;
+    padding: 0 0.1em;
+    margin-left: 0.25em;
+    border: none;
+    background: none;
+    color: var(--Wine-Red);
+    cursor: pointer;
+    font-size: inherit;
+    line-height: 1;
+    vertical-align: baseline;
+}
+
+.victim-trajectory-button svg {
+    width: 0.75em;
+    height: 0.75em;
+    vertical-align: -0.05em;
+    fill: currentColor;
+}
+
+.victim-trajectory-button:hover,
+.victim-trajectory-button:focus-visible {
+    opacity: 0.75;
+}

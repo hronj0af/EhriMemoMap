@@ -214,6 +214,7 @@
   "show": "Show",
   "showMyLocation": "Show my location on map",
   "showOnMap": "Show on the map",
+  "showWholeTrajectory": "Show the whole trajectory on the map",
   "showStatistics": "Show statistics",
   "specification": "Specification",
   "storyMapExistsForPerson": "There is a story map for a given person.",

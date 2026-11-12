@@ -44,6 +44,8 @@ export interface MapController {
   /** Osobní trajektorie: zobrazit (s přizpůsobením výřezu) / odstranit */
   showTrajectory(stops: TrajectoryStopForLeaflet[], maxZoom: number): void
   hideTrajectory(): void
+  /** Výřez mapy na všechny body zobrazené trajektorie */
+  fitTrajectory(): void
   /** Střed a zoom mapy */
   getView(): { center: Coordinate; zoom: number } | null
   setView(center: Coordinate, zoom: number): void
@@ -91,6 +93,7 @@ const nullController: MapController = {
   closeGallery: noop,
   showTrajectory: noop,
   hideTrajectory: noop,
+  fitTrajectory: noop,
   getView: () => null,
   setView: noop,
   showPointOnMap: noop,

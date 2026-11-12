@@ -710,6 +710,17 @@ export const useMapStore = defineStore('map', () => {
     ctrl.showPointOnMap(point, Math.min(PLACE_FOCUS_ZOOM, map.value?.initialVariables?.maxZoom || PLACE_FOCUS_ZOOM))
   }
 
+  /** Celá trajektorie na mapě (ikona u jména v detailu osoby). Na mobilu panel přes celou obrazovku zmenší. */
+  function showWholeTrajectory(): void {
+    if (mapType.value !== MapType.Trajectory) return
+    const ctrl = mapController()
+    if (isMobileView.value && isDialogFullScreen.value) {
+      isDialogFullScreen.value = false
+      ctrl.setDialogFullScreen(false)
+    }
+    ctrl.fitTrajectory()
+  }
+
   /** Detail osoby se obnovuje z parametru URL "victim" (po obnovení stránky / z odkazu) */
   let restoringVictimFromUrl = false
 
@@ -953,6 +964,7 @@ export const useMapStore = defineStore('map', () => {
     showVictim,
     showPlaceOnMap,
     showVictimFromUrl,
+    showWholeTrajectory,
     // handlery z mapy
     onMapMoved,
     showPlaceInfo,

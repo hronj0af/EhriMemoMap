@@ -826,11 +826,15 @@ export function showTrajectory(stops: TrajectoryStopForLeaflet[], maxZoom: numbe
   map.off('zoomend', drawTrajectoryLines)
   map.on('zoomend', drawTrajectoryLines)
 
-  if (stops.length > 0) {
-    const bounds = L.latLngBounds(stops.map((a) => [a.lat, a.lng] as L.LatLngTuple))
-    map.fitBounds(bounds, { padding: [50, 50], maxZoom: Math.min(trajectoryMaxZoom, 16) })
-  }
+  fitTrajectory()
   drawTrajectoryLines()
+}
+
+/** Přizpůsobí výřez mapy všem bodům zobrazené trajektorie. */
+export function fitTrajectory(): void {
+  if (!map || !trajectoryStops || trajectoryStops.length === 0) return
+  const bounds = L.latLngBounds(trajectoryStops.map((a) => [a.lat, a.lng] as L.LatLngTuple))
+  map.fitBounds(bounds, { padding: [50, 50], maxZoom: Math.min(trajectoryMaxZoom, 16) })
 }
 
 /** Odstraní trajektorii z mapy. */
@@ -1086,6 +1090,7 @@ export const mapApi: MapController = {
   closeGallery,
   showTrajectory,
   hideTrajectory,
+  fitTrajectory,
   showPointOnMap,
   getView,
   setView,
